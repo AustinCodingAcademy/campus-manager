@@ -1,9 +1,11 @@
 var express = require('express');
+var bcrypt = require('bcrypt');
+var salt = require('../config/env').salt;
 var router = express.Router();
 
 var passport = require('../config/passport');
 
-var User = require('../models/index').User;
+var User = require('../models/index').user;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -45,11 +47,12 @@ router.post('/register', function(req, res, next) {
   console.log(req.body.username);
   User.find({ where: { username : req.body.username } }).then(function (user) {
     if (!user) {
-      console.log(req.body);
-      
-      User.create(req.body).then(function (user) {
-        passport.authenticate('local')(req, res, function () {
-          res.redirect('/');
+      bcrypt.hash(req.body.password, salt, function(err, hash) {
+        req.body.password = hash;
+        User.create(req.body).then(function (user) {
+          passport.authenticate('local')(req, res, function () {
+            res.redirect('/');
+          });
         });
       });
     } else {

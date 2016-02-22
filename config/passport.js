@@ -1,18 +1,26 @@
 var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy
+var bcrypt = require('bcrypt')
 
-var User = require('../models/index').User;
+var salt = require('./env').salt;
+var User = require('../models/index').user;
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
     User.find({ where: { username : username } }).then(function(user) {
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
+      } else {
+        bcrypt.hash(user.password, salt, function(err, hash) {
+          bcrypt.compare(user.password, hash, function(err, match) {
+            if (match) {
+              return done(null, user);
+            } else {
+              return done(null, false, { message: 'Incorrect password.' });
+            }
+          });
+        });
       }
-      if (user.password != password) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
     });
   }
 ));
