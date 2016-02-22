@@ -4,4 +4,10 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    if (messages.info)
+      .message.info
+        span= messages.info
+    if (messages.error)
+      .message.error
+        span= messages.error
     block content

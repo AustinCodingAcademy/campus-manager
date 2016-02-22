@@ -7,26 +7,56 @@ var User = require('../models/index').User;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {
-    title: 'Express',
-    user: req.user
-  });
+  if(!req.isAuthenticated()){
+    res.redirect('/login');
+  } else {
+    res.render('index', { user: req.user });
+  }
+});
+
+router.get('/login', function(req, res, next) {
+  if(req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
+    res.render('login');
+  }
 });
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/hello',
+  failureRedirect: '/login',
   failureFlash: true
 }));
 
-router.get('/create', function(req, res, next) {
-  User.create({'username':'Username', 'password':'Password', 'rol':'rol'})
-    .then(function(user) {
-      console.log(user);
-    });
-  var date = new Date();
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
 
-  res.send(date);
+router.get('/register', function(req, res, next) {
+  if(req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
+    res.render('register');
+  }
+});
+
+router.post('/register', function(req, res, next) {
+  console.log(req.body.username);
+  User.find({ where: { username : req.body.username } }).then(function (user) {
+    if (!user) {
+      console.log(req.body);
+      
+      User.create(req.body).then(function (user) {
+        passport.authenticate('local')(req, res, function () {
+          res.redirect('/');
+        });
+      });
+    } else {
+      req.flash('error', 'User already exists');
+      res.redirect('/');
+    }
+  });
 });
 
 module.exports = router;

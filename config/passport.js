@@ -5,7 +5,7 @@ var User = require('../models/index').User;
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    User.findOne({ username: username }).then(function(user) {
+    User.find({ where: { username : username } }).then(function(user) {
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
