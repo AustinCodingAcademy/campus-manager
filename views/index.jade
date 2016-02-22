@@ -3,3 +3,15 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  if !user
+    form(action='/login', method='post')
+      div
+        label Username:
+        input(type='text', name='username')
+      div
+        label Password:
+        input(type='password', name='password')
+      div
+        input(type='submit', value='Log In')
+  else
+    p Welcome #{user.username}!
