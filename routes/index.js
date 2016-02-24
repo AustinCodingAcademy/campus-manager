@@ -44,20 +44,27 @@ router.get('/register', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  console.log(req.body.username);
   User.find({ where: { username : req.body.username } }).then(function (user) {
     if (!user) {
-      bcrypt.hash(req.body.password, salt, function(err, hash) {
-        req.body.password = hash;
-        User.create(req.body).then(function (user) {
-          passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
+      if (req.body.password.length > 5) {
+        bcrypt.hash(req.body.password, salt, function(err, hash) {
+          req.body.password = hash;
+          User.create(req.body).then(function (user) {
+            passport.authenticate('local')(req, res, function () {
+              res.redirect('/');
+            });
+          }).catch(function(error) {
+            req.flash('error', error.message);
+            res.redirect('/register');
           });
         });
-      });
+      } else {
+        req.flash('error', 'Password must be at least 6 characters');
+        res.redirect('/register');
+      }
     } else {
       req.flash('error', 'User already exists');
-      res.redirect('/');
+      res.redirect('/register');
     }
   });
 });
