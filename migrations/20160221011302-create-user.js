@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: function(queryInterface, Sequelize) {
-    return queryInterface.createTable('users', {
+    queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       password: {
@@ -21,8 +22,40 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      first_name: {
+        type: Sequelize.STRING
+      },
+      last_name: {
+        type: Sequelize.STRING
+      },
+      github: {
+        type: Sequelize.STRING
+      },
+      client: {
+        type: Sequelize.BOOLEAN
+      },
+      admin: {
+        type: Sequelize.BOOLEAN
+      },
+      instructor: {
+        type: Sequelize.BOOLEAN
+      },
+      student: {
+        type: Sequelize.BOOLEAN
       }
     });
+    
+    queryInterface.addIndex(
+      'users',
+      ['username'],
+      {
+        indexName: 'username_index',
+        indicesType: 'UNIQUE'
+      }
+    );
+    
+    return;
   },
   down: function(queryInterface, Sequelize) {
     return queryInterface.dropTable('users');
