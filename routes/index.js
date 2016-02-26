@@ -5,7 +5,7 @@ var router = express.Router();
 
 var passport = require('../config/passport');
 
-var User = require('../models/index').user;
+var User = require('../models/user');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -44,18 +44,20 @@ router.get('/register', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  User.find({ where: { username : req.body.username } }).then(function (user) {
+  User.find({ username : req.body.username }, function (user) {
     if (!user) {
       if (req.body.password.length > 5) {
         bcrypt.hash(req.body.password, salt, function(err, hash) {
           req.body.password = hash;
-          User.create(req.body).then(function (user) {
+          var user = new User(req.body);
+          user.save(function (error, user) {
+            if (error) {
+              req.flash('error', error.message);
+              res.redirect('/register');
+            }
             passport.authenticate('local')(req, res, function () {
               res.redirect('/');
             });
-          }).catch(function(error) {
-            req.flash('error', error.message);
-            res.redirect('/register');
           });
         });
       } else {

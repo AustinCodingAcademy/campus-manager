@@ -3,11 +3,11 @@ var LocalStrategy = require('passport-local').Strategy
 var bcrypt = require('bcrypt')
 
 var salt = require('./env').salt;
-var User = require('../models/index').user;
+var User = require('../models/user');
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    User.find({ where: { username : username } }).then(function(user) {
+    User.findOne({ username : username }, function(err, user) {
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       } else {
