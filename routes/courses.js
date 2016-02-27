@@ -1,40 +1,40 @@
 var express = require('express');
 var router = express.Router();
-var userController = require('../controllers/userController.js');
+var courseController = require('../controllers/courseController.js');
 
 /*
 * GET
 */
 router.get('/', function(req, res) {
-  userController.list(req, res);
+  courseController.list(req, res);
 });
 
 /*
 * GET
 */
 router.get('/:id', function(req, res) {
-  userController.show(req, res);
+  courseController.show(req, res);
 });
 
 /*
 * POST
 */
 router.post('/', function(req, res) {
-  userController.create(req, res);
+  courseController.create(req, res);
 });
 
 /*
 * PUT
 */
 router.put('/:id', function(req, res) {
-  userController.update(req, res);
+  courseController.update(req, res);
 });
 
 /*
 * DELETE
 */
 router.delete('/:id', function(req, res) {
-  userController.remove(req, res);
+  courseController.remove(req, res);
 });
 
 module.exports = router;

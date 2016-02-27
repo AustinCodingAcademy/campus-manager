@@ -8,6 +8,8 @@ var flash = require('express-flash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var sessions = require('./routes/sessions');
+var courses = require('./routes/courses');
 
 var passport = require('./config/passport');
 
@@ -30,15 +32,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({secret: 'crackalackin',
-    resave: true,
-    saveUninitialized: true,
-    cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) }}));
+app.use(session({ secret: 'crackalackin' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', routes);
-app.use('/users', auth, users);
+app.use('/api/users', auth, users);
+app.use('/api/sessions', auth, sessions);
+app.use('/api/courses', auth, courses);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -5,7 +5,7 @@ var router = express.Router();
 
 var passport = require('../config/passport');
 
-var User = require('../models/user');
+var User = require('../models/userModel');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

@@ -3,3 +3,6 @@ extends layout
 block content
   p Welcome #{user.username}!
   a(href="/logout") Logout
+  #content
+  script(type='text/javascript', href='/javascripts/bundle.js')
+  
