@@ -1,8 +1,12 @@
-extends layout
-
-block content
-  p Welcome #{user.username}!
-  a(href="/logout") Logout
-  #content
-  script(type='text/javascript', href='/javascripts/bundle.js')
-  
+doctype html
+html
+  head
+    title Austin Coding Academy
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1')
+    link(rel='stylesheet', href='css/app.css')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+  body
+    div(data-bootstrap="#{user}")
+    .container#container
+    script(type='text/javascript', src='js/bundle.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js')

@@ -1,13 +1,15 @@
 extends layout
-
+  
 block content
+  h2 Register
   form(action='/register', method='post')
-    div
-      label Username:
-      input(type='text', name='username')
-    div
-      label Password:
-      input(type='password', name='password')
-    div
-      input(type='submit', value='register')
-  a(href="/login") Login
+    .row
+      .input-field.col.s12
+        input#email.validate(type='email', name='username')
+        label(for='email') Email
+    .row
+      .input-field.col.s12
+        input#password.validate(type='password', name='password')
+        label(for='password') Password
+    button.btn.waves-effect.waves-light(type='submit', name='action') Submit
+      i.material-icons.right send

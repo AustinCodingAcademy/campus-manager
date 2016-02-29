@@ -1,13 +1,26 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title Austin Coding Academy
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1')
+    link(rel='stylesheet', href='css/app.css')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
   body
-    if (messages.info)
-      .message.info
-        span= messages.info
-    if (messages.error)
-      .message.error
-        span= messages.error
-    block content
+    include top-bar
+    // Your content goes here
+    .container
+      .row
+        .col.s12
+          if (messages.info)
+            .card-panel.yellow
+              span.white-text= messages.info
+          if (messages.error)
+            .card-panel.red
+              span.white-text= messages.error
+      block content
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js')
+    script(type='text/javascript').
+      $(function() {
+        $(".button-collapse").sideNav();
+      });

@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
 
 var routes = require('./routes/index');
@@ -15,10 +16,12 @@ var passport = require('./config/passport');
 
 var auth = require('./routes/middleware').auth;
 
+var mongo_url = require('./config/env').mongo_url;
+
 var app = express();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/aca-campus');
+mongoose.connect(mongo_url);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,7 +35,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: 'crackalackin' }));
+app.use(session({
+  secret: 'foo',
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 

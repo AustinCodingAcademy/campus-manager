@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
   if(!req.isAuthenticated()){
     res.redirect('/login');
   } else {
-    res.render('index', { user: req.user });
+    res.render('index', { user: JSON.stringify(req.user) });
   }
 });
 
