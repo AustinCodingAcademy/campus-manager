@@ -21,10 +21,9 @@ $(function() {
       'sessions': 'sessions'
     },
     
-    // currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
+    currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
     
     initialize: function() {
-      this.currentUser = new UserModel($('[data-bootstrap]').detach().data('bootstrap'));
       $('<nav></nav>').insertBefore('#container');
       ReactDOM.render(<NavbarComponent model={this.currentUser} />, $('nav')[0]);
     },
