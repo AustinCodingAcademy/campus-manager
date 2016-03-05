@@ -7,8 +7,8 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var SessionsCollection = require('./collections/sessionsCollection');
-var SessionsListComponent = require('./components/sessionsListComponent');
+var TermsCollection = require('./collections/termsCollection');
+var TermsListComponent = require('./components/termsListComponent');
 var HomeLayoutComponent = require('./components/homeLayoutComponent');
 var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
@@ -18,7 +18,7 @@ $(function() {
     routes: {
       '': 'index',
       '/': 'index',
-      'sessions': 'sessions'
+      'terms': 'terms',
     },
     
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -32,10 +32,11 @@ $(function() {
       ReactDOM.render(<HomeLayoutComponent />, $('#container')[0]);
     },
     
-    sessions: function() {
-      var sessions = new SessionsCollection();
-      sessions.fetch();
-      ReactDOM.render(<SessionsListComponent collection={sessions} />, $('#container')[0]);
+    terms: function() {
+      var terms = new TermsCollection();
+      terms.fetch();
+      ReactDOM.render(<TermsListComponent collection={terms} />, $('#container')[0]);
+    },
     }
   });
   

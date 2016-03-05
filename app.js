@@ -9,7 +9,7 @@ var flash = require('express-flash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var sessions = require('./routes/sessions');
+var terms = require('./routes/terms');
 var courses = require('./routes/courses');
 
 var passport = require('./config/passport');
@@ -45,7 +45,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/api/users', auth, users);
-app.use('/api/sessions', auth, sessions);
+app.use('/api/terms', auth, terms);
 app.use('/api/courses', auth, courses);
 
 // catch 404 and forward to error handler
