@@ -14,7 +14,7 @@ module.exports = React.createClass({
         </a>
         <ul className="right hide-on-med-and-down">
           <li><a href="#users">Users</a></li>
-          <li><a href="#sessions">Sessions</a></li>
+          <li><a href="#terms">Terms</a></li>
           <li><a href="#courses">Courses</a></li>
           <li>
             <a className="dropdown-button" href="#!" data-activates="nav-user">
@@ -24,7 +24,7 @@ module.exports = React.createClass({
         </ul>
         <ul className="side-nav" id="mobile-demo">
           <li><a href="#users">Users</a></li>
-          <li><a href="#sessions">Sessions</a></li>
+          <li><a href="#terms">Terms</a></li>
           <li><a href="#courses">Courses</a></li>
           <li><a href="#profile">Profile</a></li>
           <li><a href="/logout">Logout</a></li>
