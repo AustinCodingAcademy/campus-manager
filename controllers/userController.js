@@ -1,4 +1,5 @@
 var userModel = require('../models/userModel.js');
+var _ = require('lodash');
 
 /**
 * userController.js
@@ -45,22 +46,7 @@ module.exports = {
   * userController.create()
   */
   create: function(req, res) {
-    var user = new userModel({      username : req.body.username,      password : req.body.password
-    });
-    
-    user.save(function(err, user){
-      if(err) {
-        return res.json(500, {
-          message: 'Error saving user',
-          error: err
-        });
-      }
-      return res.json({
-        message: 'saved',
-        _id: user._id
-      });
-    });
-  },
+    var user = new userModel();        var attributes = [      'idn',      'username',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student'    ];        _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });        userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {       user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json({          message: 'saved',          _id: user._id        });      });    });  },
   
   /**
   * userController.update()
@@ -80,8 +66,24 @@ module.exports = {
         });
       }
       
-      user.username =  req.body.username ? req.body.username : user.username;      user.password =  req.body.password ? req.body.password : user.password;      
-      user.save(function(err, user){
+      var attributes = [
+        'idn',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'website',
+        'github',
+        'is_admin',
+        'is_instructor',
+        'is_student'
+      ];
+      
+      _.each(attributes, function(attr) {
+        user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+      });
+          user.save(function(err, user){
         if(err) {
           return res.json(500, {
             message: 'Error getting user.'

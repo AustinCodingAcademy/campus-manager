@@ -50,13 +50,21 @@ router.post('/register', function(req, res, next) {
         bcrypt.hash(req.body.password, salt, function(err, hash) {
           req.body.password = hash;
           var user = new User(req.body);
+          user.is_client = true;
           user.save(function (error, user) {
             if (error) {
               req.flash('error', error.message);
               res.redirect('/register');
             }
-            passport.authenticate('local')(req, res, function () {
-              res.redirect('/');
+            user.client = user._id;
+            user.save(function (error, user) {
+              if (error) {
+                req.flash('error', error.message);
+                res.redirect('/register');
+              }
+              passport.authenticate('local')(req, res, function () {
+                res.redirect('/');
+              });
             });
           });
         });

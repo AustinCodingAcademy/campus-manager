@@ -12,6 +12,8 @@ var TermsListComponent = require('./components/termsListComponent');
 var HomeLayoutComponent = require('./components/homeLayoutComponent');
 var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
+var UsersCollection = require('./collections/usersCollection');
+var UsersListComponent = require('./components/usersListComponent');
 
 $(function() {
   var AppRouter = Backbone.Router.extend({
@@ -19,6 +21,7 @@ $(function() {
       '': 'index',
       '/': 'index',
       'terms': 'terms',
+      'users': 'users'
     },
     
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -37,6 +40,11 @@ $(function() {
       terms.fetch();
       ReactDOM.render(<TermsListComponent collection={terms} />, $('#container')[0]);
     },
+    
+    users: function() {
+      var users = new UsersCollection();
+      users.fetch();
+      ReactDOM.render(<UsersListComponent collection={users} />, $('#container')[0]);
     }
   });
   

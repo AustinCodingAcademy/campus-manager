@@ -6,8 +6,6 @@ module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
 
   render: function() {
-    return (
-      <a href="#sessions">sessions</a>
-    );
+    return (<br/>);
   }
 });
