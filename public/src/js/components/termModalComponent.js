@@ -8,42 +8,38 @@ module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   
   componentDidMount: function() {
-    if (this.props.model) {
-      this.refs.name.value = this.props.model.get('name');
-      this.refs.start_date.value = this.props.model.get('start_date');
-      this.refs.end_date.value = this.props.model.get('end_date');
-    }
+    this.refs.name.value = this.props.model.get('name');
+    this.refs.start_date.value = this.props.model.get('start_date');
+    this.refs.end_date.value = this.props.model.get('end_date');
+    
+    $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year
+      container: 'body',
+      klass: {
+        picker: 'picker z-top'
+      }
+    });
   },
   
   saveTerm: function(e) {
     e.preventDefault();
     var that = this;
-    var term;
-    if (this.props.model) {
-      term = this.props.model;
-    } else {
-      term = new TermModel();
-    }
 
-    term.save({
+    this.props.model.save({
       name: this.refs.name.value,
       start_date: this.refs.start_date.value,
       end_date: this.refs.end_date.value
     }, {
-      success: function () {
+      success: function (term) {
         that.props.collection.add(term);
       }
     });
   },
 
   render: function() {
-    var termId = '';
-    if (this.props.model) {
-      termId = this.props.model.id;
-      Materialize.updateTextFields();
-    }
     return (
-      <div id={'term-modal' + termId} className="modal">
+      <div id={'term-modal' + (this.props.model.id ? this.props.model.id  : '')} className="modal">
         <div className="modal-content">
           <div className="row">
             <form className="col s12" onSubmit={this.saveTerm}>
