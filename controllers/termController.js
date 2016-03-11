@@ -1,4 +1,5 @@
 var termModel = require('../models/termModel.js');
+var userModel = require('../models/userModel.js');
 
 /**
 * termController.js
@@ -45,19 +46,21 @@ module.exports = {
   * termController.create()
   */
   create: function(req, res) {
-    var term = new termModel({      start_date : req.body.start_date,      end_date : req.body.end_date,      name : req.body.name,      client : req.body.client
-    });
+    var term = new termModel({      start_date : req.body.start_date,      end_date : req.body.end_date,      name : req.body.name    });
     
-    term.save(function(err, term){
-      if(err) {
-        return res.json(500, {
-          message: 'Error saving term',
-          error: err
+    userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) { 
+      term.client = currentUser.client.id;
+      term.save(function(err, term){
+        if(err) {
+          return res.json(500, {
+            message: 'Error saving term',
+            error: err
+          });
+        }
+        return res.json({
+          message: 'saved',
+          _id: term._id
         });
-      }
-      return res.json({
-        message: 'saved',
-        _id: term._id
       });
     });
   },

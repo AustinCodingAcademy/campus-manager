@@ -3,38 +3,38 @@ var router = express.Router();
 var courseController = require('../controllers/courseController.js');
 
 /*
-* GET
-*/
+ * GET
+ */
 router.get('/', function(req, res) {
-  courseController.list(req, res);
+    courseController.list(req, res);
 });
 
 /*
-* GET
-*/
+ * GET
+ */
 router.get('/:id', function(req, res) {
-  courseController.show(req, res);
+    courseController.show(req, res);
 });
 
 /*
-* POST
-*/
+ * POST
+ */
 router.post('/', function(req, res) {
-  courseController.create(req, res);
+    courseController.create(req, res);
 });
 
 /*
-* PUT
-*/
+ * PUT
+ */
 router.put('/:id', function(req, res) {
-  courseController.update(req, res);
+    courseController.update(req, res);
 });
 
 /*
-* DELETE
-*/
+ * DELETE
+ */
 router.delete('/:id', function(req, res) {
-  courseController.remove(req, res);
+    courseController.remove(req, res);
 });
 
 module.exports = router;

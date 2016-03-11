@@ -7,8 +7,8 @@ module.exports = React.createClass({
   
   render: function() {
     return (
-      <div className="nav-wrapper">
-        <a href="/" className="brand-logo">Austin Coding Academy</a>
+      <div className="nav-wrapper indigo darken-4">
+        <a href="/" className="brand-logo">ACA Campus</a>
         <a href="#" data-activates="mobile-demo" className="button-collapse">
           <i className="material-icons">menu</i>
         </a>
@@ -23,10 +23,10 @@ module.exports = React.createClass({
           </li>
         </ul>
         <ul className="side-nav" id="mobile-demo">
+          <li><a href="#profile">Profile</a></li>
           <li><a href="#users">Users</a></li>
           <li><a href="#terms">Terms</a></li>
           <li><a href="#courses">Courses</a></li>
-          <li><a href="#profile">Profile</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
         <ul id="nav-user" className="dropdown-content">

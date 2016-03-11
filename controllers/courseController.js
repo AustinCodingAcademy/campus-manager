@@ -1,4 +1,5 @@
 var courseModel = require('../models/courseModel.js');
+var userModel = require('../models/userModel.js');
 
 /**
 * courseController.js
@@ -11,7 +12,7 @@ module.exports = {
   * courseController.list()
   */
   list: function(req, res) {
-    courseModel.find(function(err, courses){
+    courseModel.find().populate('term').exec(function(err, courses){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.'
@@ -45,19 +46,22 @@ module.exports = {
   * courseController.create()
   */
   create: function(req, res) {
-    var course = new courseModel({      name : req.body.name,      days : req.body.days
+    var course = new courseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
+      seats : req.body.seats
     });
-    
-    course.save(function(err, course){
-      if(err) {
-        return res.json(500, {
-          message: 'Error saving course',
-          error: err
+    userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) { 
+      course.client = currentUser.client.id;
+      course.save(function(err, course){
+        if(err) {
+          return res.json(500, {
+            message: 'Error saving course',
+            error: err
+          });
+        }
+        return res.json({
+          message: 'saved',
+          _id: course._id
         });
-      }
-      return res.json({
-        message: 'saved',
-        _id: course._id
       });
     });
   },
@@ -80,7 +84,7 @@ module.exports = {
         });
       }
       
-      course.name =  req.body.name ? req.body.name : course.name;      course.days =  req.body.days ? req.body.days : course.days;      
+      course.name =  req.body.name ? req.body.name : course.name;      course.session =  req.body.session ? req.body.session : course.session;      course.client =  req.body.client ? req.body.client : course.client;      course.days =  req.body.days ? req.body.days : course.days;      course.seats =  req.body.seats ? req.body.seats : course.seats;      
       course.save(function(err, course){
         if(err) {
           return res.json(500, {

@@ -9,6 +9,8 @@ var ReactDOM = require('react-dom');
 
 var TermsCollection = require('./collections/termsCollection');
 var TermsListComponent = require('./components/termsListComponent');
+var CoursesCollection = require('./collections/coursesCollection');
+var CoursesListComponent = require('./components/coursesListComponent');
 var HomeLayoutComponent = require('./components/homeLayoutComponent');
 var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
@@ -21,7 +23,8 @@ $(function() {
       '': 'index',
       '/': 'index',
       'terms': 'terms',
-      'users': 'users'
+      'users': 'users',
+      'courses': 'courses'
     },
     
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -45,6 +48,17 @@ $(function() {
       var users = new UsersCollection();
       users.fetch();
       ReactDOM.render(<UsersListComponent collection={users} />, $('#container')[0]);
+    },
+    
+    courses: function() {
+      var courses = new CoursesCollection();
+      courses.fetch();
+      var terms = new TermsCollection();
+      terms.fetch({
+        success: function() {
+          ReactDOM.render(<CoursesListComponent terms={terms} collection={courses} />, $('#container')[0]);
+        }
+      });
     }
   });
   
