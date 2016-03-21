@@ -16,6 +16,7 @@ module.exports = React.createClass({
           <li><a href="#users">Users</a></li>
           <li><a href="#terms">Terms</a></li>
           <li><a href="#courses">Courses</a></li>
+          <li><a href="#registration">Registration</a></li>
           <li>
             <a className="dropdown-button" href="#!" data-activates="nav-user">
               {this.state.model.username} <i className="material-icons right">arrow_drop_down</i>
@@ -27,6 +28,7 @@ module.exports = React.createClass({
           <li><a href="#users">Users</a></li>
           <li><a href="#terms">Terms</a></li>
           <li><a href="#courses">Courses</a></li>
+          <li><a href="#registration">Registration</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
         <ul id="nav-user" className="dropdown-content">

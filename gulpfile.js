@@ -19,7 +19,10 @@ gulp.task('bundle', function () {
     entries: ['public/src/js/app.js'],
     debug: true,
     transform: [reactify]
-  }).bundle()
+  }).bundle().on('error', function(error) {
+    console.log(error.toString());
+    this.emit('end');
+  })
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))

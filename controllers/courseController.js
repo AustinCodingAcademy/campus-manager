@@ -12,7 +12,7 @@ module.exports = {
   * courseController.list()
   */
   list: function(req, res) {
-    courseModel.find().populate('term').exec(function(err, courses){
+    courseModel.find().populate('term registrations').exec(function(err, courses){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.'

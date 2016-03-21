@@ -1,5 +1,8 @@
 var Backbone = require('backbone');
+var _ = require('underscore');
 var TermModel = require('./termModel');
+var UsersCollection = require('../collections/usersCollection');
+
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/courses',
@@ -19,6 +22,7 @@ module.exports = Backbone.Model.extend({
   
   parse: function(obj) {
     obj.term = new TermModel(obj.term);
+    obj.registrations = new UsersCollection(obj.registrations);
     return obj;
   }
 });

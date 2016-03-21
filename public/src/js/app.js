@@ -16,6 +16,8 @@ var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
 var UsersCollection = require('./collections/usersCollection');
 var UsersListComponent = require('./components/usersListComponent');
+var RegistrationsCollection = require('./collections/registrationsCollection');
+var RegistrationsListComponent = require('./components/registrationsListComponent');
 
 $(function() {
   var AppRouter = Backbone.Router.extend({
@@ -24,7 +26,8 @@ $(function() {
       '/': 'index',
       'terms': 'terms',
       'users': 'users',
-      'courses': 'courses'
+      'courses': 'courses',
+      'registration': 'registration'
     },
     
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -59,6 +62,20 @@ $(function() {
           ReactDOM.render(<CoursesListComponent terms={terms} collection={courses} />, $('#container')[0]);
         }
       });
+    },
+    
+    registration: function() {
+      var courses = new CoursesCollection();
+      courses.fetch({
+        success: function() {
+          var users = new UsersCollection();
+          users.fetch({
+            success: function() {
+              ReactDOM.render(<RegistrationsListComponent collection={courses} users={users} />, $('#container')[0]);
+            }
+          })
+        }
+      });  
     }
   });
   

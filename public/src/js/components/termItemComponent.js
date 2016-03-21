@@ -24,9 +24,9 @@ module.exports = React.createClass({
   render: function() {
     return (
       <tr>
-        <td>{this.state.model.name}</td>
-        <td>{moment(this.state.model.start_date).format("MMM D, YYYY")}</td>
-        <td>{moment(this.state.model.end_date).format("MMM D, YYYY")}</td>
+        <td>{this.props.model.get('name')}</td>
+        <td>{moment(this.props.model.get('start_date')).format("MMM D, YYYY")}</td>
+        <td>{moment(this.props.model.get('end_date')).format("MMM D, YYYY")}</td>
         <td>
           <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.termModal}>
             <i className="material-icons">mode_edit</i>
