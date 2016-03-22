@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "./node_modules/gulp/bin/gulp.js build && node ./bin/www"
   },
   "dependencies": {
     "backbone": "^1.2.3",
