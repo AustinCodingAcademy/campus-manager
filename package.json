@@ -8,6 +8,7 @@
   "dependencies": {
     "backbone": "^1.2.3",
     "backbone-react-component": "^0.10.0",
+    "bcrypt": "^0.8.5",
     "body-parser": "~1.13.2",
     "bower": "^1.7.7",
     "connect-mongo": "^1.1.0",
