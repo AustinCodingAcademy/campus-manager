@@ -33,9 +33,7 @@
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "serve-favicon": "~2.3.0",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
+    "underscore": "^1.8.3",
     "browserify": "^13.0.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-cssnano": "^2.1.1",
