@@ -16,7 +16,6 @@ var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
 var UsersCollection = require('./collections/usersCollection');
 var UsersListComponent = require('./components/usersListComponent');
-var RegistrationsCollection = require('./collections/registrationsCollection');
 var RegistrationsListComponent = require('./components/registrationsListComponent');
 
 $(function() {

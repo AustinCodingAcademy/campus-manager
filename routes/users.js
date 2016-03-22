@@ -37,4 +37,11 @@ router.delete('/:id', function(req, res) {
   userController.remove(req, res);
 });
 
+/*
+* POST
+*/
+router.post('/import', function(req, res) {
+  userController.import(req, res);
+});
+
 module.exports = router;

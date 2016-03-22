@@ -12,6 +12,16 @@ module.exports = React.createClass({
     $('select').material_select();
   },
   
+  registerUser: function(e) {
+    e.preventDefault();
+    var that = this;
+    var course = this.props.collection.get(this.refs.course.value);
+    course.get('registrations').push(this.props.users.get(this.refs.user.value));
+    course.save(null, {
+      wait: true
+    });
+  },
+  
   render: function() {
     var that = this;
     var registrations = [];
@@ -37,20 +47,9 @@ module.exports = React.createClass({
     });
     
     return (
-      <div className="row">
-        <div className="col s12">
-          <table>
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Course</th>
-                <th>Term</th>
-              </tr>
-            </thead>
-            <tbody>
-              {registrationItems}
-            </tbody>
-          </table>
+      <div>
+        <br/>
+        <form className="col s12" onSubmit={this.registerUser}>
           <div className="row">
             <div className="input-field col m6 s12">
               <select defaultValue={this.props.users.first().id} ref="user">
@@ -64,6 +63,29 @@ module.exports = React.createClass({
               </select>
               <label>Course</label>
             </div>
+          </div>
+          <div className="row">
+            <div className="input-field col s12">
+              <button className="btn waves-effect waves-light" type="submit" name="action">Register
+                <i className="material-icons right">send</i>
+              </button>
+            </div>
+          </div>
+        </form>
+        <div className="row">
+          <div className="col s12">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Term</th>
+                  <th>Course</th>
+                </tr>
+              </thead>
+              <tbody>
+                {registrationItems}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

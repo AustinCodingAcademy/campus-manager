@@ -31,7 +31,7 @@ module.exports = React.createClass({
                 <th>Name</th>
                 <th>Term</th>
                 <th>Days</th>
-                <th>Seats</th>
+                <th>Seats Avai.</th>
                 <th></th>
                 <th></th>
               </tr>

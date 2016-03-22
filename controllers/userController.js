@@ -12,7 +12,9 @@ module.exports = {
   * userController.list()
   */
   list: function(req, res) {
-    userModel.find(function(err, users){
+    userModel.find(null,null,{
+      sort: 'last_name',
+    }, function(err, users){
       if(err) {
         return res.json(500, {
           message: 'Error getting user.'
@@ -112,5 +114,34 @@ module.exports = {
       }
       return res.json(user);
     });
+  },
+  
+  import: function(req, res) {
+    _.each(req.body, function(reqUser) {
+      var user = new userModel();
+      
+      var attributes = [
+        'idn',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'website',
+        'github'
+      ];
+      
+      _.each(attributes, function(attr) {
+        user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+      });
+      
+      user.is_student = true;
+      
+      userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) { 
+        user.client = currentUser.client.id;
+        user.save();
+      });
+    });
+    return res.json(req.body);
   }
 };

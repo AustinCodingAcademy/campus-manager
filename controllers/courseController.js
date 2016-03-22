@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var courseModel = require('../models/courseModel.js');
 var userModel = require('../models/userModel.js');
 
@@ -84,7 +86,7 @@ module.exports = {
         });
       }
       
-      course.name =  req.body.name ? req.body.name : course.name;      course.session =  req.body.session ? req.body.session : course.session;      course.client =  req.body.client ? req.body.client : course.client;      course.days =  req.body.days ? req.body.days : course.days;      course.seats =  req.body.seats ? req.body.seats : course.seats;      
+      course.name =  req.body.name ? req.body.name : course.name;      course.session =  req.body.session ? req.body.session : course.session;      course.client =  req.body.client ? req.body.client : course.client;      course.days =  req.body.days ? req.body.days : course.days;      course.seats =  req.body.seats ? req.body.seats : course.seats;      course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;      
       course.save(function(err, course){
         if(err) {
           return res.json(500, {

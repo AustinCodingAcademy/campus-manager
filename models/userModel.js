@@ -46,4 +46,14 @@ var userSchema = new Schema({
     ref: 'user'
   }
 });
+
+userSchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    delete ret.password;
+    delete ret.client;
+    delete ret.__v;
+    return ret;
+  }
+});
+
 module.exports = mongoose.model('user', userSchema);

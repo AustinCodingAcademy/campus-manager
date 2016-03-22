@@ -27,7 +27,7 @@ module.exports = React.createClass({
         <td>{this.props.model.get('name')}</td>
         <td>{this.props.model.get('term').get('name')}</td>
         <td>{this.props.model.shortDays()}</td>
-        <td>{this.props.model.get('seats')}</td>
+        <td>{this.props.model.get('seats') - this.props.model.get('registrations').length + ' / ' + this.props.model.get('seats')}</td>
         <td>
           <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.courseModal}>
             <i className="material-icons">mode_edit</i>
