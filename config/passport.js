@@ -2,7 +2,7 @@ var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy
 var bcrypt = require('bcrypt')
 
-var salt = require('./env').salt;
+var salt = process.env.SALT || require('./env').salt;
 var User = require('../models/userModel');
 
 passport.use(new LocalStrategy(
