@@ -16,7 +16,7 @@ var passport = require('./config/passport');
 
 var auth = require('./routes/middleware').auth;
 
-var mongo_url = require('./config/env').mongo_url;
+var mongo_url = process.env.MONGO_URL || require('./config/env').mongo_url;
 
 var app = express();
 
