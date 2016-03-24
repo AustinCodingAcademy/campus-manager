@@ -18,11 +18,11 @@ var passport = require('./config/passport');
 var auth = require('./routes/middleware').auth;
 
 var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
+var rollbar = require('rollbar');
 var rollbarAccessToken = process.env.ROLLBAR_ACCESS_TOKEN || require('./config/env').rollbarAccessToken
 
 var app = express();
 app.use(cors());
-app.use(rollbar.errorHandler(rollbarAccessToken));
 
 var mongoose = require('mongoose');
 mongoose.connect(mongo_url);
@@ -51,6 +51,7 @@ app.use('/', routes);
 app.use('/api/users', auth, users);
 app.use('/api/terms', auth, terms);
 app.use('/api/courses', auth, courses);
+app.use(rollbar.errorHandler(rollbarAccessToken));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -79,7 +80,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: error
   });
 });
 
