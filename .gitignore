@@ -3,4 +3,4 @@ npm-debug.log
 *.sqlite
 config/env.js
 public/css
-public/js
+public/js/bundle*
