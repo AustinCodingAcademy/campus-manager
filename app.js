@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
+var cors = require('cors')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -19,6 +20,7 @@ var auth = require('./routes/middleware').auth;
 var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
 
 var app = express();
+app.use(cors());
 
 var mongoose = require('mongoose');
 mongoose.connect(mongo_url);
