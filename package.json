@@ -46,6 +46,7 @@
     "react": "0.14.7",
     "react-dom": "0.14.7",
     "reactify": "1.1.1",
+    "rollbar": "0.5.16",
     "serve-favicon": "2.3.0",
     "underscore": "1.8.3",
     "vinyl-buffer": "1.0.0",

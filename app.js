@@ -18,9 +18,11 @@ var passport = require('./config/passport');
 var auth = require('./routes/middleware').auth;
 
 var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
+var rollbarAccessToken = process.env.ROLLBAR_ACCESS_TOKEN || require('./config/env').rollbarAccessToken
 
 var app = express();
 app.use(cors());
+app.use(rollbar.errorHandler(rollbarAccessToken));
 
 var mongoose = require('mongoose');
 mongoose.connect(mongo_url);
