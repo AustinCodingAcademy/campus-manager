@@ -18,8 +18,6 @@ var passport = require('./config/passport');
 var auth = require('./routes/middleware').auth;
 
 var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
-var rollbar = require('rollbar');
-var rollbarAccessToken = process.env.ROLLBAR_ACCESS_TOKEN || require('./config/env').rollbarAccessToken
 
 var app = express();
 app.use(cors());
