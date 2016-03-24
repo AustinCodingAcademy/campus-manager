@@ -49,7 +49,6 @@ app.use('/', routes);
 app.use('/api/users', auth, users);
 app.use('/api/terms', auth, terms);
 app.use('/api/courses', auth, courses);
-app.use(rollbar.errorHandler(rollbarAccessToken));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
