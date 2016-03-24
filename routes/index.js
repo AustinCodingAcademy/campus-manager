@@ -1,6 +1,7 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
-var salt = process.env.SALT || require('../config/env').salt;
+// var salt = process.env.SALT || require('../config/env').salt;
+var salt = "$2a$10$cWJo9D7mPJXd5u6VXGP0suNVzBobvQrv6IEMTXq9Nf6hy88rETfGC";
 var router = express.Router();
 
 var passport = require('../config/passport');
