@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = window.$ = window.jQuery = require('jquery');
+require('materialize');
 
 var _ = require('underscore');
 var Backbone = require('backbone');
