@@ -17,9 +17,7 @@ module.exports = React.createClass({
     var that = this;
     var course = this.props.collection.get(this.refs.course.value);
     course.get('registrations').push(this.props.users.get(this.refs.user.value));
-    course.save(null, {
-      wait: true
-    });
+    course.save();
   },
   
   render: function() {
@@ -43,7 +41,7 @@ module.exports = React.createClass({
     
     var userOptions = [];
     this.props.users.each(function(user) {
-      userOptions.push(<option key={user.id} value={user.id}>{user.fullName() + ' (' + user.get('username') + ')'}</option>);
+      userOptions.push(<option key={user.id} value={user.id}>{user.get('full_name')+ ' (' + user.get('username') + ')'}</option>);
     });
     
     return (

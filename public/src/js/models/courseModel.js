@@ -3,7 +3,6 @@ var _ = require('underscore');
 var TermModel = require('./termModel');
 var UsersCollection = require('../collections/usersCollection');
 
-
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/courses',
   idAttribute: '_id',
@@ -11,7 +10,8 @@ module.exports = Backbone.Model.extend({
   defaults: {
     name: '',
     term: new TermModel(),
-    seats: ''
+    seats: '',
+    registrations: new UsersCollection()
   },
   
   shortDays: function() {
@@ -21,8 +21,12 @@ module.exports = Backbone.Model.extend({
   },
   
   parse: function(obj) {
-    obj.term = new TermModel(obj.term);
-    obj.registrations = new UsersCollection(obj.registrations);
+    if (obj.term) {
+      obj.term = new TermModel(obj.term);
+    }
+    if (obj.registrations) {
+      obj.registrations = new UsersCollection(obj.registrations);
+    }
     return obj;
   }
 });

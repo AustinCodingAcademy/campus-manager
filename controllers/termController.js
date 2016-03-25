@@ -1,5 +1,8 @@
 var termModel = require('../models/termModel.js');
+var courseModel = require('../models/courseModel.js');
 var userModel = require('../models/userModel.js');
+var _ = require('underscore');
+var reversePopulate = require('mongoose-reverse-populate');
 
 /**
 * termController.js
@@ -18,7 +21,15 @@ module.exports = {
           message: 'Error getting term.'
         });
       }
-      return res.json(terms);
+    	reversePopulate({
+        modelArray: terms,
+        storeWhere: "courses",
+        arrayPop: true,
+        mongooseModel: courseModel,
+        idField: "term"
+      }, function(err, terms) {
+    		return res.json(terms);
+    	});
     });
   },
   

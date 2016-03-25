@@ -29,7 +29,7 @@ module.exports = {
   */
   show: function(req, res) {
     var id = req.params.id;
-    courseModel.findOne({_id: id}, function(err, course){
+    courseModel.findOne({_id: id}).populate('term registrations').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.'
@@ -73,7 +73,7 @@ module.exports = {
   */
   update: function(req, res) {
     var id = req.params.id;
-    courseModel.findOne({_id: id}, function(err, course){
+    courseModel.findOne({_id: id}).populate('term registrations').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error saving course',
@@ -98,7 +98,9 @@ module.exports = {
             message: 'No such course'
           });
         }
-        return res.json(course);
+        course.populate('registrations').populate(function(err, course) {
+          return res.json(course);
+        });
       });
     });
   },

@@ -107,7 +107,7 @@ module.exports = React.createClass({
                   <label htmlFor="website">Website</label>
                 </div>
               </div>
-              <input type="submit" className="modal-action modal-close waves-effect waves-green btn-flat" value="Submit"/>
+              <input type="submit" className="modal-action modal-close waves-effect waves-green btn" value="Submit"/>
             </form>
           </div>
         </div>

@@ -41,10 +41,11 @@ module.exports = React.createClass({
       seats: this.refs.seats.value,
       term: this.props.terms.get(this.refs.term.value)
     }, {
-      success: function (course) {
-        that.props.collection.add(course);
+      success: function() {
+        that.props.collection.add(that.props.model);
       }
     });
+    
   },
 
   render: function() {

@@ -11,12 +11,13 @@ var TermsCollection = require('./collections/termsCollection');
 var TermsListComponent = require('./components/termsListComponent');
 var CoursesCollection = require('./collections/coursesCollection');
 var CoursesListComponent = require('./components/coursesListComponent');
-var HomeLayoutComponent = require('./components/homeLayoutComponent');
+var HomeLayoutView = require('./views/HomeLayoutView');
 var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
 var UsersCollection = require('./collections/usersCollection');
 var UsersListComponent = require('./components/usersListComponent');
 var RegistrationsListComponent = require('./components/registrationsListComponent');
+var TermModel = require('./models/termModel');
 
 $(function() {
   var AppRouter = Backbone.Router.extend({
@@ -30,14 +31,19 @@ $(function() {
     },
     
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
+    currentView: undefined,
     
     initialize: function() {
-      $('<nav></nav>').insertBefore('#container');
+      $(' <div class="navbar-fixed"><nav></nav></div>').insertBefore('#container');
       ReactDOM.render(<NavbarComponent model={this.currentUser} />, $('nav')[0]);
     },
     
     index: function() {
-      ReactDOM.render(<HomeLayoutComponent />, $('#container')[0]);
+      var terms = new TermsCollection();
+      terms.fetch();
+      this.currentView = new HomeLayoutView({collection: terms});
+      $('#container').html(this.currentView.render().el);
+      this.currentView.insertCharts();
     },
     
     terms: function() {

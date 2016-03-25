@@ -39,6 +39,7 @@
     "material-design-lite": "1.1.1",
     "moment": "2.11.2",
     "mongoose": "4.4.5",
+    "mongoose-reverse-populate": "1.1.0",
     "morgan": "1.6.1",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
@@ -51,5 +52,8 @@
     "underscore": "1.8.3",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0"
+  },
+  "devDependencies": {
+    "chart.js": "^1.0.2"
   }
 }

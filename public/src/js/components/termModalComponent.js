@@ -59,7 +59,7 @@ module.exports = React.createClass({
                   <input ref="end_date" type="date" name="end_date" id="end-date" className="datepicker" />
                 </div>
               </div>
-              <input type="submit" className="modal-action modal-close waves-effect waves-green btn-flat" value="Submit"/>
+              <input type="submit" className="modal-action modal-close waves-effect waves-green btn" value="Submit"/>
             </form>
           </div>
         </div>

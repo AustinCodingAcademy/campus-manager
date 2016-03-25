@@ -25,7 +25,7 @@ module.exports = React.createClass({
     return (
       <tr>
         <td>{this.props.model.get('idn')}</td>
-        <td>{this.props.model.fullName()}</td>
+        <td>{this.props.model.get('full_name')}</td>
         <td>{this.props.model.get('username')}</td>
         <td>{this.props.model.get('phone')}</td>
         <td>{this.props.model.roles()}</td>
