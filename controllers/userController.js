@@ -1,5 +1,6 @@
 var userModel = require('../models/userModel.js');
-var _ = require('lodash');
+var _ = require('underscore');
+var moment = require('moment');
 
 /**
 * userController.js
@@ -79,7 +80,8 @@ module.exports = {
         'github',
         'is_admin',
         'is_instructor',
-        'is_student'
+        'is_student',
+        'attendance'
       ];
       
       _.each(attributes, function(attr) {
@@ -143,5 +145,27 @@ module.exports = {
       });
     });
     return res.json(req.body);
-  }
+  },
+  
+  attendance: function(req, res) {
+    _.each(req.body, function(checkIn) {
+      userModel.findOne({ idn: checkIn['IDN'] }, function(err, user) {
+        if(err) {
+          return res.json(500, {
+            message: 'Error saving user',
+            error: err
+          });
+        }
+        if (!user.attendance) {
+          user.attendance = [];
+        }
+        if (!_.some(user.attendance, function(date) { return moment(date).isSame(checkIn['Timestamp'], 'day')})) {
+          user.attendance.push(checkIn['Timestamp']);
+        }
+        user.save();
+      });
+    });
+    return res.json(req.body);
+  },
+  
 };

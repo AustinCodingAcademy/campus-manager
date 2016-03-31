@@ -44,7 +44,8 @@ var userSchema = new Schema({
   "client" : {
     type: Schema.Types.ObjectId,
     ref: 'user'
-  }
+  },
+  attendance: Array
 });
 
 userSchema.set('toJSON', {

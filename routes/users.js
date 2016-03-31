@@ -44,4 +44,11 @@ router.post('/import', function(req, res) {
   userController.import(req, res);
 });
 
+/*
+* POST
+*/
+router.post('/attendance', function(req, res) {
+  userController.attendance(req, res);
+});
+
 module.exports = router;

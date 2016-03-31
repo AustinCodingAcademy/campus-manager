@@ -2,17 +2,21 @@
 
 var $ = window.$ = window.jQuery = require('jquery');
 require('materialize');
+require('picker');
+require('picker.date');
+require('picker.time');
 
 var _ = require('underscore');
 var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var AttendanceListComponent = require('./components/attendanceListComponent');
 var TermsCollection = require('./collections/termsCollection');
 var TermsListComponent = require('./components/termsListComponent');
 var CoursesCollection = require('./collections/coursesCollection');
 var CoursesListComponent = require('./components/coursesListComponent');
-var HomeLayoutView = require('./views/HomeLayoutView');
+var HomeLayoutComponent = require('./components/homeLayoutComponent');
 var NavbarComponent = require('./components/navbarComponent');
 var UserModel = require('./models/userModel');
 var UsersCollection = require('./collections/usersCollection');
@@ -25,6 +29,7 @@ $(function() {
     routes: {
       '': 'index',
       '/': 'index',
+      'attendance': 'attendance',
       'terms': 'terms',
       'users': 'users',
       'courses': 'courses',
@@ -35,16 +40,20 @@ $(function() {
     currentView: undefined,
     
     initialize: function() {
-      $(' <div class="navbar-fixed"><nav></nav></div>').insertBefore('#container');
+      $('<div class="navbar-fixed"><nav></nav></div>').insertBefore('#container');
       ReactDOM.render(<NavbarComponent model={this.currentUser} />, $('nav')[0]);
+    },
+    
+    attendance: function() {
+      var users = new UsersCollection();
+      users.fetch();
+      ReactDOM.render(<AttendanceListComponent users={users} model={new UserModel()} />, $('#container')[0]);
     },
     
     index: function() {
       var terms = new TermsCollection();
       terms.fetch();
-      this.currentView = new HomeLayoutView({collection: terms});
-      $('#container').html(this.currentView.render().el);
-      this.currentView.insertCharts();
+      ReactDOM.render(<HomeLayoutComponent collection={terms} />, $('#container')[0]);
     },
     
     terms: function() {

@@ -44,6 +44,7 @@
     "morgan": "1.6.1",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
+    "pickadate": "3.5.6",
     "pixrem": "3.0.0",
     "react": "0.14.7",
     "react-dom": "0.14.7",
@@ -56,7 +57,10 @@
   },
   "browser": {
     "jquery": "jquery",
-    "materialize": "./public/js/materialize.min.js"
+    "materialize": "./public/js/materialize.min.js",
+    "picker": "./node_modules/pickadate/lib/picker.js",
+    "picker.date": "./node_modules/pickadate/lib/picker.date.js",
+    "picker.time": "./node_modules/pickadate/lib/picker.time.js"
   },
   "browserify": {
     "transform": [
