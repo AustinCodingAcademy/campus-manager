@@ -21,11 +21,15 @@ module.exports = React.createClass({
     var time = this.refs.time.value ? moment(this.refs.time.value, 'hh:mm a').format('HH:mm') : moment().format('HH:mm')
     var dateTime = moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DD') + ' ' + time;
     var user = this.props.users.findWhere({ 'idn': parseInt(this.refs.idn.value) });
-    if (!_.some(user.get('attendance'), function(date) { return moment(date).isSame(dateTime, 'day')})) {
-      user.get('attendance').push(dateTime);
-      user.save();
+    if (!user) {
+      Materialize.toast('User with IDN of ' + this.refs.idn.value + ' does not exist!', 4000, 'red darken-1');
+    } else {
+      if (!_.some(user.get('attendance'), function(date) { return moment(date).isSame(dateTime, 'day')})) {
+        user.get('attendance').push(dateTime);
+        user.save();
+      }
+      this.props.model.set(user.attributes);
     }
-    this.props.model.set(user.attributes);
     this.refs.idn.value = '';
     this.pickadate.set('select', new Date().getTime(), { muted: true });
     this.refs.time.value = '';
