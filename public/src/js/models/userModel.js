@@ -3,7 +3,7 @@ var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/users',
   idAttribute: '_id',
-  
+
   defaults: {
     idn: '',
     is_student: false,
@@ -17,16 +17,16 @@ module.exports = Backbone.Model.extend({
     last_name: '',
     full_name: ''
   },
-  
+
   initialize: function() {
     this.fullName();
-    this.on('change:first_name change:last_name', this.fullName);
+    this.on('change:first_name change:last_name sync', this.fullName);
   },
-  
+
   fullName: function() {
     return this.set('full_name', this.get('last_name') + ', ' + this.get('first_name'));
   },
-  
+
   roles: function() {
     var roles = [];
     if (this.get('is_client')) {
