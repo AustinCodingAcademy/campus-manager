@@ -1,11 +1,7 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
-var salt = process.env.SALT || require('../config/env').salt;
-var salt = "$2a$10$cWJo9D7mPJXd5u6VXGP0suNVzBobvQrv6IEMTXq9Nf6hy88rETfGC";
 var router = express.Router();
-
 var passport = require('../config/passport');
-
 var User = require('../models/userModel');
 
 /* GET home page. */
@@ -44,39 +40,53 @@ router.get('/register', function(req, res, next) {
   }
 });
 
+// Todo: We should probably look at extracting this into a module
 router.post('/register', function(req, res, next) {
-  User.find({ username : req.body.username }, function (user) {
-    if (!user) {
-      if (req.body.password.length > 5) {
-        bcrypt.hash(req.body.password, salt, function(err, hash) {
-          req.body.password = hash;
-          var user = new User(req.body);
-          user.is_client = true;
-          user.save(function (error, user) {
-            if (error) {
-              req.flash('error', error.message);
-              res.redirect('/register');
-            }
-            user.client = user._id;
-            user.save(function (error, user) {
-              if (error) {
-                req.flash('error', error.message);
-                res.redirect('/register');
-              }
-              passport.authenticate('local')(req, res, function () {
-                res.redirect('/');
-              });
-            });
+  User.findOne({ username : req.body.username }, function (err, user) {
+    var user;
+    var saltRounds = 10;
+
+    if (user) {
+      req.flash('error', 'The email address has already been used');
+      return res.redirect('/register');
+    }
+
+    if (req.body.password.length <= 5) {
+      req.flash('error', 'Password must be at least 6 characters');
+      return res.redirect('/register');
+    }
+
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+      // Set the hashed password on the body
+      req.body.password = hash;
+
+      user = new User(req.body);
+      user.is_client = true;
+
+      user.save(function (error, user) {
+
+        if (error) {
+          req.flash('error', error.message);
+          res.redirect('/register');
+        }
+
+        user.client = user._id;
+        user.save(function (error, user) {
+
+          if (error) {
+            req.flash('error', error.message);
+            res.redirect('/register');
+          }
+
+          // If the users has been created successfully, log them in with
+          // passport to start their session and redirect to the home route
+          req.login(user, function(err) {
+            if (err) { return res.redirect('/register'); }
+            return res.redirect('/');
           });
         });
-      } else {
-        req.flash('error', 'Password must be at least 6 characters');
-        res.redirect('/register');
-      }
-    } else {
-      req.flash('error', 'User already exists');
-      res.redirect('/register');
-    }
+      });
+    });
   });
 });
 
