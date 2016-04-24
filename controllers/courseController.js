@@ -9,12 +9,14 @@ var userModel = require('../models/userModel.js');
 * @description :: Server-side logic for managing courses.
 */
 module.exports = {
-  
+
   /**
   * courseController.list()
   */
   list: function(req, res) {
-    courseModel.find().populate('term registrations').exec(function(err, courses){
+    courseModel.find({
+      client: req.user.client
+    }).populate('term registrations').exec(function(err, courses){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.'
@@ -23,13 +25,16 @@ module.exports = {
       return res.json(courses);
     });
   },
-  
+
   /**
   * courseController.show()
   */
   show: function(req, res) {
     var id = req.params.id;
-    courseModel.findOne({_id: id}).populate('term registrations').exec(function(err, course){
+    courseModel.findOne({
+      _id: id,
+      client: req.user.client
+    }).populate('term registrations').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.'
@@ -43,7 +48,7 @@ module.exports = {
       return res.json(course);
     });
   },
-  
+
   /**
   * courseController.create()
   */
@@ -51,7 +56,9 @@ module.exports = {
     var course = new courseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
       seats : req.body.seats
     });
-    userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) { 
+    userModel.findOne({
+      _id: req.user.id
+    }).populate('client').exec(function(err, currentUser) {
       course.client = currentUser.client.id;
       course.save(function(err, course){
         if(err) {
@@ -67,13 +74,16 @@ module.exports = {
       });
     });
   },
-  
+
   /**
   * courseController.update()
   */
   update: function(req, res) {
     var id = req.params.id;
-    courseModel.findOne({_id: id}).populate('term registrations').exec(function(err, course){
+    courseModel.findOne({
+      _id: id,
+      client: req.user.client
+    }).populate('term registrations').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error saving course',
@@ -85,8 +95,8 @@ module.exports = {
           message: 'No such course'
         });
       }
-      
-      course.name =  req.body.name ? req.body.name : course.name;      course.session =  req.body.session ? req.body.session : course.session;      course.client =  req.body.client ? req.body.client : course.client;      course.days =  req.body.days ? req.body.days : course.days;      course.seats =  req.body.seats ? req.body.seats : course.seats;      course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;      
+
+      course.name =  req.body.name ? req.body.name : course.name;      course.session =  req.body.session ? req.body.session : course.session;      course.client =  req.body.client ? req.body.client : course.client;      course.days =  req.body.days ? req.body.days : course.days;      course.seats =  req.body.seats ? req.body.seats : course.seats;      course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
       course.save(function(err, course){
         if(err) {
           return res.json(500, {
@@ -104,13 +114,16 @@ module.exports = {
       });
     });
   },
-  
+
   /**
   * courseController.remove()
   */
   remove: function(req, res) {
     var id = req.params.id;
-    courseModel.findByIdAndRemove(id, function(err, course){
+    courseModel.remove({
+      client: req.user.client,
+      _id: id
+    }, function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.'
