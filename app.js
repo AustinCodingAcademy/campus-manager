@@ -15,7 +15,7 @@ var courses = require('./routes/courses');
 
 var passport = require('./config/passport');
 
-var auth = require('./routes/middleware').auth;
+var middleware = require('./routes/middleware');
 
 var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
 
@@ -46,9 +46,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', routes);
-app.use('/api/users', auth, users);
-app.use('/api/terms', auth, terms);
-app.use('/api/courses', auth, courses);
+app.use('/api/users', middleware.auth, users);
+app.use('/api/terms', middleware.auth, middleware.admin, terms);
+app.use('/api/courses', middleware.auth, middleware.instructor, courses);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
