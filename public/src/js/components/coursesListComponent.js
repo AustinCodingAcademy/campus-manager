@@ -9,22 +9,25 @@ var TermsCollection = require('../collections/termsCollection');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
-  
+
   newCourseModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(<CourseModalComponent terms={this.props.terms} collection={this.props.collection} model={new CourseModel()} />, $('#modal-container')[0]);
     $('#course-modal').openModal();
   },
-  
+
   render: function() {
     var that = this;
     var courseItems = this.props.collection.map(function(courseItem) {
       return <CourseItemComponent key={courseItem.id} terms={that.props.terms} model={courseItem} collection={that.props.collection}/>
     });
-    
+
     return (
       <div className="row">
         <div className="col s12">
+          <br />
+          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newCourseModal}><i className="material-icons left">add</i> course</a>
+          <br />
           <table>
             <thead>
               <tr>
@@ -40,7 +43,6 @@ module.exports = React.createClass({
               {courseItems}
             </tbody>
           </table>
-          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newCourseModal}><i className="material-icons left">add</i> course</a>
         </div>
       </div>
     );
