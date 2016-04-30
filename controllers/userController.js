@@ -131,28 +131,32 @@ module.exports = {
 
   import: function(req, res) {
     _.each(req.body, function(reqUser) {
-      var user = new userModel();
+      userModel.findOne({ username: reqUser['username'] }, function(err, existingUser) {
+        var user = existingUser ? existingUser : new userModel();
 
-      var attributes = [
-        'idn',
-        'username',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'website',
-        'github'
-      ];
+        var attributes = [
+          'idn',
+          'username',
+          'first_name',
+          'last_name',
+          'phone',
+          'website',
+          'github',
+          'codecademy',
+          'zipcode',
+          'photo'
+        ];
 
-      _.each(attributes, function(attr) {
-        user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
-      });
+        _.each(attributes, function(attr) {
+          user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+        });
 
-      user.is_student = true;
+        user.is_student = true;
 
-      userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {
-        user.client = currentUser.client.id;
-        user.save();
+        userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {
+          user.client = currentUser.client.id;
+          user.save();
+        });
       });
     });
     return res.json(req.body);
