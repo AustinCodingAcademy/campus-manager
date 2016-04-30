@@ -54,7 +54,7 @@ module.exports = {
   * userController.create()
   */
   create: function(req, res) {
-    var user = new userModel();    var attributes = [      'idn',      'username',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student'    ];    _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });    userModel.findOne({      _id: req.user.id    }).populate('client').exec(function(err, currentUser) {      user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json({          message: 'saved',          _id: user._id        });      });    });  },
+    var user = new userModel();    var attributes = [      'idn',      'username',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student',      'codecademy',      'zipcode',      'photo'    ];    _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });    userModel.findOne({      _id: req.user.id    }).populate('client').exec(function(err, currentUser) {      user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json(user);      });    });  },
 
   /**
   * userController.update()
@@ -89,7 +89,10 @@ module.exports = {
         'is_admin',
         'is_instructor',
         'is_student',
-        'attendance'
+        'attendance',
+        'codecademy',
+        'zipcode',
+        'photo'
       ];
 
       _.each(attributes, function(attr) {
