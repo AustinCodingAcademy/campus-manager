@@ -51,7 +51,10 @@ var userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  attendance: Array
+  attendance: Array,
+  codecademy: String,
+  zipcode: String,
+  photo: String
 });
 
 userSchema.set('toJSON', {
