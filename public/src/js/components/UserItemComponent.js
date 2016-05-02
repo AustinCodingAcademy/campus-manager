@@ -3,14 +3,14 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var moment = require('moment');
 require('backbone-react-component');
-var UserModelComponent = require('./UserModelComponent.js');
+var UserModalComponent = require('./UserModalComponent.js');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModelComponent collection={this.props.collection} model={this.props.model}/>, $('#modal-container')[0]);
+    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.props.model}/>, $('#modal-container')[0]);
     $('#user-modal' + this.props.model.id).openModal();
     Materialize.updateTextFields();
   },

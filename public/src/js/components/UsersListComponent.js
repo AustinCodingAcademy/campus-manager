@@ -3,7 +3,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
 var UserItemComponent = require('./UserItemComponent');
-var UserModelComponent = require('./UserModelComponent');
+var UserModalComponent = require('./UserModalComponent');
 var UserModel = require('../models/UserModel');
 
 module.exports = React.createClass({
@@ -11,7 +11,7 @@ module.exports = React.createClass({
 
   newUserModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModelComponent collection={this.props.collection} model={new UserModel()}/>, $('#modal-container')[0]);
+    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={new UserModel()}/>, $('#modal-container')[0]);
     $('#user-modal').openModal();
   },
 
