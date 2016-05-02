@@ -42,7 +42,7 @@ router.get('/register', function(req, res, next) {
 
 // Todo: We should probably look at extracting this into a module
 router.post('/register', function(req, res, next) {
-  User.findOne({ username : req.body.username }, function (err, user) {
+  User.findOne({ username : req.body.username.toLowerCase() }, function (err, user) {
     var user;
     var saltRounds = 10;
 
@@ -57,10 +57,11 @@ router.post('/register', function(req, res, next) {
     }
 
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-      // Set the hashed password on the body
-      req.body.password = hash;
 
-      user = new User(req.body);
+      user = new User({
+        username: req.body.username.toLowerCase(),
+        password: hash
+      });
       user.is_client = true;
 
       user.save(function (error, user) {

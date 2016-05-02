@@ -54,7 +54,7 @@ module.exports = {
   * UserController.create()
   */
   create: function(req, res) {
-    var user = new UserModel();    var attributes = [      'idn',      'username',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student',      'codecademy',      'zipcode',      'photo'    ];    _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });    UserModel.findOne({      _id: req.user.id    }).populate('client').exec(function(err, currentUser) {      user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json(user);      });    });  },
+    var user = new UserModel();    var attributes = [      'idn',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student',      'codecademy',      'zipcode',      'photo'    ];    _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });    user.username = req.body.username ? req.body.username.toLowerCase() : user.username;    UserModel.findOne({      _id: req.user.id    }).populate('client').exec(function(err, currentUser) {      user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json(user);      });    });  },
 
   /**
   * UserController.update()
@@ -79,7 +79,6 @@ module.exports = {
 
       var attributes = [
         'idn',
-        'username',
         'first_name',
         'last_name',
         'email',
@@ -98,6 +97,7 @@ module.exports = {
       _.each(attributes, function(attr) {
         user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
       });
+      user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
       user.save(function(err, user){
         if(err) {
           return res.json(500, {
@@ -139,7 +139,6 @@ module.exports = {
 
         var attributes = [
           'idn',
-          'username',
           'first_name',
           'last_name',
           'phone',
@@ -153,6 +152,7 @@ module.exports = {
         _.each(attributes, function(attr) {
           user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
         });
+        user.username = reqUser.username ? reqUser.username.toLowerCase() : user.username;
 
         user.is_student = true;
 
