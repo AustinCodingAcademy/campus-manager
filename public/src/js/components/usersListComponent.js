@@ -2,22 +2,22 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
-var UserItemComponent = require('./userItemComponent');
-var UserModalComponent = require('./userModalComponent');
-var UserModel = require('../models/userModel');
+var UserItemComponent = require('./UserItemComponent');
+var UserModelComponent = require('./UserModelComponent');
+var UserModel = require('../models/UserModel');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
 
   newUserModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={new UserModel()}/>, $('#modal-container')[0]);
+    ReactDOM.render(<UserModelComponent collection={this.props.collection} model={new UserModel()}/>, $('#modal-container')[0]);
     $('#user-modal').openModal();
   },
 
   render: function() {
     var that = this;
-    var userItemComponents = this.props.collection.map(function(user) {
+    var userItems = this.props.collection.map(function(user) {
       return <UserItemComponent key={user.id} model={user} collection={that.props.collection}/>
     });
 
@@ -40,7 +40,7 @@ module.exports = React.createClass({
               </tr>
             </thead>
             <tbody>
-              {userItemComponents}
+              {userItems}
             </tbody>
           </table>
         </div>

@@ -11,18 +11,18 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var AttendanceListComponent = require('./components/attendanceListComponent');
-var TermsCollection = require('./collections/termsCollection');
-var TermsListComponent = require('./components/termsListComponent');
-var CoursesCollection = require('./collections/coursesCollection');
-var CoursesListComponent = require('./components/coursesListComponent');
-var HomeLayoutComponent = require('./components/homeLayoutComponent');
-var NavbarComponent = require('./components/navbarComponent');
-var UserModel = require('./models/userModel');
-var UsersCollection = require('./collections/usersCollection');
-var UsersListComponent = require('./components/usersListComponent');
-var RegistrationsListComponent = require('./components/registrationsListComponent');
-var TermModel = require('./models/termModel');
+var AttendanceListComponent = require('./components/AttendanceListComponent');
+var TermsCollection = require('./collections/TermsCollection');
+var TermsListComponent = require('./components/TermsListComponent');
+var CoursesCollection = require('./collections/CoursesCollection');
+var CoursesListComponent = require('./components/CoursesListComponent');
+var HomeLayoutComponent = require('./components/HomeLayoutComponent');
+var NavbarComponent = require('./components/NavbarComponent');
+var UserModel = require('./models/UserModel');
+var UsersCollection = require('./collections/UsersCollection');
+var UsersListComponent = require('./components/UsersListComponent');
+var RegistrationsListComponent = require('./components/RegistrationsListComponent');
+var TermModel = require('./models/TermModel');
 
 $(function() {
   var AppRouter = Backbone.Router.extend({

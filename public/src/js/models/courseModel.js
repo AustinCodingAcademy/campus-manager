@@ -1,7 +1,7 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
-var TermModel = require('./termModel');
-var UsersCollection = require('../collections/usersCollection');
+var TermModel = require('./TermModel');
+var UsersCollection = require('../collections/UsersCollection');
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/courses',

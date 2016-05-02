@@ -2,7 +2,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
 require('backbone-react-component');
-var TermCardComponent = require('./termCardComponent');
+var TermCardComponent = require('./TermCardComponent');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],

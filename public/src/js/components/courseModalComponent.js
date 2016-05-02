@@ -3,7 +3,7 @@ var _ = require('underscore');
 var React = require('react');
 var moment = require('moment');
 require('backbone-react-component');
-var CourseModel = require('../models/courseModel');
+var CourseModel = require('../models/CourseModel');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],

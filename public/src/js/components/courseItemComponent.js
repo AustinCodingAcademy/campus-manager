@@ -3,7 +3,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var moment = require('moment');
 require('backbone-react-component');
-var CourseModalComponent = require('./courseModalComponent.js');
+var CourseModalComponent = require('./CourseModalComponent.js');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
