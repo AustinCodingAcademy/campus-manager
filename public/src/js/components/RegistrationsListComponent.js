@@ -3,7 +3,7 @@ var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
-var RegistrationItemComponent = require('./registrationItemComponent');
+var RegistrationItemComponent = require('./RegistrationItemComponent');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],

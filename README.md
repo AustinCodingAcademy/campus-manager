@@ -16,8 +16,8 @@ After cloning and navigating into directoy:
   }
   ```
   
-1. leave `npm run-script gulp` running in one terminal session
+1. leave `npm run gulp` running in one terminal session
 
-1. leave `npm run-script develop` running in another terminal session
+1. leave `npm run develop` running in another terminal session
 
 1. navigate to `http://localhost:3000`

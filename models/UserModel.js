@@ -1,8 +1,14 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
+var uniqueValidator = require('mongoose-unique-validator');
 
 var userSchema = new Schema({
-  "username" : String,
+  "username" : {
+    type: String,
+    required: true,
+    unique: true,
+    index: true
+  },
   "password" : String,
   "is_client" : {
     type: Boolean,
@@ -45,7 +51,10 @@ var userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  attendance: Array
+  attendance: Array,
+  codecademy: String,
+  zipcode: String,
+  photo: String
 });
 
 userSchema.set('toJSON', {
@@ -56,5 +65,7 @@ userSchema.set('toJSON', {
     return ret;
   }
 });
+
+userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('user', userSchema);

@@ -1,19 +1,21 @@
-var userModel = require('../models/userModel.js');
+var UserModel = require('../models/UserModel.js');
 var _ = require('underscore');
 var moment = require('moment');
 
 /**
-* userController.js
+* UserController.js
 *
 * @description :: Server-side logic for managing users.
 */
 module.exports = {
-  
+
   /**
-  * userController.list()
+  * UserController.list()
   */
   list: function(req, res) {
-    userModel.find(null,null,{
+    UserModel.find({
+      client: req.user.client
+    }, null, {
       sort: 'last_name',
     }, function(err, users){
       if(err) {
@@ -24,13 +26,16 @@ module.exports = {
       return res.json(users);
     });
   },
-  
+
   /**
-  * userController.show()
+  * UserController.show()
   */
   show: function(req, res) {
     var id = req.params.id;
-    userModel.findOne({_id: id}, function(err, user){
+    UserModel.findOne({
+      _id: id,
+      client: req.user.client
+    }, function(err, user){
       if(err) {
         return res.json(500, {
           message: 'Error getting user.'
@@ -44,19 +49,22 @@ module.exports = {
       return res.json(user);
     });
   },
-  
+
   /**
-  * userController.create()
+  * UserController.create()
   */
   create: function(req, res) {
-    var user = new userModel();        var attributes = [      'idn',      'username',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student'    ];        _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });        userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {       user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json({          message: 'saved',          _id: user._id        });      });    });  },
-  
+    var user = new UserModel();    var attributes = [      'idn',      'username',      'first_name',      'last_name',      'email',      'phone',      'website',      'github',      'is_admin',      'is_instructor',      'is_student',      'codecademy',      'zipcode',      'photo'    ];    _.each(attributes, function(attr) {      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];    });    UserModel.findOne({      _id: req.user.id    }).populate('client').exec(function(err, currentUser) {      user.client = currentUser.client.id;      user.save(function(err, user){        if(err) {          return res.json(500, {            message: 'Error saving user',            error: err          });        }        return res.json(user);      });    });  },
+
   /**
-  * userController.update()
+  * UserController.update()
   */
   update: function(req, res) {
     var id = req.params.id;
-    userModel.findOne({_id: id}, function(err, user){
+    UserModel.findOne({
+      _id: id,
+      client: req.user.client
+    }, function(err, user){
       if(err) {
         return res.json(500, {
           message: 'Error saving user',
@@ -68,7 +76,7 @@ module.exports = {
           message: 'No such user'
         });
       }
-      
+
       var attributes = [
         'idn',
         'username',
@@ -81,13 +89,16 @@ module.exports = {
         'is_admin',
         'is_instructor',
         'is_student',
-        'attendance'
+        'attendance',
+        'codecademy',
+        'zipcode',
+        'photo'
       ];
-      
+
       _.each(attributes, function(attr) {
         user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
       });
-          user.save(function(err, user){
+      user.save(function(err, user){
         if(err) {
           return res.json(500, {
             message: 'Error getting user.'
@@ -102,13 +113,16 @@ module.exports = {
       });
     });
   },
-  
+
   /**
-  * userController.remove()
+  * UserController.remove()
   */
   remove: function(req, res) {
     var id = req.params.id;
-    userModel.findByIdAndRemove(id, function(err, user){
+    UserModel.remove({
+      _id: id,
+      client: req.user.client
+    }, function(err, user){
       if(err) {
         return res.json(500, {
           message: 'Error getting user.'
@@ -117,39 +131,43 @@ module.exports = {
       return res.json(user);
     });
   },
-  
+
   import: function(req, res) {
     _.each(req.body, function(reqUser) {
-      var user = new userModel();
-      
-      var attributes = [
-        'idn',
-        'username',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'website',
-        'github'
-      ];
-      
-      _.each(attributes, function(attr) {
-        user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
-      });
-      
-      user.is_student = true;
-      
-      userModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) { 
-        user.client = currentUser.client.id;
-        user.save();
+      UserModel.findOne({ username: reqUser['username'] }, function(err, existingUser) {
+        var user = existingUser ? existingUser : new UserModel();
+
+        var attributes = [
+          'idn',
+          'username',
+          'first_name',
+          'last_name',
+          'phone',
+          'website',
+          'github',
+          'codecademy',
+          'zipcode',
+          'photo'
+        ];
+
+        _.each(attributes, function(attr) {
+          user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+        });
+
+        user.is_student = true;
+
+        UserModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {
+          user.client = currentUser.client.id;
+          user.save();
+        });
       });
     });
     return res.json(req.body);
   },
-  
+
   attendance: function(req, res) {
     _.each(req.body, function(checkIn) {
-      userModel.findOne({ idn: checkIn['IDN'] }, function(err, user) {
+      UserModel.findOne({ idn: checkIn['IDN'] }, function(err, user) {
         if(err) {
           return res.json(500, {
             message: 'Error saving user',
@@ -167,5 +185,5 @@ module.exports = {
     });
     return res.json(req.body);
   },
-  
+
 };
