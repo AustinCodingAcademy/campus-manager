@@ -9,6 +9,14 @@ module.exports = {
     res.redirect("/login")
   },
 
+  super: function(req, res, next) {
+    if (req.isAuthenticated() && req.user.is_super) {
+      return next();
+    }
+
+    res.status(401).send({ error: "Must be a super user." });
+  },
+
   client: function(req, res, next) {
 
     if (req.isAuthenticated() && req.user.is_client) {

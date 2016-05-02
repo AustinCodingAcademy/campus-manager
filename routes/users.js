@@ -13,7 +13,7 @@ router.get('/', middleware.admin, function(req, res) {
 /*
 * GET
 */
-router.get('/:id', function(req, res) {
+router.get('/:id', middleware.student, function(req, res) {
   UserController.show(req, res);
 });
 

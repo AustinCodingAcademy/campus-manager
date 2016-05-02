@@ -184,6 +184,5 @@ module.exports = {
       });
     });
     return res.json(req.body);
-  },
-
+  }
 };
