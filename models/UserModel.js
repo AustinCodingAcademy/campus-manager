@@ -10,6 +10,10 @@ var userSchema = new Schema({
     index: true
   },
   "password" : String,
+  "is_super": {
+    type: Boolean,
+    default: false
+  },
   "is_client" : {
     type: Boolean,
     default: false
