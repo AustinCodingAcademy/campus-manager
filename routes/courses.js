@@ -4,38 +4,38 @@ var CourseController = require('../controllers/CourseController.js');
 var middleware = require('./middleware');
 
 /*
- * GET
- */
+* GET
+*/
 router.get('/', middleware.admin, function(req, res) {
-    CourseController.list(req, res);
+  CourseController.list(req, res);
 });
 
 /*
- * GET
- */
+* GET
+*/
 router.get('/:id', middleware.instructor, function(req, res) {
-    CourseController.show(req, res);
+  CourseController.show(req, res);
 });
 
 /*
- * POST
- */
+* POST
+*/
 router.post('/', middleware.admin, function(req, res) {
-    CourseController.create(req, res);
+  CourseController.create(req, res);
 });
 
 /*
- * PUT
- */
+* PUT
+*/
 router.put('/:id', middleware.admin, function(req, res) {
-    CourseController.update(req, res);
+  CourseController.update(req, res);
 });
 
 /*
- * DELETE
- */
+* DELETE
+*/
 router.delete('/:id', middleware.admin, function(req, res) {
-    CourseController.remove(req, res);
+  CourseController.remove(req, res);
 });
 
 module.exports = router;
