@@ -2,9 +2,9 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
-var TermItemComponent = require('./termItemComponent.js');
-var TermModalComponent = require('./termModalComponent.js');
-var TermModel = require('../models/termModel');
+var TermItemComponent = require('./TermItemComponent.js');
+var TermModalComponent = require('./TermModalComponent.js');
+var TermModel = require('../models/TermModel');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],

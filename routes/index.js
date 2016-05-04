@@ -2,7 +2,7 @@ var express = require('express');
 var bcrypt = require('bcrypt');
 var router = express.Router();
 var passport = require('../config/passport');
-var User = require('../models/userModel');
+var User = require('../models/UserModel');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

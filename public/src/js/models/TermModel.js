@@ -15,7 +15,7 @@ module.exports = Backbone.Model.extend({
   },
   
   parse: function(obj) {
-    var CoursesCollection = require('../collections/coursesCollection');
+    var CoursesCollection = require('../collections/CoursesCollection');
     obj.courses = new CoursesCollection(obj.courses);
     return obj;
   },

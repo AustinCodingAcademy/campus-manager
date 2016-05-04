@@ -1,20 +1,20 @@
 var _ = require('lodash');
 
-var courseModel = require('../models/courseModel.js');
-var userModel = require('../models/userModel.js');
+var CourseModel = require('../models/CourseModel.js');
+var UserModel = require('../models/UserModel.js');
 
 /**
-* courseController.js
+* CourseController.js
 *
 * @description :: Server-side logic for managing courses.
 */
 module.exports = {
 
   /**
-  * courseController.list()
+  * CourseController.list()
   */
   list: function(req, res) {
-    courseModel.find({
+    CourseModel.find({
       client: req.user.client
     }).populate('term registrations').exec(function(err, courses){
       if(err) {
@@ -27,11 +27,11 @@ module.exports = {
   },
 
   /**
-  * courseController.show()
+  * CourseController.show()
   */
   show: function(req, res) {
     var id = req.params.id;
-    courseModel.findOne({
+    CourseModel.findOne({
       _id: id,
       client: req.user.client
     }).populate('term registrations').exec(function(err, course){
@@ -50,13 +50,13 @@ module.exports = {
   },
 
   /**
-  * courseController.create()
+  * CourseController.create()
   */
   create: function(req, res) {
-    var course = new courseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
+    var course = new CourseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
       seats : req.body.seats
     });
-    userModel.findOne({
+    UserModel.findOne({
       _id: req.user.id
     }).populate('client').exec(function(err, currentUser) {
       course.client = currentUser.client.id;
@@ -76,11 +76,11 @@ module.exports = {
   },
 
   /**
-  * courseController.update()
+  * CourseController.update()
   */
   update: function(req, res) {
     var id = req.params.id;
-    courseModel.findOne({
+    CourseModel.findOne({
       _id: id,
       client: req.user.client
     }).populate('term registrations').exec(function(err, course){
@@ -116,11 +116,11 @@ module.exports = {
   },
 
   /**
-  * courseController.remove()
+  * CourseController.remove()
   */
   remove: function(req, res) {
     var id = req.params.id;
-    courseModel.remove({
+    CourseModel.remove({
       client: req.user.client,
       _id: id
     }, function(err, course){
