@@ -4,7 +4,10 @@ html
     title Austin Coding Academy
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css')
-    link(rel='stylesheet', href='{{cache-break:css/app.css}}')
+    if env == 'production'
+      link(rel='stylesheet', href='{{cache-break:css/app.css}}')
+    else
+      link(rel='stylesheet', href='css/app.css')
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
   body
     include top-bar
@@ -24,4 +27,10 @@ html
     script(type='text/javascript').
       $(function() {
         $(".button-collapse").sideNav();
+        
+        $(document).ajaxError(function(e, xhr) {
+          if (xhr.status === 401) {
+            window.location.replace('/login');
+          }
+        });
       });
