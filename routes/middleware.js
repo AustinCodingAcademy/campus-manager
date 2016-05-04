@@ -5,8 +5,7 @@ module.exports = {
       return next();
     }
 
-    // if they aren't redirect them to the login page
-    res.redirect("/login")
+    res.status(401).send({ error: "You are not logged in." });
   },
 
   super: function(req, res, next) {
@@ -14,7 +13,7 @@ module.exports = {
       return next();
     }
 
-    res.status(401).send({ error: "Must be a super user." });
+    res.status(403).send({ error: "Must be a super user." });
   },
 
   client: function(req, res, next) {
@@ -23,7 +22,7 @@ module.exports = {
       return next();
     }
 
-    res.status(401).send({ error: "Must be at least client level." });
+    res.status(403).send({ error: "Must be at least client level." });
   },
 
   admin: function(req, res, next) {
@@ -32,7 +31,7 @@ module.exports = {
       return next();
     }
 
-    res.status(401).send({ error: "Must be at least admin level." });
+    res.status(403).send({ error: "Must be at least admin level." });
   },
 
   instructor: function(req, res, next) {
@@ -42,7 +41,7 @@ module.exports = {
       return next();
     }
 
-    res.status(401).send({ error: "Must be at least instructor level." });
+    res.status(403).send({ error: "Must be at least instructor level." });
   },
 
   student: function(req, res, next) {
@@ -52,6 +51,6 @@ module.exports = {
       return next();
     }
 
-    res.status(401).send({ error: "Must be at least student level." });
+    res.status(403).send({ error: "Must be at least student level." });
   }
 };

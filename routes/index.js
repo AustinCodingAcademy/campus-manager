@@ -9,7 +9,10 @@ router.get('/', function(req, res, next) {
   if(!req.isAuthenticated()){
     res.redirect('/login');
   } else {
-    res.render('index', { user: JSON.stringify(req.user) });
+    res.render('index', {
+      user: JSON.stringify(req.user),
+      env: process.env.NODE_ENV
+    });
   }
 });
 
