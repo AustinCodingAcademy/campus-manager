@@ -2,6 +2,7 @@
 
 var browserify = require('browserify');
 var gulp = require('gulp');
+var runSequence = require('run-sequence');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
@@ -13,8 +14,20 @@ var imagemin = require('gulp-imagemin');
 var pixrem  = require('pixrem');
 var postcss = require('gulp-postcss');
 var reactify = require('reactify');
+var CacheBreaker = require('gulp-cache-breaker');
+var cb = new CacheBreaker();
 
 gulp.task('bundle', function () {
+  return browserify({
+    entries: ['public/src/js/app.js'],
+    transform: [reactify]
+  }).bundle()
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(gulp.dest('public/js/'));
+});
+
+gulp.task('bundle-dev', function() {
   return browserify({
     entries: ['public/src/js/app.js'],
     debug: true,
@@ -26,12 +39,22 @@ gulp.task('bundle', function () {
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
-    // .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('sass', function () {
+  return gulp.src('public/src/scss/app.scss')
+    .pipe(sass())
+    .pipe(postcss([pixrem]))
+    .pipe(autoprefixer({
+      browsers: ['> 5%', 'last 2 versions']
+    }))
+    .pipe(cssnano({zindex: false}))
+    .pipe(gulp.dest('public/css/'));
+});
+
+gulp.task('sass-dev', function () {
   return gulp.src('public/src/scss/app.scss')
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
@@ -44,10 +67,24 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('public/css/'));
 });
 
+gulp.task('html', function() {
+  return gulp.src('views/*.jade')
+    .pipe(cb.gulpCbPath('public'))
+    .pipe(gulp.dest('views'));
+});
+
+// Write symlinks for all cache-broken paths from previous tasks.
+gulp.task('symlink-cb-paths', ['html'], function() {
+  cb.symlinkCbPaths();
+});
+
 gulp.task('watch', function () {
   gulp.watch('public/src/js/**', ['bundle']);
   gulp.watch('public/src/scss/**', ['sass']);
 });
 
-gulp.task('build', ['bundle', 'sass']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('build', function(callback) {
+  runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
+});
+gulp.task('develop', ['bundle-dev', 'sass-dev']);
+gulp.task('default', ['develop', 'watch']);
