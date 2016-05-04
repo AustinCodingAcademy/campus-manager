@@ -4,38 +4,38 @@ var TermController = require('../controllers/TermController.js');
 var middleware = require('./middleware');
 
 /*
- * GET
- */
+* GET
+*/
 router.get('/', middleware.admin, function(req, res) {
-    TermController.list(req, res);
+  TermController.list(req, res);
 });
 
 /*
- * GET
- */
+* GET
+*/
 router.get('/:id', middleware.admin, function(req, res) {
-    TermController.show(req, res);
+  TermController.show(req, res);
 });
 
 /*
- * POST
- */
+* POST
+*/
 router.post('/', middleware.admin, function(req, res) {
-    TermController.create(req, res);
+  TermController.create(req, res);
 });
 
 /*
- * PUT
- */
+* PUT
+*/
 router.put('/:id', middleware.admin, function(req, res) {
-    TermController.update(req, res);
+  TermController.update(req, res);
 });
 
 /*
- * DELETE
- */
+* DELETE
+*/
 router.delete('/:id', middleware.admin, function(req, res) {
-    TermController.remove(req, res);
+  TermController.remove(req, res);
 });
 
 module.exports = router;
