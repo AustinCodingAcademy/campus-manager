@@ -21,3 +21,6 @@ After cloning and navigating into directoy:
 1. leave `npm run develop` running in another terminal session
 
 1. navigate to `http://localhost:3000`
+
+### Activity
+[![Throughput Graph](https://graphs.waffle.io/AustinCodingAcademy/aca-campus/throughput.svg)](https://waffle.io/AustinCodingAcademy/aca-campus/metrics/throughput)
