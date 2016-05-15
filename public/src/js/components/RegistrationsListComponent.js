@@ -41,7 +41,7 @@ module.exports = React.createClass({
 
     var userOptions = [];
     this.props.users.each(function(user) {
-      userOptions.push(<option key={user.id} value={user.id}>{user.fullName + ' (' + user.get('username') + ')'}</option>);
+      userOptions.push(<option key={user.id} value={user.id}>{user.fullName() + ' (' + user.get('username') + ')'}</option>);
     });
 
     return (

@@ -17,11 +17,19 @@ module.exports = React.createClass({
   },
 
   focusGrade: function(e) {
-    e.target.setAttribute('disabled', false);
+    $(e.currentTarget).removeClass('disabled');
   },
 
-  blueGrade: function(e) {
-    e.target.setAttribute('disabled', true);
+  blurGrade: function(e) {
+    $(e.currentTarget).addClass('disabled');
+    if ($(e.currentTarget).val()) {
+      var student = this.props.model.get('registrations').get($(e.currentTarget).data('student-id'));
+      var gradeIdx = _.findIndex(student.get('grades'), function(grade) {
+        return grade.courseId === this.props.model.id && grade.name === $(e.currentTarget).data('grade-name');
+      }, this);
+      student.get('grades')[gradeIdx].score = Number($(e.currentTarget).val());
+      student.save();
+    }
   },
 
   render: function() {
@@ -41,7 +49,7 @@ module.exports = React.createClass({
           student.get('grades').push({
             courseId: this.props.model.id,
             name: grade,
-            score: 0
+            score: ''
           });
         }
       }, this);
@@ -60,7 +68,17 @@ module.exports = React.createClass({
 
       var studentCells = _.map(courseGrades, function(grade, i) {
         return (
-          <td key={i}><input className="trim-margin" style={{ height: '1rem' }} value={grade.score} onclick={this.focusGrade} onBlur={this.blurGrade} disabled/></td>
+          <td key={i}>
+            <input
+            type="text"
+            className="trim-margin disabled"
+            style={{ height: '1rem' }}
+            defaultValue={grade.score}
+            onFocus={this.focusGrade}
+            onBlur={this.blurGrade}
+            data-student-id={student.id}
+            data-grade-name={grade.name} />
+          </td>
         );
       }, this);
 
