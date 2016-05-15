@@ -6,7 +6,7 @@ require('backbone-react-component');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
-  
+
   deleteRegistration: function() {
     this.props.course.get('registrations').remove(this.props.user);
     this.props.course.save();
@@ -15,7 +15,7 @@ module.exports = React.createClass({
   render: function() {
     return (
       <tr>
-        <td>{this.props.user.get('full_name') + ' (' + this.props.user.get('username') + ')'}</td>
+        <td>{this.props.user.fullName() + ' (' + this.props.user.get('username') + ')'}</td>
         <td>{this.props.course.get('term').get('name')}</td>
         <td>{this.props.course.get('name')}</td>
         <td><a className="waves-effect waves-teal btn-flat" onClick={this.deleteRegistration}><i className="material-icons">delete</i></a></td>

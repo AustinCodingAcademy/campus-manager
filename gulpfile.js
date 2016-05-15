@@ -79,8 +79,8 @@ gulp.task('symlink-cb-paths', ['html'], function() {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('public/src/js/**', ['bundle']);
-  gulp.watch('public/src/scss/**', ['sass']);
+  gulp.watch('public/src/js/**', ['bundle-dev']);
+  gulp.watch('public/src/scss/**', ['sass-dev']);
 });
 
 gulp.task('build', function(callback) {

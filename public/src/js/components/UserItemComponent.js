@@ -7,14 +7,14 @@ var UserModalComponent = require('./UserModalComponent.js');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
-  
+
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.props.model}/>, $('#modal-container')[0]);
     $('#user-modal' + this.props.model.id).openModal();
     Materialize.updateTextFields();
   },
-  
+
   deleteUser: function() {
     this.props.model.destroy({
       wait: true
@@ -25,7 +25,7 @@ module.exports = React.createClass({
     return (
       <tr>
         <td>{this.props.model.get('idn')}</td>
-        <td>{this.props.model.get('full_name')}</td>
+        <td>{this.props.model.fullName()}</td>
         <td>{this.props.model.get('username')}</td>
         <td>{this.props.model.get('phone')}</td>
         <td>{this.props.model.roles()}</td>
