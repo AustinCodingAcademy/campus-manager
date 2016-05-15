@@ -8,7 +8,6 @@ html
     else
       link(rel='stylesheet', href='css/app.css')
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
-    link(href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css')
   body
     div(data-bootstrap="#{user}")
     .container#container
@@ -17,12 +16,4 @@ html
       script(type='text/javascript', src='{{cache-break:js/bundle.js}}')
     else
       script(type='text/javascript', src='js/bundle.js')
-      script(type='text/javascript').
-        $(function() {
-          $(document).ajaxError(function(e, xhr) {
-            if (xhr.status === 401) {
-              window.location.replace('/login');
-            }
-          });
-        });
         

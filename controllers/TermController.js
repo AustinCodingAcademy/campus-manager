@@ -20,7 +20,8 @@ module.exports = {
     }, null, function(err, terms){
       if(err) {
         return res.json(500, {
-          message: 'Error getting term.'
+          message: 'Error getting term.',
+          error: err
         });
       }
     	reversePopulate({
@@ -46,7 +47,8 @@ module.exports = {
     }, function(err, term){
       if(err) {
         return res.json(500, {
-          message: 'Error getting term.'
+          message: 'Error getting term.',
+          error: err
         });
       }
       if(!term) {
@@ -108,7 +110,8 @@ module.exports = {
       term.save(function(err, term){
         if(err) {
           return res.json(500, {
-            message: 'Error getting term.'
+            message: 'Error getting term.',
+            error: err
           });
         }
         if(!term) {
@@ -132,7 +135,8 @@ module.exports = {
     }, function(err, term){
       if(err) {
         return res.json(500, {
-          message: 'Error getting term.'
+          message: 'Error getting term.',
+          error: err
         });
       }
       return res.json(term);

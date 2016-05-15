@@ -27,6 +27,14 @@ var RegistrationsListComponent = require('./components/RegistrationsListComponen
 var TermModel = require('./models/TermModel');
 
 $(function() {
+  $(document).ajaxError(function(e, xhr) {
+    if (xhr.status === 401) {
+      window.location.replace('/login');
+    }
+    Materialize.toast(JSON.parse(xhr.responseText).message + ' See console for more info.', 4000, 'red darken-1');
+    console.log(JSON.parse(xhr.responseText).error);
+  });
+
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'index',

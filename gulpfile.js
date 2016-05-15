@@ -62,7 +62,6 @@ gulp.task('sass-dev', function () {
     .pipe(autoprefixer({
       browsers: ['> 5%', 'last 2 versions']
     }))
-    .pipe(cssnano({zindex: false}))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/css/'));
 });

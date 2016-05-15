@@ -21,6 +21,7 @@ module.exports = React.createClass({
   },
 
   blurGrade: function(e) {
+    e.persist();
     $(e.currentTarget).addClass('disabled');
     if ($(e.currentTarget).val()) {
       var student = this.props.model.get('registrations').get($(e.currentTarget).data('student-id'));
@@ -28,7 +29,12 @@ module.exports = React.createClass({
         return grade.courseId === this.props.model.id && grade.name === $(e.currentTarget).data('grade-name');
       }, this);
       student.get('grades')[gradeIdx].score = Number($(e.currentTarget).val());
-      student.save();
+      student.save(null, {
+        error: function() {
+          e.target.value = '';
+          student.get('grades')[gradeIdx].score = '';
+        }
+      });
     }
   },
 

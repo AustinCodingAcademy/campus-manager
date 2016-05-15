@@ -19,7 +19,8 @@ module.exports = {
     }).populate('term registrations').exec(function(err, courses){
       if(err) {
         return res.json(500, {
-          message: 'Error getting course.'
+          message: 'Error getting course.',
+          error: err
         });
       }
       return res.json(courses);
@@ -37,7 +38,8 @@ module.exports = {
     }).populate('term registrations').exec(function(err, course){
       if(err) {
         return res.json(500, {
-          message: 'Error getting course.'
+          message: 'Error getting course.',
+          error: err
         });
       }
       if(!course) {
@@ -115,7 +117,8 @@ module.exports = {
       course.save(function(err, course){
         if(err) {
           return res.json(500, {
-            message: 'Error getting course.'
+            message: 'Error getting course.',
+            error: err
           });
         }
         if(!course) {
@@ -141,7 +144,8 @@ module.exports = {
     }, function(err, course){
       if(err) {
         return res.json(500, {
-          message: 'Error getting course.'
+          message: 'Error getting course.',
+          error: err
         });
       }
       return res.json(course);
