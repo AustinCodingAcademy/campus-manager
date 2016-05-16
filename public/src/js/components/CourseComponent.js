@@ -16,6 +16,24 @@ module.exports = React.createClass({
     this.refs.grade.value = '';
   },
 
+  removeGrade: function(e) {
+    e.preventDefault();
+    var gradeName = $(e.currentTarget).data('grade-name');
+    var r = confirm('Are you sure you want to delete ' + gradeName + '?');
+    if (r == true) {
+      var gradeIdx = this.props.model.get('grades').indexOf(gradeName);
+      this.props.model.get('grades').splice(gradeIdx, 1);
+      this.props.model.get('registrations').each(function(student) {
+        var gradeIdx = _.findIndex(student.get('grades'), function(grade) {
+          return grade.courseId === this.props.model.id && grade.name === $(e.currentTarget).data('grade-name');
+        }, this);
+        student.get('grades').splice(gradeIdx, 1);
+        student.save();
+      }, this);
+      this.props.model.save();
+    }
+  },
+
   focusGrade: function(e) {
     $(e.currentTarget).removeClass('disabled');
   },
@@ -42,9 +60,9 @@ module.exports = React.createClass({
     var userRows = this.props.model.get('registrations').map(function(student, i) {
       return (
         <tr key={i}>
-          <td className="text-right">
-            {student.fullName()}
-          </td>
+        <td className="text-right">
+        {student.fullName()}
+        </td>
         </tr>
       );
     });
@@ -62,7 +80,7 @@ module.exports = React.createClass({
 
       return (
         <td key={i}>
-          {grade}
+        {grade} <a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a>
         </td>
       );
     }, this);
@@ -75,22 +93,22 @@ module.exports = React.createClass({
       var studentCells = _.map(courseGrades, function(grade, i) {
         return (
           <td key={i}>
-            <input
-            type="text"
-            className="trim-margin disabled"
-            style={{ height: '1rem' }}
-            defaultValue={grade.score}
-            onFocus={this.focusGrade}
-            onBlur={this.blurGrade}
-            data-student-id={student.id}
-            data-grade-name={grade.name} />
+          <input
+          type="text"
+          className="trim-margin disabled"
+          style={{ height: '1rem' }}
+          defaultValue={grade.score}
+          onFocus={this.focusGrade}
+          onBlur={this.blurGrade}
+          data-student-id={student.id}
+          data-grade-name={grade.name} />
           </td>
         );
       }, this);
 
       return (
         <tr key={i}>
-          {studentCells}
+        {studentCells}
         </tr>
       );
     }, this);
@@ -101,51 +119,51 @@ module.exports = React.createClass({
 
     return (
       <div className="row">
-        <div className="s12">
-          <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
-          <div className="row">
-            <form onSubmit={this.addGrade}>
-              <div className="col s4">
-                <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
-                  <i className="material-icons left">mail</i> Email Class
-                </a>
-              </div>
-              <div className="col s4 input-field trim-margin">
-                <input id="grade" type="text" ref="grade" className="right" />
-                <label htmlFor="grade">Grade Name</label>
-              </div>
-              <div className="col s4">
-                <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
-              </div>
-            </form>
-          </div>
-          <div className="row">
-            <div className="col s3">
-              <table className="striped">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userRows}
-                </tbody>
-              </table>
-            </div>
-            <div className="col s9" style={{overflowX: 'scroll'}}>
-              <table className="striped">
-                <thead>
-                  <tr>
-                    {gradeNames}
-                  </tr>
-                </thead>
-                <tbody>
-                  {studentGrades}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      <div className="s12">
+      <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
+      <div className="row">
+      <form onSubmit={this.addGrade}>
+      <div className="col s4">
+      <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
+      <i className="material-icons left">mail</i> Email Class
+      </a>
+      </div>
+      <div className="col s4 input-field trim-margin">
+      <input id="grade" type="text" ref="grade" className="right" />
+      <label htmlFor="grade">Grade Name</label>
+      </div>
+      <div className="col s4">
+      <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
+      </div>
+      </form>
+      </div>
+      <div className="row">
+      <div className="col s3">
+      <table className="striped">
+      <thead>
+      <tr>
+      <th>Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      {userRows}
+      </tbody>
+      </table>
+      </div>
+      <div className="col s9" style={{overflowX: 'scroll'}}>
+      <table className="striped">
+      <thead>
+      <tr>
+      {gradeNames}
+      </tr>
+      </thead>
+      <tbody>
+      {studentGrades}
+      </tbody>
+      </table>
+      </div>
+      </div>
+      </div>
       </div>
     );
   }
