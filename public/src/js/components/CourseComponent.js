@@ -79,7 +79,7 @@ module.exports = React.createClass({
       }, this);
 
       return (
-        <td key={i}>
+        <td key={i} style={{whiteSpace: 'nowrap'}}>
         {grade} <a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a>
         </td>
       );
@@ -119,51 +119,51 @@ module.exports = React.createClass({
 
     return (
       <div className="row">
-      <div className="s12">
-      <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
-      <div className="row">
-      <form onSubmit={this.addGrade}>
-      <div className="col s4">
-      <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
-      <i className="material-icons left">mail</i> Email Class
-      </a>
-      </div>
-      <div className="col s4 input-field trim-margin">
-      <input id="grade" type="text" ref="grade" className="right" />
-      <label htmlFor="grade">Grade Name</label>
-      </div>
-      <div className="col s4">
-      <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
-      </div>
-      </form>
-      </div>
-      <div className="row">
-      <div className="col s3">
-      <table className="striped">
-      <thead>
-      <tr>
-      <th>Name</th>
-      </tr>
-      </thead>
-      <tbody>
-      {userRows}
-      </tbody>
-      </table>
-      </div>
-      <div className="col s9" style={{overflowX: 'scroll'}}>
-      <table className="striped">
-      <thead>
-      <tr>
-      {gradeNames}
-      </tr>
-      </thead>
-      <tbody>
-      {studentGrades}
-      </tbody>
-      </table>
-      </div>
-      </div>
-      </div>
+        <div className="s12">
+          <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
+          <div className="row">
+            <form onSubmit={this.addGrade}>
+              <div className="col s4">
+                <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
+                  <i className="material-icons left">mail</i> Email Class
+                </a>
+              </div>
+              <div className="col s4 input-field trim-margin">
+                <input id="grade" type="text" ref="grade" className="right" />
+                <label htmlFor="grade">Grade Name</label>
+              </div>
+              <div className="col s4">
+                <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
+              </div>
+            </form>
+          </div>
+          <div className="row">
+            <div className="col s3">
+              <table className="striped">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userRows}
+                </tbody>
+              </table>
+            </div>
+            <div className="col s9" style={{overflowX: 'scroll'}}>
+              <table className="striped">
+                <thead>
+                  <tr>
+                    {gradeNames}
+                  </tr>
+                </thead>
+                <tbody>
+                  {studentGrades}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
