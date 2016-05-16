@@ -19,7 +19,8 @@ module.exports = {
     }).populate('term registrations').exec(function(err, courses){
       if(err) {
         return res.json(500, {
-          message: 'Error getting course.'
+          message: 'Error getting course.',
+          error: err
         });
       }
       return res.json(courses);
@@ -37,7 +38,8 @@ module.exports = {
     }).populate('term registrations').exec(function(err, course){
       if(err) {
         return res.json(500, {
-          message: 'Error getting course.'
+          message: 'Error getting course.',
+          error: err
         });
       }
       if(!course) {
@@ -96,11 +98,27 @@ module.exports = {
         });
       }
 
-      course.name =  req.body.name ? req.body.name : course.name;      course.session =  req.body.session ? req.body.session : course.session;      course.client =  req.body.client ? req.body.client : course.client;      course.days =  req.body.days ? req.body.days : course.days;      course.seats =  req.body.seats ? req.body.seats : course.seats;      course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
+      var attributes = [
+        'name',
+        'session',
+        'client',
+        'days',
+        'seats',
+        'holidays',
+        'grades'
+      ];
+
+      _.each(attributes, function(attr) {
+        course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+      });
+
+      course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
+
       course.save(function(err, course){
         if(err) {
           return res.json(500, {
-            message: 'Error getting course.'
+            message: 'Error getting course.',
+            error: err
           });
         }
         if(!course) {
@@ -126,7 +144,8 @@ module.exports = {
     }, function(err, course){
       if(err) {
         return res.json(500, {
-          message: 'Error getting course.'
+          message: 'Error getting course.',
+          error: err
         });
       }
       return res.json(course);

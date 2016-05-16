@@ -15,7 +15,9 @@ var AttendanceListComponent = require('./components/AttendanceListComponent');
 var TermsCollection = require('./collections/TermsCollection');
 var TermsListComponent = require('./components/TermsListComponent');
 var CoursesCollection = require('./collections/CoursesCollection');
+var CourseModel = require('./models/CourseModel');
 var CoursesListComponent = require('./components/CoursesListComponent');
+var CourseComponent = require('./components/CourseComponent');
 var HomeLayoutComponent = require('./components/HomeLayoutComponent');
 var NavbarComponent = require('./components/NavbarComponent');
 var UserModel = require('./models/UserModel');
@@ -25,6 +27,14 @@ var RegistrationsListComponent = require('./components/RegistrationsListComponen
 var TermModel = require('./models/TermModel');
 
 $(function() {
+  $(document).ajaxError(function(e, xhr) {
+    if (xhr.status === 401) {
+      window.location.replace('/login');
+    }
+    Materialize.toast(JSON.parse(xhr.responseText).message + ' See console for more info.', 4000, 'red darken-1');
+    console.log(JSON.parse(xhr.responseText).error);
+  });
+
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'index',
@@ -33,41 +43,42 @@ $(function() {
       'terms': 'terms',
       'users': 'users',
       'courses': 'courses',
+      'courses/:id': 'course',
       'registration': 'registration'
     },
-    
+
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
     currentView: undefined,
-    
+
     initialize: function() {
       $('<div class="navbar-fixed"><nav></nav></div>').insertBefore('#container');
       ReactDOM.render(<NavbarComponent model={this.currentUser} />, $('nav')[0]);
     },
-    
+
     attendance: function() {
       var users = new UsersCollection();
       users.fetch();
       ReactDOM.render(<AttendanceListComponent users={users} model={new UserModel()} />, $('#container')[0]);
     },
-    
+
     index: function() {
       var terms = new TermsCollection();
       terms.fetch();
       ReactDOM.render(<HomeLayoutComponent collection={terms} />, $('#container')[0]);
     },
-    
+
     terms: function() {
       var terms = new TermsCollection();
       terms.fetch();
       ReactDOM.render(<TermsListComponent collection={terms} />, $('#container')[0]);
     },
-    
+
     users: function() {
       var users = new UsersCollection();
       users.fetch();
       ReactDOM.render(<UsersListComponent collection={users} />, $('#container')[0]);
     },
-    
+
     courses: function() {
       var courses = new CoursesCollection();
       courses.fetch();
@@ -78,7 +89,13 @@ $(function() {
         }
       });
     },
-    
+
+    course: function(id) {
+      var course = new CourseModel({_id: id});
+      course.fetch();
+      ReactDOM.render(<CourseComponent model={course} currentUser={this.currentUser}/>, $('#container')[0]);
+    },
+
     registration: function() {
       var courses = new CoursesCollection();
       courses.fetch({
@@ -90,10 +107,10 @@ $(function() {
             }
           })
         }
-      });  
+      });
     }
   });
-  
+
   new AppRouter();
   Backbone.history.start();
 });

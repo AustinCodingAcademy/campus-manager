@@ -7,7 +7,7 @@ var CourseModel = require('../models/CourseModel');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
-  
+
   days: [
     'monday',
     'tuesday',
@@ -17,7 +17,7 @@ module.exports = React.createClass({
     'saturday',
     'sunday'
   ],
-  
+
   componentDidMount: function() {
     var that = this;
     this.refs.name.value = this.props.model.get('name');
@@ -26,12 +26,12 @@ module.exports = React.createClass({
       that.refs[day].checked = _.indexOf(that.props.model.get('days'), day) > -1;
     });
     this.refs.term.value = this.props.model.get('term').id;
-    
+
     $(document).ready(function() {
       $('select').material_select();
     });
   },
-  
+
   saveCourse: function(e) {
     e.preventDefault();
     var that = this;
@@ -45,7 +45,7 @@ module.exports = React.createClass({
         that.props.collection.add(that.props.model);
       }
     });
-    
+
   },
 
   render: function() {
@@ -53,7 +53,7 @@ module.exports = React.createClass({
     this.props.terms.each(function(term) {
       termOptions.push(<option key={term.id} value={term.id}>{term.get('name')}</option>);
     });
-    
+
     return (
       <div id={'course-modal' + (this.props.model.id ? this.props.model.id  : '')} className="modal">
         <div className="modal-content">

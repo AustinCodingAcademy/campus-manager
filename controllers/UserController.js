@@ -20,7 +20,8 @@ module.exports = {
     }, function(err, users){
       if(err) {
         return res.json(500, {
-          message: 'Error getting user.'
+          message: 'Error getting user.',
+          error: err
         });
       }
       return res.json(users);
@@ -38,7 +39,8 @@ module.exports = {
     }, function(err, user){
       if(err) {
         return res.json(500, {
-          message: 'Error getting user.'
+          message: 'Error getting user.',
+          error: err
         });
       }
       if(!user) {
@@ -69,7 +71,8 @@ module.exports = {
       'is_student',
       'codecademy',
       'zipcode',
-      'photo'
+      'photo',
+      'grades'
     ];
 
     _.each(attributes, function(attr) {
@@ -128,7 +131,8 @@ module.exports = {
         'attendance',
         'codecademy',
         'zipcode',
-        'photo'
+        'photo',
+        'grades'
       ];
 
       _.each(attributes, function(attr) {
@@ -139,7 +143,8 @@ module.exports = {
       user.save(function(err, user){
         if(err) {
           return res.json(500, {
-            message: 'Error getting user.'
+            message: 'Error getting user.',
+            error: err
           });
         }
         if(!user) {
@@ -163,7 +168,8 @@ module.exports = {
     }, function(err, user){
       if(err) {
         return res.json(500, {
-          message: 'Error getting user.'
+          message: 'Error getting user.',
+          error: err
         });
       }
       return res.json(user);

@@ -62,7 +62,6 @@ gulp.task('sass-dev', function () {
     .pipe(autoprefixer({
       browsers: ['> 5%', 'last 2 versions']
     }))
-    .pipe(cssnano({zindex: false}))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/css/'));
 });
@@ -79,8 +78,8 @@ gulp.task('symlink-cb-paths', ['html'], function() {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('public/src/js/**', ['bundle']);
-  gulp.watch('public/src/scss/**', ['sass']);
+  gulp.watch('public/src/js/**', ['bundle-dev']);
+  gulp.watch('public/src/scss/**', ['sass-dev']);
 });
 
 gulp.task('build', function(callback) {

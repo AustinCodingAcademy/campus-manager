@@ -1,11 +1,18 @@
 @charset 'utf-8';
 
+@import
+  '../../../node_modules/materialize-css/dist/css/materialize';
+
 .z-top {
   z-index: 1004;
 }
 
 nav .brand-logo {
   margin-left: 1rem;
+}
+
+.trim-margin {
+  margin: 0 !important;
 }
 
 @media only screen and (min-width: 993px) {
@@ -18,4 +25,20 @@ nav .brand-logo {
   .container {
       width: 90%;
   }
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.disabled {
+  opacity: 0.75;
 }

@@ -7,14 +7,14 @@ var CourseModalComponent = require('./CourseModalComponent.js');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
-  
+
   courseModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(<CourseModalComponent terms={this.props.terms} collection={this.props.collection} model={this.props.model}/>, $('#modal-container')[0]);
     $('#course-modal' + this.props.model.id).openModal();
     Materialize.updateTextFields();
   },
-  
+
   deleteCourse: function() {
     this.props.model.destroy({
       wait: true
@@ -24,7 +24,7 @@ module.exports = React.createClass({
   render: function() {
     return (
       <tr>
-        <td>{this.props.model.get('name')}</td>
+        <td><a href={'#courses/' + this.props.model.id}>{this.props.model.get('name')}</a></td>
         <td>{this.props.model.get('term').get('name')}</td>
         <td>{this.props.model.shortDays()}</td>
         <td>{this.props.model.get('seats') - this.props.model.get('registrations').length + ' / ' + this.props.model.get('seats')}</td>

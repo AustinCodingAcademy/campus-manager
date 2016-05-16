@@ -6,7 +6,8 @@
     "postinstall": "gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
-    "develop": "nodemon ./bin/www"
+    "develop": "nodemon ./bin/www",
+    "mongoose-gen": "mongoose-gen"
   },
   "engines": {
     "node": "5.6.0"
@@ -41,6 +42,7 @@
     "jquery": "2.1.4",
     "lodash": "4.6.1",
     "material-design-icons": "2.2.0",
+    "materialize-css": "^0.97.6",
     "moment": "2.11.2",
     "mongoose": "4.4.5",
     "mongoose-reverse-populate": "1.1.0",
@@ -50,8 +52,8 @@
     "passport-local": "1.0.0",
     "pickadate": "3.5.6",
     "pixrem": "3.0.0",
-    "react": "0.14.7",
-    "react-dom": "0.14.7",
+    "react": "15.0.2",
+    "react-dom": "15.0.2",
     "reactify": "1.1.1",
     "rollbar": "0.5.16",
     "run-sequence": "1.1.5",
@@ -62,7 +64,7 @@
   },
   "browser": {
     "jquery": "jquery",
-    "materialize": "./public/js/materialize.min.js",
+    "materialize": "./node_modules/materialize-css/dist/js/materialize.js",
     "picker": "./node_modules/pickadate/lib/picker.js",
     "picker.date": "./node_modules/pickadate/lib/picker.date.js",
     "picker.time": "./node_modules/pickadate/lib/picker.time.js"
@@ -75,5 +77,9 @@
   "browserify-shim": {
     "jquery": "$",
     "materialize": "materialize"
+  },
+  "devDependencies": {
+    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "nodemon": "^1.9.2"
   }
 }

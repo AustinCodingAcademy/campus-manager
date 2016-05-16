@@ -14,17 +14,11 @@ module.exports = Backbone.Model.extend({
     phone: '',
     username: '',
     first_name: '',
-    last_name: '',
-    full_name: ''
-  },
-
-  initialize: function() {
-    this.fullName();
-    this.on('change:first_name change:last_name sync', this.fullName);
+    last_name: ''
   },
 
   fullName: function() {
-    return this.set('full_name', this.get('last_name') + ', ' + this.get('first_name'));
+    return this.get('last_name') + ', ' + this.get('first_name');
   },
 
   roles: function() {
