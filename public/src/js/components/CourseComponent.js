@@ -69,7 +69,7 @@ module.exports = React.createClass({
 
     var gradeNames = _.map(this.props.model.get('grades'), function(grade, i) {
       this.props.model.get('registrations').each(function(student){
-        if (_.pluck(student.get('grades'), 'name').indexOf(grade) === -1) {
+        if (!_.findWhere(student.get('grades'), { name: grade, courseId: this.props.model.id })) {
           student.get('grades').push({
             courseId: this.props.model.id,
             name: grade,
