@@ -34,6 +34,15 @@ module.exports = {
     res.status(403).send({ error: "Must be at least admin level." });
   },
 
+  me: function(req, res, next) {
+
+    if (req.isAuthenticated() && (req.user.is_client || req.user.is_admin || req.params.id === req.user._id )) {
+      return next();
+    }
+
+    res.status(403).send({ error: "Must be at least admin level." });
+  },
+
   instructor: function(req, res, next) {
 
     if (req.isAuthenticated() &&

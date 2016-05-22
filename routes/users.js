@@ -27,7 +27,7 @@ router.post('/', middleware.admin, function(req, res) {
 /*
 * PUT
 */
-router.put('/:id', middleware.admin, function(req, res) {
+router.put('/:id', middleware.me, function(req, res) {
   UserController.update(req, res);
 });
 

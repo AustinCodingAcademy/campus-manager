@@ -29,6 +29,7 @@
     "express": "4.13.1",
     "express-flash": "0.0.2",
     "express-session": "1.13.0",
+    "font-awesome": "^4.6.1",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.0",
     "gulp-cache-breaker": "^1.0.0",

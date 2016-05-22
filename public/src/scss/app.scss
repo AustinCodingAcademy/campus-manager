@@ -1,7 +1,10 @@
 @charset 'utf-8';
 
+$fa-font-path: '/fonts/fontawesome/';
+
 @import
-  '../../../node_modules/materialize-css/dist/css/materialize';
+  '../../../node_modules/materialize-css/dist/css/materialize',
+  '../../../node_modules/font-awesome/scss/font-awesome.scss';
 
 .z-top {
   z-index: 1004;

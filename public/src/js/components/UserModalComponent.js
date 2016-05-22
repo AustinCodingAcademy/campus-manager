@@ -182,6 +182,34 @@ module.exports = React.createClass({
 
               </div>
 
+              <div className="row">
+
+                {/* Website Input */}
+                <div className="input-field col s12 m6">
+                  <input
+                    type="text"
+                    id="codecademy"
+                    value={this.state.model.codecademy}
+                    onChange={function(evt) {
+                      that.handleInputChange('codecademy', evt);
+                    }}/>
+                  <label htmlFor="codecademy">Codecademy</label>
+                </div>
+
+                {/* Website Input */}
+                <div className="input-field col s12 m6">
+                  <input
+                    type="text"
+                    id="zipcode"
+                    value={this.state.model.zipcode}
+                    onChange={function(evt) {
+                      that.handleInputChange('zipcode', evt);
+                    }}/>
+                  <label htmlFor="zipcode">Zipcode</label>
+                </div>
+
+              </div>
+
               {/* Submit Button */}
               <input
                 type="submit"

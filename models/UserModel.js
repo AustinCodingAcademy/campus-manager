@@ -59,7 +59,8 @@ var userSchema = new Schema({
   codecademy: String,
   zipcode: String,
   photo: String,
-  grades: Array
+  grades: Array,
+  courses: []
 });
 
 userSchema.set('toJSON', {
