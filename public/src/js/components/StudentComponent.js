@@ -95,7 +95,7 @@ module.exports = React.createClass({
                 </p>
                 <p>
                   <i className="fa fa-fw fa-github"></i>
-                  <a href={'https://github.com/' + this.props.model.get('username')}>
+                  <a href={'https://github.com/' + this.props.model.get('github')}>
                     {this.props.model.get('github')}
                   </a>
                 </p>
