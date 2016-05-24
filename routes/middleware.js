@@ -35,8 +35,7 @@ module.exports = {
   },
 
   me: function(req, res, next) {
-
-    if (req.isAuthenticated() && (req.user.is_client || req.user.is_admin || req.params.id === req.user._id )) {
+    if (req.isAuthenticated() && (req.user.is_client || req.user.is_admin || req.params.id == req.user._id )) {
       return next();
     }
 

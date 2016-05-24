@@ -14,7 +14,8 @@ module.exports = Backbone.Model.extend({
     phone: '',
     username: '',
     first_name: '',
-    last_name: ''
+    last_name: '',
+    courses: []
   },
 
   fullName: function() {
@@ -36,5 +37,13 @@ module.exports = Backbone.Model.extend({
       roles.push('student');
     }
     return roles.join(', ');
+  },
+
+  parse: function(obj) {
+    if (obj.courses) {
+      var CoursesCollection = require('../collections/CoursesCollection');
+      obj.courses = new CoursesCollection(obj.courses, { parse: true });
+    }
+    return obj;
   }
 });

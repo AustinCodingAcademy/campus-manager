@@ -56,9 +56,9 @@ module.exports = {
   */
   create: function(req, res) {
     var course = new CourseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
-      seats : req.body.seats
-    });
-    UserModel.findOne({
+      seats : req.body.seats,
+      textbook: req.body.textbook
+    });    UserModel.findOne({
       _id: req.user.id
     }).populate('client').exec(function(err, currentUser) {
       course.client = currentUser.client.id;
@@ -105,7 +105,8 @@ module.exports = {
         'days',
         'seats',
         'holidays',
-        'grades'
+        'grades',
+        'textbook'
       ];
 
       _.each(attributes, function(attr) {

@@ -70,6 +70,9 @@ $(function() {
     },
 
     index: function() {
+      if (this.currentUser.get('is_student')) {
+        return this.navigate('users/' + this.currentUser.id, {trigger: true, replace: true});
+      }
       var terms = new TermsCollection();
       terms.fetch();
       ReactDOM.render(<HomeLayoutComponent collection={terms} />, $('#container')[0]);
