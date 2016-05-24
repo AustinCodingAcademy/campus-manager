@@ -37,6 +37,7 @@ module.exports = React.createClass({
     var that = this;
     this.props.model.save({
       name: this.refs.name.value,
+      textbook: this.refs.textbook.value,
       days: _.filter(this.days, function(day) { return that.refs[day].checked; }),
       seats: this.refs.seats.value,
       term: this.props.terms.get(this.refs.term.value)
@@ -102,11 +103,15 @@ module.exports = React.createClass({
                 </div>
               </div>
               <div className="row">
-                <div className="input-field col s12">
+                <div className="input-field col s12 m6">
                   <select defaultValue={this.props.terms.first().id} ref="term">
                     {termOptions}
                   </select>
                   <label>Term</label>
+                </div>
+                <div className="input-field col s12 m6">
+                  <input ref="textbook" type="text" id="textbook" />
+                  <label htmlFor="textbook">Textbook URL</label>
                 </div>
               </div>
               <div className="row">

@@ -60,9 +60,9 @@ module.exports = React.createClass({
     var userRows = this.props.model.get('registrations').map(function(student, i) {
       return (
         <tr key={i}>
-        <td className="text-right">
-        {student.fullName()}
-        </td>
+          <td className="right-align">
+            <a href={'#users/' + student.id}>{student.fullName()}</a>
+          </td>
         </tr>
       );
     });
@@ -93,15 +93,15 @@ module.exports = React.createClass({
       var studentCells = _.map(courseGrades, function(grade, i) {
         return (
           <td key={i}>
-          <input
-          type="text"
-          className="trim-margin disabled"
-          style={{ height: '1rem' }}
-          defaultValue={grade.score}
-          onFocus={this.focusGrade}
-          onBlur={this.blurGrade}
-          data-student-id={student.id}
-          data-grade-name={grade.name} />
+            <input
+            type="text"
+            className="trim-margin disabled"
+            style={{ height: '1rem' }}
+            defaultValue={grade.score}
+            onFocus={this.focusGrade}
+            onBlur={this.blurGrade}
+            data-student-id={student.id}
+            data-grade-name={grade.name} />
           </td>
         );
       }, this);

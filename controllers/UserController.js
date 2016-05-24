@@ -1,6 +1,8 @@
-var UserModel = require('../models/UserModel.js');
+var UserModel = require('../models/UserModel');
 var _ = require('underscore');
 var moment = require('moment');
+var CourseModel = require('../models/CourseModel')
+var mongoose = require('mongoose');
 
 /**
 * UserController.js
@@ -20,7 +22,7 @@ module.exports = {
     }, function(err, users){
       if(err) {
         return res.json(500, {
-          message: 'Error getting user.',
+          message: 'Error getting users.',
           error: err
         });
       }
@@ -48,7 +50,18 @@ module.exports = {
           message: 'No such user'
         });
       }
-      return res.json(user);
+      CourseModel.find({
+        registrations: mongoose.Types.ObjectId(user._id)
+      }).populate('term').exec(function(err, courses) {
+        if(err) {
+          return res.json(500, {
+            message: 'Error getting user courses.',
+            error: err
+          });
+        }
+        user.courses = courses;
+        return res.json(user);
+      });
     });
   },
 
@@ -118,16 +131,12 @@ module.exports = {
       }
 
       var attributes = [
-        'idn',
         'first_name',
         'last_name',
         'email',
         'phone',
         'website',
         'github',
-        'is_admin',
-        'is_instructor',
-        'is_student',
         'attendance',
         'codecademy',
         'zipcode',
@@ -135,10 +144,23 @@ module.exports = {
         'grades'
       ];
 
+      var protectedAttrs = [
+        'idn',
+        'is_admin',
+        'is_instructor',
+        'is_student',
+      ];
+
       _.each(attributes, function(attr) {
         user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
       });
       user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
+
+      if (req.user.is_admin || req.user.is_client || req.user.is_super) {
+        _.each(protectedAttrs, function(attr) {
+          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+        });
+      }
 
       user.save(function(err, user){
         if(err) {
@@ -152,7 +174,18 @@ module.exports = {
             message: 'No such user'
           });
         }
-        return res.json(user);
+        CourseModel.find({
+          registrations: mongoose.Types.ObjectId(user._id)
+        }).populate('term').exec(function(err, courses) {
+          if(err) {
+            return res.json(500, {
+              message: 'Error getting user courses.',
+              error: err
+            });
+          }
+          user.courses = courses;
+          return res.json(user);
+        });
       });
     });
   },

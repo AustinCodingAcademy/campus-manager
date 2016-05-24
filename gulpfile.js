@@ -83,7 +83,9 @@ gulp.task('watch', function () {
 });
 
 gulp.task('build', function(callback) {
-  runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
+  if (process.env.NODE_ENV === 'production') {
+    runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
+  }
 });
 gulp.task('develop', ['bundle-dev', 'sass-dev']);
 gulp.task('default', ['develop', 'watch']);

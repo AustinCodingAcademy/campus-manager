@@ -31,13 +31,18 @@ module.exports = React.createClass({
 
     this.props.model.save(this.state.model, {
       success: function (user) {
-        that.props.collection.add(user);
+         $('#' + 'user-modal' + (that.props.model.id || '')).closeModal();
+        if (that.props.collection) {
+          that.props.collection.add(user);
+        }
       }
     });
   },
 
   render: function() {
     var that = this;
+
+    var rolesHidden = this.props.rolesHidden? 'hidden': '';
 
     return (
       <div id={'user-modal' + (this.props.model.id || '')} className="modal">
@@ -46,7 +51,7 @@ module.exports = React.createClass({
           <div className="row">
             <form className="col s12" onSubmit={this.saveUser}>
 
-              <div className="row">
+              <div className={"row " + rolesHidden}>
 
                 {/* IDN Input Field */}
                 <div className="input-field col s12 m3">
@@ -142,7 +147,8 @@ module.exports = React.createClass({
                 {/* Email Input */}
                 <div className="input-field col s12 m6">
                   <input
-                    type="text"
+                    type="email"
+                    className="validate"
                     id="username"
                     value={this.state.model.username}
                     onChange={function(evt) {
@@ -182,10 +188,38 @@ module.exports = React.createClass({
 
               </div>
 
+              <div className="row">
+
+                {/* Website Input */}
+                <div className="input-field col s12 m6">
+                  <input
+                    type="text"
+                    id="codecademy"
+                    value={this.state.model.codecademy}
+                    onChange={function(evt) {
+                      that.handleInputChange('codecademy', evt);
+                    }}/>
+                  <label htmlFor="codecademy">Codecademy</label>
+                </div>
+
+                {/* Website Input */}
+                <div className="input-field col s12 m6">
+                  <input
+                    type="text"
+                    id="zipcode"
+                    value={this.state.model.zipcode}
+                    onChange={function(evt) {
+                      that.handleInputChange('zipcode', evt);
+                    }}/>
+                  <label htmlFor="zipcode">Zipcode</label>
+                </div>
+
+              </div>
+
               {/* Submit Button */}
               <input
                 type="submit"
-                className="modal-action modal-close waves-effect waves-green btn"
+                className="modal-action waves-effect waves-green btn"
                 value="Submit"/>
 
             </form>

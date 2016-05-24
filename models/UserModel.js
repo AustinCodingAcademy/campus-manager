@@ -7,7 +7,8 @@ var userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    index: true
+    index: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   "password" : String,
   "is_super": {
@@ -59,7 +60,8 @@ var userSchema = new Schema({
   codecademy: String,
   zipcode: String,
   photo: String,
-  grades: Array
+  grades: Array,
+  courses: []
 });
 
 userSchema.set('toJSON', {

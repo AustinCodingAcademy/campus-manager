@@ -35,8 +35,6 @@ module.exports = React.createClass({
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Role(s)</th>
-                <th>Github</th>
-                <th>Website</th>
               </tr>
             </thead>
             <tbody>

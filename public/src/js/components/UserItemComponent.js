@@ -25,12 +25,10 @@ module.exports = React.createClass({
     return (
       <tr>
         <td>{this.props.model.get('idn')}</td>
-        <td>{this.props.model.fullName()}</td>
-        <td>{this.props.model.get('username')}</td>
-        <td>{this.props.model.get('phone')}</td>
+        <td><a href={'#users/' + this.props.model.id}>{this.props.model.fullName()}</a></td>
+        <td><a href={'mailto:' + this.props.model.get('username')} target="_blank">{this.props.model.get('username')}</a></td>
+        <td style={{whiteSpace: 'nowrap'}}>{this.props.model.get('phone')}</td>
         <td>{this.props.model.roles()}</td>
-        <td>{this.props.model.get('github')}</td>
-        <td>{this.props.model.get('website')}</td>
         <td>
           <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.userModal}>
             <i className="material-icons">mode_edit</i>
