@@ -1,8 +1,7 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
-var ReactDOM = require('react-dom');
-var Modal = require('react-modal');
+var BaseModal = require('./BaseModal');
 var CourseVideoUploadModal = require('./CourseVideoUploadModal');
 require('backbone-react-component');
 
@@ -11,7 +10,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      showModal: false
+      modalIsOpen: false
     };
   },
 
@@ -73,11 +72,11 @@ module.exports = React.createClass({
   //
   // <Modal> <CourseVideoUploadModal /> </Modal>
   showUploadModal: function() {
-    this.setState({showModal: true});
+    this.setState({modalIsOpen: true});
   },
 
   closeModal: function() {
-    this.setState({showModal: false});
+    this.setState({modalIsOpen: false});
   },
 
   render: function() {
@@ -197,16 +196,11 @@ module.exports = React.createClass({
             </div>
           </div>
         </div>
-        <Modal
-          isOpen={this.state.showModal}
-          onRequestClose={this.closeModal}
-          style={{
-            overlay: {
-              zIndex: 1000
-            }
-          }}>
+        <BaseModal
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}>
           <CourseVideoUploadModal model={this.props.model} />
-        </Modal>
+        </BaseModal>
       </div>
     );
   }

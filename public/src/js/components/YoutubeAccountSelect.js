@@ -3,7 +3,22 @@ var React = require('react');
 module.exports = React.createClass({
   render: function() {
     return (
-      <button onClick={this.selectAccount}>Select Youtube Account</button>
+      <div>
+        <div className="row">
+          <div style={{textAlign: 'center'}} className="col s6 offset-s3">
+            <button
+              className="waves-effect waves-teal btn"
+              onClick={this.selectAccount}>
+              Select Youtube Account
+            </button>
+          </div>
+        </div>
+        <div className="row" style={{marginBottom: 0}}>
+          <div style={{textAlign: 'center', fontSize: '12px'}} className="col s8 offset-s2">
+            (You will need to select the ACA Class Screencast Account)
+          </div>
+        </div>
+      </div>
     );
   },
 

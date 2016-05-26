@@ -1,7 +1,9 @@
 @charset 'utf-8';
 
 @import
-  '../../../node_modules/materialize-css/dist/css/materialize';
+  '../../../node_modules/materialize-css/dist/css/materialize',
+  './modal',
+  './youtube_uploader';
 
 .z-top {
   z-index: 1004;

@@ -3,14 +3,77 @@ var Dropzone = require('react-dropzone');
 var MediaUploader = require('../modules/MediaUploader');
 
 module.exports = React.createClass({
+  getInitialState: function() {
+    return {
+      uploadStatus: 'upload',
+      uploadProgress: 0
+    };
+  },
+
   render: function() {
     return (
-      <div>
-      <Dropzone multiple={false} onDrop={this.onDrop}>
-        <div>I am the uplaod man!</div>
-      </Dropzone>
+      <div id={'youtube-uploader'}>
+        <div className="row">
+          <div className="col s12">
+            {this.renderDropZone()}
+          </div>
+        </div>
+        <div className="row" style={{marginBottom: 0}}>
+          <div className="col s12">
+            {this.renderProgressBar()}
+          </div>
+        </div>
       </div>
     );
+  },
+
+  renderDropZone: function() {
+    return (
+      <Dropzone
+        multiple={false}
+        onDrop={this.onDrop}
+        className='dropzone-base-style'
+        activeClassName='dropzone-active-style'>
+        <div className={this.state.uploadStatus}>
+          <i className="material-icons center large upload">cloud_queue</i>
+          <i className="material-icons center large uploading">cloud_upload</i>
+          <i className="material-icons center large complete">cloud_done</i>
+          <i className="material-icons center large error">error</i>
+          <div className="text">
+            <div>Drag and Drop your video here to upload to youtube!</div>
+            <div style={{fontSize: '11px'}}>(or click here to select your video, if you're in to that)</div>
+          </div>
+        </div>
+      </Dropzone>
+    );
+  },
+
+  renderProgressBar: function() {
+    var indicatorStyle = {
+      background: this.state.uploadStatus === 'complete' ? '#43a047' : '#ffa726',
+      height: '100%',
+      width: this.state.uploadProgress + '%',
+      transition: 'width 0.5s ease',
+      borderRadius: '10px'
+    };
+
+    if (this.state.uploadProgress) {
+      return (
+        <div
+          style={{
+            height: '20px',
+            width: '100%',
+            border: '2px solid #ddd',
+            borderRadius: '10px'
+          }}>
+          <div
+            style={indicatorStyle}>
+          </div>
+        </div>
+      );
+    }
+
+    return <div></div>;
   },
 
   onDrop: function(files) {
@@ -32,7 +95,7 @@ module.exports = React.createClass({
       token: this.props.token,
       metadata: metadata,
       params: {
-        part: 'snippet,status,contentDetails,player'
+        part: 'snippet,status,contentDetails'
       },
       onError: this.onError,
       onProgress: this.onProgress,
@@ -40,6 +103,7 @@ module.exports = React.createClass({
     });
 
     uploader.upload();
+    this.setState({uploadStatus: 'uploading'});
   },
 
   onError: function(data) {
@@ -50,12 +114,14 @@ module.exports = React.createClass({
     var bytesUploaded = data.loaded;
     var totalBytes = data.total;
     var percentageComplete = Math.floor((bytesUploaded * 100) / totalBytes);
-    // this.setState({progress: percentageComplete});
-    console.log('Progres: ', percentageComplete + '%');
+    console.log('Progress: ' + percentageComplete + '%');
+    this.setState({uploadProgress: percentageComplete});
   },
 
   onComplete: function(data) {
     var uploadResponse = JSON.parse(data);
+    this.setState({uploadStatus: 'complete'});
     console.log('Complete: ', uploadResponse);
+    this.props.onComplete(uploadResponse);
   }
 });

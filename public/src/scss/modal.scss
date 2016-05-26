@@ -1,0 +1,11 @@
+.ReactModalPortal {
+  .ReactModal__Content {
+    width: 55%;
+    max-height: 70%;
+    margin: auto;
+
+    @media screen and (max-width: 992px) {
+      width: 80%;
+    }
+  }
+}

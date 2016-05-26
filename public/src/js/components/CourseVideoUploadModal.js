@@ -15,20 +15,32 @@ module.exports = React.createClass({
     return (
       <div>
         {this.state.showErrorMessage ? this.renderErrorMessage() : ''}
-        {this.state.canUploadVideo ? this.renderUploader() : this.renderAccountSelect()}
+        <div className='row'>
+          <div className="col s12">
+            {this.state.canUploadVideo ? this.renderUploader() : this.renderAccountSelect()}
+          </div>
+        </div>
       </div>
     );
   },
 
   renderErrorMessage: function() {
     return (
-      <div>Oh no!  You selected the wrong account ding dong!</div>
+      <div className="row">
+        <div className="col s12">
+          <div className="card-panel red darken-4 grey-text text-lighten-5">
+            Oh no! It looks like you didn't select the ACA Class Videos account, go ahead and try again!
+          </div>
+        </div>
+      </div>
     );
   },
 
   renderUploader: function() {
     return (
-      <YoutubeUploader token={this.state.accessToken} />
+      <YoutubeUploader
+        onComplete={this.onComplete}
+        token={this.state.accessToken} />
     );
   },
 
@@ -52,5 +64,9 @@ module.exports = React.createClass({
     } else {
       this.setState({showErrorMessage: true});
     }
+  },
+
+  onComplete: function(uploadResponse) {
+    console.log('onComplete');
   }
 });
