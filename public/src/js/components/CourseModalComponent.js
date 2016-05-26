@@ -26,6 +26,7 @@ module.exports = React.createClass({
       that.refs[day].checked = _.indexOf(that.props.model.get('days'), day) > -1;
     });
     this.refs.term.value = this.props.model.get('term').id;
+    this.refs.textbook.value = this.props.model.get('textbook');
 
     $(document).ready(function() {
       $('select').material_select();
