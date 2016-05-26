@@ -9,11 +9,14 @@ var flash = require('express-flash');
 var cors = require('cors')
 
 var routes = require('./routes/index');
+var reset = require('./routes/reset');
 var users = require('./routes/users');
 var terms = require('./routes/terms');
 var courses = require('./routes/courses');
 
 var passport = require('./config/passport');
+
+var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
 
@@ -21,6 +24,7 @@ var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
 
 var app = express();
 app.use(cors());
+app.use(methodOverride('_method'));
 
 var mongoose = require('mongoose');
 mongoose.connect(mongo_url);
@@ -46,6 +50,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', routes);
+app.use('/reset', reset);
 app.use('/api/users', middleware.auth, users);
 app.use('/api/terms', middleware.auth, middleware.admin, terms);
 app.use('/api/courses', middleware.auth, middleware.instructor, courses);

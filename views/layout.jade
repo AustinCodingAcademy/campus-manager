@@ -7,7 +7,7 @@ html
     if env == 'production'
       link(rel='stylesheet', href='{{cache-break:css/app.css}}')
     else
-      link(rel='stylesheet', href='css/app.css')
+      link(rel='stylesheet', href='/css/app.css')
     link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
   body
     include top-bar
@@ -34,3 +34,4 @@ html
           }
         });
       });
+    block bottom_scripts

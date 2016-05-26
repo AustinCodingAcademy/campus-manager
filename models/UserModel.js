@@ -61,7 +61,8 @@ var userSchema = new Schema({
   zipcode: String,
   photo: String,
   grades: Array,
-  courses: []
+  courses: [],
+  reset_password: String
 });
 
 userSchema.set('toJSON', {
@@ -69,6 +70,7 @@ userSchema.set('toJSON', {
     delete ret.password;
     delete ret.client;
     delete ret.__v;
+    delete ret.reset_password;
     return ret;
   }
 });
