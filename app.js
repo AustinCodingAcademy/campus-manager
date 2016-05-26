@@ -24,7 +24,7 @@ var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
 
 var app = express();
 
-app.configure('production', function () {
+if (process.env.NODE_ENV === 'production') {
   app.use (function (req, res, next) {
     var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
     if (schema === 'https') {
@@ -33,7 +33,7 @@ app.configure('production', function () {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
-});
+}
 
 app.use(cors());
 app.use(methodOverride('_method'));
