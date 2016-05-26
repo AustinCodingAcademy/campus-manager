@@ -3,10 +3,11 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 var UserModel = require('../models/UserModel');
 var nodemailer = require('nodemailer');
+var host = process.env.DOMAIN || require('../config/env').domain;
 var mandrillTransport = require('nodemailer-mandrill-transport');
 var transport = nodemailer.createTransport(mandrillTransport({
   auth: {
-    apiKey: process.env.MANDRILL_API_KEY || require('../config/env').mandrill_key
+    apiKey: process.env.MANDRILL_API_KEY || require('../config/env').mandrill_key || ''
   }
 }));
 
@@ -39,7 +40,7 @@ router.post('/', function(req, res, next) {
         from: 'info@austincodingacademy.com',
         to: user.username,
         subject: 'ACA Campus Manager Password Reset',
-        html: 'Visit http://localhost:3000/reset/' + user.reset_password + ' to reset your password.</p>'
+        html: 'Visit ' + host + '/reset/' + user.reset_password + ' to reset your password.</p>'
       }, function(err, info) {
         if (err) {
           return res.json(500, {
