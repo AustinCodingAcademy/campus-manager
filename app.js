@@ -23,6 +23,18 @@ var middleware = require('./routes/middleware');
 var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
 
 var app = express();
+
+app.configure('production', function () {
+  app.use (function (req, res, next) {
+    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+    if (schema === 'https') {
+      next();
+    } else {
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  });
+});
+
 app.use(cors());
 app.use(methodOverride('_method'));
 
