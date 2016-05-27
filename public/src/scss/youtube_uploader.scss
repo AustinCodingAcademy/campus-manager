@@ -1,11 +1,12 @@
 #youtube-uploader {
   i {
-    color: #90CAF9;
+    color: #dddddd;
     position:absolute;
     width: 84px;
     left: 0;
     right: 0;
     margin: 0 auto;
+    transition: color 0.25s ease;
   }
 
   i.uploading, i.complete, i.error {
@@ -26,6 +27,7 @@
     }
 
     i.uploading {
+      color: #90CAF9;
       display: block;
       animation: bounce 0.85s infinite;
     }
@@ -49,6 +51,8 @@
     }
 
     i.error {
+      animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+      transform: translate3d(0, 0, 0);
       display: block;
     }
   }
@@ -86,6 +90,7 @@
     border: 2px dashed;
     border-color: #dddddd;
     border-radius: 5px;
+    transition: border-color 0.25s ease;
 
     .text {
       position: absolute;
@@ -96,7 +101,9 @@
   }
 
   .dropzone-active-style {
-    color: #9c27b0;
-    border-color: #9c27b0;
+    border-color: #90CAF9;
+    i.upload {
+      color: #90CAF9
+    }
   }
 }

@@ -23,6 +23,12 @@ module.exports = React.createClass({
   },
 
   selectAccount: function() {
+    // Since we are pulling this library in over cdn,
+    // we need to ensure it is here...
+    if (typeof gapi === 'undefined') {
+      this.onError('We are unable to upload videos at this time.  Please try agian later.');
+      return;
+    }
     gapi.client.setApiKey(this.props.apiKey);
     this.checkAuth();
   },
@@ -39,8 +45,7 @@ module.exports = React.createClass({
     if (authResult && !authResult.error) {
       this.checkAccount(authResult.access_token);
     } else {
-      // Handle error
-      console.log('ERROR');
+      this.props.onError('There was an error accessing your account. Please try again.');
     }
   },
 

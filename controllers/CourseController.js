@@ -105,7 +105,8 @@ module.exports = {
         'days',
         'seats',
         'holidays',
-        'grades'
+        'grades',
+        'videos'
       ];
 
       _.each(attributes, function(attr) {

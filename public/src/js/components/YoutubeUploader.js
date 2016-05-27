@@ -1,12 +1,14 @@
 var React = require('react');
 var Dropzone = require('react-dropzone');
+var moment = require('moment');
 var MediaUploader = require('../modules/MediaUploader');
 
 module.exports = React.createClass({
   getInitialState: function() {
     return {
       uploadStatus: 'upload',
-      uploadProgress: 0
+      uploadProgress: 0,
+      date: moment().format('YYYY-MM-DD')
     };
   },
 
@@ -29,28 +31,49 @@ module.exports = React.createClass({
 
   renderDropZone: function() {
     return (
-      <Dropzone
-        multiple={false}
-        onDrop={this.onDrop}
-        className='dropzone-base-style'
-        activeClassName='dropzone-active-style'>
-        <div className={this.state.uploadStatus}>
-          <i className="material-icons center large upload">cloud_queue</i>
-          <i className="material-icons center large uploading">cloud_upload</i>
-          <i className="material-icons center large complete">cloud_done</i>
-          <i className="material-icons center large error">error</i>
-          <div className="text">
-            <div>Drag and Drop your video here to upload to youtube!</div>
-            <div style={{fontSize: '11px'}}>(or click here to select your video, if you're in to that)</div>
+      <div>
+        <div className="row">
+          <div className="col s12">
+            <Dropzone
+              accept={'video/*'}
+              multiple={false}
+              onDrop={this.onDrop}
+              className='dropzone-base-style'
+              activeClassName='dropzone-active-style'>
+              <div className={this.state.uploadStatus}>
+                <i className="material-icons center large upload">cloud_queue</i>
+                <i className="material-icons center large uploading">cloud_upload</i>
+                <i className="material-icons center large complete">cloud_done</i>
+                <i className="material-icons center large error">error</i>
+                <div className="text">
+                  <div>Drag and Drop your video here to upload to youtube!</div>
+                  <div style={{fontSize: '11px'}}>(or click here to select your video, if you're in to that)</div>
+                </div>
+              </div>
+            </Dropzone>
           </div>
         </div>
-      </Dropzone>
+        <div className="row">
+          <div className="col s12">
+            <label htmlFor="lecture-date">Select date of lecture:</label>
+            <input
+              type="date"
+              name="lecture-date"
+              value={this.state.date}
+              onChange={this.handleDateChange}/>
+          </div>
+        </div>
+      </div>
     );
+  },
+
+  handleDateChange: function(event) {
+    this.setState({date: event.target.value});
   },
 
   renderProgressBar: function() {
     var indicatorStyle = {
-      background: this.state.uploadStatus === 'complete' ? '#43a047' : '#ffa726',
+      background: this.state.uploadStatus === 'complete' ? '#43a047' : '#90CAF9',
       height: '100%',
       width: this.state.uploadProgress + '%',
       transition: 'width 0.5s ease',
@@ -81,8 +104,8 @@ module.exports = React.createClass({
 
     var metadata = {
       snippet: {
-        title: Date.now(),
-        description: 'Video'
+        title: this.state.date,
+        description: this.props.snippetDescription
       },
       status: {
         privacyStatus: 'unlisted'
@@ -103,25 +126,29 @@ module.exports = React.createClass({
     });
 
     uploader.upload();
+    this.props.onUpload();
     this.setState({uploadStatus: 'uploading'});
   },
 
   onError: function(data) {
-    console.log('ERROR: ', data);
+    data = JSON.parse(data);
+    this.props.onError(data.error.message);
+    this.setState({uploadStatus: 'error'});
   },
 
   onProgress: function(data) {
     var bytesUploaded = data.loaded;
     var totalBytes = data.total;
     var percentageComplete = Math.floor((bytesUploaded * 100) / totalBytes);
-    console.log('Progress: ' + percentageComplete + '%');
-    this.setState({uploadProgress: percentageComplete});
+
+    if (!isNaN(percentageComplete) && percentageComplete > this.state.uploadProgress) {
+      this.setState({uploadProgress: percentageComplete});
+    }
   },
 
   onComplete: function(data) {
     var uploadResponse = JSON.parse(data);
     this.setState({uploadStatus: 'complete'});
-    console.log('Complete: ', uploadResponse);
     this.props.onComplete(uploadResponse);
   }
 });
