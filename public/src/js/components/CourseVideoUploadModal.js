@@ -12,7 +12,6 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    console.log(process.env);
     return (
       <div>
         {this.state.errorMessage ? this.renderErrorMessage() : ''}
@@ -53,8 +52,8 @@ module.exports = React.createClass({
   renderAccountSelect: function() {
     return (
       <YoutubeAccountSelect
-        apiKey={'AIzaSyD8nGoE2NLcDSBnIgTFvd_qrO1pULoxEy0'}
-        clientId={'355169120001-23rnelkdfqjl43q0sllkffdth15eltgb.apps.googleusercontent.com'}
+        apiKey={process.env.YOUTUBE_API_KEY}
+        clientId={process.env.YOUTUBE_CLIENT_ID}
         onAccountSelect={this.checkAccount}
         onError={this.showErrorMessage}
         scopes={['https://www.googleapis.com/auth/youtube']}/>
@@ -62,7 +61,7 @@ module.exports = React.createClass({
   },
 
   checkAccount: function(accessToken, response) {
-    if (response.result.items[0].id === 'UCzNpMM1lxoyj8paRCZoq5mA') {
+    if (response.result.items[0].id === process.env.YOUTUBE_CHANNEL_ID) {
       this.setState({
         canUploadVideo: true,
         errorMessage: false,
@@ -82,6 +81,11 @@ module.exports = React.createClass({
       link: 'https://www.youtube.com/watch?v=' + uploadResponse.id,
       timestamp: uploadResponse.snippet.title
     });
+
+    // How should we handle an error here? At this point the video is on youtube.
+    // However if this save fails, we've lost that reference between the course and video
+    // could attempt to retry the save possibly, might end up being a
+    // manual process to find the video and create the link
     this.props.model.save();
   },
 

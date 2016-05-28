@@ -16,6 +16,8 @@ var postcss = require('gulp-postcss');
 var reactify = require('reactify');
 var CacheBreaker = require('gulp-cache-breaker');
 var cb = new CacheBreaker();
+var envify = require('envify/custom');
+var env = require('gulp-env');
 
 gulp.task('bundle', function () {
   return browserify({
@@ -28,11 +30,16 @@ gulp.task('bundle', function () {
 });
 
 gulp.task('bundle-dev', function() {
+  // Load our development variables into the process.env
+  env('.env.dev.js');
+
   return browserify({
     entries: ['public/src/js/app.js'],
     debug: true,
     transform: [reactify]
-  }).bundle().on('error', function(error) {
+  })
+  .transform(envify())
+  .bundle().on('error', function(error) {
     console.log(error.toString());
     this.emit('end');
   })

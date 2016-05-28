@@ -82,6 +82,7 @@
   },
   "devDependencies": {
     "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "gulp-env": "^0.4.0",
     "nodemon": "^1.9.2"
   }
 }
