@@ -1,0 +1,26 @@
+extends layout
+  
+block content
+  h2 Enter Email
+  form
+    .row
+      .input-field.col.s12
+        input#email.validate(type='email', name='username')
+        label(for='email') Email
+    button.btn.waves-effect.waves-light(type='submit', name='action') Submit
+      i.material-icons.right send
+block bottom_scripts
+  script(type='text/javascript').
+    $('form').submit(function(e) {
+      e.preventDefault();
+      $.ajax('/reset', {
+        method: 'POST',
+        data: {
+          username: $('[name="username"]').val()
+        },
+        success: function(response) {
+          Materialize.toast(response.message, 4000);
+        }
+      });
+    });
+    

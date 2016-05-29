@@ -2,7 +2,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
 var BaseModal = require('./BaseModal');
-var CourseVideoUploadModal = require('./CourseVideoUploadModal');
+var CourseVideoUpload = require('./CourseVideoUpload');
 require('backbone-react-component');
 
 module.exports = React.createClass({
@@ -70,7 +70,7 @@ module.exports = React.createClass({
   // We would be less likely to run into weird bugs as a result of
   // repeating this logic over and over again
   //
-  // <Modal> <CourseVideoUploadModal /> </Modal>
+  // <Modal> <CourseVideoUpload /> </Modal>
   showUploadModal: function() {
     this.setState({modalIsOpen: true});
   },
@@ -83,9 +83,9 @@ module.exports = React.createClass({
     var userRows = this.props.model.get('registrations').map(function(student, i) {
       return (
         <tr key={i}>
-        <td className="text-right">
-        {student.fullName()}
-        </td>
+          <td className="right-align">
+            <a href={'#users/' + student.id}>{student.fullName()}</a>
+          </td>
         </tr>
       );
     });
@@ -116,15 +116,15 @@ module.exports = React.createClass({
       var studentCells = _.map(courseGrades, function(grade, i) {
         return (
           <td key={i}>
-          <input
-          type="text"
-          className="trim-margin disabled"
-          style={{ height: '1rem' }}
-          defaultValue={grade.score}
-          onFocus={this.focusGrade}
-          onBlur={this.blurGrade}
-          data-student-id={student.id}
-          data-grade-name={grade.name} />
+            <input
+            type="text"
+            className="trim-margin disabled"
+            style={{ height: '1rem' }}
+            defaultValue={grade.score}
+            onFocus={this.focusGrade}
+            onBlur={this.blurGrade}
+            data-student-id={student.id}
+            data-grade-name={grade.name} />
           </td>
         );
       }, this);
@@ -199,7 +199,7 @@ module.exports = React.createClass({
         <BaseModal
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}>
-          <CourseVideoUploadModal model={this.props.model} />
+          <CourseVideoUpload model={this.props.model} />
         </BaseModal>
       </div>
     );

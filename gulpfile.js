@@ -20,10 +20,15 @@ var envify = require('envify/custom');
 var env = require('gulp-env');
 
 gulp.task('bundle', function () {
+  // Load our development variables into the process.env
+  env('.env.js');
+
   return browserify({
     entries: ['public/src/js/app.js'],
     transform: [reactify]
-  }).bundle()
+  })
+    .transform(envify())
+    .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(gulp.dest('public/js/'));
@@ -90,7 +95,9 @@ gulp.task('watch', function () {
 });
 
 gulp.task('build', function(callback) {
-  runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
+  if (process.env.NODE_ENV === 'production') {
+    runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
+  }
 });
 gulp.task('develop', ['bundle-dev', 'sass-dev']);
 gulp.task('default', ['develop', 'watch']);

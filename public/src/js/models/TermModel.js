@@ -3,30 +3,30 @@ var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/terms',
   idAttribute: '_id',
-  
+
   defaults: {
     name: '',
     full: 0
   },
-  
+
   initialize: function() {
     this.percentFull();
     this.on('sync', this.percentFull);
   },
-  
+
   parse: function(obj) {
     var CoursesCollection = require('../collections/CoursesCollection');
-    obj.courses = new CoursesCollection(obj.courses);
+    obj.courses = new CoursesCollection(obj.courses, { parse: true });
     return obj;
   },
-  
+
   percentFull: function() {
     if (this.get('courses') && this.get('courses').length) {
-      var total = this.get('courses').reduce(function(memo, course) { 
-        return memo + course.get('seats'); 
+      var total = this.get('courses').reduce(function(memo, course) {
+        return memo + course.get('seats');
       }, 0);
-      var taken = this.get('courses').reduce(function(memo, course) { 
-        return memo + course.get('registrations').length; 
+      var taken = this.get('courses').reduce(function(memo, course) {
+        return memo + course.get('registrations').length;
       }, 0);
     }
     var percent = Math.round(taken / total * 100);

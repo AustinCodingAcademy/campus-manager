@@ -26,7 +26,7 @@ module.exports = React.createClass({
     // Since we are pulling this library in over cdn,
     // we need to ensure it is here...
     if (typeof gapi === 'undefined') {
-      this.onError('We are unable to upload videos at this time.  Please try agian later.');
+      this.props.onError('We are unable to upload videos at this time.  Please try agian later.');
       return;
     }
     gapi.client.setApiKey(this.props.apiKey);

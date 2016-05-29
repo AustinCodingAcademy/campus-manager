@@ -25,6 +25,7 @@ var UsersCollection = require('./collections/UsersCollection');
 var UsersListComponent = require('./components/UsersListComponent');
 var RegistrationsListComponent = require('./components/RegistrationsListComponent');
 var TermModel = require('./models/TermModel');
+var StudentComponent = require('./components/StudentComponent');
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -42,6 +43,7 @@ $(function() {
       'attendance': 'attendance',
       'terms': 'terms',
       'users': 'users',
+      'users/:id': 'student',
       'courses': 'courses',
       'courses/:id': 'course',
       'registration': 'registration'
@@ -55,6 +57,12 @@ $(function() {
       ReactDOM.render(<NavbarComponent model={this.currentUser} />, $('nav')[0]);
     },
 
+    student: function(id) {
+      var student = new UserModel({ _id: id });
+      student.fetch();
+      ReactDOM.render(<StudentComponent model={student} />, $('#container')[0]);
+    },
+
     attendance: function() {
       var users = new UsersCollection();
       users.fetch();
@@ -62,6 +70,9 @@ $(function() {
     },
 
     index: function() {
+      if (this.currentUser.get('is_student')) {
+        return this.navigate('users/' + this.currentUser.id, {trigger: true, replace: true});
+      }
       var terms = new TermsCollection();
       terms.fetch();
       ReactDOM.render(<HomeLayoutComponent collection={terms} />, $('#container')[0]);

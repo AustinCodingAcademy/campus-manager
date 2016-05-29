@@ -75,7 +75,7 @@ module.exports = React.createClass({
     var indicatorStyle = {
       background: this.state.uploadStatus === 'complete' ? '#43a047' : '#90CAF9',
       height: '100%',
-      width: this.state.uploadProgress + '%',
+      width: this.state.uploadStatus === 'complete' ? '100%' : this.state.uploadProgress + '%',
       transition: 'width 0.5s ease',
       borderRadius: '10px'
     };

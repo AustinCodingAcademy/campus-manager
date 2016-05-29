@@ -55,8 +55,13 @@ module.exports = {
   * CourseController.create()
   */
   create: function(req, res) {
-    var course = new CourseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
-      seats : req.body.seats
+    var course = new CourseModel({
+      name : req.body.name,
+      term : req.body.term._id,
+      days : req.body.days,
+      seats : req.body.seats,
+      textbook: req.body.textbook,
+      videos: req.body.videos
     });
     UserModel.findOne({
       _id: req.user.id
@@ -106,6 +111,7 @@ module.exports = {
         'seats',
         'holidays',
         'grades',
+        'textbook',
         'videos'
       ];
 

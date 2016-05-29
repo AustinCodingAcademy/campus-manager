@@ -1,7 +1,10 @@
 @charset 'utf-8';
 
+$fa-font-path: '/fonts/fontawesome/';
+
 @import
   '../../../node_modules/materialize-css/dist/css/materialize',
+  '../../../node_modules/font-awesome/scss/font-awesome.scss',
   './modal',
   './youtube_uploader';
 
@@ -29,18 +32,10 @@ nav .brand-logo {
   }
 }
 
-.text-right {
-  text-align: right;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
 .disabled {
   opacity: 0.75;
+}
+
+.hidden {
+  display: none;
 }
