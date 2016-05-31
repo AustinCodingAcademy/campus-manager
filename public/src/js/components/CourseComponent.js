@@ -198,7 +198,8 @@ module.exports = React.createClass({
         </div>
         <BaseModal
           isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}>
+          onRequestClose={this.closeModal}
+          shouldCloseOnOverlayClick={false}>
           <CourseVideoUpload model={this.props.model} />
         </BaseModal>
       </div>

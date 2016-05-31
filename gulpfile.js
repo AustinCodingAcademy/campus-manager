@@ -20,9 +20,6 @@ var envify = require('envify/custom');
 var env = require('gulp-env');
 
 gulp.task('bundle', function () {
-  // Load our development variables into the process.env
-  env('.env.js');
-
   return browserify({
     entries: ['public/src/js/app.js'],
     transform: [reactify]
@@ -36,7 +33,7 @@ gulp.task('bundle', function () {
 
 gulp.task('bundle-dev', function() {
   // Load our development variables into the process.env
-  env('.env.dev.js');
+  env('.env');
 
   return browserify({
     entries: ['public/src/js/app.js'],
