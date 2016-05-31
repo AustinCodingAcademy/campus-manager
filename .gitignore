@@ -5,3 +5,5 @@ config/env.js
 public/css
 public/js/bundle*
 .floo*
+.env
+.env.*
