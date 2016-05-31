@@ -26,17 +26,19 @@ module.exports = React.createClass({
     // Since we are pulling this library in over cdn,
     // we need to ensure it is here...
     if (typeof gapi === 'undefined') {
-      this.props.onError('We are unable to upload videos at this time.  Please try agian later.');
+      this.props.onError(
+        'We are unable to upload videos at this time.  Please try agian later.'
+      );
       return;
     }
-    gapi.client.setApiKey(this.props.apiKey);
+    gapi.client.setApiKey(process.env.GOOGLE_API_KEY);
     this.checkAuth();
   },
 
   checkAuth: function() {
     gapi.auth.authorize({
-      client_id: this.props.clientId,
-      scope: this.props.scopes,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      scope: ['https://www.googleapis.com/auth/youtube'],
       immediate: false
     }, this.handleAuthResult);
   },
@@ -45,7 +47,9 @@ module.exports = React.createClass({
     if (authResult && !authResult.error) {
       this.checkAccount(authResult.access_token);
     } else {
-      this.props.onError('There was an error accessing your account. Please try again.');
+      this.props.onError(
+        'There was an error accessing your account. Please try again.'
+      );
     }
   },
 

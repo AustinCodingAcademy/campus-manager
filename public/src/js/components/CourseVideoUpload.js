@@ -43,20 +43,15 @@ module.exports = React.createClass({
         onError={this.showErrorMessage}
         onComplete={this.onComplete}
         token={this.state.accessToken}
-        snippetDescription={
-          'Course Name: ' + this.props.model.get('name') + '\n Term: ' + this.props.model.get('term').get('name')
-        }/>
+        course={this.props.model}/>
     );
   },
 
   renderAccountSelect: function() {
     return (
       <YoutubeAccountSelect
-        apiKey={process.env.YOUTUBE_API_KEY}
-        clientId={process.env.YOUTUBE_CLIENT_ID}
         onAccountSelect={this.checkAccount}
-        onError={this.showErrorMessage}
-        scopes={['https://www.googleapis.com/auth/youtube']}/>
+        onError={this.showErrorMessage} />
     );
   },
 

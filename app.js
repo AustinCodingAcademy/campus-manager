@@ -20,7 +20,7 @@ var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
 
-var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
+var mongo_url = process.env.MONGOLAB_URI || 'mongodb://localhost/heroku_nqf25wvf';
 
 var app = express();
 

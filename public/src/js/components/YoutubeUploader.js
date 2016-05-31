@@ -14,7 +14,7 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div id={'youtube-uploader'}>
+      <div className={this.state.uploadStatus} id={'youtube-uploader'}>
         <div className="row">
           <div className="col s12">
             {this.renderDropZone()}
@@ -40,7 +40,7 @@ module.exports = React.createClass({
               onDrop={this.onDrop}
               className='dropzone-base-style'
               activeClassName='dropzone-active-style'>
-              <div className={this.state.uploadStatus}>
+              <div>
                 <i className="material-icons center large upload">cloud_queue</i>
                 <i className="material-icons center large uploading">cloud_upload</i>
                 <i className="material-icons center large complete">cloud_done</i>
@@ -73,30 +73,21 @@ module.exports = React.createClass({
 
   renderProgressBar: function() {
     var indicatorStyle = {
-      background: this.state.uploadStatus === 'complete' ? '#43a047' : '#90CAF9',
-      height: '100%',
-      width: this.state.uploadStatus === 'complete' ? '100%' : this.state.uploadProgress + '%',
-      transition: 'width 0.5s ease',
-      borderRadius: '10px'
+      width: this.state.uploadStatus === 'complete' ?
+        '100%' : this.state.uploadProgress + '%'
     };
 
     if (this.state.uploadProgress) {
       return (
-        <div
-          style={{
-            height: '20px',
-            width: '100%',
-            border: '2px solid #ddd',
-            borderRadius: '10px'
-          }}>
-          <div
+        <div className='progress-bar-container'>
+          <div className='progress-indicator'
             style={indicatorStyle}>
           </div>
         </div>
       );
     }
 
-    return <div></div>;
+    return '';
   },
 
   onDrop: function(files) {
