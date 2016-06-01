@@ -32,13 +32,8 @@ module.exports = React.createClass({
         closeTimeoutMS={this.props.closeTimeoutMS}
         shouldCloseOnOverlayClick={this.props.shouldCloseOnOverlayClick}>
         <i
-          style={{
-            color: '#868686',
-            cursor: 'pointer',
-            marginBottom: '15px'
-          }}
           onClick={this.props.onRequestClose}
-          className="material-icons right small">close</i>
+          className="material-icons right small close-icon">close</i>
         {this.props.children}
       </Modal>
     );
