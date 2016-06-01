@@ -1,4 +1,6 @@
 'use strict';
+// inject custom environment variables into the process env
+require('dotenv').config();
 
 var browserify = require('browserify');
 var gulp = require('gulp');
@@ -17,7 +19,6 @@ var reactify = require('reactify');
 var CacheBreaker = require('gulp-cache-breaker');
 var cb = new CacheBreaker();
 var envify = require('envify/custom');
-var env = require('gulp-env');
 
 gulp.task('bundle', function () {
   return browserify({
@@ -32,9 +33,6 @@ gulp.task('bundle', function () {
 });
 
 gulp.task('bundle-dev', function() {
-  // Load our development variables into the process.env
-  env('.env');
-
   return browserify({
     entries: ['public/src/js/app.js'],
     debug: true,

@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
-var cors = require('cors')
+var cors = require('cors');
 
 var routes = require('./routes/index');
 var reset = require('./routes/reset');
@@ -20,7 +20,7 @@ var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
 
-var mongo_url = process.env.MONGOLAB_URI || 'mongodb://localhost/heroku_nqf25wvf';
+var mongo_url;
 
 var app = express();
 
@@ -33,7 +33,12 @@ if (process.env.NODE_ENV === 'production') {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
+} else {
+  // If this is not our production environment inject our custom environment variables
+  require('dotenv').config();
 }
+
+mongo_url = process.env.MONGOLAB_URI;
 
 app.use(cors());
 app.use(methodOverride('_method'));
