@@ -1,3 +1,17 @@
+if (process.env.NODE_ENV === 'production') {
+  app.use (function (req, res, next) {
+    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+    if (schema === 'https') {
+      next();
+    } else {
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  });
+} else {
+  // If this is not our production environment inject our custom environment variables
+  require('dotenv').config();
+}
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -23,20 +37,6 @@ var middleware = require('./routes/middleware');
 var mongo_url;
 
 var app = express();
-
-if (process.env.NODE_ENV === 'production') {
-  app.use (function (req, res, next) {
-    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-    if (schema === 'https') {
-      next();
-    } else {
-      res.redirect('https://' + req.headers.host + req.url);
-    }
-  });
-} else {
-  // If this is not our production environment inject our custom environment variables
-  require('dotenv').config();
-}
 
 mongo_url = process.env.MONGOLAB_URI;
 
