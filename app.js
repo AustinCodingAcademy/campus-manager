@@ -1,3 +1,17 @@
+if (process.env.NODE_ENV === 'production') {
+  app.use (function (req, res, next) {
+    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+    if (schema === 'https') {
+      next();
+    } else {
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  });
+} else {
+  // If this is not our production environment inject our custom environment variables
+  require('dotenv').config();
+}
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,7 +20,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
-var cors = require('cors')
+var cors = require('cors');
 
 var routes = require('./routes/index');
 var reset = require('./routes/reset');
@@ -20,20 +34,11 @@ var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
 
-var mongo_url = process.env.MONGOLAB_URI || require('./config/env').mongo_url;
+var mongo_url;
 
 var app = express();
 
-if (process.env.NODE_ENV === 'production') {
-  app.use (function (req, res, next) {
-    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-    if (schema === 'https') {
-      next();
-    } else {
-      res.redirect('https://' + req.headers.host + req.url);
-    }
-  });
-}
+mongo_url = process.env.MONGOLAB_URI;
 
 app.use(cors());
 app.use(methodOverride('_method'));

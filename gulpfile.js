@@ -1,4 +1,6 @@
 'use strict';
+// inject custom environment variables into the process env
+require('dotenv').config();
 
 var browserify = require('browserify');
 var gulp = require('gulp');
@@ -16,12 +18,15 @@ var postcss = require('gulp-postcss');
 var reactify = require('reactify');
 var CacheBreaker = require('gulp-cache-breaker');
 var cb = new CacheBreaker();
+var envify = require('envify/custom');
 
 gulp.task('bundle', function () {
   return browserify({
     entries: ['public/src/js/app.js'],
     transform: [reactify]
-  }).bundle()
+  })
+    .transform(envify())
+    .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(gulp.dest('public/js/'));
@@ -32,7 +37,9 @@ gulp.task('bundle-dev', function() {
     entries: ['public/src/js/app.js'],
     debug: true,
     transform: [reactify]
-  }).bundle().on('error', function(error) {
+  })
+  .transform(envify())
+  .bundle().on('error', function(error) {
     console.log(error.toString());
     this.emit('end');
   })

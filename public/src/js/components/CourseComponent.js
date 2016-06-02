@@ -1,10 +1,18 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
+var BaseModal = require('./BaseModal');
+var CourseVideoUpload = require('./CourseVideoUpload');
 require('backbone-react-component');
 
 module.exports = React.createClass({
   mixins: [Backbone.React.Component.mixin],
+
+  getInitialState: function() {
+    return {
+      modalIsOpen: false
+    };
+  },
 
   addGrade: function(e) {
     e.preventDefault();
@@ -54,6 +62,21 @@ module.exports = React.createClass({
         }
       });
     }
+  },
+
+  // I'm thinking how we show modals is in need of an update. Going into the dom
+  // like this seems like an anti-pattern.  We would probably be better off
+  // having some type of modal component and passing it a child component.
+  // We would be less likely to run into weird bugs as a result of
+  // repeating this logic over and over again
+  //
+  // <Modal> <CourseVideoUpload /> </Modal>
+  showUploadModal: function() {
+    this.setState({modalIsOpen: true});
+  },
+
+  closeModal: function() {
+    this.setState({modalIsOpen: false});
   },
 
   render: function() {
@@ -118,52 +141,67 @@ module.exports = React.createClass({
     });
 
     return (
-      <div className="row">
-        <div className="s12">
-          <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
-          <div className="row">
-            <form onSubmit={this.addGrade}>
-              <div className="col s4">
-                <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
-                  <i className="material-icons left">mail</i> Email Class
-                </a>
+      <div>
+        <div className="row">
+          <div className="s12">
+            <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
+            <div className="row">
+              <form onSubmit={this.addGrade}>
+                <div className="col s3">
+                  <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
+                    <i className="material-icons left">mail</i> Email Class
+                  </a>
+                </div>
+                <div className="col s3 input-field trim-margin">
+                  <input id="grade" type="text" ref="grade" className="right" />
+                  <label htmlFor="grade">Grade Name</label>
+                </div>
+                <div className="col s3">
+                  <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
+                </div>
+              </form>
+              <div className="col s3">
+                <button
+                  onClick={this.showUploadModal}
+                  className="waves-effect waves-teal btn left">
+                  Add Video
+                </button>
               </div>
-              <div className="col s4 input-field trim-margin">
-                <input id="grade" type="text" ref="grade" className="right" />
-                <label htmlFor="grade">Grade Name</label>
-              </div>
-              <div className="col s4">
-                <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
-              </div>
-            </form>
-          </div>
-          <div className="row">
-            <div className="col s3">
-              <table className="striped">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userRows}
-                </tbody>
-              </table>
             </div>
-            <div className="col s9" style={{overflowX: 'scroll'}}>
-              <table className="striped">
-                <thead>
-                  <tr>
-                    {gradeNames}
-                  </tr>
-                </thead>
-                <tbody>
-                  {studentGrades}
-                </tbody>
-              </table>
+            <div className="row">
+              <div className="col s3">
+                <table className="striped">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userRows}
+                  </tbody>
+                </table>
+              </div>
+              <div className="col s9" style={{overflowX: 'scroll'}}>
+                <table className="striped">
+                  <thead>
+                    <tr>
+                      {gradeNames}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {studentGrades}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
+        <BaseModal
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}
+          shouldCloseOnOverlayClick={false}>
+          <CourseVideoUpload model={this.props.model} />
+        </BaseModal>
       </div>
     );
   }

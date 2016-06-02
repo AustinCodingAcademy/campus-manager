@@ -3,11 +3,11 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 var UserModel = require('../models/UserModel');
 var nodemailer = require('nodemailer');
-var host = process.env.DOMAIN || require('../config/env').domain;
+var host = process.env.DOMAIN;
 var mandrillTransport = require('nodemailer-mandrill-transport');
 var transport = nodemailer.createTransport(mandrillTransport({
   auth: {
-    apiKey: process.env.MANDRILL_API_KEY || require('../config/env').mandrill_key || ''
+    apiKey: process.env.MANDRILL_API_KEY
   }
 }));
 

@@ -12,8 +12,8 @@ html
     div(data-bootstrap="#{user}")
     .container#container
     #modal-container
+    script(type='text/javascript', src='https://apis.google.com/js/client.js')
     if env == 'production'
       script(type='text/javascript', src='{{cache-break:js/bundle.js}}')
     else
       script(type='text/javascript', src='js/bundle.js')
-        

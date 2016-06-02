@@ -55,10 +55,15 @@ module.exports = {
   * CourseController.create()
   */
   create: function(req, res) {
-    var course = new CourseModel({      name : req.body.name,      term : req.body.term._id,      days : req.body.days,
+    var course = new CourseModel({
+      name : req.body.name,
+      term : req.body.term._id,
+      days : req.body.days,
       seats : req.body.seats,
-      textbook: req.body.textbook
-    });    UserModel.findOne({
+      textbook: req.body.textbook,
+      videos: req.body.videos
+    });
+    UserModel.findOne({
       _id: req.user.id
     }).populate('client').exec(function(err, currentUser) {
       course.client = currentUser.client.id;
@@ -106,7 +111,8 @@ module.exports = {
         'seats',
         'holidays',
         'grades',
-        'textbook'
+        'textbook',
+        'videos'
       ];
 
       _.each(attributes, function(attr) {
