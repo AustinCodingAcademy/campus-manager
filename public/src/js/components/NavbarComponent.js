@@ -12,7 +12,7 @@ module.exports = React.createClass({
     }
     return (
       <div className="nav-wrapper white">
-        <a href="/#" className="brand-logo">
+        <a href="/" className="brand-logo">
           <img src="/img/aca-logo-header.jpg" style={{width:195}}/>
         </a>
         <a href="#" data-activates="mobile-demo" className="button-collapse">
