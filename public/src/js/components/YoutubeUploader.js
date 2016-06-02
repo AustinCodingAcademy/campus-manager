@@ -7,8 +7,7 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       uploadStatus: 'upload',
-      uploadProgress: 0,
-      date: moment().format('YYYY-MM-DD')
+      uploadProgress: 0
     };
   },
 
@@ -65,7 +64,6 @@ module.exports = React.createClass({
             <input
               type="date"
               name="lecture-date"
-              value={this.state.date}
               onChange={this.handleDateChange}
               ref="date"/>
           </div>
