@@ -66,7 +66,8 @@ module.exports = React.createClass({
               type="date"
               name="lecture-date"
               value={this.state.date}
-              onChange={this.handleDateChange}/>
+              onChange={this.handleDateChange}
+              ref="date"/>
           </div>
         </div>
       </div>
@@ -101,7 +102,7 @@ module.exports = React.createClass({
 
     var metadata = {
       snippet: {
-        title: moment(this.state.date, 'D MMMM, YYYY').format('YYYY-MM-DD'),
+        title: moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DD'),
         description: this.props.snippetDescription
       },
       status: {
