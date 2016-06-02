@@ -12,6 +12,12 @@ module.exports = React.createClass({
     };
   },
 
+  componentDidMount: function() {
+    this.pickadate = $('input[type="date"]').pickadate().pickadate('picker');
+    this.pickadate.set('select', new Date().getTime(), { muted: true });
+    $('input[type="time"]').pickatime();
+  },
+
   render: function() {
     return (
       <div className={this.state.uploadStatus} id={'youtube-uploader'}>
@@ -95,7 +101,7 @@ module.exports = React.createClass({
 
     var metadata = {
       snippet: {
-        title: this.state.date,
+        title: moment(this.state.date, 'D MMMM, YYYY').format('YYYY-MM-DD'),
         description: this.props.snippetDescription
       },
       status: {
