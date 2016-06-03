@@ -31,9 +31,16 @@ module.exports = React.createClass({
             attended = 'fa fa-calendar-check-o green-text';
           }
         }
-        return (
-          <p key={idx}><i className={attended}></i> {date.format("ddd, MMM Do, YYYY")}</p>
-        );
+        var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
+        if (video) {
+          return (
+            <p key={idx}><i className={attended}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
+          );
+        } else {
+          return (
+            <p key={idx}><i className={attended}></i> {date.format("ddd, MMM Do, YYYY")}</p>
+          );
+        }
       }, this);
 
       var grades = _.map(_.where(this.props.model.get('grades'), { courseId: course.id }), function(grade, idx) {
@@ -61,12 +68,13 @@ module.exports = React.createClass({
                   {course.get('term').get('name') + ' - ' + course.get('name')}
                 </a>
               </span>
-              <h5>Attendance</h5>
               <div className="row">
                 <div className="col s12 m6">
+                  <h5>Attendance</h5>
                   {dates}
                 </div>
                 <div className="col s12 m6">
+                  <h5>Grades</h5>
                   {grades}
                 </div>
               </div>
@@ -88,7 +96,9 @@ module.exports = React.createClass({
                 <p><i className="fa fa-fw fa-hashtag"></i> {this.props.model.get('idn')}</p>
                 <p>
                   <i className="fa fa-fw fa-envelope"></i>
-                  <a href={'mailto:' + this.props.model.get('username')}>{this.props.model.get('username')}</a>
+                  <a href={'mailto:' + this.props.model.get('username')}>
+                    {this.props.model.get('username')}
+                  </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-mobile"></i> {this.props.model.get('phone')}
