@@ -1,6 +1,7 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
+var moment = require('moment');
 var BaseModal = require('./BaseModal');
 var CourseVideoUpload = require('./CourseVideoUpload');
 require('backbone-react-component');
@@ -12,6 +13,10 @@ module.exports = React.createClass({
     return {
       modalIsOpen: false
     };
+  },
+
+  componentDidUpdate: function() {
+    Materialize.updateTextFields();
   },
 
   addGrade: function(e) {
@@ -79,6 +84,17 @@ module.exports = React.createClass({
     this.setState({modalIsOpen: false});
   },
 
+  removeVideo: function(e) {
+    e.preventDefault();
+    var r = confirm("You sure you wanna delete this video?");
+    if (r === true) {
+      var idx = $(e.currentTarget).data('idx');
+      this.props.model.get('videos').splice(idx, 1);
+      this.props.model.save();
+    }
+
+  },
+
   render: function() {
     var userRows = this.props.model.get('registrations').map(function(student, i) {
       return (
@@ -102,7 +118,7 @@ module.exports = React.createClass({
       }, this);
 
       return (
-        <td key={i} style={{whiteSpace: 'nowrap'}}>
+        <td key={i} style={{whiteSpace: 'nowrap'}} className="trim-padding">
         {grade} <a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a>
         </td>
       );
@@ -140,32 +156,34 @@ module.exports = React.createClass({
       return student.get('username');
     });
 
+    var videos = _.map(this.props.model.get('videos'), function(video, idx) {
+      return (
+        <p key={idx}><a href={video.link}>{moment(video.timestamp, 'YYYY-MM-DD').format('ddd, MMM Do, YYYY')}</a> (<a href="#" data-idx={idx} onClick={this.removeVideo}>x</a>)</p>
+      );
+    }, this);
+
     return (
       <div>
         <div className="row">
           <div className="s12">
             <h3>{this.props.model.get('term').get('name') + ' - ' + this.props.model.get('name')}</h3>
             <div className="row">
-              <form onSubmit={this.addGrade}>
-                <div className="col s3">
+                <div className="col s4">
                   <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
                     <i className="material-icons left">mail</i> Email Class
                   </a>
                 </div>
-                <div className="col s3 input-field trim-margin">
-                  <input id="grade" type="text" ref="grade" className="right" />
-                  <label htmlFor="grade">Grade Name</label>
-                </div>
-                <div className="col s3">
-                  <button className="waves-effect waves-teal btn left"><i className="material-icons right">send</i> Submit</button>
-                </div>
-              </form>
-              <div className="col s3">
+              <div className="col s4">
                 <button
                   onClick={this.showUploadModal}
                   className="waves-effect waves-teal btn left">
-                  Add Video
+                  <i className="fa fa-youtube-play left"></i> Add Video
                 </button>
+              </div>
+              <div className="col s4">
+                <a href={this.props.model.get('textbook')} target="_blank" className="waves-effect waves-teal btn left">
+                  <i className="fa fa-book left"></i> Textbook
+                </a>
               </div>
             </div>
             <div className="row">
@@ -173,7 +191,7 @@ module.exports = React.createClass({
                 <table className="striped">
                   <thead>
                     <tr>
-                      <th>Name</th>
+                      <th style={{ padding: '2rem 0 1.5rem' }}>Name</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -186,12 +204,29 @@ module.exports = React.createClass({
                   <thead>
                     <tr>
                       {gradeNames}
+                      <th>
+                        <div className="input-field trim-margin">
+                          <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin"/>
+                          <label htmlFor="grade">Add Grade</label>
+                        </div>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {studentGrades}
                   </tbody>
                 </table>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col s12 m6">
+                <div className="card">
+
+                  <div className="card-content">
+                    <span className="card-title">Video Manager</span>
+                    {videos}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
