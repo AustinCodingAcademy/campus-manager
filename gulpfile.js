@@ -1,6 +1,9 @@
 'use strict';
-// inject custom environment variables into the process env
-require('dotenv').config();
+
+if (process.env.NODE_ENV != 'production') {
+  // inject custom environment variables into the process env
+  require('dotenv').config();
+}
 
 var browserify = require('browserify');
 var gulp = require('gulp');

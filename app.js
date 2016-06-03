@@ -1,5 +1,8 @@
+var express = require('express');
+var app = express();
+
 if (process.env.NODE_ENV === 'production') {
-  app.use (function (req, res, next) {
+  app.use(function (req, res, next) {
     var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
     if (schema === 'https') {
       next();
@@ -12,7 +15,6 @@ if (process.env.NODE_ENV === 'production') {
   require('dotenv').config();
 }
 
-var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -34,17 +36,11 @@ var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
 
-var mongo_url;
-
-var app = express();
-
-mongo_url = process.env.MONGOLAB_URI;
-
 app.use(cors());
 app.use(methodOverride('_method'));
 
 var mongoose = require('mongoose');
-mongoose.connect(mongo_url);
+mongoose.connect(process.env.MONGOLAB_URI);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
