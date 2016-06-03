@@ -158,7 +158,7 @@ module.exports = React.createClass({
 
     var videos = _.map(this.props.model.get('videos'), function(video, idx) {
       return (
-        <p key={idx}><a href={video.link}>{moment(video.timestamp, 'YYYY-MM-DD').format('ddd, MMM Do, YYYY')}</a> (<a href="#" data-idx={idx} onClick={this.removeVideo}>x</a>)</p>
+        <p key={idx}><a href={video.link} target="_blank">{moment(video.timestamp, 'YYYY-MM-DD').format('ddd, MMM Do, YYYY')}</a> (<a href="#" data-idx={idx} onClick={this.removeVideo}>x</a>)</p>
       );
     }, this);
 
