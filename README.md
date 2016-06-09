@@ -11,12 +11,14 @@ After cloning and navigating into directory:
 
 1. `npm install`
 
-1. Create `config/env.js`
-  ```javascript
-  module.exports = {
-    mongo_url: 'mongodb://localhost/aca-campus',
-    host: 'http://localhost:3000'
-  }
+1. Create `.env`
+  ```bash
+  MONGOLAB_URI="mongodb://localhost/aca-campus"
+  DOMAIN="http://localhost:3000"
+  MANDRILL_API_KEY=""
+  GOOGLE_API_KEY=""
+  GOOGLE_CLIENT_ID=""
+  YOUTUBE_CHANNEL_ID=""
   ```
 
 1. leave `npm run gulp` running in one terminal session
