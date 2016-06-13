@@ -157,5 +157,34 @@ module.exports = {
       }
       return res.json(course);
     });
+  },
+
+  /**
+  * CourseController.screencasts()
+  */
+  screencasts: function(req, res) {
+    _.each(req.body, function(screencast) {
+      console.log(screencast.course_id);
+      CourseModel.findOne({ _id: screencast.course_id }, function(err, course) {
+        if(err) {
+          return res.json(500, {
+            message: 'Error finding course',
+            error: err
+          });
+        }
+        if (course) {
+          if (!course.videos) {
+            course.videos = [];
+          }
+          course.videos.push({
+            youtubeId: screencast.youtubeId,
+            link: screencast.link,
+            timestamp: screencast.timestamp
+          });
+          course.save();
+        }
+      });
+    });
+  return res.json(req.body);
   }
 };
