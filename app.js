@@ -11,8 +11,11 @@ if (process.env.NODE_ENV === 'production') {
     }
   });
 } else {
-  // If this is not our production environment inject our custom environment variables
   require('dotenv').config();
+}
+
+if (process.env.NODE_ENV === 'test') {
+  process.env.MONGOLAB_URI = 'mongodb://localhost/aca-campus-test';
 }
 
 var path = require('path');

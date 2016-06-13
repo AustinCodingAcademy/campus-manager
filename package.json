@@ -7,7 +7,8 @@
     "start": "node ./bin/www",
     "gulp": "gulp",
     "develop": "nodemon ./bin/www",
-    "mongoose-gen": "mongoose-gen"
+    "mongoose-gen": "mongoose-gen",
+    "test": "nightwatch"
   },
   "engines": {
     "node": "5.6.0"
@@ -88,8 +89,12 @@
     "materialize": "materialize"
   },
   "devDependencies": {
-    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "database-cleaner": "^0.13.0",
     "dotenv": "^2.0.0",
-    "nodemon": "^1.9.2"
+    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "gulp-live-server": "0.0.30",
+    "nightwatch": "^0.9.3",
+    "nodemon": "^1.9.2",
+    "selenium-server-standalone-jar": "^2.53.0"
   }
 }
