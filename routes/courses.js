@@ -38,4 +38,12 @@ router.delete('/:id', middleware.admin, function(req, res) {
   CourseController.remove(req, res);
 });
 
+/*
+* POST
+*/
+router.post('/screencasts', middleware.admin, function(req, res) {
+  CourseController.screencasts(req, res);
+});
+
+
 module.exports = router;
