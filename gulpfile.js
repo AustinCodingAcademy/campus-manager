@@ -9,6 +9,7 @@ if (process.env.NODE_ENV != 'production') {
   var DatabaseCleaner = require('database-cleaner');
   var databaseCleaner = new DatabaseCleaner('mongodb');
   var nightwatch = require('gulp-nightwatch');
+  var mongo = require('mongodb');
 }
 
 var browserify = require('browserify');
@@ -28,7 +29,6 @@ var reactify = require('reactify');
 var CacheBreaker = require('gulp-cache-breaker');
 var cb = new CacheBreaker();
 var envify = require('envify/custom');
-var mongo = require('mongodb');
 
 gulp.task('bundle', function () {
   return browserify({
