@@ -26,7 +26,7 @@ module.exports = React.createClass({
           <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
           <li>
             <a className="dropdown-button black-text" href="#!" data-activates="nav-user">
-              {this.state.model.username} <i className="material-icons right">arrow_drop_down</i>
+              {this.props.model.get('username')} <i className="material-icons right">arrow_drop_down</i>
             </a>
           </li>
         </ul>
