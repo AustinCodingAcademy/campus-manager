@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if (process.env.NODE_ENV === 'test') {
-  process.env.MONGOLAB_URI = 'mongodb://localhost/aca-campus-test';
+  process.env.MONGOLAB_URI = process.env.TEST_DB;
 }
 
 var path = require('path');
