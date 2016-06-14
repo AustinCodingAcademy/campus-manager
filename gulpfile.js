@@ -1,8 +1,10 @@
 'use strict';
 
-if (process.env.NODE_ENV != 'production') {
-  // inject custom environment variables into the process env
+if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
+}
+
+if (process.env.NODE_ENV != 'production') {
   var nodemon = require('nodemon');
   var DatabaseCleaner = require('database-cleaner');
   var databaseCleaner = new DatabaseCleaner('mongodb');
