@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
-} else {
+} else if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
 
