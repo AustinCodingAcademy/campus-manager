@@ -1,6 +1,6 @@
 'use strict';
 
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV == 'development') {
   // inject custom environment variables into the process env
   require('dotenv').config();
 }
