@@ -19,6 +19,7 @@ After cloning and navigating into directory:
   GOOGLE_API_KEY=""
   GOOGLE_CLIENT_ID=""
   YOUTUBE_CHANNEL_ID=""
+  TEST_DB="mongodb://localhost/aca-campus-test"
   ```
 
 1. leave `npm run gulp` running in one terminal session
@@ -26,6 +27,10 @@ After cloning and navigating into directory:
 1. leave `npm run develop` running in another terminal session
 
 1. navigate to `http://localhost:3000/register` to create a top-level client
+
+For testing:
+
+1. Download and Install [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 ### Activity
 [![Throughput Graph](https://graphs.waffle.io/AustinCodingAcademy/aca-campus/throughput.svg)](https://waffle.io/AustinCodingAcademy/aca-campus/metrics/throughput)
