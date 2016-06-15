@@ -1,5 +1,6 @@
 machine:
   environment:
     NODE_ENV: test
+    TEST_DB: mongodb://localhost/circle-test
   node:
     version: 5.5.0

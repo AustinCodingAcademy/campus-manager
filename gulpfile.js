@@ -107,7 +107,10 @@ gulp.task('build', function(callback) {
 
 gulp.task('clean-db', function() {
   mongo.connect(process.env.TEST_DB, function(err, db) {
-    databaseCleaner.clean(db);
+    databaseCleaner.clean(db, function() {
+      console.log('done');
+      db.close();
+    });;
   });
 })
 
