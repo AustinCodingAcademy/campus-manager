@@ -1,8 +1,15 @@
 'use strict';
 
-if (process.env.NODE_ENV == 'development') {
-  // inject custom environment variables into the process env
+if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
+}
+
+if (process.env.NODE_ENV != 'production') {
+  var nodemon = require('nodemon');
+  var DatabaseCleaner = require('database-cleaner');
+  var databaseCleaner = new DatabaseCleaner('mongodb');
+  var nightwatch = require('gulp-nightwatch');
+  var mongo = require('mongodb');
 }
 
 var browserify = require('browserify');
@@ -97,5 +104,41 @@ gulp.task('build', function(callback) {
     runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
   }
 });
+
+gulp.task('clean-db', function() {
+  mongo.connect(process.env.TEST_DB, function(err, db) {
+    databaseCleaner.clean(db, function() {
+      console.log('done');
+      db.close();
+    });;
+  });
+})
+
+gulp.task('nodemon-start', function() {
+  nodemon({
+    script: './bin/www',
+    env: {
+      NODE_ENV: 'test',
+      PORT: 8080
+    }
+  });
+});
+
+gulp.task('nightwatch', function() {
+  return gulp.src('').pipe(nightwatch({
+    configFile: "nightwatch.json"
+  }));
+});
+
+gulp.task('nodemon-quit', function() {
+  nodemon.once('exit', function () {
+    process.exit(); // finish the exit process
+  }).emit('quit');
+});
+
+gulp.task('test', function(callback) {
+  runSequence('clean-db', 'nodemon-start', 'nightwatch', 'nodemon-quit', callback)
+});
+
 gulp.task('develop', ['bundle-dev', 'sass-dev']);
 gulp.task('default', ['develop', 'watch']);

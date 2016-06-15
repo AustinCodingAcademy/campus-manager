@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm rebuild node-sass && gulp build",
+    "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
     "develop": "nodemon ./bin/www",
-    "mongoose-gen": "mongoose-gen"
+    "mongoose-gen": "mongoose-gen",
+    "test": "gulp test"
   },
   "engines": {
     "node": "5.6.0"
@@ -17,7 +18,6 @@
     "backbone-react-component": "0.10.0",
     "bcrypt": "0.8.5",
     "body-parser": "1.13.2",
-    "bower": "1.7.7",
     "browserify": "13.0.0",
     "browserify-shim": "3.8.12",
     "chart.js": "1.0.2",
@@ -26,7 +26,6 @@
     "cookie-session": "2.0.0-alpha.1",
     "cors": "2.7.1",
     "debug": "2.2.0",
-    "dotenv": "^2.0.0",
     "envify": "3.4.0",
     "express": "4.13.1",
     "express-flash": "0.0.2",
@@ -43,7 +42,6 @@
     "gulp-uglify": "1.5.3",
     "jade": "1.11.0",
     "jquery": "2.1.4",
-    "lodash": "4.6.1",
     "material-design-icons": "2.2.0",
     "materialize-css": "^0.97.6",
     "method-override": "2.3.6",
@@ -89,8 +87,14 @@
     "materialize": "materialize"
   },
   "devDependencies": {
-    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "database-cleaner": "^0.13.0",
     "dotenv": "^2.0.0",
-    "nodemon": "^1.9.2"
+    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "gulp-live-server": "0.0.30",
+    "gulp-nightwatch": "^0.2.9",
+    "mongodb": "^2.1.18",
+    "nightwatch": "^0.9.3",
+    "nodemon": "^1.9.2",
+    "selenium-server-standalone-jar": "^2.53.0"
   }
 }
