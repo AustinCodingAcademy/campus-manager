@@ -3,6 +3,3 @@ machine:
     NODE_ENV: test
   node:
     version: 5.5.0
-dependencies:
-  post:
-    - npm rebuild node-sass
