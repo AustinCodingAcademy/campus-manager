@@ -10,8 +10,7 @@ if (process.env.NODE_ENV === 'production') {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
-} else {
-  // If this is not our production environment inject our custom environment variables
+} else if (process.env.NODE_ENV === 'development'){
   require('dotenv').config();
 }
 
