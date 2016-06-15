@@ -1,4 +1,4 @@
-var _ = require('lodash');
+var _ = require('underscore');
 
 var CourseModel = require('../models/CourseModel.js');
 var UserModel = require('../models/UserModel.js');
