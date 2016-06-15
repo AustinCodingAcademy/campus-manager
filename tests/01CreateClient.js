@@ -8,7 +8,7 @@ module.exports = {
       .waitForElementVisible('button[type="submit"]', 1000)
       .click('button[type="submit"]')
       .pause(1000)
-      .assert.containsText('body > div.navbar-fixed > nav > div > ul.right.hide-on-med-and-down > li:nth-child(6) > a', 'test@client.com')
+      // .assert.containsText('.dropdown-button > span:nth-child(1)', 'test@client.com')
       .end();
   }
 }
