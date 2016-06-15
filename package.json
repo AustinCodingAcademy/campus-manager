@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm rebuild node-sass && gulp build",
+    "postinstall": "npm rebuild && npm gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
     "develop": "nodemon ./bin/www",
