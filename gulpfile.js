@@ -105,17 +105,19 @@ gulp.task('build', function(callback) {
   }
 });
 
-gulp.task('nodemon-start', function() {
+gulp.task('clean-db', function() {
   mongo.connect(process.env.TEST_DB, function(err, db) {
-    databaseCleaner.clean(db, function() {
-      nodemon({
-        script: './bin/www',
-        env: {
-          NODE_ENV: 'test',
-          PORT: 8080
-        }
-      });
-    });
+    databaseCleaner.clean(db);
+  });
+})
+
+gulp.task('nodemon-start', function() {
+  nodemon({
+    script: './bin/www',
+    env: {
+      NODE_ENV: 'test',
+      PORT: 8080
+    }
   });
 });
 
@@ -132,7 +134,7 @@ gulp.task('nodemon-quit', function() {
 });
 
 gulp.task('test', function(callback) {
-  runSequence('nodemon-start', 'nightwatch', 'nodemon-quit', callback)
+  runSequence('clean-db', 'nodemon-start', 'nightwatch', 'nodemon-quit', callback)
 });
 
 gulp.task('develop', ['bundle-dev', 'sass-dev']);

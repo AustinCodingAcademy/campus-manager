@@ -12,9 +12,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 } else if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
-}
-
-if (process.env.NODE_ENV === 'test') {
+} else if (process.env.NODE_ENV === 'test') {
   process.env.MONGOLAB_URI = process.env.TEST_DB;
 }
 
