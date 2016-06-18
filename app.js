@@ -10,10 +10,10 @@ if (process.env.NODE_ENV === 'production') {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
-} else if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config();
 } else if (process.env.NODE_ENV === 'test') {
   process.env.MONGOLAB_URI = process.env.TEST_DB;
+} else {
+  require('dotenv').config();
 }
 
 var path = require('path');
@@ -45,7 +45,7 @@ mongoose.connect(process.env.MONGOLAB_URI);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
