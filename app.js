@@ -10,10 +10,10 @@ if (process.env.NODE_ENV === 'production') {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
-} else if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config();
 } else if (process.env.NODE_ENV === 'test') {
   process.env.MONGOLAB_URI = process.env.TEST_DB;
+} else {
+  require('dotenv').config();
 }
 
 var path = require('path');
