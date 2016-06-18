@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "gulp build",
+    "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
     "develop": "nodemon ./bin/www",
-    "mongoose-gen": "mongoose-gen"
+    "mongoose-gen": "mongoose-gen",
+    "test": "gulp test"
   },
   "engines": {
     "node": "5.6.0"
@@ -49,6 +50,7 @@
     "mongoose-reverse-populate": "1.1.0",
     "mongoose-unique-validator": "1.0.2",
     "morgan": "1.6.1",
+    "node-sass": "3.7.0",
     "nodemailer": "2.4.1",
     "nodemailer-mandrill-transport": "1.1.0",
     "passport": "0.3.2",
@@ -85,8 +87,14 @@
     "materialize": "materialize"
   },
   "devDependencies": {
-    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "database-cleaner": "^0.13.0",
     "dotenv": "^2.0.0",
-    "nodemon": "^1.9.2"
+    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
+    "gulp-live-server": "0.0.30",
+    "gulp-nightwatch": "^0.2.9",
+    "mongodb": "^2.1.18",
+    "nightwatch": "^0.9.3",
+    "nodemon": "^1.9.2",
+    "selenium-server-standalone-jar": "^2.53.0"
   }
 }

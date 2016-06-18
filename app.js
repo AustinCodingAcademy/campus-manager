@@ -10,9 +10,10 @@ if (process.env.NODE_ENV === 'production') {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
-} else {
-  // If this is not our production environment inject our custom environment variables
+} else if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
+} else if (process.env.NODE_ENV === 'test') {
+  process.env.MONGOLAB_URI = process.env.TEST_DB;
 }
 
 var path = require('path');
