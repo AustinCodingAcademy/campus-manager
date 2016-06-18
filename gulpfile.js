@@ -110,9 +110,9 @@ gulp.task('clean-db', function() {
     databaseCleaner.clean(db, function() {
       console.log('done');
       db.close();
-    });;
+    });
   });
-})
+});
 
 gulp.task('nodemon-start', function() {
   nodemon({
