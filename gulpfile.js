@@ -84,7 +84,7 @@ gulp.task('sass-dev', function () {
 });
 
 gulp.task('html', function() {
-  return gulp.src('views/*.jade')
+  return gulp.src('views/*.pug')
     .pipe(cb.gulpCbPath('public'))
     .pipe(gulp.dest('views'));
 });
