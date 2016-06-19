@@ -106,7 +106,7 @@ gulp.task('build', function(callback) {
 });
 
 gulp.task('clean-db', function() {
-  mongo.connect(process.env.TEST_DB, function(err, db) {
+  mongo.connect('mongodb://localhost/test', function(err, db) {
     databaseCleaner.clean(db, function() {
       console.log('done');
       db.close();
@@ -119,7 +119,8 @@ gulp.task('nodemon-start', function() {
     script: './bin/www',
     env: {
       NODE_ENV: 'test',
-      PORT: 8080
+      PORT: 8080,
+      TEST_DB: 'mongodb://localhost/test'
     }
   });
 });
