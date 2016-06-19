@@ -1,13 +1,9 @@
-var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
-var ReactDOM = require('react-dom');
-require('backbone-react-component');
-var RegistrationItemComponent = require('./RegistrationItemComponent');
+require('react.backbone');
+var RegistrationItemComponent = React.createFactory(require('./RegistrationItemComponent'));
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   componentDidMount: function() {
     $('select').material_select();
   },
@@ -31,7 +27,11 @@ module.exports = React.createClass({
     });
 
     var registrationItems = _.map(registrations, function(registration, idx) {
-      return <RegistrationItemComponent key={idx} user={registration.user} course={registration.course} collection={that.props.collection}/>
+      return RegistrationItemComponent({
+        user: registration.user,
+        course: registration.course,
+        collection: that.props.collection
+      });
     });
 
     var courseOptions = [];

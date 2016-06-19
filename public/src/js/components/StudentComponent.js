@@ -1,31 +1,26 @@
-var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
-require('backbone-react-component');
+require('react.backbone');
 var UserModalComponent = require('./UserModalComponent');
-var Barcode = require('react-barcode');
-var CourseCardComponent = require('./CourseCardComponent');
 var moment = require('moment');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.props.model} rolesHidden={true}/>, $('#modal-container')[0]);
-    $('#user-modal' + this.props.model.id).openModal();
+    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.getModel()} rolesHidden={true}/>, $('#modal-container')[0]);
+    $('#user-modal' + this.getModel().id).openModal();
     Materialize.updateTextFields();
   },
 
   render: function() {
 
-    var courseCards = this.props.model.get('courses').map(function(course, idx) {
+    var courseCards = this.getModel().get('courses').map(function(course, idx) {
       var dates = _.map(course.classDates(), function(date, idx) {
         var attended = 'fa fa-calendar-o';
         if (date.isSameOrBefore(moment(), 'day')) {
           attended = 'fa fa-calendar-times-o red-text';
-          var matched = _.find(this.props.model.get('attendance'), function(attended) {
+          var matched = _.find(this.getModel().get('attendance'), function(attended) {
             return moment(attended, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
           });
           if (matched) {
@@ -44,7 +39,7 @@ module.exports = React.createClass({
         }
       }, this);
 
-      var grades = _.map(_.where(this.props.model.get('grades'), { courseId: course.id }), function(grade, idx) {
+      var grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), function(grade, idx) {
         var gradeColor = 'red-text';
         if (grade.score === 100) {
           gradeColor = 'blue-text';
@@ -92,37 +87,37 @@ module.exports = React.createClass({
             <div className="card">
               <div className="card-content">
                 <span className="card-title">
-                  {this.props.model.get('first_name') + ' ' + this.props.model.get('last_name')}
+                  {this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
                 </span>
-                <p><i className="fa fa-fw fa-hashtag"></i> {this.props.model.get('idn')}</p>
+                <p><i className="fa fa-fw fa-hashtag"></i> {this.getModel().get('idn')}</p>
                 <p>
                   <i className="fa fa-fw fa-envelope"></i>
-                  <a href={'mailto:' + this.props.model.get('username')}>
-                    {this.props.model.get('username')}
+                  <a href={'mailto:' + this.getModel().get('username')}>
+                    {this.getModel().get('username')}
                   </a>
                 </p>
                 <p>
-                  <i className="fa fa-fw fa-mobile"></i> {this.props.model.get('phone')}
+                  <i className="fa fa-fw fa-mobile"></i> {this.getModel().get('phone')}
                 </p>
                 <p>
                   <i className="fa fa-fw fa-github"></i>
-                  <a href={'https://github.com/' + this.props.model.get('github')}>
-                    {this.props.model.get('github')}
+                  <a href={'https://github.com/' + this.getModel().get('github')}>
+                    {this.getModel().get('github')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-globe"></i>
-                  <a href={this.props.model.get('website')}>
-                    {this.props.model.get('website')}
+                  <a href={this.getModel().get('website')}>
+                    {this.getModel().get('website')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-code"></i>
-                  <a href={'https://codecademy.com/' + this.props.model.get('codecademy')}>
-                    {this.props.model.get('codecademy')}
+                  <a href={'https://codecademy.com/' + this.getModel().get('codecademy')}>
+                    {this.getModel().get('codecademy')}
                   </a>
                 </p>
-                <p><i className="fa fa-fw fa-map-marker"></i> {this.props.model.get('zipcode')}</p>
+                <p><i className="fa fa-fw fa-map-marker"></i> {this.getModel().get('zipcode')}</p>
               </div>
               <div className="card-action">
                 <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.userModal}>

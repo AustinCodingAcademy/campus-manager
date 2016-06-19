@@ -1,14 +1,11 @@
-var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
-require('backbone-react-component');
-var TermItemComponent = require('./TermItemComponent.js');
-var TermModalComponent = require('./TermModalComponent.js');
+require('react.backbone');
+var TermItemComponent = React.createFactory(require('./TermItemComponent.js'));
+var TermModalComponent = React.createFactory(require('./TermModalComponent.js'));
 var TermModel = require('../models/TermModel');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   newTermModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(<TermModalComponent collection={this.props.collection} model={new TermModel()} />, $('#modal-container')[0]);

@@ -2,7 +2,7 @@ var React = require('react');
 var Modal = require('react-modal');
 var _ = require('underscore');
 
-module.exports = React.createClass({
+module.exports = React.createBackboneClass({
   render: function() {
     var style = {
       overlay: {

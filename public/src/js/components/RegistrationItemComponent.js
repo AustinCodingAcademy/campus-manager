@@ -1,12 +1,7 @@
-var Backbone = require('backbone');
 var React = require('react');
-var ReactDOM = require('react-dom');
-var moment = require('moment');
-require('backbone-react-component');
+require('react.backbone');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   deleteRegistration: function() {
     this.props.course.get('registrations').remove(this.props.user);
     this.props.course.save();

@@ -3,7 +3,7 @@ var Dropzone = require('react-dropzone');
 var moment = require('moment');
 var MediaUploader = require('../modules/MediaUploader');
 
-module.exports = React.createClass({
+module.exports = React.createBackboneClass({
   getInitialState: function() {
     return {
       uploadStatus: 'upload',

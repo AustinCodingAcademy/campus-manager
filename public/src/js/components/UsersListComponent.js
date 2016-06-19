@@ -1,13 +1,13 @@
 var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
-require('backbone-react-component');
-var UserItemComponent = require('./UserItemComponent');
+require('react.backbone');
+var UserItemComponent = React.createFactory(require('./UserItemComponent'));
 var UserModalComponent = require('./UserModalComponent');
 var UserModel = require('../models/UserModel');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
+module.exports = React.createBackboneClass({
+
 
   newUserModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
@@ -18,7 +18,10 @@ module.exports = React.createClass({
   render: function() {
     var that = this;
     var userItems = this.props.collection.map(function(user) {
-      return <UserItemComponent key={user.id} model={user} collection={that.props.collection}/>
+      return UserItemComponent({
+        model: user,
+        collection: that.props.collection
+      });
     });
 
     return (
