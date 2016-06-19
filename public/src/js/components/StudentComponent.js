@@ -4,6 +4,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 require('backbone-react-component');
 var UserModalComponent = require('./UserModalComponent');
+var Barcode = require('react-barcode');
 var CourseCardComponent = require('./CourseCardComponent');
 var moment = require('moment');
 
@@ -87,7 +88,7 @@ module.exports = React.createClass({
     return (
       <div>
         <div className="row">
-          <div className="col s12">
+          <div className="col s12 m6">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">
@@ -128,6 +129,11 @@ module.exports = React.createClass({
                   Edit
                 </a>
               </div>
+            </div>
+          </div>
+          <div className="col s12 m6">
+            <div className="card-panel">
+              <Barcode value={'' + this.props.model.get('idn')} />
             </div>
           </div>
         </div>
