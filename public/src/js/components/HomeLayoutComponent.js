@@ -1,14 +1,15 @@
 var Backbone = require('backbone');
 var React = require('react');
-require('backbone-react-component');
-var TermCardComponent = require('./TermCardComponent');
+require('react.backbone');
+var TermCardComponent = React.createFactory(require('./TermCardComponent'));
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   render: function() {
     var cardItems = this.props.collection.map(function(cardItem) {
-      return <TermCardComponent key={cardItem.id} model={cardItem} />
+      return TermCardComponent({
+        key: cardItem.id,
+        model: cardItem
+      })
     });
 
     return(

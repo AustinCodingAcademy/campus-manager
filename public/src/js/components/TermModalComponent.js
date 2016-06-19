@@ -1,17 +1,13 @@
-var Backbone = require('backbone');
 var React = require('react');
-var moment = require('moment');
-require('backbone-react-component');
+require('react.backbone');
 var TermModel = require('../models/TermModel');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-  
+module.exports = React.createBackboneClass({
   componentDidMount: function() {
-    this.refs.name.value = this.props.model.get('name');
-    this.refs.start_date.value = this.props.model.get('start_date');
-    this.refs.end_date.value = this.props.model.get('end_date');
-    
+    this.refs.name.value = this.getModel().get('name');
+    this.refs.start_date.value = this.getModel().get('start_date');
+    this.refs.end_date.value = this.getModel().get('end_date');
+
     $('.datepicker').pickadate({
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
@@ -21,12 +17,12 @@ module.exports = React.createClass({
       }
     });
   },
-  
+
   saveTerm: function(e) {
     e.preventDefault();
     var that = this;
 
-    this.props.model.save({
+    this.getModel().save({
       name: this.refs.name.value,
       start_date: this.refs.start_date.value,
       end_date: this.refs.end_date.value
@@ -39,7 +35,7 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div id={'term-modal' + (this.props.model.id ? this.props.model.id  : '')} className="modal">
+      <div id={'term-modal' + (this.getModel().id ? this.getModel().id  : '')} className="modal">
         <div className="modal-content">
           <div className="row">
             <form className="col s12" onSubmit={this.saveTerm}>

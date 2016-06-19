@@ -1,21 +1,17 @@
-var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
-var ReactDOM = require('react-dom');
-require('backbone-react-component');
+require('react.backbone');
 var moment = require('moment');
 
-module.exports = React.createClass({
+module.exports = React.createBackboneClass({
   pickadate: undefined,
-  
-  mixins: [Backbone.React.Component.mixin],
-  
+
   componentDidMount: function() {
     this.pickadate = $('input[type="date"]').pickadate().pickadate('picker');
     this.pickadate.set('select', new Date().getTime(), { muted: true });
     $('input[type="time"]').pickatime();
   },
-  
+
   checkinUser: function(e) {
     e.preventDefault();
     var time = this.refs.time.value ? moment(this.refs.time.value, 'hh:mm a').format('HH:mm') : moment().format('HH:mm')
@@ -28,14 +24,14 @@ module.exports = React.createClass({
         user.get('attendance').push(dateTime);
         user.save();
       }
-      this.props.model.set(user.attributes);
+      this.getModel().set(user.attributes);
     }
     this.refs.idn.value = '';
     this.pickadate.set('select', new Date().getTime(), { muted: true });
     this.refs.time.value = '';
     this.refs.idn.focus();
   },
-  
+
   render: function() {
     return (
       <div>
@@ -67,11 +63,11 @@ module.exports = React.createClass({
           <div className="col s12 m6">
             <div className="card">
               <div className="card-content">
-                <span className="card-title">{this.props.model.get('first_name') + ' ' + this.props.model.get('last_name')}</span>
-                <p><i className="fa fa-fw fa-envelope"></i> {this.props.model.get('username')}</p>
-                <p><i className="fa fa-fw fa-mobile"></i> {this.props.model.get('phone')}</p>
-                <p><i className="fa fa-fw fa-github"></i> {this.props.model.get('github')}</p>
-                <p><i className="fa fa-fw fa-globe"></i> {this.props.model.get('website')}</p>
+                <span className="card-title">{this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}</span>
+                <p><i className="fa fa-fw fa-envelope"></i> {this.getModel().get('username')}</p>
+                <p><i className="fa fa-fw fa-mobile"></i> {this.getModel().get('phone')}</p>
+                <p><i className="fa fa-fw fa-github"></i> {this.getModel().get('github')}</p>
+                <p><i className="fa fa-fw fa-globe"></i> {this.getModel().get('website')}</p>
               </div>
               <div className="card-action">
               </div>

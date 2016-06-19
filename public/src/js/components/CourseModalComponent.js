@@ -1,13 +1,9 @@
-var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
-var moment = require('moment');
-require('backbone-react-component');
+require('react.backbone');
 var CourseModel = require('../models/CourseModel');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   days: [
     'monday',
     'tuesday',
@@ -20,13 +16,13 @@ module.exports = React.createClass({
 
   componentDidMount: function() {
     var that = this;
-    this.refs.name.value = this.props.model.get('name');
-    this.refs.seats.value = this.props.model.get('seats');
+    this.refs.name.value = this.getModel().get('name');
+    this.refs.seats.value = this.getModel().get('seats');
     _.each(this.days, function(day) {
       that.refs[day].checked = _.indexOf(that.props.model.get('days'), day) > -1;
     });
-    this.refs.term.value = this.props.model.get('term').id;
-    this.refs.textbook.value = this.props.model.get('textbook');
+    this.refs.term.value = this.getModel().get('term').id;
+    this.refs.textbook.value = this.getModel().get('textbook');
 
     $(document).ready(function() {
       $('select').material_select();
@@ -36,7 +32,7 @@ module.exports = React.createClass({
   saveCourse: function(e) {
     e.preventDefault();
     var that = this;
-    this.props.model.save({
+    this.getModel().save({
       name: this.refs.name.value,
       textbook: this.refs.textbook.value,
       days: _.filter(this.days, function(day) { return that.refs[day].checked; }),
@@ -57,7 +53,7 @@ module.exports = React.createClass({
     });
 
     return (
-      <div id={'course-modal' + (this.props.model.id ? this.props.model.id  : '')} className="modal">
+      <div id={'course-modal' + (this.getModel().id ? this.getModel().id  : '')} className="modal">
         <div className="modal-content">
           <div className="row">
             <form className="col s12" onSubmit={this.saveCourse}>

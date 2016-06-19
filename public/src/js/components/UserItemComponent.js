@@ -1,22 +1,18 @@
-var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
-var moment = require('moment');
-require('backbone-react-component');
+require('react.backbone');
 var UserModalComponent = require('./UserModalComponent.js');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.props.model}/>, $('#modal-container')[0]);
-    $('#user-modal' + this.props.model.id).openModal();
+    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.getModel()}/>, $('#modal-container')[0]);
+    $('#user-modal' + this.getModel().id).openModal();
     Materialize.updateTextFields();
   },
 
   deleteUser: function() {
-    this.props.model.destroy({
+    this.getModel().destroy({
       wait: true
     });
   },
@@ -24,11 +20,11 @@ module.exports = React.createClass({
   render: function() {
     return (
       <tr>
-        <td>{this.props.model.get('idn')}</td>
-        <td><a href={'#users/' + this.props.model.id}>{this.props.model.fullName()}</a></td>
-        <td><a href={'mailto:' + this.props.model.get('username')} target="_blank">{this.props.model.get('username')}</a></td>
-        <td style={{whiteSpace: 'nowrap'}}>{this.props.model.get('phone')}</td>
-        <td>{this.props.model.roles()}</td>
+        <td>{this.getModel().get('idn')}</td>
+        <td><a href={'#users/' + this.getModel().id}>{this.getModel().fullName()}</a></td>
+        <td><a href={'mailto:' + this.getModel().get('username')} target="_blank">{this.getModel().get('username')}</a></td>
+        <td style={{whiteSpace: 'nowrap'}}>{this.getModel().get('phone')}</td>
+        <td>{this.getModel().roles()}</td>
         <td>
           <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.userModal}>
             <i className="material-icons">mode_edit</i>

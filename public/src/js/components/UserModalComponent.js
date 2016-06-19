@@ -2,11 +2,11 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var React = require('react');
 var moment = require('moment');
-require('backbone-react-component');
+require('react.backbone');
 var UserModel = require('../models/UserModel');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
+module.exports = React.createBackboneClass({
+   
 
   // On input change update the state with the given
   // attribute and value retreived from the event
@@ -29,7 +29,7 @@ module.exports = React.createClass({
     e.preventDefault();
     var that = this;
 
-    this.props.model.save(this.state.model, {
+    this.getModel().save(this.state.model, {
       success: function (user) {
          $('#' + 'user-modal' + (that.props.model.id || '')).closeModal();
         if (that.props.collection) {
@@ -45,7 +45,7 @@ module.exports = React.createClass({
     var rolesHidden = this.props.rolesHidden? 'hidden': '';
 
     return (
-      <div id={'user-modal' + (this.props.model.id || '')} className="modal">
+      <div id={'user-modal' + (this.getModel().id || '')} className="modal">
         <div className="modal-content">
 
           <div className="row">
