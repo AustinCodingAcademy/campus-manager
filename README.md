@@ -11,6 +11,9 @@
 
 After cloning and navigating into directory:
 
+1. Install [Cairo](https://cairographics.org/download/)
+  * With Homebrew (OSX) `brew install cairo`
+
 1. `npm install`
 
 1. Create `.env`
@@ -21,7 +24,6 @@ After cloning and navigating into directory:
   GOOGLE_API_KEY=""
   GOOGLE_CLIENT_ID=""
   YOUTUBE_CHANNEL_ID=""
-  TEST_DB="mongodb://localhost/aca-campus-test"
   ```
 
 1. leave `npm run gulp` running in one terminal session

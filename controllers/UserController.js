@@ -72,7 +72,6 @@ module.exports = {
     var user = new UserModel();
 
     var attributes = [
-      'idn',
       'first_name',
       'last_name',
       'email',
@@ -93,10 +92,17 @@ module.exports = {
     });
     user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
 
-    UserModel.findOne({
-      _id: req.user.id
-    }).populate('client').exec(function(err, currentUser) {
-      user.client = currentUser.client.id;
+    UserModel.find(
+      { client: req.user.client },
+      'idn',
+      {
+        limit: 1,
+        sort:{
+          idn: -1
+        }
+    }, function(err, users) {
+      user.idn = users[0].idn;
+      user.client = req.user.client;
       user.save(function(err, user){
         if(err) {
           return res.json(500, {
@@ -145,7 +151,6 @@ module.exports = {
       ];
 
       var protectedAttrs = [
-        'idn',
         'is_admin',
         'is_instructor',
         'is_student',

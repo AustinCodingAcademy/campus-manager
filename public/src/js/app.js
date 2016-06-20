@@ -11,21 +11,21 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var AttendanceListComponent = require('./components/AttendanceListComponent');
+var AttendanceListComponent = React.createFactory(require('./components/AttendanceListComponent'));
 var TermsCollection = require('./collections/TermsCollection');
-var TermsListComponent = require('./components/TermsListComponent');
+var TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
 var CoursesCollection = require('./collections/CoursesCollection');
 var CourseModel = require('./models/CourseModel');
-var CoursesListComponent = require('./components/CoursesListComponent');
-var CourseComponent = require('./components/CourseComponent');
-var HomeLayoutComponent = require('./components/HomeLayoutComponent');
-var NavbarComponent = require('./components/NavbarComponent');
+var CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
+var CourseComponent = React.createFactory(require('./components/CourseComponent'));
+var HomeLayoutComponent = React.createFactory(require('./components/HomeLayoutComponent'));
+var NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
 var UserModel = require('./models/UserModel');
 var UsersCollection = require('./collections/UsersCollection');
-var UsersListComponent = require('./components/UsersListComponent');
-var RegistrationsListComponent = require('./components/RegistrationsListComponent');
+var UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
+var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
-var StudentComponent = require('./components/StudentComponent');
+var StudentComponent = React.createFactory(require('./components/StudentComponent'));
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -54,19 +54,25 @@ $(function() {
 
     initialize: function() {
       $('<div class="navbar-fixed"><nav></nav></div>').insertBefore('#container');
-      ReactDOM.render(<NavbarComponent model={this.currentUser} />, $('nav')[0]);
+      ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('nav')[0]);
     },
 
     student: function(id) {
       var student = new UserModel({ _id: id });
-      student.fetch();
-      ReactDOM.render(<StudentComponent model={student} />, $('#container')[0]);
+      student.fetch({
+        success: function() {
+          ReactDOM.render(StudentComponent({ model: student}), $('#container')[0]);
+        }
+      });
     },
 
     attendance: function() {
       var users = new UsersCollection();
       users.fetch();
-      ReactDOM.render(<AttendanceListComponent users={users} model={new UserModel()} />, $('#container')[0]);
+      ReactDOM.render(AttendanceListComponent({
+        users: users,
+        model: new UserModel()
+      }), $('#container')[0]);
     },
 
     index: function() {
@@ -75,19 +81,19 @@ $(function() {
       }
       var terms = new TermsCollection();
       terms.fetch();
-      ReactDOM.render(<HomeLayoutComponent collection={terms} />, $('#container')[0]);
+      ReactDOM.render(HomeLayoutComponent({ collection: terms }), $('#container')[0]);
     },
 
     terms: function() {
       var terms = new TermsCollection();
       terms.fetch();
-      ReactDOM.render(<TermsListComponent collection={terms} />, $('#container')[0]);
+      ReactDOM.render(TermsListComponent({ collection: terms }), $('#container')[0]);
     },
 
     users: function() {
       var users = new UsersCollection();
       users.fetch();
-      ReactDOM.render(<UsersListComponent collection={users} />, $('#container')[0]);
+      ReactDOM.render(UsersListComponent({ collection: users }), $('#container')[0]);
     },
 
     courses: function() {
@@ -96,7 +102,10 @@ $(function() {
       var terms = new TermsCollection();
       terms.fetch({
         success: function() {
-          ReactDOM.render(<CoursesListComponent terms={terms} collection={courses} />, $('#container')[0]);
+          ReactDOM.render(CoursesListComponent({
+            terms: terms,
+            collection: courses
+          }), $('#container')[0]);
         }
       });
     },
@@ -104,7 +113,10 @@ $(function() {
     course: function(id) {
       var course = new CourseModel({_id: id});
       course.fetch();
-      ReactDOM.render(<CourseComponent model={course} currentUser={this.currentUser}/>, $('#container')[0]);
+      ReactDOM.render(CourseComponent({
+        model: course,
+        currentUser: this.currentUser
+      }), $('#container')[0]);
     },
 
     registration: function() {
@@ -114,7 +126,10 @@ $(function() {
           var users = new UsersCollection();
           users.fetch({
             success: function() {
-              ReactDOM.render(<RegistrationsListComponent collection={courses} users={users} />, $('#container')[0]);
+              ReactDOM.render(RegistrationsListComponent({
+                collection: courses,
+                users: users
+              }), $('#container')[0]);
             }
           })
         }

@@ -2,7 +2,7 @@ var React = require('react');
 var YoutubeAccountSelect = require('./YoutubeAccountSelect');
 var YoutubeUploader = require('./YoutubeUploader');
 
-module.exports = React.createClass({
+module.exports = React.createBackboneClass({
   getInitialState: function() {
     return {
       errorMessage: false,
@@ -43,7 +43,7 @@ module.exports = React.createClass({
         onError={this.showErrorMessage}
         onComplete={this.onComplete}
         token={this.state.accessToken}
-        course={this.props.model}/>
+        course={this.getModel()}/>
     );
   },
 
@@ -70,7 +70,7 @@ module.exports = React.createClass({
   },
 
   onComplete: function(uploadResponse) {
-    var videos = this.props.model.get('videos');
+    var videos = this.getModel().get('videos');
     videos.push({
       youtubeId: uploadResponse.id,
       link: 'https://www.youtube.com/watch?v=' + uploadResponse.id,
@@ -81,7 +81,7 @@ module.exports = React.createClass({
     // However if this save fails, we've lost that reference between the course and video
     // could attempt to retry the save possibly, might end up being a
     // manual process to find the video and create the link
-    this.props.model.save();
+    this.getModel().save();
   },
 
   hideErrorMessage: function() {

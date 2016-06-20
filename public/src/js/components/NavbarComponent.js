@@ -1,13 +1,10 @@
-var Backbone = require('backbone');
 var React = require('react');
-require('backbone-react-component');
+require('react.backbone');
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   render: function() {
     var hidden = 'hidden';
-    if (this.props.model.get('is_admin') || this.props.model.get('is_instructor') || this.props.model.get('is_client')) {
+    if (this.getModel().get('is_admin') || this.getModel().get('is_instructor') || this.getModel().get('is_client')) {
       hidden = '';
     }
     return (
@@ -26,7 +23,7 @@ module.exports = React.createClass({
           <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
           <li>
             <a className="dropdown-button black-text" href="#!" data-activates="nav-user">
-              {this.props.model.get('username')} <i className="material-icons right">arrow_drop_down</i>
+              {this.getModel().get('username')} <i className="material-icons right">arrow_drop_down</i>
             </a>
           </li>
         </ul>

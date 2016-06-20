@@ -1,13 +1,9 @@
-var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react');
-var ReactDOM = require('react-dom');
-require('backbone-react-component');
-var RegistrationItemComponent = require('./RegistrationItemComponent');
+require('react.backbone');
+var RegistrationItemComponent = React.createFactory(require('./RegistrationItemComponent'));
 
-module.exports = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
+module.exports = React.createBackboneClass({
   componentDidMount: function() {
     $('select').material_select();
   },
@@ -15,7 +11,7 @@ module.exports = React.createClass({
   registerUser: function(e) {
     e.preventDefault();
     var that = this;
-    var course = this.props.collection.get(this.refs.course.value);
+    var course = this.getCollection().get(this.refs.course.value);
     course.get('registrations').push(this.props.users.get(this.refs.user.value));
     course.save();
   },
@@ -24,18 +20,22 @@ module.exports = React.createClass({
     var that = this;
     var registrations = [];
 
-    this.props.collection.each(function(course) {
+    this.getCollection().each(function(course) {
       course.get('registrations').each(function(user) {
         registrations.push({ course: course, user: user });
       });
     });
 
     var registrationItems = _.map(registrations, function(registration, idx) {
-      return <RegistrationItemComponent key={idx} user={registration.user} course={registration.course} collection={that.props.collection}/>
+      return RegistrationItemComponent({
+        user: registration.user,
+        course: registration.course,
+        collection: that.getCollection()
+      });
     });
 
     var courseOptions = [];
-    this.props.collection.each(function(course) {
+    this.getCollection().each(function(course) {
       courseOptions.push(<option key={course.id} value={course.id}>{course.get('term').get('name') + ' - ' + course.get('name')}</option>);
     });
 
@@ -56,7 +56,7 @@ module.exports = React.createClass({
               <label>User</label>
             </div>
             <div className="input-field col m6 s12">
-              <select defaultValue={this.props.collection.first().id} ref="course">
+              <select defaultValue={this.getCollection().first().id} ref="course">
                 {courseOptions}
               </select>
               <label>Course</label>

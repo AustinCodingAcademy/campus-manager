@@ -1,6 +1,6 @@
 var React = require('react');
 
-module.exports = React.createClass({
+module.exports = React.createBackboneClass({
   render: function() {
     return (
       <div>

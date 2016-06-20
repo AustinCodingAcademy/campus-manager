@@ -1,18 +1,18 @@
 var Backbone = require('backbone');
 var React = require('react');
-require('backbone-react-component');
+require('react.backbone');
 var Chart = require('chart.js');
 
-module.exports = React.createClass({
+module.exports = React.createBackboneClass({
   componentDidUpdate: function() {
     new Chart(this.refs.canvas.getContext('2d')).Doughnut([
       {
-        value: this.props.model.get('full'),
-        color: this.props.model.get('health_color'),
+        value: this.getModel().get('full'),
+        color: this.getModel().get('health_color'),
         label: "Health"
       },
       {
-        value: 100 - this.props.model.get('full'),
+        value: 100 - this.getModel().get('full'),
         color: "#ffffff",
         label: ""
       }
@@ -27,11 +27,11 @@ module.exports = React.createClass({
             <canvas ref="canvas" width="175" height="175"></canvas>
           </div>
           <div className="card-content">
-            <span className="card-title activator grey-text text-darken-4">{this.props.model.get("name")}<i className="material-icons right">more_vert</i></span>
+            <span className="card-title activator grey-text text-darken-4">{this.getModel().get("name")}<i className="material-icons right">more_vert</i></span>
           </div>
           <div className="card-reveal">
-            <span className="card-title grey-text text-darken-4">{this.props.model.get("name")}<i className="material-icons right">close</i></span>
-            <p>{'Registration: ' + this.props.model.get("full") + '%'}</p>
+            <span className="card-title grey-text text-darken-4">{this.getModel().get("name")}<i className="material-icons right">close</i></span>
+            <p>{'Registration: ' + this.getModel().get("full") + '%'}</p>
           </div>
         </div>
       </div>
