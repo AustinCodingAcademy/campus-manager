@@ -11,7 +11,7 @@ module.exports = React.createBackboneClass({
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(CourseModalComponent({
       terms: this.props.terms,
-      collection: this.props.collection,
+      collection: this.getCollection(),
       model: new CourseModel()
     }), $('#modal-container')[0]);
     $('#course-modal').openModal();
@@ -19,12 +19,12 @@ module.exports = React.createBackboneClass({
 
   render: function() {
     var that = this;
-    var courseItems = this.props.collection.map(function(courseItem) {
+    var courseItems = this.getCollection().map(function(courseItem) {
       return CourseItemComponent({
         key: courseItem.id,
         terms: that.props.terms,
         model: courseItem,
-        collection: that.props.collection
+        collection: that.getCollection()
       });
     });
 

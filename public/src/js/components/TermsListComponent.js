@@ -8,14 +8,14 @@ var TermModel = require('../models/TermModel');
 module.exports = React.createBackboneClass({
   newTermModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<TermModalComponent collection={this.props.collection} model={new TermModel()} />, $('#modal-container')[0]);
+    ReactDOM.render(<TermModalComponent collection={this.getCollection()} model={new TermModel()} />, $('#modal-container')[0]);
     $('#term-modal').openModal();
   },
 
   render: function() {
     var that = this;
-    var termItems = this.props.collection.map(function(termItem) {
-      return <TermItemComponent key={termItem.id} model={termItem} collection={that.props.collection}/>
+    var termItems = this.getCollection().map(function(termItem) {
+      return <TermItemComponent key={termItem.id} model={termItem} collection={that.getCollection()}/>
     });
 
     return (

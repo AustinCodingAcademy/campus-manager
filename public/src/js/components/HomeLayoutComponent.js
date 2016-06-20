@@ -5,7 +5,7 @@ var TermCardComponent = React.createFactory(require('./TermCardComponent'));
 
 module.exports = React.createBackboneClass({
   render: function() {
-    var cardItems = this.props.collection.map(function(cardItem) {
+    var cardItems = this.getCollection().map(function(cardItem) {
       return TermCardComponent({
         key: cardItem.id,
         model: cardItem

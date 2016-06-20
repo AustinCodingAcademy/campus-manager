@@ -15,7 +15,7 @@ module.exports = React.createBackboneClass({
   checkinUser: function(e) {
     e.preventDefault();
     var time = this.refs.time.value ? moment(this.refs.time.value, 'hh:mm a').format('HH:mm') : moment().format('HH:mm')
-    var dateTime = moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DD') + ' ' + time;
+    var dateTime = moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DDT:00:00.000Z') + ' ' + time;
     var user = this.props.users.findWhere({ 'idn': parseInt(this.refs.idn.value) });
     if (!user) {
       Materialize.toast('User with IDN of ' + this.refs.idn.value + ' does not exist!', 4000, 'red darken-1');

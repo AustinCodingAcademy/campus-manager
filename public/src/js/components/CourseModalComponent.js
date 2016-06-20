@@ -19,7 +19,7 @@ module.exports = React.createBackboneClass({
     this.refs.name.value = this.getModel().get('name');
     this.refs.seats.value = this.getModel().get('seats');
     _.each(this.days, function(day) {
-      that.refs[day].checked = _.indexOf(that.props.model.get('days'), day) > -1;
+      that.refs[day].checked = _.indexOf(that.getModel().get('days'), day) > -1;
     });
     this.refs.term.value = this.getModel().get('term').id;
     this.refs.textbook.value = this.getModel().get('textbook');
@@ -40,7 +40,7 @@ module.exports = React.createBackboneClass({
       term: this.props.terms.get(this.refs.term.value)
     }, {
       success: function() {
-        that.props.collection.add(that.props.model);
+        that.getCollection().add(that.getModel());
       }
     });
 

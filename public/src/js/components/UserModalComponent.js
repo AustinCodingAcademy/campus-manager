@@ -1,12 +1,13 @@
 var _ = require('underscore');
-var Backbone = require('backbone');
 var React = require('react');
-var moment = require('moment');
 require('react.backbone');
 var UserModel = require('../models/UserModel');
 
 module.exports = React.createBackboneClass({
-   
+
+  getInitialState: function () {
+      return {model: this.getModel().attributes};
+    },
 
   // On input change update the state with the given
   // attribute and value retreived from the event
@@ -31,9 +32,9 @@ module.exports = React.createBackboneClass({
 
     this.getModel().save(this.state.model, {
       success: function (user) {
-         $('#' + 'user-modal' + (that.props.model.id || '')).closeModal();
-        if (that.props.collection) {
-          that.props.collection.add(user);
+        $('#' + 'user-modal' + (that.getModel().id || '')).closeModal();
+        if (that.getCollection()) {
+          that.getCollection().add(user);
         }
       }
     });
@@ -45,7 +46,7 @@ module.exports = React.createBackboneClass({
     var rolesHidden = this.props.rolesHidden? 'hidden': '';
 
     return (
-      <div id={'user-modal' + (this.getModel().id || '')} className="modal">
+      <div id={'user-modal' + (this.state.model._id || '')} className="modal">
         <div className="modal-content">
 
           <div className="row">
@@ -53,20 +54,8 @@ module.exports = React.createBackboneClass({
 
               <div className={"row " + rolesHidden}>
 
-                {/* IDN Input Field */}
-                <div className="input-field col s12 m3">
-                  <input
-                    type="text"
-                    id="idn"
-                    value={this.state.model.idn}
-                    onChange={function(evt) {
-                      that.handleInputChange('idn', evt);
-                    }}/>
-                  <label htmlFor="idn">IDN</label>
-                </div>
-
                 {/* Is Admin Check Box */}
-                <div className="col s12 m3">
+                <div className="col s12 m4">
                   <input
                     type="checkbox"
                     id="is_admin"
@@ -78,7 +67,7 @@ module.exports = React.createBackboneClass({
                 </div>
 
                 {/* Is Instructor Check Box */}
-                <div className="col s12 m3">
+                <div className="col s12 m4">
                   <input
                     type="checkbox"
                     id="is_instructor"
@@ -90,7 +79,7 @@ module.exports = React.createBackboneClass({
                 </div>
 
                 {/* Is Student Check Box */}
-                <div className="col s12 m3">
+                <div className="col s12 m4">
                   <input
                     type="checkbox"
                     id="is_student"

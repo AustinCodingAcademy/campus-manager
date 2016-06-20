@@ -6,15 +6,18 @@ var UserModalComponent = require('./UserModalComponent.js');
 module.exports = React.createBackboneClass({
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.getModel()}/>, $('#modal-container')[0]);
+    ReactDOM.render(<UserModalComponent collection={this.getCollection()} model={this.getModel()}/>, $('#modal-container')[0]);
     $('#user-modal' + this.getModel().id).openModal();
     Materialize.updateTextFields();
   },
 
   deleteUser: function() {
-    this.getModel().destroy({
-      wait: true
-    });
+    var r = confirm('Are you sure you want to delete this user?');
+    if (r == true) {
+      this.getModel().destroy({
+        wait: true
+      });
+    }
   },
 
   render: function() {

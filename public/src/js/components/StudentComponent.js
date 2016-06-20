@@ -2,13 +2,18 @@ var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
 require('react.backbone');
-var UserModalComponent = require('./UserModalComponent');
+var UserModalComponent = React.createFactory(require('./UserModalComponent'));
+var Barcode = require('react-barcode');
 var moment = require('moment');
 
 module.exports = React.createBackboneClass({
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<UserModalComponent collection={this.props.collection} model={this.getModel()} rolesHidden={true}/>, $('#modal-container')[0]);
+    ReactDOM.render(UserModalComponent({
+      collection: this.getCollection(),
+      model: this.getModel(),
+      rolesHidden: true
+    }), $('#modal-container')[0]);
     $('#user-modal' + this.getModel().id).openModal();
     Materialize.updateTextFields();
   },
@@ -127,8 +132,13 @@ module.exports = React.createBackboneClass({
             </div>
           </div>
           <div className="col s12 m6">
-            <div className="card-panel">
-              <Barcode value={'' + this.props.model.get('idn')} />
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Student Number</span>
+                <p className="center-align">
+                  <Barcode value={'' + this.getModel().get('idn')} />
+                </p>
+              </div>
             </div>
           </div>
         </div>

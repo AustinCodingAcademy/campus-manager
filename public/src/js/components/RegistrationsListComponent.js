@@ -11,7 +11,7 @@ module.exports = React.createBackboneClass({
   registerUser: function(e) {
     e.preventDefault();
     var that = this;
-    var course = this.props.collection.get(this.refs.course.value);
+    var course = this.getCollection().get(this.refs.course.value);
     course.get('registrations').push(this.props.users.get(this.refs.user.value));
     course.save();
   },
@@ -20,7 +20,7 @@ module.exports = React.createBackboneClass({
     var that = this;
     var registrations = [];
 
-    this.props.collection.each(function(course) {
+    this.getCollection().each(function(course) {
       course.get('registrations').each(function(user) {
         registrations.push({ course: course, user: user });
       });
@@ -30,12 +30,12 @@ module.exports = React.createBackboneClass({
       return RegistrationItemComponent({
         user: registration.user,
         course: registration.course,
-        collection: that.props.collection
+        collection: that.getCollection()
       });
     });
 
     var courseOptions = [];
-    this.props.collection.each(function(course) {
+    this.getCollection().each(function(course) {
       courseOptions.push(<option key={course.id} value={course.id}>{course.get('term').get('name') + ' - ' + course.get('name')}</option>);
     });
 
@@ -56,7 +56,7 @@ module.exports = React.createBackboneClass({
               <label>User</label>
             </div>
             <div className="input-field col m6 s12">
-              <select defaultValue={this.props.collection.first().id} ref="course">
+              <select defaultValue={this.getCollection().first().id} ref="course">
                 {courseOptions}
               </select>
               <label>Course</label>

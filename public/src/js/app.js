@@ -59,8 +59,11 @@ $(function() {
 
     student: function(id) {
       var student = new UserModel({ _id: id });
-      student.fetch();
-      ReactDOM.render(StudentComponent({ model: student}), $('#container')[0]);
+      student.fetch({
+        success: function() {
+          ReactDOM.render(StudentComponent({ model: student}), $('#container')[0]);
+        }
+      });
     },
 
     attendance: function() {

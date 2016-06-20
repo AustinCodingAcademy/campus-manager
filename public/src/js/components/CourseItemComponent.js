@@ -8,7 +8,7 @@ module.exports = React.createBackboneClass({
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(CourseModalComponent({
       terms: this.props.terms,
-      collection: this.props.collection,
+      collection: this.getCollection(),
       model: this.getModel()
     }), $('#modal-container')[0]);
     $('#course-modal' + this.getModel().id).openModal();
