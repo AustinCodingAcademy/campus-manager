@@ -3,8 +3,8 @@ machine:
     NODE_ENV: test
   node:
     version: 5.5.0
-  test:
-    pre:
-      - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
-    post:
-      - screen-capture stop
+test:
+  pre:
+    - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
+  post:
+    - screen-capture stop
