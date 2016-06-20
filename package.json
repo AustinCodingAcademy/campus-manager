@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "preinstall": "npm prune",
     "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
