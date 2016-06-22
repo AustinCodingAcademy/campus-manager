@@ -11,8 +11,13 @@
 
 After cloning and navigating into directory:
 
+1. Use Node version 5.6
+  1. (OSX) Recommend installing `brew install nvm`
+
 1. Install [Cairo](https://cairographics.org/download/)
-  * With Homebrew (OSX) `brew install cairo`
+  1. With Homebrew (OSX) `brew install cairo`
+  2. Install [X11](https://www.xquartz.org/)
+  3. Add `export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig` to your `~/.bash_profile`
 
 1. `npm install`
 
