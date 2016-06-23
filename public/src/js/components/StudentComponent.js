@@ -136,7 +136,7 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">Student Number</span>
                 <p className="center-align">
-                  <Barcode value={'' + this.getModel().get('idn')} />
+                  <Barcode value={'' + this.getModel().get('idn')} format={'CODE128'} />
                 </p>
               </div>
             </div>
