@@ -115,7 +115,7 @@ module.exports = React.createBackboneClass({
       }, this);
 
       return (
-        <td key={i} style={{whiteSpace: 'nowrap'}} className="trim-padding">
+        <td key={i} className='nowrap'>
         {grade} <a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a>
         </td>
       );
@@ -203,8 +203,8 @@ module.exports = React.createBackboneClass({
                       {gradeNames}
                       <th>
                         <div className="input-field trim-margin">
-                          <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin"/>
-                          <label htmlFor="grade">Add Grade</label>
+                          <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin" style={{minWidth:'100px'}} />
+                          <label htmlFor="grade" className="nowrap">Add Grade</label>
                         </div>
                       </th>
                     </tr>
