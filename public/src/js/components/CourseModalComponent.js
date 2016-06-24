@@ -23,6 +23,7 @@ module.exports = React.createBackboneClass({
     });
     this.refs.term.value = this.getModel().get('term').id;
     this.refs.textbook.value = this.getModel().get('textbook');
+    this.refs.holidays.value = this.getModel().get('holidays').join(', ');
 
     $(document).ready(function() {
       $('select').material_select();
@@ -37,7 +38,8 @@ module.exports = React.createBackboneClass({
       textbook: this.refs.textbook.value,
       days: _.filter(this.days, function(day) { return that.refs[day].checked; }),
       seats: this.refs.seats.value,
-      term: this.props.terms.get(this.refs.term.value)
+      term: this.props.terms.get(this.refs.term.value),
+      holidays: _.map(this.refs.holidays.value.split(','), function(holiday) { return holiday.trim(); })
     }, {
       success: function() {
         that.getCollection().add(that.getModel());
@@ -109,6 +111,12 @@ module.exports = React.createBackboneClass({
                 <div className="input-field col s12 m6">
                   <input ref="textbook" type="text" id="textbook" />
                   <label htmlFor="textbook">Textbook URL</label>
+                </div>
+              </div>
+              <div className="row">
+                <div className="input-field col s12">
+                  <input ref="holidays" type="text" id="holidays" placeholder="YYYY-MM-DD, YYYY-MM-DD, etc"/>
+                  <label htmlFor="holidays">Holidays</label>
                 </div>
               </div>
               <div className="row">
