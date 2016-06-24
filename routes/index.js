@@ -63,7 +63,6 @@ router.post('/register', function(req, res, next) {
       user = new UserModel({
         username: req.body.username.toLowerCase(),
         password: hash,
-        idn: 1,
         is_client: true
       });
 
