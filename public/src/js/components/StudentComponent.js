@@ -18,6 +18,22 @@ module.exports = React.createBackboneClass({
     Materialize.updateTextFields();
   },
 
+  changeAttendance: function(e) {
+    var that = this;
+    if (!this.props.currentUser.get('is_student')) {
+      $.ajax('/api/users/attendance', {
+        method: 'post',
+        data: {
+          idn: that.getModel().get('idn'),
+          date: $(e.currentTarget).data('date')
+        },
+        success: function() {
+          that.getModel().fetch();
+        }
+      });
+    }
+  },
+
   render: function() {
 
     var courseCards = this.getModel().get('courses').map(function(course, idx) {
@@ -35,11 +51,11 @@ module.exports = React.createBackboneClass({
         var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (video) {
           return (
-            <p key={idx}><i className={attended}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
+            <p key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
           );
         } else {
           return (
-            <p key={idx}><i className={attended}></i> {date.format("ddd, MMM Do, YYYY")}</p>
+            <p key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM Do, YYYY")}</p>
           );
         }
       }, this);

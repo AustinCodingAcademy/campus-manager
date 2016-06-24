@@ -248,22 +248,24 @@ module.exports = {
   },
 
   attendance: function(req, res) {
-    _.each(req.body, function(checkIn) {
-      UserModel.findOne({ idn: checkIn['IDN'] }, function(err, user) {
-        if(err) {
-          return res.json(500, {
-            message: 'Error saving user',
-            error: err
-          });
-        }
-        if (!user.attendance) {
-          user.attendance = [];
-        }
-        if (!_.some(user.attendance, function(date) { return moment(date).isSame(checkIn['Timestamp'], 'day')})) {
-          user.attendance.push(checkIn['Timestamp']);
-        }
-        user.save();
-      });
+    UserModel.findOne({ idn: req.body.idn }, function(err, user) {
+      if(err) {
+        return res.json(500, {
+          message: 'Error saving user',
+          error: err
+        });
+      }
+      if (!user.attendance) {
+        user.attendance = [];
+      }
+      var matched = _.find(user.attendance, function(date) { return moment(date, 'YYYY-MM-DD HH:ss').isSame(req.body.date, 'day')});
+      if (matched) {
+        user.attendance.splice(user.attendance.indexOf(matched), 1);
+      } else {
+        user.attendance.push(req.body.date);
+      }
+
+      user.save();
     });
     return res.json(req.body);
   }
