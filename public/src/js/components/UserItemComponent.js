@@ -19,7 +19,7 @@ module.exports = React.createBackboneClass({
           <a href={'#users/' + this.getModel().id}>{this.getModel().fullName()}</a>
         </td>
         <td><a href={'mailto:' + this.getModel().get('username')} target="_blank">{this.getModel().get('username')}</a></td>
-        <td className={'score' + this.getModel().get('totalScore')}>{this.getModel().get('totalScore')}</td>
+        <td className={'score' + this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}</td>
         <td>{this.getModel().roles()}</td>
         <td>
           <a href="#" className="modal-trigger" onClick={this.userModal}>

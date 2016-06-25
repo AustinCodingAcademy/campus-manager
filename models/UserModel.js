@@ -34,11 +34,11 @@ var userSchema = new Schema({
   },
   "first_name" : {
     type: String,
-    default: ""
+    required: true
   },
   "last_name" : {
     type: String,
-    default: ""
+    required: true
   },
   "phone": {
     type: String,
@@ -66,10 +66,11 @@ var userSchema = new Schema({
   reset_password: String
 });
 
-userSchema.virtual('totalScore').get(function() {
-  var num = _.select(this.get('grades'), function(grade) { return grade.score; }).length;
+userSchema.virtual('gradeAverage').get(function() {
+  var grades =  _.select(this.get('grades'), function(grade) { return _.isNumber(grade.score); });
+  var num =grades.length;
   if (num) {
-    return _.reduce(_.pluck(this.get('grades'), 'score'), function(memo, num) { return memo + num; }) / num;
+    return Math.round(_.reduce(_.pluck(grades, 'score'), function(memo, num) { return memo + num; }) / num);
   }
   return '';
 })

@@ -6,7 +6,6 @@ var UserModalComponent = React.createFactory(require('./UserModalComponent'));
 var Barcode = require('react-barcode');
 var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
-var utils = require('../utils');
 
 module.exports = React.createBackboneClass({
   userModal: function() {
@@ -52,11 +51,11 @@ module.exports = React.createBackboneClass({
         var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (video) {
           return (
-            <p key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
           );
         } else {
           return (
-            <p key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM Do, YYYY")}</p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM Do, YYYY")}</p>
           );
         }
       }, this);
@@ -66,8 +65,9 @@ module.exports = React.createBackboneClass({
           <p key={idx}>{grade.name}: <span className={'score'+ grade.score}>{grade.score}</span></p>
         );
       });
+      var clearfix = idx === 0 ? 'clearfix' : '';
       return (
-        <div key={idx} className="col s12 m6">
+        <div key={idx} className={'col s12 m6 l4 ' + clearfix}>
           <div className="card">
             <div className="card-content">
               <span className="card-title">
@@ -92,34 +92,10 @@ module.exports = React.createBackboneClass({
       );
     }, this);
 
-    var scoreData = [
-      {
-        value: this.getModel().get('totalScore'),
-        color: [utils.scoreColor(this.getModel().get('totalScore'))],
-        label: 'Score'
-      },
-      {
-        value: 100 - this.getModel().get('totalScore'),
-        color: ["white"],
-        label: 'hide'
-      }
-    ];
-
-    var doughnutOptions = {
-      tooltipTemplate: function (d) {
-        if (d.label === 'hide') {
-          throw '';
-        } else {
-          // else return the normal tooltip text
-          return d.label + ': ' + d.value;
-        }
-      }
-    };
-
     return (
       <div>
         <div className="row">
-          <div className="col s12 m6">
+          <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">
@@ -162,7 +138,7 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
-          <div className="col s12 m6">
+          <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Student Number</span>
@@ -172,20 +148,16 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col s12 m6">
+          <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
-                <span className="card-title">Total Score</span>
+                <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
                 <p className="center-align">
-                  <DoughnutChart data={scoreData} options={doughnutOptions} />
+                  <DoughnutChart data={this.getModel().averageScoreData().chart} options={this.getModel().averageScoreData().options} />
                 </p>
               </div>
             </div>
           </div>
-        </div>
-        <div className="row">
           {courseCards}
         </div>
       </div>

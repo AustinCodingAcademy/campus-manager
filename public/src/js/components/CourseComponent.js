@@ -2,6 +2,7 @@ var _ = require('underscore');
 var React = require('react');
 var moment = require('moment');
 var BaseModal = require('./BaseModal');
+var LineChart = require('react-chartjs').Line;
 var CourseVideoUpload = require('./CourseVideoUpload');
 require('react.backbone');
 
@@ -216,9 +217,18 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
             <div className="row">
+              <div className="col s12">
+                <div className="card">
+                  <div className="card-content">
+                    <span className="card-title">Attendance</span>
+                    <LineChart data={this.getModel().attendanceOverTime().chart} options={this.getModel().attendanceOverTime().options} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
               <div className="col s12 m6">
                 <div className="card">
-
                   <div className="card-content">
                     <span className="card-title">Video Manager</span>
                     {videos}

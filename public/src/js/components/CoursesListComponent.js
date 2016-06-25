@@ -40,7 +40,7 @@ module.exports = React.createBackboneClass({
                 <th>Name</th>
                 <th>Term</th>
                 <th>Days</th>
-                <th>Seats Avai.</th>
+                <th>Seats</th>
                 <th></th>
                 <th></th>
               </tr>

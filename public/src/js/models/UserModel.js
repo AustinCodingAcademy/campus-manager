@@ -1,4 +1,5 @@
 var Backbone = require('backbone');
+var utils = require('../utils');
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/users',
@@ -37,6 +38,25 @@ module.exports = Backbone.Model.extend({
       roles.push('student');
     }
     return roles.join(', ');
+  },
+
+  averageScoreData: function() {
+    return {
+      chart: {
+        labels: ['Average', ''],
+        datasets: [
+          {
+            data: [this.get('gradeAverage'), 100 - this.get('gradeAverage')],
+            backgroundColor: [utils.scoreColor(this.get('gradeAverage')), 'white']
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: false
+        }
+      }
+    };
   },
 
   parse: function(obj) {

@@ -115,7 +115,7 @@ module.exports = React.createBackboneClass({
                     onChange={function(evt) {
                       that.handleInputChange('first_name', evt);
                     }}/>
-                  <label htmlFor="first-name">First Name</label>
+                  <label htmlFor="first-name">First Name (required)</label>
                 </div>
 
                 {/* Last Name Input */}
@@ -127,24 +127,12 @@ module.exports = React.createBackboneClass({
                     onChange={function(evt) {
                       that.handleInputChange('last_name', evt);
                     }}/>
-                  <label htmlFor="last-name">Last Name</label>
+                  <label htmlFor="last-name">Last Name (required)</label>
                 </div>
 
               </div>
 
               <div className="row">
-
-                {/* Phone Input */}
-                <div className="input-field col s12 m6">
-                  <input
-                    type="text"
-                    id="phone"
-                    value={this.state.model.phone}
-                    onChange={function(evt) {
-                      that.handleInputChange('phone', evt);
-                    }}/>
-                  <label htmlFor="phone">Phone</label>
-                </div>
 
                 {/* Email Input */}
                 <div className="input-field col s12 m6">
@@ -156,7 +144,19 @@ module.exports = React.createBackboneClass({
                     onChange={function(evt) {
                       that.handleInputChange('username', evt);
                     }}/>
-                  <label htmlFor="username">Email</label>
+                  <label htmlFor="username">Email (required)</label>
+                </div>
+
+                {/* Phone Input */}
+                <div className="input-field col s12 m6">
+                  <input
+                    type="text"
+                    id="phone"
+                    value={this.state.model.phone}
+                    onChange={function(evt) {
+                      that.handleInputChange('phone', evt);
+                    }}/>
+                  <label htmlFor="phone">Phone</label>
                 </div>
 
               </div>
