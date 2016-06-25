@@ -5,6 +5,8 @@ require('react.backbone');
 var UserModalComponent = React.createFactory(require('./UserModalComponent'));
 var Barcode = require('react-barcode');
 var moment = require('moment');
+var DoughnutChart = require('react-chartjs').Doughnut;
+var utils = require('../utils');
 
 module.exports = React.createBackboneClass({
   userModal: function() {
@@ -35,7 +37,6 @@ module.exports = React.createBackboneClass({
   },
 
   render: function() {
-
     var courseCards = this.getModel().get('courses').map(function(course, idx) {
       var dates = _.map(course.classDates(), function(date, idx) {
         var attended = 'fa fa-calendar-o';
@@ -61,18 +62,8 @@ module.exports = React.createBackboneClass({
       }, this);
 
       var grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), function(grade, idx) {
-        var gradeColor = 'red-text';
-        if (grade.score === 100) {
-          gradeColor = 'blue-text';
-        } else if (grade.score >= 90) {
-          gradeColor = 'green-text';
-        } else if (grade.score >= 80) {
-          gradeColor = 'yellow-text';
-        } else if (grade.score >= 70) {
-          gradeColor = 'orange-text';
-        }
         return (
-          <p key={idx}>{grade.name}: <span className={gradeColor}>{grade.score}</span></p>
+          <p key={idx}>{grade.name}: <span className={'score'+ grade.score}>{grade.score}</span></p>
         );
       });
       return (
@@ -100,6 +91,30 @@ module.exports = React.createBackboneClass({
         </div>
       );
     }, this);
+
+    var scoreData = [
+      {
+        value: this.getModel().get('totalScore'),
+        color: [utils.scoreColor(this.getModel().get('totalScore'))],
+        label: 'Score'
+      },
+      {
+        value: 100 - this.getModel().get('totalScore'),
+        color: ["white"],
+        label: 'hide'
+      }
+    ];
+
+    var doughnutOptions = {
+      tooltipTemplate: function (d) {
+        if (d.label === 'hide') {
+          throw '';
+        } else {
+          // else return the normal tooltip text
+          return d.label + ': ' + d.value;
+        }
+      }
+    };
 
     return (
       <div>
@@ -153,6 +168,18 @@ module.exports = React.createBackboneClass({
                 <span className="card-title">Student Number</span>
                 <p className="center-align">
                   <Barcode value={'' + this.getModel().get('idn')} format={'CODE128'} />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Total Score</span>
+                <p className="center-align">
+                  <DoughnutChart data={scoreData} options={doughnutOptions} />
                 </p>
               </div>
             </div>

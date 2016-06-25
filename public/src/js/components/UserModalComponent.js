@@ -40,6 +40,19 @@ module.exports = React.createBackboneClass({
     });
   },
 
+  deleteUser: function(e) {
+    e.preventDefault();
+    var r = confirm('Are you sure you want to delete this user?');
+    if (r == true) {
+      this.getModel().destroy({
+        wait: true,
+        success: function() {
+          $('#' + 'user-modal' + (that.getModel().id || '')).closeModal();
+        }
+      });
+    }
+  },
+
   render: function() {
     var that = this;
 
@@ -211,6 +224,7 @@ module.exports = React.createBackboneClass({
                 className="modal-action waves-effect waves-green btn"
                 value="Submit"/>
 
+              <a href="#" className={ rolesHidden + ' waves-effect waves-light btn red right'} onClick={this.deleteUser}><i className="fa fa-trash fa-2x"></i></a>
             </form>
           </div>
         </div>

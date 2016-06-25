@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
+var _ = require('underscore');
 
 var userSchema = new Schema({
   "username" : {
@@ -65,6 +66,14 @@ var userSchema = new Schema({
   reset_password: String
 });
 
+userSchema.virtual('totalScore').get(function() {
+  var num = _.select(this.get('grades'), function(grade) { return grade.score; }).length;
+  if (num) {
+    return _.reduce(_.pluck(this.get('grades'), 'score'), function(memo, num) { return memo + num; }) / num;
+  }
+  return '';
+})
+
 userSchema.set('toJSON', {
   transform: function(doc, ret, options) {
     delete ret.password;
@@ -72,7 +81,8 @@ userSchema.set('toJSON', {
     delete ret.__v;
     delete ret.reset_password;
     return ret;
-  }
+  },
+  virtuals: true
 });
 
 userSchema.plugin(uniqueValidator);
