@@ -25,7 +25,7 @@ var UsersCollection = require('./collections/UsersCollection');
 var UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
 var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
-var StudentComponent = React.createFactory(require('./components/StudentComponent'));
+var UserComponent = React.createFactory(require('./components/UserComponent'));
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -43,7 +43,7 @@ $(function() {
       'attendance': 'attendance',
       'terms': 'terms',
       'users': 'users',
-      'users/:id': 'student',
+      'users/:id': 'user',
       'courses': 'courses',
       'courses/:id': 'course',
       'registration': 'registration'
@@ -57,13 +57,13 @@ $(function() {
       ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('nav')[0]);
     },
 
-    student: function(id) {
+    user: function(id) {
       var that = this;
-      var student = new UserModel({ _id: id });
-      student.fetch({
+      var user = new UserModel({ _id: id });
+      user.fetch({
         success: function() {
-          ReactDOM.render(StudentComponent({
-            model: student,
+          ReactDOM.render(UserComponent({
+            model: user,
             currentUser: that.currentUser
           }), $('#container')[0]);
         }
@@ -80,12 +80,12 @@ $(function() {
     },
 
     index: function() {
-      if (this.currentUser.get('is_student')) {
+      // if (this.currentUser.get('is_student')) {
         return this.navigate('users/' + this.currentUser.id, {trigger: true, replace: true});
-      }
-      var terms = new TermsCollection();
-      terms.fetch();
-      ReactDOM.render(HomeLayoutComponent({ collection: terms }), $('#container')[0]);
+      // }
+      // var terms = new TermsCollection();
+      // terms.fetch();
+      // ReactDOM.render(HomeLayoutComponent({ collection: terms }), $('#container')[0]);
     },
 
     terms: function() {

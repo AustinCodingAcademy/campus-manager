@@ -1,24 +1,8 @@
 var Backbone = require('backbone');
 var React = require('react');
 require('react.backbone');
-var Chart = require('chart.js');
 
 module.exports = React.createBackboneClass({
-  componentDidUpdate: function() {
-    new Chart(this.refs.canvas.getContext('2d')).Doughnut([
-      {
-        value: this.getModel().get('full'),
-        color: this.getModel().get('health_color'),
-        label: "Health"
-      },
-      {
-        value: 100 - this.getModel().get('full'),
-        color: "#ffffff",
-        label: ""
-      }
-    ]);
-  },
-  
   render: function() {
     return (
       <div className="col s12 m6">

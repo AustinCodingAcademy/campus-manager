@@ -36,11 +36,12 @@ module.exports = React.createBackboneClass({
           <table>
             <thead>
               <tr>
-                <th>IDN</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Phone</th>
+                <th>Score</th>
                 <th>Role(s)</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>

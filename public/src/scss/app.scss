@@ -47,3 +47,31 @@ nav .brand-logo {
 .hidden {
   display: none;
 }
+
+@for $i from 0 through 69 {
+  .score#{$i} {
+    color: red;
+  }
+}
+@for $i from 70 through 79 {
+  .score#{$i} {
+    color: orangered;
+  }
+}
+@for $i from 80 through 89 {
+  .score#{$i} {
+    color: #E8A812;
+  }
+}
+@for $i from 90 through 99 {
+  .score#{$i} {
+    color: green;
+  }
+}
+.score100 {
+  color: blue;
+}
+
+.clearfix {
+  clear: both;
+}

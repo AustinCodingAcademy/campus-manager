@@ -5,6 +5,7 @@ require('react.backbone');
 var UserModalComponent = React.createFactory(require('./UserModalComponent'));
 var Barcode = require('react-barcode');
 var moment = require('moment');
+var DoughnutChart = require('react-chartjs').Doughnut;
 
 module.exports = React.createBackboneClass({
   userModal: function() {
@@ -35,7 +36,6 @@ module.exports = React.createBackboneClass({
   },
 
   render: function() {
-
     var courseCards = this.getModel().get('courses').map(function(course, idx) {
       var dates = _.map(course.classDates(), function(date, idx) {
         var attended = 'fa fa-calendar-o';
@@ -51,32 +51,23 @@ module.exports = React.createBackboneClass({
         var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (video) {
           return (
-            <p key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
           );
         } else {
           return (
-            <p key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM Do, YYYY")}</p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM Do, YYYY")}</p>
           );
         }
       }, this);
 
       var grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), function(grade, idx) {
-        var gradeColor = 'red-text';
-        if (grade.score === 100) {
-          gradeColor = 'blue-text';
-        } else if (grade.score >= 90) {
-          gradeColor = 'green-text';
-        } else if (grade.score >= 80) {
-          gradeColor = 'yellow-text';
-        } else if (grade.score >= 70) {
-          gradeColor = 'orange-text';
-        }
         return (
-          <p key={idx}>{grade.name}: <span className={gradeColor}>{grade.score}</span></p>
+          <p key={idx}>{grade.name}: <span className={'score'+ grade.score}>{grade.score}</span></p>
         );
       });
+      var clearfix = idx === 0 ? 'clearfix' : '';
       return (
-        <div key={idx} className="col s12 m6">
+        <div key={idx} className={'col s12 m6 l4 ' + clearfix}>
           <div className="card">
             <div className="card-content">
               <span className="card-title">
@@ -104,7 +95,7 @@ module.exports = React.createBackboneClass({
     return (
       <div>
         <div className="row">
-          <div className="col s12 m6">
+          <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">
@@ -147,7 +138,7 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
-          <div className="col s12 m6">
+          <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Student Number</span>
@@ -157,8 +148,16 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
-        </div>
-        <div className="row">
+          <div className="col s12 m6 l4">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
+                <p className="center-align">
+                  <DoughnutChart data={this.getModel().averageScoreData().chart} options={this.getModel().averageScoreData().options} />
+                </p>
+              </div>
+            </div>
+          </div>
           {courseCards}
         </div>
       </div>

@@ -14,7 +14,8 @@ module.exports = Backbone.Model.extend({
     term: new TermModel(),
     seats: '',
     registrations: new UsersCollection(),
-    textbook: '#'
+    textbook: '#',
+    days: []
   },
 
   shortDays: function() {
@@ -24,17 +25,53 @@ module.exports = Backbone.Model.extend({
   },
 
   classDates: function() {
+    return this.dates(this.get('term').get('end_date'));
+  },
+
+  pastDates: function() {
+    return this.dates(moment());
+  },
+
+  dates: function(endDate) {
     var that = this;
     var classDates = [];
-    if (this.get('term')) {
-      moment.range(this.get('term').get('start_date'), this.get('term').get('end_date')).by('days', function(day) {
-        if (that.get('days').indexOf(day.format('dddd').toLowerCase()) > -1 &&
-          that.get('holidays').indexOf(day.format('YYYY-MM-DD')) === -1) {
-          classDates.push(day)
-        }
-      });
-    }
+    moment.range(this.get('term').get('start_date'), endDate).by('days', function(day) {
+      if (that.get('days').indexOf(day.format('dddd').toLowerCase()) > -1 &&
+        that.get('holidays').indexOf(day.format('YYYY-MM-DD')) === -1) {
+        classDates.push(day)
+      }
+    });
     return classDates;
+  },
+
+  attendanceOverTime: function() {
+    var data = [];
+    var labels = [];
+    _.each(this.pastDates(), function(date) {
+      labels.push(date.format('ddd, MMM Do'));
+      var checkIns = 0;
+      this.get('registrations').each(function(student) {
+        var match = _.find(student.get('attendance'), function(checkIn) {
+          if (moment(checkIn, 'YYYY-MM-DD HH:ss').isSame(date, 'day')) {
+            checkIns++;
+          }
+        });
+      });
+      data.push(checkIns);
+    }, this);
+    return {
+      chart: {
+        labels: labels,
+        datasets: [{
+          data: data
+        }]
+      },
+      options: {
+        legend: {
+          display: false
+        }
+      }
+    };
   },
 
   parse: function(obj) {
