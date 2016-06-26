@@ -39,7 +39,7 @@
     "gulp-postcss": "6.1.0",
     "gulp-sass": "2.2.0",
     "gulp-sourcemaps": "1.6.0",
-    "gulp-uglify": "1.5.3",
+    "gulp-uglify": "1.5.4",
     "jquery": "2.1.4",
     "material-design-icons": "2.2.0",
     "materialize-css": "^0.97.6",
@@ -58,6 +58,7 @@
     "pickadate": "3.5.6",
     "pixrem": "3.0.0",
     "pug": "2.0.0-beta3",
+    "pump": "1.0.1",
     "react": "15.1.0",
     "react-barcode": "1.0.4",
     "react-chartjs": "github:jhudson8/react-chartjs#c711d75",
@@ -81,7 +82,9 @@
   },
   "browserify": {
     "transform": [
-      "browserify-shim"
+      "browserify-shim",
+      "reactify",
+      "envify"
     ]
   },
   "browserify-shim": {

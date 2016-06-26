@@ -25,30 +25,34 @@ var cssnano = require('gulp-cssnano');
 var imagemin = require('gulp-imagemin');
 var pixrem  = require('pixrem');
 var postcss = require('gulp-postcss');
-var reactify = require('reactify');
+var pump = require('pump');
 var CacheBreaker = require('gulp-cache-breaker');
 var cb = new CacheBreaker();
-var envify = require('envify/custom');
 
 gulp.task('bundle', function () {
   return browserify({
     entries: ['public/src/js/app.js'],
-    transform: [reactify]
   })
-    .transform(envify())
     .bundle()
     .pipe(source('bundle.js'))
-    .pipe(buffer())
     .pipe(gulp.dest('public/js/'));
+});
+
+gulp.task('compress', function (cb) {
+  pump([
+        gulp.src('public/js/bundle.js'),
+        uglify(),
+        gulp.dest('public/js/')
+    ],
+    cb
+  );
 });
 
 gulp.task('bundle-dev', function() {
   return browserify({
     entries: ['public/src/js/app.js'],
     debug: true,
-    transform: [reactify]
   })
-  .transform(envify())
   .bundle().on('error', function(error) {
     console.log(error.toString());
     this.emit('end');
@@ -101,7 +105,7 @@ gulp.task('watch', function () {
 
 gulp.task('build', function(callback) {
   if (process.env.NODE_ENV === 'production') {
-    runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
+    runSequence(['bundle', 'sass'], 'compress', 'symlink-cb-paths', callback);
   }
 });
 

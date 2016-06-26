@@ -100,7 +100,7 @@ module.exports = React.createBackboneClass({
 
     var metadata = {
       snippet: {
-        title: this.getModel().get('term').get('name') + ' - ' + this.getModel().get('name') + ' ' + moment(this.refs.date.value, 'D MMMM, YYYY').format('ddd, MMM Do, YYYY'),
+        title: this.props.course.get('term').get('name') + ' - ' + this.props.course.get('name') + ' ' + moment(this.refs.date.value, 'D MMMM, YYYY').format('ddd, MMM Do, YYYY'),
         description: this.props.snippetDescription
       },
       status: {
