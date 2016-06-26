@@ -43,7 +43,7 @@ module.exports = React.createBackboneClass({
     }, this.handleAuthResult);
   },
 
-  handleAuthResult(authResult) {
+  handleAuthResult: function(authResult) {
     if (authResult && !authResult.error) {
       this.checkAccount(authResult.access_token);
     } else {

@@ -19,7 +19,7 @@ module.exports = React.createBackboneClass({
   },
 
   // When a check box is clicked, toggle the state for the corosponding box
-  handleToggleCheck(attr) {
+  handleToggleCheck: function(attr) {
     var model = this.state.model;
     model[attr] = !this.state.model[attr];
 
