@@ -52,7 +52,11 @@ var userSchema = new Schema({
     type: String,
     default: ""
   },
-  "idn": Number,
+  "idn": {
+    type: Number,
+    required: true,
+    default: 1
+  },
   "client" : {
     type: Schema.Types.ObjectId,
     ref: 'user'
