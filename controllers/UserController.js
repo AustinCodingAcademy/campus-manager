@@ -101,7 +101,7 @@ module.exports = {
           idn: -1
         }
     }, function(err, users) {
-      user.idn = users[0].idn;
+      user.idn = users[0].idn + 1;
       user.client = req.user.client;
       user.save(function(err, user){
         if(err) {
