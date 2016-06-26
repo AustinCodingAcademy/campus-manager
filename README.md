@@ -18,10 +18,9 @@ After cloning and navigating into directory:
 
 1. Install [Cairo](https://cairographics.org/download/)
   * OSX
-    1. With Homebrew (OSX) `brew install cairo`
+    1. With Homebrew (OSX) `brew install cairo pkg-config`
     2. Install [X11](https://www.xquartz.org/)
     3. Add `export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig` to your `~/.bash_profile`
-
 
 1. `npm install`
 
