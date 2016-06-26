@@ -1,5 +1,7 @@
 var Backbone = require('backbone');
 var utils = require('../utils');
+var _ = require('underscore');
+var moment = require('moment');
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/users',
@@ -40,20 +42,35 @@ module.exports = Backbone.Model.extend({
     return roles.join(', ');
   },
 
-  averageScoreData: function() {
+  attendanceAverage: function() {
+    var courseDates = [];
+    this.get('courses').each(function(course) {
+      _.each(course.pastDates(), function(date) {
+        courseDates.push(date.format('YYYY-MM-DD'));
+      });
+    });
+    courseDates = _.uniq(courseDates);
+    var attendance = _.uniq(_.map(this.get('attendance'), function(date) { return moment(date, 'YYYY-MM-DD HH:ss').format('YYYY-MM-DD'); }));
+    return Math.round(_.intersection(courseDates, attendance).length / courseDates.length * 100);
+  },
+
+  averageChartData: function(score) {
     return {
       chart: {
-        labels: ['Average', ''],
+        labels: ['', ''],
         datasets: [
           {
-            data: [this.get('gradeAverage'), 100 - this.get('gradeAverage')],
-            backgroundColor: [utils.scoreColor(this.get('gradeAverage')), 'white']
+            data: [score, 100 - score],
+            backgroundColor: [utils.scoreColor(score), 'white']
           }
         ]
       },
       options: {
         legend: {
           display: false
+        },
+        tooltips: {
+          enabled: false
         }
       }
     };

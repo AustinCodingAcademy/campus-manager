@@ -51,11 +51,11 @@ module.exports = React.createBackboneClass({
         var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (video) {
           return (
-            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")}</a></p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM D")}</a></p>
           );
         } else {
           return (
-            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM Do, YYYY")}</p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM D")}</p>
           );
         }
       }, this);
@@ -77,11 +77,11 @@ module.exports = React.createBackboneClass({
                 </a>
               </span>
               <div className="row">
-                <div className="col s12 m6">
+                <div className="col s6">
                   <h5>Attendance</h5>
                   {dates}
                 </div>
-                <div className="col s12 m6">
+                <div className="col s6">
                   <h5>Grades</h5>
                   {grades}
                 </div>
@@ -141,7 +141,6 @@ module.exports = React.createBackboneClass({
           <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
-                <span className="card-title">Student Number</span>
                 <p className="center-align">
                   <Barcode value={'' + this.getModel().get('idn')} format={'CODE128'} />
                 </p>
@@ -153,7 +152,17 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
                 <p className="center-align">
-                  <DoughnutChart data={this.getModel().averageScoreData().chart} options={this.getModel().averageScoreData().options} />
+                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().get('gradeAverage')).chart} options={this.getModel().averageChartData(this.getModel().get('gradeAverage')).options} />
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col s12 m6 l4">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Attendance: <span className={'score'+ this.getModel().attendanceAverage()}>{this.getModel().attendanceAverage()}%</span></span>
+                <p className="center-align">
+                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().attendanceAverage()).chart} options={this.getModel().averageChartData(this.getModel().attendanceAverage()).options} />
                 </p>
               </div>
             </div>
