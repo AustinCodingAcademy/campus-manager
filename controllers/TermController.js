@@ -17,7 +17,9 @@ module.exports = {
   list: function(req, res) {
     TermModel.find({
       client: req.user.client
-    }, null, function(err, terms){
+    }, null, {
+      sort: 'start_date'
+    }, function(err, terms){
       if(err) {
         return res.json(500, {
           message: 'Error getting term.',

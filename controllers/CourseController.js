@@ -16,6 +16,8 @@ module.exports = {
   list: function(req, res) {
     CourseModel.find({
       client: req.user.client
+    }, null, {
+      sort: 'term.start_date'
     }).populate('term registrations').exec(function(err, courses){
       if(err) {
         return res.json(500, {

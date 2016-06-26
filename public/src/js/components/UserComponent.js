@@ -6,6 +6,7 @@ var UserModalComponent = React.createFactory(require('./UserModalComponent'));
 var Barcode = require('react-barcode');
 var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
+var Gravatar = require('react-gravatar');
 
 module.exports = React.createBackboneClass({
   userModal: function() {
@@ -99,37 +100,51 @@ module.exports = React.createBackboneClass({
             <div className="card">
               <div className="card-content">
                 <span className="card-title">
-                  {this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
+                  <div className="valign-wrapper">
+                    <a href="http://en.gravatar.com/" target="_blank">
+                      <Gravatar email={this.getModel().get('username')} className="circle" />
+                    </a>
+                    <div className="valign">
+                      &nbsp;&nbsp;{this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
+                    </div>
+                  </div>
                 </span>
-                <p><i className="fa fa-fw fa-hashtag"></i> {this.getModel().get('idn')}</p>
                 <p>
                   <i className="fa fa-fw fa-envelope"></i>
-                  <a href={'mailto:' + this.getModel().get('username')}>
+                  <a href={'mailto:' + this.getModel().get('username')} target="_blank">
                     {this.getModel().get('username')}
                   </a>
                 </p>
                 <p>
-                  <i className="fa fa-fw fa-mobile"></i> {this.getModel().get('phone')}
+                  <i className="fa fa-fw fa-mobile"></i>
+                  <a href={'tel:'+ this.getModel().get('phone')}>
+                    {this.getModel().get('phone')}
+                  </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-github"></i>
-                  <a href={'https://github.com/' + this.getModel().get('github')}>
+                  <a href={'https://github.com/' + this.getModel().get('github')} target="_blank">
                     {this.getModel().get('github')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-globe"></i>
-                  <a href={this.getModel().get('website')}>
+                  <a href={this.getModel().get('website')} target="_blank">
                     {this.getModel().get('website')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-code"></i>
-                  <a href={'https://codecademy.com/' + this.getModel().get('codecademy')}>
+                  <a href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
                     {this.getModel().get('codecademy')}
                   </a>
                 </p>
-                <p><i className="fa fa-fw fa-map-marker"></i> {this.getModel().get('zipcode')}</p>
+                <p>
+                  <i className="fa fa-fw fa-map-marker"></i>
+                  <a href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
+                    {this.getModel().get('zipcode')}
+                  </a>
+                </p>
               </div>
               <div className="card-action">
                 <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.userModal}>
@@ -147,7 +162,7 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
-          <div className="col s12 m6 l4">
+          <div className="col s12 m6 l4 right">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
