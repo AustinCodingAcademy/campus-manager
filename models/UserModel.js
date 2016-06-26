@@ -55,8 +55,7 @@ var userSchema = new Schema({
   "idn": {
     type: Number,
     required: true,
-    default: 1,
-    unique: true
+    default: 1
   },
   "client" : {
     type: Schema.Types.ObjectId,
