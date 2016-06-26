@@ -51,7 +51,7 @@ module.exports = React.createBackboneClass({
         var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (video) {
           return (
-            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")} <i className="fa fa-youtube-play fa-fw"></i></a></p>
+            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM Do, YYYY")}</a></p>
           );
         } else {
           return (
