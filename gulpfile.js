@@ -105,7 +105,7 @@ gulp.task('watch', function () {
 
 gulp.task('build', function(callback) {
   if (process.env.NODE_ENV === 'production') {
-    runSequence(['bundle', 'sass'], 'compress','symlink-cb-paths', callback);
+    runSequence(['bundle', 'sass'], 'compress', 'symlink-cb-paths', callback);
   }
 });
 
