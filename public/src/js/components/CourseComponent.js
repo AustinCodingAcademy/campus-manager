@@ -51,19 +51,27 @@ module.exports = React.createBackboneClass({
 
   blurGrade: function(e) {
     e.persist();
+    var that = this;
     $(e.currentTarget).addClass('disabled');
-    if ($(e.currentTarget).val()) {
-      var student = this.getModel().get('registrations').get($(e.currentTarget).data('student-id'));
-      var gradeIdx = _.findIndex(student.get('grades'), function(grade) {
-        return grade.courseId === this.getModel().id && grade.name === $(e.currentTarget).data('grade-name');
-      }, this);
+    var student = this.getModel().get('registrations').get($(e.currentTarget).data('student-id'));
+    var gradeIdx = _.findIndex(student.get('grades'), function(grade) {
+      return grade.courseId === this.getModel().id && grade.name === $(e.currentTarget).data('grade-name');
+    }, this);
+    var originalScore = student.get('grades')[gradeIdx].score;
+    if ($(e.currentTarget).val() && Number($(e.currentTarget).val()) > -1) {
       student.get('grades')[gradeIdx].score = Number($(e.currentTarget).val());
       student.save(null, {
         error: function() {
-          e.target.value = '';
-          student.get('grades')[gradeIdx].score = '';
+          e.target.value = originalScore;
+          student.get('grades')[gradeIdx].score = originalScore;
+          that.forceUpdate();
+        },
+        success: function() {
+          that.forceUpdate();
         }
       });
+    } else {
+      $(e.currentTarget).val(originalScore);
     }
   },
 
@@ -95,29 +103,57 @@ module.exports = React.createBackboneClass({
 
   render: function() {
     var userRows = this.getModel().get('registrations').map(function(student, i) {
+
+      var courseGrades = _.filter(_.pluck(_.where(student.get('grades'), {courseId: this.getModel().id}), 'score'), function(score) {
+        return _.isNumber(score);
+      });
+      var courseAverage = Math.round(_.reduce(courseGrades, function(memo, num) { return memo + num; }) / courseGrades.length) || '';
+
+      var courseAttendance = _.filter(student.get('attendance'), function(checkIn) {
+        return _.find(this.getModel().pastDates(), function(date) {
+          return moment(checkIn, 'YYYY-MM-DD HH:ss').isSame(date, 'day');
+        });
+      }, this);
+
+      var courseAttendanceAverage = Math.round(courseAttendance.length / this.getModel().pastDates().length * 100);
+
       return (
         <tr key={i}>
-          <td className="right-align">
+          <td className="right-align nowrap" style={{padding: '0.35rem', height: '51px'}}>
             <a href={'#users/' + student.id}>{student.fullName()}</a>
+            <br />
+            <small>Course Att: <span className={'score' + courseAttendanceAverage}>{courseAttendanceAverage}</span> Avg: <span className={'score' + courseAverage}>{courseAverage}</span></small>
           </td>
         </tr>
       );
-    });
+    }, this);
 
     var gradeNames = _.map(this.getModel().get('grades'), function(grade, i) {
+      var assignmentGrades = [];
       this.getModel().get('registrations').each(function(student){
-        if (!_.findWhere(student.get('grades'), { name: grade, courseId: this.getModel().id })) {
+        var match = _.findWhere(student.get('grades'), { name: grade, courseId: this.getModel().id });
+        if (!match) {
           student.get('grades').push({
             courseId: this.getModel().id,
             name: grade,
             score: ''
           });
+        } else {
+          if (_.isNumber(match.score)){
+            assignmentGrades.push(match.score);
+          }
         }
       }, this);
 
+      var assignmentAverage = Math.round(_.reduce(assignmentGrades, function(memo, num) { return memo + num; }) / assignmentGrades.length) || '';
+
       return (
         <td key={i} className='nowrap'>
-        {grade} <a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a>
+          {grade}
+          <sup><a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a></sup>
+          <br />
+          <small>Avg: <span className={'score' + assignmentAverage}>{assignmentAverage}</span></small>
+
         </td>
       );
     }, this);
@@ -166,30 +202,32 @@ module.exports = React.createBackboneClass({
           <div className="s12">
             <h3>{this.getModel().get('term').get('name') + ' - ' + this.getModel().get('name')}</h3>
             <div className="row">
-                <div className="col s4">
-                  <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
-                    <i className="material-icons left">mail</i> Email Class
-                  </a>
-                </div>
-              <div className="col s4">
-                <button
-                  onClick={this.showUploadModal}
-                  className="waves-effect waves-teal btn left">
-                  <i className="fa fa-youtube-play left"></i> Add Video
-                </button>
+              <div className="col s12 m4">
+                <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
+                  <i className="material-icons left">mail</i> Email Class
+                </a>
+                <br /><br />
               </div>
-              <div className="col s4">
-                <a href={this.getModel().get('textbook')} target="_blank" className="waves-effect waves-teal btn left">
+              <div className="col s12 m4">
+                <a
+                  onClick={this.showUploadModal}
+                  className="waves-effect waves-teal btn">
+                  <i className="fa fa-youtube-play left"></i> Add Video
+                </a>
+                <br /><br />
+              </div>
+              <div className="col s12 m4">
+                <a href={this.getModel().get('textbook')} target="_blank" className="waves-effect waves-teal btn">
                   <i className="fa fa-book left"></i> Textbook
                 </a>
               </div>
             </div>
             <div className="row">
-              <div className="col s3">
+              <div className="col s3" style={{ overflowX: 'scroll' }}>
                 <table className="striped">
                   <thead>
                     <tr>
-                      <th style={{ padding: '2rem 0 1.5rem' }}>Name</th>
+                      <th style={{ padding: '2rem 0 1.75rem' }}>Name</th>
                     </tr>
                   </thead>
                   <tbody>
