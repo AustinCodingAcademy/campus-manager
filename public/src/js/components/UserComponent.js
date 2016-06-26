@@ -102,7 +102,7 @@ module.exports = React.createBackboneClass({
                 <span className="card-title">
                   <div className="valign-wrapper">
                     <a href="http://en.gravatar.com/" target="_blank">
-                      <Gravatar email={this.getModel().get('username')} className="circle" />
+                      <Gravatar email={this.getModel().get('username')} className="circle" https />
                     </a>
                     <div className="valign">
                       &nbsp;&nbsp;{this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
