@@ -119,7 +119,7 @@ module.exports = React.createBackboneClass({
 
       return (
         <tr key={i}>
-          <td className="right-align nowrap" style={{padding: '0.35rem', height: '51px'}}>
+          <td className="right-align nowrap" style={{height: '51px', padding: '0 5px'}}>
             <a href={'#users/' + student.id}>{student.fullName()}</a>
             <br />
             <small>Course Att: <span className={'score' + courseAttendanceAverage}>{courseAttendanceAverage}</span> Avg: <span className={'score' + courseAverage}>{courseAverage}</span></small>
@@ -165,7 +165,7 @@ module.exports = React.createBackboneClass({
 
       var studentCells = _.map(courseGrades, function(grade, i) {
         return (
-          <td key={i}>
+          <td key={i} style={{height: '51px', padding: '0 5px'}} >
             <input
             type="text"
             className="trim-margin disabled"

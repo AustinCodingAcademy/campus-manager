@@ -57,6 +57,12 @@ $(function() {
       ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('nav')[0]);
     },
 
+    execute: function(callback, args, name) {
+      ReactDOM.unmountComponentAtNode($('#container')[0]);
+      $(document).scrollTop(0);
+      if (callback) callback.apply(this, args);
+    },
+
     user: function(id) {
       var that = this;
       var user = new UserModel({ _id: id });

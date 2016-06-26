@@ -64,6 +64,7 @@
     "react-chartjs": "github:jhudson8/react-chartjs#c711d75",
     "react-dom": "15.1.0",
     "react-dropzone": "3.4.0",
+    "react-gravatar": "2.4.3",
     "react-modal": "1.3.0",
     "react.backbone": "0.9.0",
     "reactify": "1.1.1",

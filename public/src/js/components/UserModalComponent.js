@@ -36,6 +36,7 @@ module.exports = React.createBackboneClass({
         if (that.getCollection()) {
           that.getCollection().add(user);
         }
+        user.trigger('change');
       }
     });
   },
@@ -185,7 +186,7 @@ module.exports = React.createBackboneClass({
                     onChange={function(evt) {
                       that.handleInputChange('website', evt);
                     }}/>
-                  <label htmlFor="website">Website</label>
+                  <label htmlFor="website">Website (ex. <i>http:&#47;&#47;example.com</i>)</label>
                 </div>
 
               </div>
