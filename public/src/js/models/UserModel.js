@@ -51,7 +51,7 @@ module.exports = Backbone.Model.extend({
     });
     courseDates = _.uniq(courseDates);
     var attendance = _.uniq(_.map(this.get('attendance'), function(date) { return moment(date, 'YYYY-MM-DD HH:ss').format('YYYY-MM-DD'); }));
-    return Math.round(_.intersection(courseDates, attendance).length / courseDates.length * 100);
+    return Math.round(_.intersection(courseDates, attendance).length / courseDates.length * 100) || '';
   },
 
   averageChartData: function(score) {
