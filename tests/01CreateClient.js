@@ -10,7 +10,7 @@ module.exports = {
       .waitForElementVisible('button[type="submit"]', 1000)
       .click('button[type="submit"]')
       .pause(1000)
-      .assert.containsText('.card-content', 'test@client.com')
+      .assert.containsText('.side-nav', 'Logout')
       .end();
   }
 }
