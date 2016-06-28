@@ -76,7 +76,7 @@ userSchema.virtual('gradeAverage').get(function() {
   if (num) {
     return Math.round(_.reduce(_.pluck(grades, 'score'), function(memo, num) { return memo + num; }) / num);
   }
-  return '';
+  return 0;
 })
 
 userSchema.set('toJSON', {
