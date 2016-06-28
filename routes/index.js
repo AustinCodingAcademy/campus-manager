@@ -58,9 +58,21 @@ router.post('/register', function(req, res, next) {
       return res.redirect('/register');
     }
 
+    if (!req.body.first_name) {
+      req.flash('error', 'Please enter your first name.')
+      return res.redirect('/register');
+    }
+
+    if (!req.body.last_name) {
+      req.flash('error', 'Please enter your last name.')
+      return res.redirect('/register');
+    }
+
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
 
       user = new UserModel({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         username: req.body.username.toLowerCase(),
         password: hash,
         is_client: true

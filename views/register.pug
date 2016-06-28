@@ -5,6 +5,14 @@ block content
   form(action='/register', method='post')
     .row
       .input-field.col.s12
+        input#first_name.validate(type='text', name='first_name')
+        label(for='first_name') First Name
+    .row
+      .input-field.col.s12
+        input#last_name.validate(type='text', name='last_name')
+        label(for='last_name') Last Name
+    .row
+      .input-field.col.s12
         input#email.validate(type='email', name='username')
         label(for='email') Email
     .row
