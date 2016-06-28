@@ -29,7 +29,10 @@ module.exports = Backbone.Model.extend({
   },
 
   pastDates: function() {
-    return this.dates(moment());
+    if (moment().isBefore(this.get('term').get('end_date'))) {
+      return this.dates(moment());
+    }
+    return this.dates(this.get('term').get('end_date'));
   },
 
   dates: function(endDate) {

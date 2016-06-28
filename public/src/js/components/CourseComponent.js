@@ -107,7 +107,7 @@ module.exports = React.createBackboneClass({
       var courseGrades = _.filter(_.pluck(_.where(student.get('grades'), {courseId: this.getModel().id}), 'score'), function(score) {
         return _.isNumber(score);
       });
-      var courseAverage = Math.round(_.reduce(courseGrades, function(memo, num) { return memo + num; }) / courseGrades.length) || '';
+      var courseAverage = Math.round(_.reduce(courseGrades, function(memo, num) { return memo + num; }) / courseGrades.length) || 0;
 
       var courseAttendance = _.filter(student.get('attendance'), function(checkIn) {
         return _.find(this.getModel().pastDates(), function(date) {
@@ -145,7 +145,7 @@ module.exports = React.createBackboneClass({
         }
       }, this);
 
-      var assignmentAverage = Math.round(_.reduce(assignmentGrades, function(memo, num) { return memo + num; }) / assignmentGrades.length) || '';
+      var assignmentAverage = Math.round(_.reduce(assignmentGrades, function(memo, num) { return memo + num; }) / assignmentGrades.length) || 0;
 
       return (
         <td key={i} className='nowrap'>
