@@ -25,14 +25,14 @@ module.exports = Backbone.Model.extend({
   },
 
   classDates: function() {
-    return this.dates(this.get('term').get('end_date'));
+    return this.dates(moment(this.get('term').get('end_date'), 'YYYY-MM-DD'));
   },
 
   pastDates: function() {
-    if (moment().isBefore(this.get('term').get('end_date'))) {
+    if (moment().isBefore(this.get('term').get('end_date'), 'YYYY-MM-DD')) {
       return this.dates(moment());
     }
-    return this.dates(this.get('term').get('end_date'));
+    return this.dates(moment(this.get('term').get('end_date'), 'YYYY-MM-DD'));
   },
 
   dates: function(endDate) {
