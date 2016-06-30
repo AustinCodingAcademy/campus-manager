@@ -38,7 +38,7 @@ module.exports = Backbone.Model.extend({
   dates: function(endDate) {
     var that = this;
     var classDates = [];
-    moment.range(this.get('term').get('start_date'), endDate).by('days', function(day) {
+    moment.range(this.get('term').get('start_date'), endDate.add(1, 'days')).by('days', function(day) {
       if (that.get('days').indexOf(day.format('dddd').toLowerCase()) > -1 &&
         that.get('holidays').indexOf(day.format('YYYY-MM-DD')) === -1) {
         classDates.push(day)
