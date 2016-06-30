@@ -40,7 +40,7 @@ module.exports = React.createBackboneClass({
           <div className="row">
             <div className="col m4 s12">
               <label>IDN</label>
-              <input type="text" ref="idn" />
+              <input type="text" ref="idn" autoFocus="true" />
             </div>
             <div className="col m4 s12">
               <label htmlFor="start-date">Date</label>
