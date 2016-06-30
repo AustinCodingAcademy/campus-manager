@@ -47,11 +47,36 @@ module.exports = Backbone.Model.extend({
     return classDates;
   },
 
+  studentAttendance: function() {
+    var datasets = [];
+    this.get('registrations').each(function(student) {
+      datasets.push({
+        label: student.fullName(),
+        data: _.map(this.pastDates(), function(date) {
+          return _.find(student.get('attendance'), function(checkIn) {
+            return moment(checkIn, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
+          }) ? 100 : 0;
+        })
+      });
+    }, this);
+    return {
+      data: {
+        labels: _.map(this.pastDates(), function(date) { return date.format('ddd, MMM D'); }),
+        datasets: datasets
+      },
+      options: {
+        tooltipTemplate: "<%= xLabel %> | <%= yLabel %> | <%= value === 0 ? 'Absent' : 'Present' %>",
+        responsive: true,
+        showLabels: false, 
+      }
+    }
+  },
+
   attendanceOverTime: function() {
     var data = [];
     var labels = [];
     _.each(this.pastDates(), function(date) {
-      labels.push(date.format('ddd, MMM Do'));
+      labels.push(date.format('ddd, MMM D'));
       var checkIns = 0;
       this.get('registrations').each(function(student) {
         var match = _.find(student.get('attendance'), function(checkIn) {
@@ -63,7 +88,7 @@ module.exports = Backbone.Model.extend({
       data.push(checkIns);
     }, this);
     return {
-      chart: {
+      data: {
         labels: labels,
         datasets: [{
           data: data
@@ -72,6 +97,14 @@ module.exports = Backbone.Model.extend({
       options: {
         legend: {
           display: false
+        },
+        scales: {
+            yAxes: [{
+                display: true,
+                ticks: {
+                  beginAtZero: true
+                }
+            }]
         }
       }
     };

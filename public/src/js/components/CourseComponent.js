@@ -3,6 +3,7 @@ var React = require('react');
 var moment = require('moment');
 var BaseModal = require('./BaseModal');
 var LineChart = require('react-chartjs').Line;
+var Chart = require('chart.heatmap.js');
 var CourseVideoUpload = require('./CourseVideoUpload');
 require('react.backbone');
 
@@ -15,6 +16,8 @@ module.exports = React.createBackboneClass({
 
   componentDidUpdate: function() {
     Materialize.updateTextFields();
+    var ctx = this.refs.heatmap.getContext('2d');
+    var newChart = new Chart(ctx).HeatMap(this.getModel().studentAttendance().data, this.getModel().studentAttendance().options);
   },
 
   addGrade: function(e) {
@@ -256,12 +259,9 @@ module.exports = React.createBackboneClass({
             </div>
             <div className="row">
               <div className="col s12">
-                <div className="card">
-                  <div className="card-content">
-                    <span className="card-title">Attendance</span>
-                    <LineChart data={this.getModel().attendanceOverTime().chart} options={this.getModel().attendanceOverTime().options} />
-                  </div>
-                </div>
+                <h4>Attendance</h4>
+                <LineChart data={this.getModel().attendanceOverTime().data} ref="attendanceChart" options={this.getModel().attendanceOverTime().options} />
+                <canvas ref="heatmap"></canvas>
               </div>
             </div>
             <div className="row">
