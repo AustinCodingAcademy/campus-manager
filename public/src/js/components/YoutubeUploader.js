@@ -100,8 +100,8 @@ module.exports = React.createBackboneClass({
 
     var metadata = {
       snippet: {
-        title: moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DD')
-        description: this.props.course.get('term').get('name') + ' - ' + this.props.course.get('name') + ' ' + moment(this.refs.date.value, 'D MMMM, YYYY').format('ddd, MMM Do, YYYY'),
+        title: moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DD'),
+        description: this.props.course.get('term').get('name') + ' - ' + this.props.course.get('name') + ' ' + moment(this.refs.date.value, 'D MMMM, YYYY').format('ddd, MMM Do, YYYY')
       },
       status: {
         privacyStatus: 'unlisted'
