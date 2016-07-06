@@ -55,7 +55,7 @@ module.exports = Backbone.Model.extend({
 
   averageChartData: function(score) {
     return {
-      chart: {
+      data: {
         labels: ['', ''],
         datasets: [
           {
@@ -73,6 +73,22 @@ module.exports = Backbone.Model.extend({
         }
       }
     };
+  },
+
+  profileComplete: function() {
+    var attrs = [
+      'first_name',
+      'last_name',
+      'username',
+      'phone',
+      'github',
+      'website',
+      'codecademy',
+      'zipcode'
+    ]
+    return Math.round(_.filter(attrs, function(attr) {
+      return !!this.get(attr);
+    }, this).length / attrs.length * 100);
   },
 
   parse: function(obj) {
