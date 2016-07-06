@@ -145,6 +145,10 @@ module.exports = React.createBackboneClass({
                     {this.getModel().get('zipcode')}
                   </a>
                 </p>
+                <div className="center-align" style={{position: 'absolute', right: '-20px', bottom: '80px', width: '100px'}}>
+                <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
+                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
+                </div>
               </div>
               <div className="card-action">
                 <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.userModal}>
@@ -167,7 +171,7 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
                 <p className="center-align">
-                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().get('gradeAverage')).chart} options={this.getModel().averageChartData(this.getModel().get('gradeAverage')).options} />
+                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().get('gradeAverage')).data} options={this.getModel().averageChartData(this.getModel().get('gradeAverage')).options} />
                 </p>
               </div>
             </div>
@@ -177,7 +181,7 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">Attendance: <span className={'score'+ this.getModel().attendanceAverage()}>{this.getModel().attendanceAverage()}%</span></span>
                 <p className="center-align">
-                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().attendanceAverage()).chart} options={this.getModel().averageChartData(this.getModel().attendanceAverage()).options} />
+                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().attendanceAverage()).data} options={this.getModel().averageChartData(this.getModel().attendanceAverage()).options} />
                 </p>
               </div>
             </div>
