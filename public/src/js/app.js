@@ -1,5 +1,6 @@
 'use strict';
 
+require('es6-shim');
 var $ = window.$ = window.jQuery = require('jquery');
 require('materialize');
 require('picker');

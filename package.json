@@ -28,6 +28,7 @@
     "cors": "2.7.1",
     "debug": "2.2.0",
     "envify": "3.4.0",
+    "es6-shim": "^0.35.1",
     "express": "4.13.1",
     "express-flash": "0.0.2",
     "express-session": "1.13.0",
