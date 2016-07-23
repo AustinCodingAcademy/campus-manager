@@ -102,6 +102,6 @@
     "mongodb": "^2.1.18",
     "nightwatch": "^0.9.3",
     "nodemon": "^1.9.2",
-    "selenium-server-standalone-jar": "^2.53.0"
+    "selenium-server-standalone-jar": "2.53.1"
   }
 }
