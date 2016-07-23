@@ -22,7 +22,6 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var cssnano = require('gulp-cssnano');
-var imagemin = require('gulp-imagemin');
 var pixrem  = require('pixrem');
 var postcss = require('gulp-postcss');
 var pump = require('pump');
