@@ -1,5 +1,5 @@
 extends layout
-  
+
 block content
   h2 Enter Email
   form
@@ -20,7 +20,9 @@ block bottom_scripts
         },
         success: function(response) {
           Materialize.toast(response.message, 4000);
+        },
+        error: function(response) {
+          Materialize.toast(JSON.parse(response.responseText).message, 4000, 'red text-white');
         }
       });
     });
-    
