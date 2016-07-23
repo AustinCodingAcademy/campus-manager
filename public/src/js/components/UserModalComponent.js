@@ -173,7 +173,7 @@ module.exports = React.createBackboneClass({
                     onChange={function(evt) {
                       that.handleInputChange('github', evt);
                     }}/>
-                  <label htmlFor="github">Github</label>
+                  <label htmlFor="github">Github Username</label>
                 </div>
 
 
@@ -202,7 +202,7 @@ module.exports = React.createBackboneClass({
                     onChange={function(evt) {
                       that.handleInputChange('codecademy', evt);
                     }}/>
-                  <label htmlFor="codecademy">Codecademy</label>
+                  <label htmlFor="codecademy">Codecademy Username</label>
                 </div>
 
                 {/* Website Input */}
