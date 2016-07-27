@@ -22,7 +22,7 @@ module.exports = React.createBackboneClass({
 
   changeAttendance: function(e) {
     var that = this;
-    if (!this.props.currentUser.get('is_student')) {
+    if (!this.props.currentUser.get('is_student') || moment($(e.currentTarget).data('date'), 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
       $.ajax('/api/users/attendance', {
         method: 'post',
         data: {

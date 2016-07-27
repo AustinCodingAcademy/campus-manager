@@ -48,7 +48,7 @@ router.post('/import', middleware.admin, function(req, res) {
 /*
 * POST
 */
-router.post('/attendance', middleware.instructor, function(req, res) {
+router.post('/attendance', middleware.auth, function(req, res) {
   UserController.attendance(req, res);
 });
 
