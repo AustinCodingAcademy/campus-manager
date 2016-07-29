@@ -5,6 +5,7 @@ var BaseModal = require('./BaseModal');
 var LineChart = require('react-chartjs').Line;
 var Chart = require('chart.heatmap.js');
 var CourseVideoUpload = require('./CourseVideoUpload');
+var Hashids = require('hashids');
 require('react.backbone');
 
 module.exports = React.createBackboneClass({
@@ -199,79 +200,84 @@ module.exports = React.createBackboneClass({
       );
     }, this);
 
+    var hashids = new Hashids();
+    var hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
+
     return (
       <div>
         <div className="row">
-          <div className="s12">
-            <h3>{this.getModel().get('term').get('name') + ' - ' + this.getModel().get('name')}</h3>
-            <div className="row">
-              <div className="col s12 m4">
-                <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
-                  <i className="material-icons left">mail</i> Email Class
-                </a>
-                <br /><br />
-              </div>
-              <div className="col s12 m4">
-                <a
-                  onClick={this.showUploadModal}
-                  className="waves-effect waves-teal btn">
-                  <i className="fa fa-youtube-play left"></i> Add Video
-                </a>
-                <br /><br />
-              </div>
-              <div className="col s12 m4">
-                <a href={this.getModel().get('textbook')} target="_blank" className="waves-effect waves-teal btn">
-                  <i className="fa fa-book left"></i> Textbook
-                </a>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s3" style={{ overflowX: 'scroll' }}>
-                <table className="striped">
-                  <thead>
-                    <tr>
-                      <th style={{ padding: '2rem 0 1.75rem' }}>Name</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userRows}
-                  </tbody>
-                </table>
-              </div>
-              <div className="col s9" style={{overflowX: 'scroll'}}>
-                <table className="striped">
-                  <thead>
-                    <tr>
-                      {gradeNames}
-                      <th>
-                        <div className="input-field trim-margin">
-                          <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin" style={{minWidth:'100px'}} />
-                          <label htmlFor="grade" className="nowrap">Add Grade</label>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentGrades}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s12">
-                <h4>Attendance</h4>
-                <LineChart data={this.getModel().attendanceOverTime().data} ref="attendanceChart" options={this.getModel().attendanceOverTime().options} />
-                <canvas ref="heatmap"></canvas>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s12 m6">
-                <div className="card">
-                  <div className="card-content">
-                    <span className="card-title">Video Manager</span>
-                    {videos}
-                  </div>
-                </div>
+          <div className="col s12">
+            <h5>{this.getModel().get('term').get('name')}</h5>
+            <h3>{this.getModel().get('name')}</h3>
+            <h6 className="align-right">Daily Attendance Code: <strong>{hash}</strong></h6>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12 m4">
+            <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
+              <i className="material-icons left">mail</i> Email Class
+            </a>
+            <br /><br />
+          </div>
+          <div className="col s12 m4">
+            <a
+              onClick={this.showUploadModal}
+              className="waves-effect waves-teal btn">
+              <i className="fa fa-youtube-play left"></i> Add Video
+            </a>
+            <br /><br />
+          </div>
+          <div className="col s12 m4">
+            <a href={this.getModel().get('textbook')} target="_blank" className="waves-effect waves-teal btn">
+              <i className="fa fa-book left"></i> Textbook
+            </a>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s3" style={{ overflowX: 'scroll' }}>
+            <table className="striped">
+              <thead>
+                <tr>
+                  <th style={{ padding: '2rem 0 1.75rem' }}>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userRows}
+              </tbody>
+            </table>
+          </div>
+          <div className="col s9" style={{overflowX: 'scroll'}}>
+            <table className="striped">
+              <thead>
+                <tr>
+                  {gradeNames}
+                  <th>
+                    <div className="input-field trim-margin">
+                      <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin" style={{minWidth:'100px'}} />
+                      <label htmlFor="grade" className="nowrap">Add Grade</label>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {studentGrades}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <h4>Attendance</h4>
+            <LineChart data={this.getModel().attendanceOverTime().data} ref="attendanceChart" options={this.getModel().attendanceOverTime().options} />
+            <canvas ref="heatmap"></canvas>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Video Manager</span>
+                {videos}
               </div>
             </div>
           </div>
