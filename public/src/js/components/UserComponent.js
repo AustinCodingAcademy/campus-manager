@@ -7,6 +7,7 @@ var Barcode = require('react-barcode');
 var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
 var Gravatar = require('react-gravatar');
+var Hashids = require('hashids');
 
 module.exports = React.createBackboneClass({
   userModal: function() {
@@ -20,19 +21,30 @@ module.exports = React.createBackboneClass({
     Materialize.updateTextFields();
   },
 
-  changeAttendance: function(e) {
+  checkIn: function(date) {
     var that = this;
-    if (!this.props.currentUser.get('is_student') || moment($(e.currentTarget).data('date'), 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
-      $.ajax('/api/users/attendance', {
-        method: 'post',
-        data: {
-          idn: that.getModel().get('idn'),
-          date: $(e.currentTarget).data('date')
-        },
-        success: function() {
-          that.getModel().fetch();
-        }
-      });
+    $.ajax('/api/users/attendance', {
+      method: 'post',
+      data: {
+        idn: this.getModel().get('idn'),
+        date: date
+      },
+      success: function() {
+        that.getModel().fetch();
+      }
+    });
+  },
+
+  changeAttendance: function(e) {
+    if (!this.props.currentUser.get('is_student')) {
+      this.checkIn($(e.currentTarget).data('date'));
+    } else if (moment($(e.currentTarget).data('date'), 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
+      var code = prompt('Enter Daily Attendance Code');
+      var hashids = new Hashids();
+      var hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
+      if (code && code.toUpperCase() === hash) {
+        this.checkIn($(e.currentTarget).data('date'));
+      }
     }
   },
 
@@ -74,8 +86,10 @@ module.exports = React.createBackboneClass({
               <span className="card-title">
                 <a href={course.get('textbook')} target="_blank">
                   <i className="fa fa-book fa-fw"></i>
-                  {course.get('term').get('name') + ' - ' + course.get('name')}
+                  {course.get('name')}
                 </a>
+                <br />
+                <small>{course.get('term').get('name')}</small>
               </span>
               <div className="row">
                 <div className="col s6">
