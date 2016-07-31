@@ -67,7 +67,7 @@ app.use('/', routes);
 app.use('/reset', reset);
 app.use('/api/users', middleware.auth, users);
 app.use('/api/terms', middleware.auth, middleware.admin, terms);
-app.use('/api/courses', middleware.auth, middleware.instructor, courses);
+app.use('/api/courses', middleware.auth, courses);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

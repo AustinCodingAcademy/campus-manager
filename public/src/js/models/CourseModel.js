@@ -15,7 +15,8 @@ module.exports = Backbone.Model.extend({
     seats: '',
     registrations: new UsersCollection(),
     textbook: '#',
-    days: []
+    days: [],
+    holidays: []
   },
 
   shortDays: function() {
@@ -67,7 +68,7 @@ module.exports = Backbone.Model.extend({
       options: {
         tooltipTemplate: "<%= xLabel %> | <%= yLabel %> | <%= value === 0 ? 'Absent' : 'Present' %>",
         responsive: true,
-        showLabels: false, 
+        showLabels: false,
       }
     }
   },

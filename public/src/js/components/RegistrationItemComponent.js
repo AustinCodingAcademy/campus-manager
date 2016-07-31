@@ -5,6 +5,7 @@ module.exports = React.createBackboneClass({
   deleteRegistration: function() {
     this.props.course.get('registrations').remove(this.props.user);
     this.props.course.save();
+    this.getCollection().trigger('remove');
   },
 
   render: function() {

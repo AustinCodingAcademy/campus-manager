@@ -11,6 +11,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var moment = require('moment');
 
 var AttendanceListComponent = React.createFactory(require('./components/AttendanceListComponent'));
 var TermsCollection = require('./collections/TermsCollection');
@@ -87,12 +88,7 @@ $(function() {
     },
 
     index: function() {
-      // if (this.currentUser.get('is_student')) {
-        return this.navigate('users/' + this.currentUser.id, {trigger: true, replace: true});
-      // }
-      // var terms = new TermsCollection();
-      // terms.fetch();
-      // ReactDOM.render(HomeLayoutComponent({ collection: terms }), $('#container')[0]);
+      return this.navigate('users/' + this.currentUser.id, {trigger: true, replace: true});
     },
 
     terms: function() {
@@ -131,18 +127,30 @@ $(function() {
     },
 
     registration: function() {
+      var that = this;
       var courses = new CoursesCollection();
       courses.fetch({
         success: function() {
-          var users = new UsersCollection();
-          users.fetch({
-            success: function() {
-              ReactDOM.render(RegistrationsListComponent({
-                collection: courses,
-                users: users
-              }), $('#container')[0]);
-            }
-          })
+          if (!that.currentUser.get('is_admin')) {
+            ReactDOM.render(RegistrationsListComponent({
+              collection: new CoursesCollection(courses.filter(function(course) {
+                return moment.utc(course.get('term').get('start_date')).isSameOrAfter(moment());
+              })),
+              users: new UsersCollection([that.currentUser]),
+              currentUser: that.currentUser
+            }), $('#container')[0]);
+          } else {
+            var users = new UsersCollection();
+            users.fetch({
+              success: function() {
+                ReactDOM.render(RegistrationsListComponent({
+                  collection: courses,
+                  users: users,
+                  currentUser: that.currentUser
+                }), $('#container')[0]);
+              }
+            })
+          }
         }
       });
     }
