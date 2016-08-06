@@ -55,7 +55,8 @@ var userSchema = new Schema({
   "idn": {
     type: Number,
     required: true,
-    default: 1
+    default: 1,
+    unique: true
   },
   "client" : {
     type: Schema.Types.ObjectId,
@@ -72,7 +73,7 @@ var userSchema = new Schema({
 
 userSchema.virtual('gradeAverage').get(function() {
   var grades =  _.select(this.get('grades'), function(grade) { return _.isNumber(grade.score); });
-  var num =grades.length;
+  var num = grades.length;
   if (num) {
     return Math.round(_.reduce(_.pluck(grades, 'score'), function(memo, num) { return memo + num; }) / num);
   }
