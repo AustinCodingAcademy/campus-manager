@@ -6,7 +6,7 @@ var middleware = require('./middleware');
 /*
 * GET
 */
-router.get('/', middleware.admin, function(req, res) {
+router.get('/', function(req, res) {
   CourseController.list(req, res);
 });
 
@@ -27,7 +27,7 @@ router.post('/', middleware.admin, function(req, res) {
 /*
 * PUT
 */
-router.put('/:id', middleware.admin, function(req, res) {
+router.put('/:id', function(req, res) {
   CourseController.update(req, res);
 });
 

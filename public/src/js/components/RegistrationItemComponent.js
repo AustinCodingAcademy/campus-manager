@@ -3,8 +3,12 @@ require('react.backbone');
 
 module.exports = React.createBackboneClass({
   deleteRegistration: function() {
-    this.props.course.get('registrations').remove(this.props.user);
-    this.props.course.save();
+    var c = confirm('Are you sure you want to delete this registration?')
+    if (c) {
+      this.props.course.get('registrations').remove(this.props.user);
+      this.props.course.save();
+      this.getCollection().trigger('remove');
+    }
   },
 
   render: function() {
