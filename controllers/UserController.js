@@ -3,6 +3,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
+var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 /**
 * UserController.js
@@ -60,7 +61,19 @@ module.exports = {
           });
         }
         user.courses = courses;
-        return res.json(user);
+        if (user.customer_id) {
+          stripe.charges.list(
+            {
+              customer: user.customer_id
+            },
+            function(err, charges) {
+              user.charges = charges.data;
+              return res.json(user);
+            }
+          );
+        } else {
+          return res.json(user);
+        }
       });
     });
   },
@@ -100,77 +113,33 @@ module.exports = {
         sort:{
           idn: -1
         }
-    }, function(err, users) {
-      user.idn = users[0].idn + 1;
-      user.client = req.user.client;
-      user.save(function(err, user){
+      }, function(err, users) {
+        user.idn = users[0].idn + 1;
+        user.client = req.user.client;
+        user.save(function(err, user){
+          if(err) {
+            return res.json(500, {
+              message: 'Error saving user',
+              error: err
+            });
+          }
+          return res.json(user);
+        });
+      });
+    },
+
+    /**
+    * UserController.update()
+    */
+    update: function(req, res) {
+      var id = req.params.id;
+      UserModel.findOne({
+        _id: id,
+        client: req.user.client
+      }, function(err, user){
         if(err) {
           return res.json(500, {
             message: 'Error saving user',
-            error: err
-          });
-        }
-        return res.json(user);
-      });
-    });
-  },
-
-  /**
-  * UserController.update()
-  */
-  update: function(req, res) {
-    var id = req.params.id;
-    UserModel.findOne({
-      _id: id,
-      client: req.user.client
-    }, function(err, user){
-      if(err) {
-        return res.json(500, {
-          message: 'Error saving user',
-          error: err
-        });
-      }
-      if(!user) {
-        return res.json(404, {
-          message: 'No such user'
-        });
-      }
-
-      var attributes = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'website',
-        'github',
-        'attendance',
-        'codecademy',
-        'zipcode',
-        'photo',
-        'grades'
-      ];
-
-      var protectedAttrs = [
-        'is_admin',
-        'is_instructor',
-        'is_student',
-      ];
-
-      _.each(attributes, function(attr) {
-        user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
-      });
-      user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
-
-      if (req.user.is_admin || req.user.is_client || req.user.is_super) {
-        _.each(protectedAttrs, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
-        });
-      }
-
-      user.save(function(err, user){
-        if(err) {
-          return res.json(500, {
-            message: 'Error getting user.',
             error: err
           });
         }
@@ -179,94 +148,138 @@ module.exports = {
             message: 'No such user'
           });
         }
-        CourseModel.find({
-          registrations: mongoose.Types.ObjectId(user._id)
-        }).populate('term').exec(function(err, courses) {
-          if(err) {
-            return res.json(500, {
-              message: 'Error getting user courses.',
-              error: err
-            });
-          }
-          user.courses = courses;
-          return res.json(user);
-        });
-      });
-    });
-  },
-
-  /**
-  * UserController.remove()
-  */
-  remove: function(req, res) {
-    var id = req.params.id;
-    UserModel.remove({
-      _id: id,
-      client: req.user.client
-    }, function(err, user){
-      if(err) {
-        return res.json(500, {
-          message: 'Error getting user.',
-          error: err
-        });
-      }
-      return res.json(user);
-    });
-  },
-
-  import: function(req, res) {
-    _.each(req.body, function(reqUser) {
-      UserModel.findOne({ username: reqUser['username'] }, function(err, existingUser) {
-        var user = existingUser ? existingUser : new UserModel();
 
         var attributes = [
-          'idn',
           'first_name',
           'last_name',
+          'email',
           'phone',
           'website',
           'github',
+          'attendance',
           'codecademy',
           'zipcode',
-          'photo'
+          'photo',
+          'grades'
+        ];
+
+        var protectedAttrs = [
+          'is_admin',
+          'is_instructor',
+          'is_student',
         ];
 
         _.each(attributes, function(attr) {
-          user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
         });
-        user.username = reqUser.username ? reqUser.username.toLowerCase() : user.username;
+        user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
 
-        user.is_student = true;
+        if (req.user.is_admin || req.user.is_client || req.user.is_super) {
+          _.each(protectedAttrs, function(attr) {
+            user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+          });
+        }
 
-        UserModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {
-          user.client = currentUser.client.id;
-          user.save();
+        user.save(function(err, user){
+          if(err) {
+            return res.json(500, {
+              message: 'Error getting user.',
+              error: err
+            });
+          }
+          if(!user) {
+            return res.json(404, {
+              message: 'No such user'
+            });
+          }
+          CourseModel.find({
+            registrations: mongoose.Types.ObjectId(user._id)
+          }).populate('term').exec(function(err, courses) {
+            if(err) {
+              return res.json(500, {
+                message: 'Error getting user courses.',
+                error: err
+              });
+            }
+            user.courses = courses;
+            return res.json(user);
+          });
         });
       });
-    });
-    return res.json(req.body);
-  },
+    },
 
-  attendance: function(req, res) {
-    UserModel.findOne({ idn: req.body.idn }, function(err, user) {
-      if(err) {
-        return res.json(500, {
-          message: 'Error saving user',
-          error: err
+    /**
+    * UserController.remove()
+    */
+    remove: function(req, res) {
+      var id = req.params.id;
+      UserModel.remove({
+        _id: id,
+        client: req.user.client
+      }, function(err, user){
+        if(err) {
+          return res.json(500, {
+            message: 'Error getting user.',
+            error: err
+          });
+        }
+        return res.json(user);
+      });
+    },
+
+    import: function(req, res) {
+      _.each(req.body, function(reqUser) {
+        UserModel.findOne({ username: reqUser['username'] }, function(err, existingUser) {
+          var user = existingUser ? existingUser : new UserModel();
+
+          var attributes = [
+            'idn',
+            'first_name',
+            'last_name',
+            'phone',
+            'website',
+            'github',
+            'codecademy',
+            'zipcode',
+            'photo'
+          ];
+
+          _.each(attributes, function(attr) {
+            user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+          });
+          user.username = reqUser.username ? reqUser.username.toLowerCase() : user.username;
+
+          user.is_student = true;
+
+          UserModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {
+            user.client = currentUser.client.id;
+            user.save();
+          });
         });
-      }
-      if (!user.attendance) {
-        user.attendance = [];
-      }
-      var matched = _.find(user.attendance, function(date) { return moment(date, 'YYYY-MM-DD HH:ss').isSame(req.body.date, 'day')});
-      if (matched) {
-        user.attendance.splice(user.attendance.indexOf(matched), 1);
-      } else {
-        user.attendance.push(req.body.date);
-      }
+      });
+      return res.json(req.body);
+    },
 
-      user.save();
-    });
-    return res.json(req.body);
-  }
-};
+    attendance: function(req, res) {
+      UserModel.findOne({ idn: req.body.idn }, function(err, user) {
+        if(err) {
+          return res.json(500, {
+            message: 'Error saving user',
+            error: err
+          });
+        }
+        if (!user.attendance) {
+          user.attendance = [];
+        }
+        var matched = _.find(user.attendance, function(date) { return moment(date, 'YYYY-MM-DD HH:ss').isSame(req.body.date, 'day')});
+        if (matched) {
+          user.attendance.splice(user.attendance.indexOf(matched), 1);
+        } else {
+          user.attendance.push(req.body.date);
+        }
+
+        user.save();
+      });
+      return res.json(req.body);
+    }
+  };

@@ -88,8 +88,8 @@
   "browserify": {
     "transform": [
       "browserify-shim",
-      "reactify",
-      "envify"
+      "envify",
+      "reactify"
     ]
   },
   "browserify-shim": {

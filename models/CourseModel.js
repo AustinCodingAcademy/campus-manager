@@ -17,7 +17,11 @@ var courseSchema = new Schema({
   "holidays": Array,
   "grades": Array,
   "textbook": String,
-	"videos": Array
+	"videos": Array,
+  "cost": {
+    type: Number,
+    default: 0.00
+  }
 });
 
 module.exports = mongoose.model('course', courseSchema);

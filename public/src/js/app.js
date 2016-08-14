@@ -28,7 +28,6 @@ var UsersListComponent = React.createFactory(require('./components/UsersListComp
 var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
 var UserComponent = React.createFactory(require('./components/UserComponent'));
-var AccountComponent = React.createFactory(require('./components/AccountComponent'));
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -43,7 +42,6 @@ $(function() {
     routes: {
       '': 'index',
       '/': 'index',
-      'account': 'account',
       'attendance': 'attendance',
       'terms': 'terms',
       'users': 'users',
@@ -78,13 +76,6 @@ $(function() {
           }), $('#container')[0]);
         }
       });
-    },
-
-    account: function() {
-      var that = this;
-      ReactDOM.render(AccountComponent({
-        model: this.currentUser,
-      }), $('#container')[0]);
     },
 
     attendance: function() {

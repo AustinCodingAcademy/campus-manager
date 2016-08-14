@@ -67,8 +67,10 @@ var userSchema = new Schema({
   zipcode: String,
   photo: String,
   grades: Array,
-  courses: [],
-  reset_password: String
+  courses: Array,
+  reset_password: String,
+  charges: Array,
+  customer_id: String
 });
 
 userSchema.virtual('gradeAverage').get(function() {
@@ -86,6 +88,7 @@ userSchema.set('toJSON', {
     delete ret.client;
     delete ret.__v;
     delete ret.reset_password;
+    delete ret.customer_id;
     return ret;
   },
   virtuals: true

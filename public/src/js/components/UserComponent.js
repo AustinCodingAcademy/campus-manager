@@ -8,8 +8,13 @@ var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
 var Gravatar = require('react-gravatar');
 var Hashids = require('hashids');
+var StripeCheckoutComponent = React.createFactory(require('./StripeCheckoutComponent'));
 
 module.exports = React.createBackboneClass({
+  componentDidMount: function() {
+    Materialize.updateTextFields();
+  },
+
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(UserModalComponent({
@@ -48,8 +53,23 @@ module.exports = React.createBackboneClass({
     }
   },
 
+  changeAmount: function(e) {
+    this.getModel().set('paymentAmount', Number(this.refs.amount.value) * 100);
+  },
+
   render: function() {
+    var courseCharges = [];
+    var totalCourseCost = 0;
     var courseCards = this.getModel().get('courses').map(function(course, idx) {
+      if (course.get('cost') && course.get('cost') > 0) {
+        totalCourseCost += course.get('cost');
+        courseCharges.push(
+          <tr>
+            <td>${course.get('cost').toFixed(2)}</td>
+            <td>{course.get('name')}</td>
+          </tr>
+        )
+      }
       var dates = _.map(course.classDates(), function(date, idx) {
         var attended = 'fa fa-calendar-o';
         if (date.isSameOrBefore(moment(), 'day')) {
@@ -106,6 +126,21 @@ module.exports = React.createBackboneClass({
         </div>
       );
     }, this);
+
+    var totalPaid = 0;
+
+    var charges = _.map(_.filter(this.getModel().get('charges'), function(charge) {
+      return !charge.refunded;
+    }), function(charge) {
+      totalPaid += (charge.amount / 100);
+      return(
+        <tr>
+          <td>{('$' + (charge.amount / 100).toFixed(2))}</td>
+          <td>*{charge.source.last4}</td>
+          <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
+        </tr>
+      )
+    });
 
     return (
       <div>
@@ -201,6 +236,46 @@ module.exports = React.createBackboneClass({
             </div>
           </div>
           {courseCards}
+          <div className="col s12 m6 l4">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Account</span>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cost</th>
+                      <th>Course</th>
+                    </tr>
+                  </thead>
+                  <tbody>{courseCharges}</tbody>
+                  <tfoot></tfoot>
+                </table>
+                <hr />
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Paid</th>
+                      <th>Card</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>{charges}</tbody>
+                  <tfoot>
+                    <tr>
+                      <th><span className={ (totalPaid - totalCourseCost < 0) ? 'score60' : '' }>${(totalPaid - totalCourseCost).toFixed(2)}</span></th>
+                      <th>Balance</th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div className="input-field">
+                  <label htmlFor="amount">Enter Payment Amount ($)</label>
+                  <input ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
+                </div>
+                <StripeCheckoutComponent model={this.getModel()} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
