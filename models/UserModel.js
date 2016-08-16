@@ -68,7 +68,7 @@ var userSchema = new Schema({
   grades: Array,
   courses: [],
   reset_password: String
-});
+}, { timestamps: true });
 
 userSchema.virtual('gradeAverage').get(function() {
   var grades =  _.select(this.get('grades'), function(grade) { return _.isNumber(grade.score); });
