@@ -25,6 +25,12 @@ module.exports = Backbone.Model.extend({
     }).join(', ');
   },
 
+  properDays: function() {
+    return this.get('days').map(function(day) {
+      return day.charAt(0).toUpperCase() + day.slice(1);
+    }).join(', ');
+  },
+
   classDates: function() {
     return this.dates(moment(this.get('term').get('end_date'), 'YYYY-MM-DD'));
   },

@@ -64,16 +64,16 @@ module.exports = React.createBackboneClass({
         });
       } else if (this.startDates.indexOf(label) > -1) {
         this.startDate = label;
-        var selectedTerm = this.getCollection().find(function(term) {
+        this.selectedTerm = this.getCollection().find(function(term) {
           return term.get('location').get('city') === this.city && moment.utc(term.get('start_date')).format('MMM D, YYYY') === label;
         }, this);
-        this.endDate = moment.utc(selectedTerm.get('end_date')).format('MMM D, YYYY');
-        var courses = selectedTerm.get('courses').filter(function(course) {
+        this.endDate = moment.utc(this.selectedTerm.get('end_date')).format('MMM D, YYYY');
+        var courses = this.selectedTerm.get('courses').filter(function(course) {
           return course.get('registrations').length < course.get('seats');
         });
         this.courseLabels = {};
         _.each(courses, function(course) {
-          this.courseLabels[course.get('name') + ' (' + course.shortDays() + ')'] = course;
+          this.courseLabels[course.get('name') + ' (' + this.selectedTerm.get('location').get('name') + ' - ' + course.shortDays() + ')'] = course;
         }, this);
         this.getModel().set({
           labels: _.keys(this.courseLabels),
@@ -81,9 +81,9 @@ module.exports = React.createBackboneClass({
         });
       } else if (this.courseLabels[label]) {
         var that = this;
-        var r = confirm('Are you sure you want to register for ' + label + '?');
+        var course = this.courseLabels[label];
+        var r = confirm('Are you sure you want to register for\n' + course.get('name') + '\n' + course.properDays() + '\n' + this.selectedTerm.locationAddress());
         if (r) {
-          var course = this.courseLabels[label];
           course.get('registrations').add(this.props.user);
           course.save(null, {
             success: function() {
@@ -123,17 +123,31 @@ module.exports = React.createBackboneClass({
       responsive: true
     };
 
+    var alreadyRegistered = this.getCollection().some(function(term) {
+      return _.intersection(this.props.user.get('courses').pluck('_id'), term.get('courses').pluck('_id')).length > 0;
+    }, this);
+
     return (
       <div className="card">
         <div className="card-content">
           <span className="card-title">Registration</span>
           {this.getCollection().length ?
             <div>
-              {this.city ? <h5>{this.city}</h5> : ''}
-              {this.startDate ? <h5>{this.startDate + ' - ' + this.endDate}</h5> : ''}
-              <h6>{this.getModel().get('title')}</h6>
-              <PieChart data={data} options={options} onClick={this.handleClick} ref='registration' redraw/>
-              <h6><a href="#" onClick={this.genCityData}><i className="fa fa-refresh"></i> reset</a></h6>
+              {alreadyRegistered ?
+              <div className="card-panel green">
+                <span className="white-text">
+                  You are all registered and ready to go! See the course textbook, details, and dates below.
+                </span>
+              </div>
+              :
+              <div>
+                {this.city ? <h5>{this.city}</h5> : ''}
+                {this.startDate && this.endDate ? <h5>{this.startDate + ' - ' + this.endDate}</h5> : ''}
+                <h6>{this.getModel().get('title')}</h6>
+                <PieChart data={data} options={options} onClick={this.handleClick} ref='registration' redraw/>
+                <h6><a href="#" onClick={this.genCityData}><i className="fa fa-refresh"></i> reset</a></h6>
+              </div>
+              }
             </div>
             :
             <div className="card-panel teal">

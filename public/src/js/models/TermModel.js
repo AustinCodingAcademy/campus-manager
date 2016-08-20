@@ -28,6 +28,10 @@ module.exports = Backbone.Model.extend({
     return obj;
   },
 
+  locationAddress: function() {
+    return this.get('location').get('name') + '\n' + this.get('location').get('address') + '\n' + this.get('location').get('city') + ', ' + this.get('location').get('state') + '  ' + this.get('location').get('zipcode');
+  },
+
   percentFull: function() {
     if (this.get('courses') && this.get('courses').length) {
       var total = this.get('courses').reduce(function(memo, course) {
