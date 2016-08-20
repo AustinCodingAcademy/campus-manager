@@ -55,7 +55,8 @@ var userSchema = new Schema({
   "idn": {
     type: Number,
     required: true,
-    default: 1
+    default: 1,
+    unique: true
   },
   "client" : {
     type: Schema.Types.ObjectId,
@@ -66,13 +67,15 @@ var userSchema = new Schema({
   zipcode: String,
   photo: String,
   grades: Array,
-  courses: [],
-  reset_password: String
+  courses: Array,
+  reset_password: String,
+  charges: Array,
+  customer_id: String
 }, { timestamps: true });
 
 userSchema.virtual('gradeAverage').get(function() {
   var grades =  _.select(this.get('grades'), function(grade) { return _.isNumber(grade.score); });
-  var num =grades.length;
+  var num = grades.length;
   if (num) {
     return Math.round(_.reduce(_.pluck(grades, 'score'), function(memo, num) { return memo + num; }) / num);
   }
@@ -85,6 +88,7 @@ userSchema.set('toJSON', {
     delete ret.client;
     delete ret.__v;
     delete ret.reset_password;
+    delete ret.customer_id;
     return ret;
   },
   virtuals: true

@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Backbone = require('backbone');
 require('react.backbone');
 var UserModalComponent = React.createFactory(require('./UserModalComponent'));
 var Barcode = require('react-barcode');
@@ -8,8 +9,21 @@ var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
 var Gravatar = require('react-gravatar');
 var Hashids = require('hashids');
+var StripeCheckoutComponent = React.createFactory(require('./StripeCheckoutComponent'));
+var TermsCollection = require('../collections/TermsCollection');
+var UserRegistrationComponent = require('./UserRegistrationComponent');
 
 module.exports = React.createBackboneClass({
+
+  paymentModel: new Backbone.Model({
+    paymentAmount: 0,
+    username: ''
+  }),
+
+  componentDidMount: function() {
+    Materialize.updateTextFields();
+  },
+
   userModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(UserModalComponent({
@@ -48,8 +62,26 @@ module.exports = React.createBackboneClass({
     }
   },
 
+  changeAmount: function(e) {
+    this.paymentModel.set({
+      paymentAmount: Number(this.refs.amount.value) * 100,
+      username: this.getModel().get('username')
+    });
+  },
+
   render: function() {
+    var courseCharges = [];
+    var totalCourseCost = 0;
     var courseCards = this.getModel().get('courses').map(function(course, idx) {
+      if (course.get('cost') && course.get('cost') > 0) {
+        totalCourseCost += course.get('cost');
+        courseCharges.push(
+          <tr>
+            <td>${course.get('cost').toFixed(2)}</td>
+            <td>{course.get('name')}</td>
+          </tr>
+        )
+      }
       var dates = _.map(course.classDates(), function(date, idx) {
         var attended = 'fa fa-calendar-o';
         if (date.isSameOrBefore(moment(), 'day')) {
@@ -107,6 +139,55 @@ module.exports = React.createBackboneClass({
       );
     }, this);
 
+    var totalPaid = 0;
+
+    var charges = _.map(_.filter(this.getModel().get('charges'), function(charge) {
+      return !charge.refunded;
+    }), function(charge) {
+      totalPaid += (charge.amount / 100);
+      return(
+        <tr>
+          <td>{('$' + (charge.amount / 100).toFixed(2))}</td>
+          <td>*{charge.source.last4}</td>
+          <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
+        </tr>
+      )
+    });
+
+    var terms = new TermsCollection();
+    terms.fetch({
+      success: function() {
+        terms.reset(terms.filter(function(term) {
+          return moment.utc(term.get('start_date')).isAfter(moment());
+        }));
+        terms.trigger('add');
+      }
+    });
+
+    var registrationCard;
+
+    if (totalPaid - totalCourseCost < 0) {
+      registrationCard = (
+        <div className="card-panel red">
+          <span className="white-text">
+            You have a negative balance! To register for another course, you must have a positive balance of at least $490.00.
+          </span>
+        </div>
+      );
+    } else if (totalPaid - totalCourseCost < 490) {
+      registrationCard = (
+        <div className="card-panel orange">
+          <span className="white-text">
+            To register for another course, you must have a positive balance of at least <strong>$490.00</strong>.
+          </span>
+        </div>
+      );
+    } else {
+      registrationCard = (
+        <UserRegistrationComponent user={this.getModel()} collection={terms} model={new Backbone.Model()}/>
+      );
+    }
+
     return (
       <div>
         <div className="row">
@@ -115,6 +196,9 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">
                   <div className="valign-wrapper">
+                    <a className="modal-trigger" onClick={this.userModal} style={{position: 'absolute', right: '10px', top: '0px'}}>
+                      <i className="material-icons">mode_edit</i>
+                    </a>
                     <a href="http://en.gravatar.com/" target="_blank">
                       <Gravatar email={this.getModel().get('username')} className="circle" https />
                     </a>
@@ -159,28 +243,20 @@ module.exports = React.createBackboneClass({
                     {this.getModel().get('zipcode')}
                   </a>
                 </p>
-                <div className="center-align" style={{position: 'absolute', right: '-20px', bottom: '80px', width: '100px'}}>
-                <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
+                <div className="center-align" style={{position: 'absolute', right: '-20px', bottom: '95px', width: '100px'}}>
+                  <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
                   <DoughnutChart data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
                 </div>
               </div>
-              <div className="card-action">
-                <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.userModal}>
-                  Edit
-                </a>
+              <div className="card-action trim-padding">
+                <div className="center-align">
+                  <Barcode value={'' + this.getModel().get('idn')} format={'CODE128'} height={40} width={4} />
+                </div>
               </div>
             </div>
           </div>
+          {this.getModel().get('courses').length ?
           <div className="col s12 m6 l4">
-            <div className="card">
-              <div className="card-content">
-                <p className="center-align">
-                  <Barcode value={'' + this.getModel().get('idn')} format={'CODE128'} />
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col s12 m6 l4 right">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
@@ -190,6 +266,8 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
+          : ''}
+          {this.getModel().get('courses').length ?
           <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
@@ -200,6 +278,54 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
+          : ''}
+        </div>
+        <div className="row">
+          <div className="col s12 m6">
+            {registrationCard}
+          </div>
+          <div className="col s12 m6">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Account</span>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cost</th>
+                      <th>Course</th>
+                    </tr>
+                  </thead>
+                  <tbody>{courseCharges}</tbody>
+                  <tfoot></tfoot>
+                </table>
+                <hr />
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Paid</th>
+                      <th>Card</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>{charges}</tbody>
+                  <tfoot>
+                    <tr>
+                      <th><span className={ (totalPaid - totalCourseCost < 0) ? 'score60' : '' }>${(totalPaid - totalCourseCost).toFixed(2)}</span></th>
+                      <th>Balance</th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div className="input-field">
+                  <label htmlFor="amount">Enter Payment Amount ($)</label>
+                  <input ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
+                </div>
+                <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} ref="checkout"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
           {courseCards}
         </div>
       </div>

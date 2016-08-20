@@ -8,15 +8,23 @@ var TermModel = require('../models/TermModel');
 module.exports = React.createBackboneClass({
   newTermModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(<TermModalComponent collection={this.getCollection()} model={new TermModel()} />, $('#modal-container')[0]);
+    ReactDOM.render(TermModalComponent({
+      collection: this.getCollection(),
+      model: new TermModel(),
+      locations: this.props.locations
+    }), $('#modal-container')[0]);
     $('#term-modal').openModal();
   },
 
   render: function() {
-    var that = this;
     var termItems = this.getCollection().map(function(termItem) {
-      return <TermItemComponent key={termItem.id} model={termItem} collection={that.getCollection()}/>
-    });
+      return TermItemComponent({
+        key: termItem.id,
+        model: termItem,
+        collection: this.getCollection(),
+        locations: this.props.locations
+      })
+    }, this);
 
     return (
       <div className="row">
@@ -28,9 +36,8 @@ module.exports = React.createBackboneClass({
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th></th>
+                <th>Dates</th>
+                <th>Location</th>
                 <th></th>
               </tr>
             </thead>

@@ -15,8 +15,16 @@ module.exports = Backbone.Model.extend({
   },
 
   parse: function(obj) {
-    var CoursesCollection = require('../collections/CoursesCollection');
-    obj.courses = new CoursesCollection(obj.courses, { parse: true });
+    if (obj.courses) {
+      var CoursesCollection = require('../collections/CoursesCollection');
+      obj.courses = new CoursesCollection(obj.courses, { parse: true });
+    }
+
+    if (obj.location) {
+      var LocationModel = require('./LocationModel');
+      obj.location = new LocationModel(obj.location, { parse: true });
+    }
+
     return obj;
   },
 

@@ -9,30 +9,24 @@ module.exports = React.createBackboneClass({
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(TermModalComponent({
       collection: this.getCollection(),
-      model: this.getModel()
+      model: this.getModel(),
+      locations: this.props.locations
     }), $('#modal-container')[0]);
     $('#term-modal' + this.getModel().id).openModal();
     Materialize.updateTextFields();
-  },
-
-  deleteTerm: function() {
-    this.getModel().destroy({
-      wait: true
-    });
   },
 
   render: function() {
     return (
       <tr>
         <td>{this.getModel().get('name')}</td>
-        <td>{moment.utc(this.getModel().get('start_date')).format("MMM D, YYYY")}</td>
-        <td>{moment.utc(this.getModel().get('end_date')).format("MMM D, YYYY")}</td>
+        <td>{moment.utc(this.getModel().get('start_date')).format("MMM D, YYYY") + ' - ' + moment.utc(this.getModel().get('end_date')).format("MMM D, YYYY")}</td>
+        <td>{this.getModel().get('location') ? this.getModel().get('location').get('name') : ''}</td>
         <td>
           <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.termModal}>
             <i className="material-icons">mode_edit</i>
           </a>
         </td>
-        <td><a className="waves-effect waves-teal btn-flat" onClick={this.deleteTerm}><i className="material-icons">delete</i></a></td>
       </tr>
     );
   }

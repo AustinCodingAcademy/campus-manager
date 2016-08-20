@@ -63,7 +63,8 @@ module.exports = {
       days : req.body.days,
       seats : req.body.seats,
       textbook: req.body.textbook,
-      videos: req.body.videos
+      videos: req.body.videos,
+      cost: req.body.cost
     });
     UserModel.findOne({
       _id: req.user.id
@@ -114,7 +115,8 @@ module.exports = {
         'holidays',
         'grades',
         'textbook',
-        'videos'
+        'videos',
+        'cost'
       ];
 
       _.each(attributes, function(attr) {

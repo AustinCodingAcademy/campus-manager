@@ -24,6 +24,7 @@ module.exports = React.createBackboneClass({
     this.refs.term.value = this.getModel().get('term').id;
     this.refs.textbook.value = this.getModel().get('textbook');
     this.refs.holidays.value = this.getModel().get('holidays').join(', ');
+    this.refs.cost.value = Number(this.getModel().get('cost')).toFixed(2);
 
     $(document).ready(function() {
       $('select').material_select();
@@ -39,7 +40,8 @@ module.exports = React.createBackboneClass({
       days: _.filter(this.days, function(day) { return that.refs[day].checked; }),
       seats: this.refs.seats.value,
       term: this.props.terms.get(this.refs.term.value),
-      holidays: _.map(this.refs.holidays.value.split(','), function(holiday) { return holiday.trim(); })
+      holidays: _.map(this.refs.holidays.value.split(','), function(holiday) { return holiday.trim(); }),
+      cost: Number(this.refs.cost.value)
     }, {
       success: function() {
         that.getCollection().add(that.getModel());
@@ -60,11 +62,15 @@ module.exports = React.createBackboneClass({
           <div className="row">
             <form className="col s12" onSubmit={this.saveCourse}>
               <div className="row">
-                <div className="input-field col s9">
+                <div className="input-field col s12 m6">
                   <input ref="name" type="text" id="name" />
                   <label htmlFor="name">Name</label>
                 </div>
-                <div className="input-field col s3">
+                <div className="input-field col s6 m3">
+                  <input ref="cost" type="text" id="cost" />
+                  <label htmlFor="cost">Cost</label>
+                </div>
+                <div className="input-field col s6 m3">
                   <label htmlFor="seats">Seats</label>
                   <input ref="seats" type="text" name="seats" id="seats" />
                 </div>
