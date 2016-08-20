@@ -5,7 +5,8 @@ var courseSchema = new Schema({
 	"name" : String,
 	"term" : {
 	 	type: Schema.Types.ObjectId,
-	 	ref: 'term'
+	 	ref: 'term',
+    required: true
 	},
 	"client" : {
 	 	type: Schema.Types.ObjectId,
@@ -22,6 +23,6 @@ var courseSchema = new Schema({
     type: Number,
     default: 0.00
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('course', courseSchema);

@@ -132,17 +132,31 @@ module.exports = {
   */
   remove: function(req, res) {
     var id = req.params.id;
-    TermModel.remove({
-      _id: id,
-      client: req.user.client
-    }, function(err, term){
-      if(err) {
-        return res.json(500, {
-          message: 'Error getting term.',
-          error: err
+    TermModel.findOne({
+        _id: id,
+        client: req.user.client
+      }, function(err, term){
+        if(err) {
+          return res.json(500, {
+            message: 'Error getting term.',
+            error: err
+          });
+        }
+        CourseModel.find({
+          term: id
+        }, function(err, courses) {
+          if (courses.length === 0) {
+            term.remove(function() {
+              return res.json(term);
+            });
+          } else {
+            return res.json(500, {
+              message: 'Remove all related courses before removing term.',
+              error: {message: 'Remove all related courses before removing term.'}
+            });
+          }
         });
-      }
-      return res.json(term);
+
     });
   }
 };

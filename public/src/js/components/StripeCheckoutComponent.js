@@ -13,7 +13,7 @@ module.exports = React.createBackboneClass({
         card_id: token.card.id
       },
       success: function() {
-        that.getModel().fetch();
+        that.props.user.fetch();
       }
     });
   },
