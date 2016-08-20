@@ -5,7 +5,8 @@ var courseSchema = new Schema({
 	"name" : String,
 	"term" : {
 	 	type: Schema.Types.ObjectId,
-	 	ref: 'term'
+	 	ref: 'term',
+    required: true
 	},
 	"client" : {
 	 	type: Schema.Types.ObjectId,
@@ -18,6 +19,6 @@ var courseSchema = new Schema({
   "grades": Array,
   "textbook": String,
 	"videos": Array
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('course', courseSchema);
