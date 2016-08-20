@@ -120,9 +120,9 @@ module.exports = React.createBackboneClass({
                   <i className="fa fa-book fa-fw"></i>
                   {course.get('name')}
                 </a>
-                <br />
-                <small>{course.get('term').get('name')}</small>
               </span>
+              <br />
+              <p dangerouslySetInnerHTML={{__html:course.get('term').locationAddress().split('\n').join('<br />')}}></p>
               <div className="row">
                 <div className="col s6">
                   <h5>Attendance</h5>
