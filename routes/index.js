@@ -36,15 +36,17 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/register', function(req, res, next) {
+  if (!process.env.REGISTRATION_ENABLED) { return res.redirect('/'); }
   if(req.isAuthenticated()) {
-    res.redirect('/');
+    return res.redirect('/');
   } else {
-    res.render('register');
+    return res.render('register');
   }
 });
 
 // Todo: We should probably look at extracting this into a module
 router.post('/register', function(req, res, next) {
+  if (!process.env.REGISTRATION_ENABLED) { return res.redirect('/'); }
   UserModel.findOne({ username : req.body.username.toLowerCase() }, function (err, user) {
     var saltRounds = 10;
 

@@ -256,11 +256,11 @@ module.exports = React.createBackboneClass({
             </div>
           </div>
           {this.getModel().get('is_admin') ?
-          <div className="col s12 m6 l4">
+          <div className="col s12 m6 l6">
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Admin Tips</span>
-                <p>New User Registration can be found at <small><pre>{process.env.DOMAIN + '/registration/' + this.getModel().get('client')}</pre></small></p>
+                <p>New User Registration can be found at <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small></p>
                 <p>Users can reset their password at <small><pre>{process.env.DOMAIN + '/reset'}</pre></small></p>
               </div>
             </div>
