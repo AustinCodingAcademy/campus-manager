@@ -68,7 +68,7 @@ app.use(passport.session());
 app.use('/', routes);
 app.use('/reset', reset);
 app.use('/api/users', middleware.auth, users);
-app.use('/api/terms', middleware.auth, middleware.admin, terms);
+app.use('/api/terms', middleware.auth, terms);
 app.use('/api/courses', middleware.auth, courses);
 app.use('/api/charges', middleware.auth, charges);
 app.use('/api/locations', middleware.admin, locations);

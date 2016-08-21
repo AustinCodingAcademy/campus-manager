@@ -70,7 +70,8 @@ var userSchema = new Schema({
   courses: Array,
   reset_password: String,
   charges: Array,
-  customer_id: String
+  customer_id: String,
+  client_hash: String
 }, { timestamps: true });
 
 userSchema.virtual('gradeAverage').get(function() {
@@ -85,7 +86,6 @@ userSchema.virtual('gradeAverage').get(function() {
 userSchema.set('toJSON', {
   transform: function(doc, ret, options) {
     delete ret.password;
-    delete ret.client;
     delete ret.__v;
     delete ret.reset_password;
     delete ret.customer_id;

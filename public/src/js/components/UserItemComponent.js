@@ -23,7 +23,7 @@ module.exports = React.createBackboneClass({
         <td>{this.getModel().roles()}</td>
         <td>
           <a href="#" className="modal-trigger" onClick={this.userModal}>
-            <i className="fa fa-pencil fa-2x"></i>
+            <i className="material-icons">mode_edit</i>
           </a>
         </td>
       </tr>

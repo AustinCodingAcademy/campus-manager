@@ -6,7 +6,7 @@ var middleware = require('./middleware');
 /*
 * GET
 */
-router.get('/', middleware.admin, function(req, res) {
+router.get('/', middleware.auth, function(req, res) {
   TermController.list(req, res);
 });
 

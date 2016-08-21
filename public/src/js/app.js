@@ -145,26 +145,16 @@ $(function() {
       var courses = new CoursesCollection();
       courses.fetch({
         success: function() {
-          if (!that.currentUser.get('is_admin')) {
-            ReactDOM.render(RegistrationsListComponent({
-              collection: new CoursesCollection(courses.filter(function(course) {
-                return moment.utc(course.get('term').get('start_date')).isSameOrAfter(moment());
-              })),
-              users: new UsersCollection([that.currentUser]),
-              currentUser: that.currentUser
-            }), $('#container')[0]);
-          } else {
-            var users = new UsersCollection();
-            users.fetch({
-              success: function() {
-                ReactDOM.render(RegistrationsListComponent({
-                  collection: courses,
-                  users: users,
-                  currentUser: that.currentUser
-                }), $('#container')[0]);
-              }
-            })
-          }
+          var users = new UsersCollection();
+          users.fetch({
+            success: function() {
+              ReactDOM.render(RegistrationsListComponent({
+                collection: courses,
+                users: users,
+                currentUser: that.currentUser
+              }), $('#container')[0]);
+            }
+          });
         }
       });
     }
