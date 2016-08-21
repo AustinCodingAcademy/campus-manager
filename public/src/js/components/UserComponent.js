@@ -255,6 +255,19 @@ module.exports = React.createBackboneClass({
               </div>
             </div>
           </div>
+          {this.getModel().get('is_admin') ?
+          <div className="col s12 m6 l4">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Admin Tips</span>
+                <p>New User Registration can be found at <small><pre>{process.env.DOMAIN + '/registration/' + this.getModel().get('client')}</pre></small></p>
+                <p>Users can reset their password at <small><pre>{process.env.DOMAIN + '/reset'}</pre></small></p>
+              </div>
+            </div>
+          </div>
+          :
+          ''
+          }
           {this.getModel().get('courses').length ?
           <div className="col s12 m6 l4">
             <div className="card">
@@ -280,51 +293,55 @@ module.exports = React.createBackboneClass({
           </div>
           : ''}
         </div>
+        {this.getModel().get('is_student') ?
         <div className="row">
-          <div className="col s12 m6">
-            {registrationCard}
-          </div>
-          <div className="col s12 m6">
-            <div className="card">
-              <div className="card-content">
-                <span className="card-title">Account</span>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Cost</th>
-                      <th>Course</th>
-                    </tr>
-                  </thead>
-                  <tbody>{courseCharges}</tbody>
-                  <tfoot></tfoot>
-                </table>
-                <hr />
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Paid</th>
-                      <th>Card</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>{charges}</tbody>
-                  <tfoot>
-                    <tr>
-                      <th><span className={ (totalPaid - totalCourseCost < 0) ? 'score60' : '' }>${(totalPaid - totalCourseCost).toFixed(2)}</span></th>
-                      <th>Balance</th>
-                      <th></th>
-                    </tr>
-                  </tfoot>
-                </table>
-                <div className="input-field">
-                  <label htmlFor="amount">Enter Payment Amount ($)</label>
-                  <input ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
+            <div className="col s12 m6">
+              {registrationCard}
+            </div>
+            <div className="col s12 m6">
+              <div className="card">
+                <div className="card-content">
+                  <span className="card-title">Account</span>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Cost</th>
+                        <th>Course</th>
+                      </tr>
+                    </thead>
+                    <tbody>{courseCharges}</tbody>
+                    <tfoot></tfoot>
+                  </table>
+                  <hr />
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Paid</th>
+                        <th>Card</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>{charges}</tbody>
+                    <tfoot>
+                      <tr>
+                        <th><span className={ (totalPaid - totalCourseCost < 0) ? 'score60' : '' }>${(totalPaid - totalCourseCost).toFixed(2)}</span></th>
+                        <th>Balance</th>
+                        <th></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <div className="input-field">
+                    <label htmlFor="amount">Enter Payment Amount ($)</label>
+                    <input ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
+                  </div>
+                  <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} ref="checkout"/>
                 </div>
-                <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} ref="checkout"/>
               </div>
             </div>
           </div>
-        </div>
+        :
+        ''
+        }
         <div className="row">
           {courseCards}
         </div>
