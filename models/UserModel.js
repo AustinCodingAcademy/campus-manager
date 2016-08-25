@@ -71,7 +71,8 @@ var userSchema = new Schema({
   reset_password: String,
   charges: Array,
   customer_id: String,
-  client_hash: String
+  client_hash: String,
+  credits: String
 }, { timestamps: true });
 
 userSchema.virtual('gradeAverage').get(function() {

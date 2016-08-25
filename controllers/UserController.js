@@ -103,7 +103,8 @@ module.exports = {
       'codecademy',
       'zipcode',
       'photo',
-      'grades'
+      'grades',
+      'credits'
     ];
 
     _.each(attributes, function(attr) {
@@ -158,7 +159,8 @@ module.exports = {
         'codecademy',
         'zipcode',
         'photo',
-        'grades'
+        'grades',
+        'credits'
       ];
 
       var protectedAttrs = [

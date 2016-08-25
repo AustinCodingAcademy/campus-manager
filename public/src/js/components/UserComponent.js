@@ -105,6 +105,23 @@ module.exports = React.createBackboneClass({
         }
       }, this);
 
+      _.each(
+          _.filter(this.getModel().get('credits').trim().split(',').map(function(credit) {
+            return _.map(credit.trim().split(':'), function(item) {
+              return item.trim();
+            });
+          }), function(credit) {
+        return credit.length === 2 && Number(credit[1]);
+      }), function(credit) {
+        totalCourseCost -= Number(credit[1]);
+        courseCharges.push(
+          <tr>
+            <td>(- ${Number(credit[1]).toFixed(2)})</td>
+            <td>{credit[0]}</td>
+          </tr>
+        );
+      });
+
       var grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), function(grade, idx) {
         return (
           <p key={idx}>{grade.name}: <span className={'score'+ grade.score}>{grade.score}</span></p>
@@ -306,7 +323,7 @@ module.exports = React.createBackboneClass({
                     <thead>
                       <tr>
                         <th>Cost</th>
-                        <th>Course</th>
+                        <th>Description</th>
                       </tr>
                     </thead>
                     <tbody>{courseCharges}</tbody>

@@ -218,6 +218,21 @@ module.exports = React.createBackboneClass({
                 </div>
 
               </div>
+              <div className={"row " + rolesHidden}>
+
+                <div className="input-field col s12">
+                  <input
+                    type="text"
+                    id="credits"
+                    value={this.state.model.credits}
+                    onChange={function(evt) {
+                      that.handleInputChange('credits', evt);
+                    }}
+                    placeholder="description:100.00, some scholarship:30.00"/>
+                  <label htmlFor="credits">Credits</label>
+                </div>
+
+              </div>
 
               {/* Submit Button */}
               <input
