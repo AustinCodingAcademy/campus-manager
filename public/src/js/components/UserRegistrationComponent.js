@@ -53,26 +53,34 @@ module.exports = React.createBackboneClass({
       var label = chart.getElementAtEvent(e)[0]._model.label;
       if (this.cities.indexOf(label) > -1) {
         this.city = label;
-        this.startDates = _.map(this.getCollection().filter(function(term) {
+        this.startDates = _.uniq(_.map(this.getCollection().filter(function(term) {
             return term.get('location').get('city') === chart.getElementAtEvent(e)[0]._model.label;
           }), function(term) {
             return moment.utc(term.get('start_date')).format('MMM D, YYYY');
-          });
+          }));
         this.getModel().set({
           labels: this.startDates,
           title: 'Select start date...'
         });
       } else if (this.startDates.indexOf(label) > -1) {
         this.startDate = label;
-        this.selectedTerm = this.getCollection().find(function(term) {
+        this.selectedTerms = this.getCollection().filter(function(term) {
           return term.get('location').get('city') === this.city && moment.utc(term.get('start_date')).format('MMM D, YYYY') === label;
         }, this);
-        this.endDate = moment.utc(this.selectedTerm.get('end_date')).format('MMM D, YYYY');
-        var courses = this.selectedTerm.get('courses').filter(function(course) {
-          return course.get('registrations').length < course.get('seats');
+        this.endDate = moment.utc(this.selectedTerms[0].get('end_date')).format('MMM D, YYYY');
+        var courses = []
+        _.each(this.selectedTerms, function(term) {
+          _.each(term.get('courses').filter(function(course) {
+            return course.get('registrations').length < course.get('seats');
+          }), function(course) {
+            courses.push(course);
+          });
         });
         this.courseLabels = {};
         _.each(courses, function(course) {
+          this.selectedTerm = _.find(this.selectedTerms, function(term) {
+            return term.get('courses').get(course);
+          });
           this.courseLabels[course.get('name') + ' (' + this.selectedTerm.get('location').get('name') + ' - ' + course.shortDays() + ')'] = course;
         }, this);
         this.getModel().set({
@@ -85,8 +93,11 @@ module.exports = React.createBackboneClass({
         var r = confirm('Are you sure you want to register for\n' + course.get('name') + '\n' + course.properDays() + '\n' + this.selectedTerm.locationAddress());
         if (r) {
           course.get('registrations').add(this.props.user);
+          var urlRoot = course.urlRoot;
+          course.urlRoot += '/register';
           course.save(null, {
             success: function() {
+              course.urlRoot = urlRoot;
               that.props.user.fetch();
             }
           });

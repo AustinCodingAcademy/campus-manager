@@ -116,7 +116,8 @@ module.exports = {
         'grades',
         'textbook',
         'videos',
-        'cost'
+        'cost',
+        'term'
       ];
 
       _.each(attributes, function(attr) {
@@ -189,5 +190,47 @@ module.exports = {
       });
     });
   return res.json(req.body);
+},
+
+  /**
+  * CourseController.register()
+  */
+  register: function(req, res) {
+    var id = req.params.id;
+    CourseModel.findOne({
+      _id: id,
+      client: req.user.client
+    }).populate('term registrations').exec(function(err, course){
+      if(err) {
+        return res.json(500, {
+          message: 'Error saving course',
+          error: err
+        });
+      }
+      if(!course) {
+        return res.json(404, {
+          message: 'No such course'
+        });
+      }
+
+      course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
+
+      course.save(function(err, course){
+        if(err) {
+          return res.json(500, {
+            message: 'Error getting course.',
+            error: err
+          });
+        }
+        if(!course) {
+          return res.json(404, {
+            message: 'No such course'
+          });
+        }
+        course.populate('registrations').populate(function(err, course) {
+          return res.json(course);
+        });
+      });
+    });
   }
 };

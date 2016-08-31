@@ -6,7 +6,7 @@ var middleware = require('./middleware');
 /*
 * GET
 */
-router.get('/', function(req, res) {
+router.get('/', middleware.instructor, function(req, res) {
   CourseController.list(req, res);
 });
 
@@ -27,7 +27,7 @@ router.post('/', middleware.admin, function(req, res) {
 /*
 * PUT
 */
-router.put('/:id', function(req, res) {
+router.put('/:id', middleware.instructor, function(req, res) {
   CourseController.update(req, res);
 });
 
@@ -43,6 +43,13 @@ router.delete('/:id', middleware.admin, function(req, res) {
 */
 router.post('/screencasts', middleware.admin, function(req, res) {
   CourseController.screencasts(req, res);
+});
+
+/*
+* PUT
+*/
+router.put('/register/:id', middleware.auth, function(req, res) {
+  CourseController.register(req, res);
 });
 
 
