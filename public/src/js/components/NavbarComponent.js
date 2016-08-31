@@ -17,8 +17,9 @@ module.exports = React.createBackboneClass({
         </a>
         <ul className="right hide-on-med-and-down">
           <li><a href="#" className="black-text">Dashboard</a></li>
-          <li><a href="#registration" className="black-text">Registration</a></li>
+          <li className={hidden}><a href="#registration" className="black-text">Registration</a></li>
           <li className={hidden}><a href="#users" className="black-text">Users</a></li>
+          <li className={hidden}><a href="#locations" className="black-text">Locations</a></li>
           <li className={hidden}><a href="#terms" className="black-text">Terms</a></li>
           <li className={hidden}><a href="#courses" className="black-text">Courses</a></li>
           <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
@@ -30,8 +31,9 @@ module.exports = React.createBackboneClass({
         </ul>
         <ul className="side-nav" id="mobile-demo">
           <li><a href="#" className="black-text">Dashboard</a></li>
-          <li><a href="#registration">Registration</a></li>
+          <li className={hidden}><a href="#registration">Registration</a></li>
           <li className={hidden}><a href="#users">Users</a></li>
+          <li className={hidden}><a href="#locations">Locations</a></li>
           <li className={hidden}><a href="#terms">Terms</a></li>
           <li className={hidden}><a href="#courses">Courses</a></li>
           <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>

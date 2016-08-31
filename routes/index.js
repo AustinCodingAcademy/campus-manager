@@ -36,15 +36,17 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/register', function(req, res, next) {
+  if (!process.env.REGISTRATION_ENABLED) { return res.redirect('/'); }
   if(req.isAuthenticated()) {
-    res.redirect('/');
+    return res.redirect('/');
   } else {
-    res.render('register');
+    return res.render('register');
   }
 });
 
 // Todo: We should probably look at extracting this into a module
 router.post('/register', function(req, res, next) {
+  if (!process.env.REGISTRATION_ENABLED) { return res.redirect('/'); }
   UserModel.findOne({ username : req.body.username.toLowerCase() }, function (err, user) {
     var saltRounds = 10;
 
@@ -70,7 +72,7 @@ router.post('/register', function(req, res, next) {
 
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
 
-      user = new UserModel({
+      var newUser = new UserModel({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         username: req.body.username.toLowerCase(),
@@ -78,7 +80,7 @@ router.post('/register', function(req, res, next) {
         is_client: true
       });
 
-      user.save(function (error, user) {
+      newUser.save(function (error, user) {
 
         if (error) {
           req.flash('error', error.message);
@@ -97,6 +99,79 @@ router.post('/register', function(req, res, next) {
           // passport to start their session and redirect to the home route
           req.login(user, function(err) {
             if (err) { return res.redirect('/register'); }
+            return res.redirect('/');
+          });
+        });
+      });
+    });
+  });
+});
+
+router.get('/register/:id', function(req, res, next) {
+  if(req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
+    UserModel.findOne({ _id: req.params.id }, function(err, user) {
+      if (err || !user) {
+        return res.redirect('/');
+      }
+      return res.render('new', { id: req.params.id });
+    });
+  }
+});
+
+router.post('/register/:id', function(req, res, next) {
+  UserModel.findOne({ username : req.body.username.toLowerCase() }, function (err, user) {
+    var saltRounds = 10;
+
+    if (user) {
+      req.flash('error', 'The email address has already been used');
+      return res.redirect('/register/' + req.params.id);
+    }
+
+    if (req.body.password.length <= 5) {
+      req.flash('error', 'Password must be at least 6 characters');
+      return res.redirect('/register/' + req.params.id);
+    }
+
+    if (!req.body.first_name) {
+      req.flash('error', 'Please enter your first name.')
+      return res.redirect('/register/' + req.params.id);
+    }
+
+    if (!req.body.last_name) {
+      req.flash('error', 'Please enter your last name.')
+      return res.redirect('/register/' + req.params.id);
+    }
+
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+      UserModel.find({}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
+        if (err) {
+          req.flash('error', error.message);
+          return res.redirect('/register/' + req.params.id);
+        }
+
+        var newUser = new UserModel({
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          username: req.body.username.toLowerCase(),
+          password: hash,
+          is_student: true,
+          client: req.params.id,
+          idn: users[0].idn + 1
+        });
+
+        newUser.save(function (err, user) {
+
+          if (err) {
+            req.flash('error', error.message);
+            return res.redirect('/register/' + req.params.id);
+          }
+
+          // If the users has been created successfully, log them in with
+          // passport to start their session and redirect to the home route
+          req.login(user, function(err) {
+            if (err) { return res.redirect('/register/' + req.params.id); }
             return res.redirect('/');
           });
         });

@@ -3,6 +3,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
+var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 /**
 * UserController.js
@@ -52,7 +53,13 @@ module.exports = {
       }
       CourseModel.find({
         registrations: mongoose.Types.ObjectId(user._id)
-      }).populate('term').exec(function(err, courses) {
+      }).populate({
+        path: 'term',
+        model: 'term',
+        populate: {
+          path: 'location',
+          model: 'location'
+      }}).exec(function(err, courses) {
         if(err) {
           return res.json(500, {
             message: 'Error getting user courses.',
@@ -60,7 +67,19 @@ module.exports = {
           });
         }
         user.courses = courses;
-        return res.json(user);
+        if (user.customer_id) {
+          stripe.charges.list(
+            {
+              customer: user.customer_id
+            },
+            function(err, charges) {
+              user.charges = charges.data;
+              return res.json(user);
+            }
+          );
+        } else {
+          return res.json(user);
+        }
       });
     });
   },
@@ -84,7 +103,8 @@ module.exports = {
       'codecademy',
       'zipcode',
       'photo',
-      'grades'
+      'grades',
+      'credits'
     ];
 
     _.each(attributes, function(attr) {
@@ -92,15 +112,7 @@ module.exports = {
     });
     user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
 
-    UserModel.find(
-      { client: req.user.client },
-      'idn',
-      {
-        limit: 1,
-        sort:{
-          idn: -1
-        }
-    }, function(err, users) {
+    UserModel.find({}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
       user.idn = users[0].idn + 1;
       user.client = req.user.client;
       user.save(function(err, user){
@@ -147,7 +159,8 @@ module.exports = {
         'codecademy',
         'zipcode',
         'photo',
-        'grades'
+        'grades',
+        'credits'
       ];
 
       var protectedAttrs = [

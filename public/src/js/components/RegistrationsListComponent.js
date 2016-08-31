@@ -43,7 +43,7 @@ module.exports = React.createBackboneClass({
 
     var courseOptions = [];
     this.getCollection().each(function(course) {
-      courseOptions.push(<option key={course.id} disabled={course.get('registrations').length >= course.get('seats')} value={course.id}>{course.get('term').get('name') + ' - ' + course.get('name')}</option>);
+      courseOptions.push(<option key={course.id} value={course.id}>{course.get('term').get('name') + ' - ' + course.get('name')}</option>);
     });
 
     var userOptions = [];

@@ -17,7 +17,9 @@ module.exports = Backbone.Model.extend({
     phone: '',
     username: '',
     first_name: '',
-    last_name: ''
+    last_name: '',
+    paymentAmount: 0.00,
+    credits: ''
   },
 
   fullName: function() {

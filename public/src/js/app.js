@@ -24,7 +24,9 @@ var HomeLayoutComponent = React.createFactory(require('./components/HomeLayoutCo
 var NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
 var UserModel = require('./models/UserModel');
 var UsersCollection = require('./collections/UsersCollection');
+var LocationsCollection = require('./collections/LocationsCollection');
 var UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
+var LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
 var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
 var UserComponent = React.createFactory(require('./components/UserComponent'));
@@ -47,6 +49,7 @@ $(function() {
       'users': 'users',
       'users/:id': 'user',
       'courses': 'courses',
+      'locations': 'locations',
       'courses/:id': 'course',
       'registration': 'registration'
     },
@@ -94,13 +97,24 @@ $(function() {
     terms: function() {
       var terms = new TermsCollection();
       terms.fetch();
-      ReactDOM.render(TermsListComponent({ collection: terms }), $('#container')[0]);
+      var locations = new LocationsCollection();
+      locations.fetch({
+        success: function() {
+          ReactDOM.render(TermsListComponent({ collection: terms, locations: locations}), $('#container')[0]);
+        }
+      });
     },
 
     users: function() {
       var users = new UsersCollection();
       users.fetch();
       ReactDOM.render(UsersListComponent({ collection: users }), $('#container')[0]);
+    },
+
+    locations: function() {
+      var locations = new LocationsCollection();
+      locations.fetch();
+      ReactDOM.render(LocationsListComponent({ collection: locations }), $('#container')[0]);
     },
 
     courses: function() {
@@ -131,26 +145,16 @@ $(function() {
       var courses = new CoursesCollection();
       courses.fetch({
         success: function() {
-          if (!that.currentUser.get('is_admin')) {
-            ReactDOM.render(RegistrationsListComponent({
-              collection: new CoursesCollection(courses.filter(function(course) {
-                return moment.utc(course.get('term').get('start_date')).isSameOrAfter(moment());
-              })),
-              users: new UsersCollection([that.currentUser]),
-              currentUser: that.currentUser
-            }), $('#container')[0]);
-          } else {
-            var users = new UsersCollection();
-            users.fetch({
-              success: function() {
-                ReactDOM.render(RegistrationsListComponent({
-                  collection: courses,
-                  users: users,
-                  currentUser: that.currentUser
-                }), $('#container')[0]);
-              }
-            })
-          }
+          var users = new UsersCollection();
+          users.fetch({
+            success: function() {
+              ReactDOM.render(RegistrationsListComponent({
+                collection: courses,
+                users: users,
+                currentUser: that.currentUser
+              }), $('#container')[0]);
+            }
+          });
         }
       });
     }

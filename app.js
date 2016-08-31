@@ -30,6 +30,8 @@ var reset = require('./routes/reset');
 var users = require('./routes/users');
 var terms = require('./routes/terms');
 var courses = require('./routes/courses');
+var charges = require('./routes/charges');
+var locations = require('./routes/locations');
 
 var passport = require('./config/passport');
 
@@ -66,8 +68,10 @@ app.use(passport.session());
 app.use('/', routes);
 app.use('/reset', reset);
 app.use('/api/users', middleware.auth, users);
-app.use('/api/terms', middleware.auth, middleware.admin, terms);
+app.use('/api/terms', middleware.auth, terms);
 app.use('/api/courses', middleware.auth, courses);
+app.use('/api/charges', middleware.auth, charges);
+app.use('/api/locations', middleware.admin, locations);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
