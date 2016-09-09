@@ -31,7 +31,8 @@ module.exports = {
         storeWhere: "courses",
         arrayPop: true,
         mongooseModel: CourseModel,
-        idField: "term"
+        idField: "term",
+        populate: { path: 'registrations', select: 'id' }
       }, function(err, terms) {
     		return res.json(terms);
     	});
