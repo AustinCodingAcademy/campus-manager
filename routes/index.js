@@ -11,7 +11,8 @@ router.get('/', function(req, res, next) {
   } else {
     res.render('index', {
       user: JSON.stringify(req.user),
-      env: process.env.NODE_ENV
+      env: process.env.NODE_ENV,
+      csrfToken: req.csrfToken()
     });
   }
 });
@@ -20,7 +21,7 @@ router.get('/login', function(req, res, next) {
   if(req.isAuthenticated()) {
     res.redirect('/');
   } else {
-    res.render('login');
+    res.render('login', {csrfToken: req.csrfToken()});
   }
 });
 
@@ -40,7 +41,7 @@ router.get('/register', function(req, res, next) {
   if(req.isAuthenticated()) {
     return res.redirect('/');
   } else {
-    return res.render('register');
+    return res.render('register', {csrfToken: req.csrfToken()});
   }
 });
 
@@ -115,7 +116,7 @@ router.get('/register/:id', function(req, res, next) {
       if (err || !user) {
         return res.redirect('/');
       }
-      return res.render('new', { id: req.params.id });
+      return res.render('new', { id: req.params.id, csrfToken: req.csrfToken() });
     });
   }
 });

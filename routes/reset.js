@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
   if(req.isAuthenticated()) {
     res.redirect('/');
   } else {
-    res.render('reset');
+    res.render('reset', {csrfToken: req.csrfToken()});
   }
 });
 
@@ -58,7 +58,7 @@ router.post('/', function(req, res, next) {
 
 router.get('/:reset_password', function(req, res, next) {
   var reset_password = req.params.reset_password;
-  res.render('password');
+  res.render('password', {csrfToken: req.csrfToken()});
 });
 
 router.put('/:reset_password', function(req, res, next) {

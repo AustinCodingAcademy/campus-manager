@@ -23,7 +23,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
-var cors = require('cors');
+var cookieParser = require('cookie-parser')
+var csrf = require('csurf')
 
 var routes = require('./routes/index');
 var reset = require('./routes/reset');
@@ -39,7 +40,6 @@ var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
 
-app.use(cors());
 app.use(methodOverride('_method'));
 
 var mongoose = require('mongoose');
@@ -58,18 +58,20 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: 'foo',
+  secret: process.env.SESSION_KEY,
   store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
+app.use(csrf({cookie: true}));
 
 app.use('/', routes);
 app.use('/reset', reset);
 app.use('/api/users', middleware.auth, users);
 app.use('/api/terms', middleware.auth, terms);
-app.use('/api/courses', middleware.auth, courses);
+app.use('/api/courses', middleware.auth,  courses);
 app.use('/api/charges', middleware.auth, charges);
 app.use('/api/locations', middleware.admin, locations);
 
