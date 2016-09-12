@@ -159,7 +159,7 @@ module.exports = React.createBackboneClass({
     var totalPaid = 0;
 
     var charges = _.map(_.filter(this.getModel().get('charges'), function(charge) {
-      return !charge.refunded;
+      return !charge.refunded && charge.paid;
     }), function(charge) {
       totalPaid += (charge.amount / 100);
       return(
