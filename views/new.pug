@@ -3,6 +3,7 @@ extends layout
 block content
   h2 New User Registration
   form(action='/register/' + id, method='post')
+    input(type='hidden', name='_csrf', value=csrfToken)
     .row
       .input-field.col.s12
         input#first_name.validate(type='text', name='first_name')

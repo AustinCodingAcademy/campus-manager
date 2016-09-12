@@ -2,7 +2,8 @@ extends layout
 
 block content
   h2 Enter Email
-  form
+  form(method="post")
+    input(type='hidden', name='_csrf', value=csrfToken)
     .row
       .input-field.col.s12
         input#email.validate(type='email', name='username')
@@ -16,7 +17,8 @@ block bottom_scripts
       $.ajax('/reset', {
         method: 'POST',
         data: {
-          username: $('[name="username"]').val()
+          username: $('[name="username"]').val(),
+          _csrf: $('[name="_csrf"]').val()
         },
         success: function(response) {
           Materialize.toast(response.message, 4000);

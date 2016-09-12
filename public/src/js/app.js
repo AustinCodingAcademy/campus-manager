@@ -39,6 +39,11 @@ $(function() {
     Materialize.toast(JSON.parse(xhr.responseText).message + ' See console for more info.', 4000, 'red darken-1');
     console.log(JSON.parse(xhr.responseText).error);
   });
+  Backbone.$.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 
   var AppRouter = Backbone.Router.extend({
     routes: {

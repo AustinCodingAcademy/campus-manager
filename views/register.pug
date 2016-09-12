@@ -1,8 +1,9 @@
 extends layout
-  
+
 block content
   h2 Register
   form(action='/register', method='post')
+    input(type='hidden', name='_csrf', value=csrfToken)
     .row
       .input-field.col.s12
         input#first_name.validate(type='text', name='first_name')
