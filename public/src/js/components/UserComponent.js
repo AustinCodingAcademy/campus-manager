@@ -348,7 +348,7 @@ module.exports = React.createBackboneClass({
                     </tfoot>
                   </table>
                   <div className="input-field">
-                    <label htmlFor="amount">Enter Payment Amount ($)</label>
+                    <label htmlFor="amount">1. Enter Payment Amount ($)</label>
                     <input ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
                   </div>
                   <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} ref="checkout"/>
