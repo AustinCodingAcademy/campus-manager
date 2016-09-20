@@ -97,6 +97,7 @@
     "materialize": "materialize"
   },
   "devDependencies": {
+    "chromedriver": "^2.24.1",
     "database-cleaner": "^1.0.0",
     "dotenv": "^2.0.0",
     "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
