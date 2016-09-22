@@ -18,7 +18,10 @@ module.exports = React.createBackboneClass({
     });
   },
 
+
   render: function() {
+
+    var disabled = isNaN(this.getModel().get('paymentAmount')) || this.getModel().get('paymentAmount')<= 0; 
 
     return (
       <StripeCheckout
@@ -31,7 +34,7 @@ module.exports = React.createBackboneClass({
         amount={this.getModel().get('paymentAmount')}
         email={this.getModel().get('username')}
       >
-        <button className="btn btn-primary" disabled={this.getModel().get('paymentAmount') === 0}>2. Pay With Card
+        <button className={'btn btn-primary '+disabled} disabled={disabled}>2. Pay With Card
           <i className="material-icons right">send</i>
         </button>
       </StripeCheckout>
