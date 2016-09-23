@@ -1,6 +1,10 @@
+var session;
+
 module.exports = {
   'Create Client': function (browser) {
-    browser
+    session = browser;
+    session
+      .resizeWindow(1500, 1000)
       .url('http://localhost:8080/register')
       .waitForElementVisible('body', 1000)
       .setValue('input[name="first_name"]', 'Test')
@@ -10,7 +14,48 @@ module.exports = {
       .waitForElementVisible('button[type="submit"]', 1000)
       .click('button[type="submit"]')
       .pause(1000)
+      .click('[href="#users"]')
+      .pause(500)
+      .click('i[class="material-icons"]')
+      .pause(300)
+      .click('label[for="is_student"]')
+      .pause(500)
+      .click('input[type="submit"]')
+      .pause(500)
+      .click('tr td a')
+      .pause(500)
+      .setValue('input', '200')
+      .pause(200)
+      .click('button[class="btn btn-primary false"]')
+      .pause(1000)
+      .keys('4242')
+      .pause(100)
+      .keys('4242')
+      .pause(100)
+      .keys('4242')
+      .pause(100)
+      .keys('4242')
+      .pause(500)
+      .keys('\uE004')
+      .pause(500)
+      .keys('11')
+      .keys('2020')
+      .pause(500)
+      .keys('\uE004')
+      .pause(500)
+      .keys('123')
+      .pause(500)
+      .keys('\uE004')
+      .pause(500)
+      .keys('77777')
+      .pause(500)
+      .keys('\uE007')
+      .pause(5000)
+      // Pause may need to be longer on other test clients
       .assert.containsText('.side-nav', 'Logout')
+      .click('i[class="material-icons black-text"]')
+      .pause(1000)
+
       .end();
   }
 }

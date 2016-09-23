@@ -123,7 +123,9 @@ gulp.task('nodemon-start', function() {
     env: {
       NODE_ENV: 'test',
       PORT: 8080,
-      TEST_DB: 'mongodb://localhost/test'
+      TEST_DB: 'mongodb://localhost/test',
+      REGISTRATION_ENABLED: true,
+      SESSION_KEY: 'foo'
     }
   });
 });
