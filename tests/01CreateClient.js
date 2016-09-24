@@ -52,9 +52,42 @@ module.exports = {
       .keys('\uE007')
       .pause(5000)
       // Pause may need to be longer on other test clients
-      .assert.containsText('.side-nav', 'Logout')
-      .click('i[class="material-icons black-text"]')
+
+      // Test for making a new location
+      .click('[href="#users"]')
+      .pause(500)
+      .click('i[class="material-icons"]')
+      .pause(300)
+      .click('label[for="is_admin"]')
+      .pause(500)
+      .click('input[type="submit"]')
+      .pause(500)
+      .click('[href="#locations"]')
       .pause(1000)
+      .click('a[class="waves-effect waves-teal btn modal-trigger"]')
+      .pause(500)
+      .click('input[id="name"]')
+      .keys('420 Central')
+      .keys('\uE004')
+      .keys('420')
+      .keys('\uE004')
+      .keys('420')
+      .keys('\uE004')
+      .keys('420')
+      .keys('\uE004')
+      .keys('420')
+      .keys('\uE004')
+      .keys('Texas')
+      .keys('\uE004')
+      .keys('420')
+      .pause(100)
+      .click('input[type="submit"]')
+      .pause(1000)
+
+      // Test for creating a term
+
+
+      .pause(2000)
 
       .end();
   }
