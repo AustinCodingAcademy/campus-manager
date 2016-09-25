@@ -26,7 +26,7 @@ module.exports = {
       .pause(500)
       .setValue('input', '200')
       .pause(500)
-      .click('button[class="btn btn-primary false"]')
+      .click('button[class="btn btn-primary"]')
       .pause(3000)
       .keys('4242')
       .pause(100)
