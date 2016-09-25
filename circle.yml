@@ -4,13 +4,8 @@ machine:
   node:
     version: 5.6.0
 dependencies:
-  post:
-    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-    - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-    # - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F76221572C52609D
-    - sudo apt-get update
-    - sudo apt-get install google-chrome-stable
-
+  pre:
+    - sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
 test:
   pre:
     - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
