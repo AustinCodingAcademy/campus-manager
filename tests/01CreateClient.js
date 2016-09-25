@@ -27,7 +27,7 @@ module.exports = {
       .setValue('input', '200')
       .pause(500)
       .click('button[class="btn btn-primary false"]')
-      .pause(2000)
+      .pause(3000)
       .keys('4242')
       .pause(100)
       .keys('4242')
@@ -109,11 +109,34 @@ module.exports = {
       .keys('\uE004')
       .pause(500)
       .keys('\uE007') // Presses ENTER btn
-      .pause(500)
+      .pause(1000)
       // Creates Term
 
+      // Test for creating Courses
+      .click('[href="#courses"]')
+      .pause(1000)
+      .click('a[class="waves-effect waves-teal btn modal-trigger"]')
+      .pause(500)
+      .keys('\uE004')
+      .keys('test course')
+      .keys('\uE004')
+      .keys('1234')
+      .pause(500)
+      .keys('\uE004') // Presses ENTER btn
+      .keys('12')
+      .pause(500)
+      .click('label[for="sunday"]')
+      .pause(500)
+      .keys('\uE004')
+      .pause(500)
+      .keys('\uE007') // Presses ENTER btn
+      .pause(500)
+      .keys('\uE004')
+      .keys('http://localhost:4202/#courses')
+      .pause(500)
+      .click('input[type="submit"]')
 
-      .pause(2000)
+      .pause(5000)
 
       .end();
   }
