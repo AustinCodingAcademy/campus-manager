@@ -67,7 +67,7 @@ module.exports = React.createBackboneClass({
                   <label htmlFor="name">Name</label>
                 </div>
                 <div className="input-field col s6 m3">
-                  <input ref="cost" type="text" id="cost" />
+                  <input ref="cost" type="text" id="cost" placeholder="0.00" />
                   <label htmlFor="cost">Cost</label>
                 </div>
                 <div className="input-field col s6 m3">
