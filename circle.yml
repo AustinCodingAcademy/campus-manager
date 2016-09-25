@@ -13,6 +13,6 @@ dependencies:
     - sudo apt-get install google-chrome-stable
 test:
   pre:
-    - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
+    # - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
   post:
-    - screen-capture stop
+    # - screen-capture stop
