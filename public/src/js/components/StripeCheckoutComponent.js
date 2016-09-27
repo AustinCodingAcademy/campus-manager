@@ -26,7 +26,7 @@ module.exports = React.createBackboneClass({
     return (
       <StripeCheckout
         token={this.onToken}
-        stripeKey={process.env.STRIPE_PUBLISHABLE_KEY}
+        stripeKey="pk_test_LIWkhhJVRCPoGBO3SXaUXmTS"
         name="Austin Coding Academy"
         description="Campus Manager"
         data-locale="auto"
