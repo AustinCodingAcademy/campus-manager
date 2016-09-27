@@ -21,7 +21,11 @@ module.exports = React.createBackboneClass({
 
   render: function() {
 
-    var disabled = isNaN(this.getModel().get('paymentAmount')) || this.getModel().get('paymentAmount')<= 0;
+
+    var disabled = '';
+    if (isNaN(this.getModel().get('paymentAmount')) || this.getModel().get('paymentAmount')<= 0) {
+      disabled = 'disabled';
+    }
 
     return (
       <StripeCheckout
