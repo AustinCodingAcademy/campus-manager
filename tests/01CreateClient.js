@@ -14,6 +14,11 @@ module.exports = {
       .waitForElementVisible('button[type="submit"]', 1000)
       .click('button[type="submit"]')
       .pause(1000)
+    },
+
+    'Make Student': function (browser) {
+      session = browser;
+      session
       .click('[href="#users"]')
       .pause(500)
       .click('i[class="material-icons"]')
@@ -22,11 +27,16 @@ module.exports = {
       .pause(500)
       .click('input[type="submit"]')
       .pause(500)
+    },
+
+    'Make Payment': function (browser) {
+      session = browser;
+      session
       .click('tr td a')
       .pause(500)
       .setValue('input', '200')
-      .pause(500)
-      .click('button[class="btn btn-primary"]')
+      .pause(1000)
+      .click('button.btn.btn-primary')
       .pause(3000)
       .keys('4242')
       .pause(100)
@@ -52,8 +62,11 @@ module.exports = {
       .keys('\uE007')
       .pause(5000)
       // Pause may need to be longer on other test clients
+    },
 
-      // Test for making a new location
+    'Create Location': function (browser) {
+      session = browser;
+      session
       .click('[href="#users"]')
       .pause(500)
       .click('i[class="material-icons"]')
@@ -85,9 +98,12 @@ module.exports = {
       .pause(100)
       .click('input[type="submit"]')
       .pause(1000)
-      // Creates location
 
-      // Test for creating a term
+    },
+
+    'Create Term': function (browser) {
+      session = browser;
+      session
       .click('[href="#terms"]')
       .pause(1000)
       .click('a[class="waves-effect waves-teal btn modal-trigger"]')
@@ -110,9 +126,11 @@ module.exports = {
       .pause(500)
       .keys('\uE007') // Presses ENTER btn
       .pause(1000)
-      // Creates Term
+    },
 
-      // Test for creating Courses
+    'Make Course': function (browser) {
+      session = browser;
+      session
       .click('[href="#courses"]')
       .pause(1000)
       .click('a[class="waves-effect waves-teal btn modal-trigger"]')
@@ -135,9 +153,7 @@ module.exports = {
       .keys('http://localhost:4202/#courses')
       .pause(500)
       .click('input[type="submit"]')
-
       .pause(5000)
-
       .end();
   }
 }
