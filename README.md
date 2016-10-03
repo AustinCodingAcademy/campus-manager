@@ -10,6 +10,7 @@
 ### Development
 
 After cloning and navigating into directory:
+
 1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
 
 1. Install [Cairo](https://cairographics.org/download/)
