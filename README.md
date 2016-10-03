@@ -10,40 +10,35 @@
 ### Development
 
 After cloning and navigating into directory:
-
-1. Use Node version 5.6
-  * Recommend installing [nvm](https://github.com/creationix/nvm)
-    * (OSX) `brew install nvm`
-    * (Windows) [`nvm-windows`](https://github.com/coreybutler/nvm-windows)
+1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
 
 1. Install [Cairo](https://cairographics.org/download/)
-  * OSX
-    1. With Homebrew (OSX) `brew install cairo pkg-config`
-    2. Install [X11](https://www.xquartz.org/)
-    3. Add `export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig` to your `~/.bash_profile`
+  * Mac OSX
+    1. Install [Homebrew](http://brew.sh/) `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+    1. Install Cairo `brew install cairo pkg-config`
+    1. Install [Homebrew Cask](https://caskroom.github.io/) `brew tap caskroom/cask`
+    1. Install XQuartz `brew install Caskroom/cask/xquartz`
+  * Windows
+    1. Install [Chocolatey](https://chocolatey.org/install)
+    1. Install Cairo `choco install gtk-runtime`
 
-1. `npm install`
+1. Install dependencies `npm install`
 
-1. Create `.env`
-  ```bash
-  MONGOLAB_URI="mongodb://localhost/aca-campus"
-  DOMAIN="http://localhost:3000"
-  MANDRILL_API_KEY=""
-  GOOGLE_API_KEY=""
-  GOOGLE_CLIENT_ID=""
-  YOUTUBE_CHANNEL_ID=""
-  ```
+1. Duplicate `.env.example` and name it `.env`
 
-1. leave `npm run gulp` running in one terminal session
+1. Leave `npm run gulp` running in one terminal session
 
-1. leave `npm run develop` running in another terminal session
+1. Leave `npm run develop` running in another terminal session
 
 1. navigate to `http://localhost:3000/register` to create a top-level client
 
-For testing:
+## For testing:
 
-1. Download and Install [Java JDK 8u91](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-2. Run `npm test`
+1. Download [Google Chrome](https://www.google.com/chrome/browser/desktop/index.html)
+1. Install Java JDK
+  * Mac OSX `brew cask install java`
+  * Windows `choco install jdk7`
+1. Run `npm test`
 
 ### Activity
 [![Throughput Graph](https://graphs.waffle.io/AustinCodingAcademy/aca-campus/throughput.svg)](https://waffle.io/AustinCodingAcademy/aca-campus/metrics/throughput)
