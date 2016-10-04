@@ -7,10 +7,9 @@
 
 [![Heroku](https://heroku-badge.herokuapp.com/?app=aca-campus)](http://aca-campus.herokuapp.com)
 
-### Development
+## Development
 
-After cloning and navigating into directory:
-
+### Machine Dependencies
 1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
 
 1. Install [Cairo](https://cairographics.org/download/)
@@ -18,19 +17,19 @@ After cloning and navigating into directory:
     1. Install [Homebrew](http://brew.sh/) `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
     1. Install Cairo `brew install cairo pkg-config`
     1. Install [Homebrew Cask](https://caskroom.github.io/) `brew tap caskroom/cask`
-    1. Install XQuartz `brew install Caskroom/cask/xquartz`
+    1. Install XQuartz `brew cask install xquartz`
   * Windows
     1. Install [Chocolatey](https://chocolatey.org/install)
     1. Install Cairo `choco install gtk-runtime`
+After cloning and navigating into directory:
+
+### App Dependencies
+After forking, cloning, and navigating into repository:
 
 1. Install dependencies `npm install`
-
 1. Duplicate `.env.example` and name it `.env`
-
 1. Leave `npm run gulp` running in one terminal session
-
 1. Leave `npm run develop` running in another terminal session
-
 1. navigate to `http://localhost:3000/register` to create a top-level client
 
 ## For testing:
