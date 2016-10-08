@@ -263,14 +263,14 @@ module.exports = {
               }
               newUsers.push(user);
               if (req.body[++idx]) {
-                newUser(req.body[++idx]);
+                newUser(req.body[idx]);
               } else {
                 return res.json(200, newUsers);
               }
             });
           } else {
             if (req.body[++idx]) {
-              newUser(req.body[++idx]);
+              newUser(req.body[idx]);
             } else {
               return res.json(200, newUsers);
             }
