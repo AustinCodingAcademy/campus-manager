@@ -4,7 +4,7 @@ npm-debug.log
 config/env.js
 public/css
 public/js/bundle*
-.floo*
 .env
 reports
 *.log
+.vscode

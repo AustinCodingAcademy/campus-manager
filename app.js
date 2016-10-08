@@ -26,14 +26,6 @@ var flash = require('express-flash');
 var cookieParser = require('cookie-parser')
 var csrf = require('csurf')
 
-var routes = require('./routes/index');
-var reset = require('./routes/reset');
-var users = require('./routes/users');
-var terms = require('./routes/terms');
-var courses = require('./routes/courses');
-var charges = require('./routes/charges');
-var locations = require('./routes/locations');
-
 var passport = require('./config/passport');
 
 var methodOverride = require('method-override')
@@ -57,9 +49,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
+mongoose.Promise = global.Promise;
 app.use(session({
   secret: process.env.SESSION_KEY,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  resave: false,
+  saveUninitialized: false
 }));
 
 app.use(passport.initialize());
@@ -67,13 +62,13 @@ app.use(passport.session());
 app.use(cookieParser());
 app.use(csrf({cookie: true}));
 
-app.use('/', routes);
-app.use('/reset', reset);
-app.use('/api/users', middleware.auth, users);
-app.use('/api/terms', middleware.auth, terms);
-app.use('/api/courses', middleware.auth,  courses);
-app.use('/api/charges', middleware.auth, charges);
-app.use('/api/locations', middleware.admin, locations);
+app.use('/', require('./routes/index'));
+app.use('/reset', require('./routes/reset'));
+app.use('/api/users', middleware.auth, require('./routes/users'));
+app.use('/api/terms', middleware.auth, require('./routes/terms'));
+app.use('/api/courses', middleware.auth, require('./routes/courses'));
+app.use('/api/charges', middleware.auth, require('./routes/charges'));
+app.use('/api/locations', middleware.admin, require('./routes/locations'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
