@@ -62,7 +62,7 @@ module.exports = React.createBackboneClass({
       return grade.courseId === this.getModel().id && grade.name === $(e.currentTarget).data('grade-name');
     }, this);
     var originalScore = student.get('grades')[gradeIdx].score;
-    if ($(e.currentTarget).val() && Number($(e.currentTarget).val()) > -1) {
+    if ($(e.currentTarget).val() && !isNaN($(e.currentTarget).val()) && Number($(e.currentTarget).val()) > -1 ) {
       student.get('grades')[gradeIdx].score = Number($(e.currentTarget).val());
       student.save(null, {
         error: function() {
