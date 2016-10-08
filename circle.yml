@@ -2,7 +2,7 @@ machine:
   environment:
     NODE_ENV: test
   node:
-    version: 5.6.0
+    version: 6.7.0
 dependencies:
   pre:
     - sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev

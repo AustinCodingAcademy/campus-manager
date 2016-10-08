@@ -33,12 +33,8 @@ module.exports = React.createBackboneClass({
       }, this);
     }, this);
 
-    var registrationItems = _.map(registrations, function(registration, idx) {
-      return RegistrationItemComponent({
-        user: registration.user,
-        course: registration.course,
-        collection: this.getCollection()
-      });
+    var registrationItems = _.map(registrations, function(registration) {
+      return <RegistrationItemComponent user={registration.user} course={registration.course} collection={this.getCollection()} key={registration.user.id + registration.course.id} />
     }, this);
 
     var courseOptions = [];
@@ -83,7 +79,8 @@ module.exports = React.createBackboneClass({
             <table>
               <thead>
                 <tr>
-                  <th>Student</th>
+                  <th>Name</th>
+                  <th>Email</th>
                   <th>Term</th>
                   <th>Course</th>
                 </tr>

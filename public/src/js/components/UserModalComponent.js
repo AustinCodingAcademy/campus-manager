@@ -43,6 +43,7 @@ module.exports = React.createBackboneClass({
 
   deleteUser: function(e) {
     e.preventDefault();
+    var that = this;
     var r = confirm('Are you sure you want to delete this user?');
     if (r == true) {
       this.getModel().destroy({

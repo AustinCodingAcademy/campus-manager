@@ -228,40 +228,65 @@ module.exports = {
   },
 
   import: function(req, res) {
-    _.each(req.body, function(reqUser) {
-      UserModel.findOne({ username: reqUser['username'] }, function(err, existingUser) {
-        var user = existingUser ? existingUser : new UserModel();
+    var newUsers = [];
+    UserModel.find({client: req.user.client}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
+      var idn = users[0].idn + 1;
+      var idx = 0;
+      function newUser(reqUser) {
+        UserModel.findOne({ username: reqUser['username'].toLowerCase() }, function(err, existingUser) {
+          if (!existingUser && reqUser['username'] && reqUser['first_name'] && reqUser['last_name']) {
+            var user = new UserModel({ idn: idn });
+            idn++;
+            var attributes = [
+              'first_name',
+              'last_name',
+              'phone',
+              'website',
+              'github',
+              'codecademy',
+              'zipcode',
+              'photo'
+            ];
 
-        var attributes = [
-          'idn',
-          'first_name',
-          'last_name',
-          'phone',
-          'website',
-          'github',
-          'codecademy',
-          'zipcode',
-          'photo'
-        ];
-
-        _.each(attributes, function(attr) {
-          user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+            _.each(attributes, function(attr) {
+              user[attr] = reqUser[attr] ? reqUser[attr] : user[attr];
+            });
+            user.username = reqUser.username ? reqUser.username.toLowerCase() : user.username;
+            user.is_student = true;
+            user.client = req.user.client;
+            user.save(function(err, user) {
+              if(err) {
+                return res.json(500, {
+                  message: 'Error creating user.',
+                  error: err
+                });
+              }
+              newUsers.push(user);
+              if (req.body[++idx]) {
+                newUser(req.body[++idx]);
+              } else {
+                return res.json(200, newUsers);
+              }
+            });
+          } else {
+            if (req.body[++idx]) {
+              newUser(req.body[++idx]);
+            } else {
+              return res.json(200, newUsers);
+            }
+          }
         });
-        user.username = reqUser.username ? reqUser.username.toLowerCase() : user.username;
-
-        user.is_student = true;
-
-        UserModel.findOne({ _id: req.user.id }).populate('client').exec(function(err, currentUser) {
-          user.client = currentUser.client.id;
-          user.save();
-        });
-      });
+      }
+      if (req.body.length > 1) {
+        return newUser(req.body[idx]);
+      } else {
+        return res.json(200, req.body);
+      }
     });
-    return res.json(req.body);
   },
 
   attendance: function(req, res) {
-    UserModel.findOne({ idn: req.body.idn }, function(err, user) {
+    UserModel.findOne({ idn: req.body.idn, client: req.user.client }, function(err, user) {
       if(err) {
         return res.json(500, {
           message: 'Error saving user',

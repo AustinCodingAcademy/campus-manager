@@ -7,43 +7,46 @@
 
 [![Heroku](https://heroku-badge.herokuapp.com/?app=aca-campus)](http://aca-campus.herokuapp.com)
 
-### Development
+## Development
 
-After cloning and navigating into directory:
+### Machine Dependencies
+1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
 
-1. Use Node version 5.6
-  * Recommend installing [nvm](https://github.com/creationix/nvm)
-    * (OSX) `brew install nvm`
-    * (Windows) [`nvm-windows`](https://github.com/coreybutler/nvm-windows)
+2. 
+  * Mac OSX
+    1. Install [Homebrew](http://brew.sh/)
+    1. Install Cairo and MongoDB `brew install cairo pkg-config mongodb`
+    1. Create MongoDB data directory `sudo chmod 0755 /data/db && chown $USER /data/db`
+    1. Start MongoDB `mongod`
+      * Leave this running or just close the window while running
+      * You'll have to do this step everytime you restart your computer
+    1. Install [Homebrew Cask](https://caskroom.github.io/) `brew tap caskroom/cask`
+    1. Install XQuartz `brew cask install xquartz`
+  * Windows
+    1. Install [Chocolatey](https://chocolatey.org/install)
+    1. Install Cairo `choco install gtk-runtime`
+    1. Install MongoDB `choco install mongodb`
+    1. Create MongoDB data directory `mkdir /data/db`
+    1. Start MongoDB `mongod.exe`
+      * Leave this running or just close the window while running
+      * You'll have to do this step everytime you restart your computer
 
-1. Install [Cairo](https://cairographics.org/download/)
-  * OSX
-    1. With Homebrew (OSX) `brew install cairo pkg-config`
-    2. Install [X11](https://www.xquartz.org/)
-    3. Add `export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig` to your `~/.bash_profile`
+### App Dependencies
+After forking, cloning, and navigating into repository:
 
-1. `npm install`
+1. Install dependencies `npm install`
+1. Duplicate `.env.example` and name it `.env`
+1. Leave `npm run gulp` running in one terminal session
+1. Leave `npm run develop` running in another terminal session
+1. navigate to `http://localhost:3000/register` to create a user
 
-1. Create `.env`
-  ```bash
-  MONGOLAB_URI="mongodb://localhost/aca-campus"
-  DOMAIN="http://localhost:3000"
-  MANDRILL_API_KEY=""
-  GOOGLE_API_KEY=""
-  GOOGLE_CLIENT_ID=""
-  YOUTUBE_CHANNEL_ID=""
-  ```
+## For testing:
 
-1. leave `npm run gulp` running in one terminal session
-
-1. leave `npm run develop` running in another terminal session
-
-1. navigate to `http://localhost:3000/register` to create a top-level client
-
-For testing:
-
-1. Download and Install [Java JDK 8u91](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-2. Run `npm test`
+1. Download [Google Chrome](https://www.google.com/chrome/browser/desktop/index.html)
+1. Install Java JDK
+  * Mac OSX `brew cask install java`
+  * Windows `choco install jdk7`
+1. Run `npm test`
 
 ### Activity
 [![Throughput Graph](https://graphs.waffle.io/AustinCodingAcademy/aca-campus/throughput.svg)](https://waffle.io/AustinCodingAcademy/aca-campus/metrics/throughput)

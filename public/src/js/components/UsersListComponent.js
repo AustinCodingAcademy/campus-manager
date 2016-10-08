@@ -23,7 +23,8 @@ module.exports = React.createBackboneClass({
     var userItems = this.getCollection().map(function(user) {
       return UserItemComponent({
         model: user,
-        collection: that.getCollection()
+        collection: that.getCollection(),
+        key: user.id
       });
     });
 
