@@ -16,7 +16,8 @@ module.exports = Backbone.Model.extend({
     registrations: new UsersCollection(),
     textbook: '',
     days: [],
-    holidays: []
+    holidays: [],
+    cost: ''
   },
 
   shortDays: function() {
