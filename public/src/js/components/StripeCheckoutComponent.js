@@ -22,7 +22,7 @@ module.exports = React.createBackboneClass({
   render: function() {
 
     var disabled = '';
-    if (isNaN(this.getModel().get('paymentAmount')) || this.getModel().get('paymentAmount')<= 0) {
+    if (isNaN(this.getModel().get('paymentAmount')) || this.getModel().get('paymentAmount')<= 0 || this.props.user.id !== this.props.currentUser.id) {
       disabled = 'disabled';
     }
 

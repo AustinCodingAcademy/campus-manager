@@ -70,7 +70,8 @@ module.exports = {
         if (user.customer_id) {
           stripe.charges.list(
             {
-              customer: user.customer_id
+              customer: user.customer_id,
+              limit: 100
             },
             function(err, charges) {
               user.charges = charges.data;
@@ -176,7 +177,7 @@ module.exports = {
 
       if (req.user.is_admin || req.user.is_client || req.user.is_super) {
         _.each(protectedAttrs, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+          user[attr] =  req.body[attr];
         });
       }
 

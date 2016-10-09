@@ -15,11 +15,17 @@ module.exports = React.createBackboneClass({
 
   registerUser: function(e) {
     e.preventDefault();
+    var that = this;
     if (this.refs.course.value) {
       var course = this.getCollection().get(this.refs.course.value);
       course.get('registrations').push(this.props.users.get(this.refs.user.value));
-      course.save();
-      this.getCollection().trigger('add');
+      course.save(null, {
+        success: function() {
+          that.getCollection().trigger('add');
+          Materialize.toast('Student Registered!', 4000)
+        }
+      });
+
     }
   },
 
