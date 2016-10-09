@@ -2,6 +2,7 @@ var _ = require('underscore');
 var React = require('react');
 require('react.backbone');
 var RegistrationItemComponent = React.createFactory(require('./RegistrationItemComponent'));
+var tableToCsv = require('node-table-to-csv');
 
 module.exports = React.createBackboneClass({
   componentDidMount: function() {
@@ -20,6 +21,17 @@ module.exports = React.createBackboneClass({
       course.save();
       this.getCollection().trigger('add');
     }
+  },
+
+  exportCSV: function() {
+    var csv = tableToCsv('<table>' + this.refs.registrations.innerHTML + '</table>');
+    var uri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = uri;
+    downloadLink.download = "registrations.csv";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   },
 
   render: function() {
@@ -67,16 +79,19 @@ module.exports = React.createBackboneClass({
             </div>
           </div>
           <div className="row">
-            <div className="input-field col s12">
+            <div className="input-field col s12 m6">
               <button className="btn waves-effect waves-light" type="submit" name="action">Register
                 <i className="material-icons right">send</i>
               </button>
+            </div>
+            <div className="input-field col s12 m6">
+              <button onClick={this.exportCSV} className="btn waves-effect waves-light">Export to CSV <i className="material-icons right">file_download</i></button>
             </div>
           </div>
         </form>
         <div className="row">
           <div className="col s12">
-            <table>
+            <table ref="registrations">
               <thead>
                 <tr>
                   <th>Name</th>
