@@ -253,8 +253,8 @@ module.exports = React.createBackboneClass({
                   {gradeNames}
                   <th>
                     <div className="input-field trim-margin">
-                      <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin" style={{minWidth:'100px'}} />
                       <label htmlFor="grade" className="nowrap">Add Grade</label>
+                      <input id="grade" type="text" ref="grade" onBlur={this.addGrade} className="trim-margin" style={{minWidth:'100px'}} />
                     </div>
                   </th>
                 </tr>
