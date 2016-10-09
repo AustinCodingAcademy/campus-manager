@@ -69,6 +69,7 @@ app.use('/api/terms', middleware.auth, require('./routes/terms'));
 app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
 app.use('/api/locations', middleware.admin, require('./routes/locations'));
+app.use('/api/import', middleware.admin, require('./routes/import'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
