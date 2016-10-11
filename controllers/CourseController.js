@@ -16,8 +16,6 @@ module.exports = {
   list: function(req, res) {
     CourseModel.find({
       client: req.user.client
-    }, null, {
-      sort: 'term.start_date'
     }).populate('term registrations').exec(function(err, courses){
       if(err) {
         return res.json(500, {
@@ -25,7 +23,19 @@ module.exports = {
           error: err
         });
       }
-      return res.json(courses);
+      var sorted = courses.sort(function(x, y) {
+        var XstartDate = x.term.start_date;
+        var YstartDate = y.term.start_date;;
+        if (XstartDate === YstartDate) {
+          if (x.name === y.name) {
+            return 0;
+          }
+          return x.name > y.name ? 1 : -1;
+        }
+        return XstartDate > YstartDate ? -1 : 1;
+      });
+
+      return res.json(sorted);
     });
   },
 
