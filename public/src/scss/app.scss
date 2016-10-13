@@ -75,3 +75,14 @@ nav .brand-logo {
 .clearfix {
   clear: both;
 }
+
+.small-checkbox {
+  [type="checkbox"] + &:before, [type="checkbox"]:not(.filled-in) + &:after {
+    top: 4px;
+    height: 15px;
+    width: 15px;
+  }
+  [type="checkbox"] + & {
+    padding-left: 20px;
+  }
+}

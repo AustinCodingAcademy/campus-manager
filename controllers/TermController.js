@@ -34,6 +34,8 @@ module.exports = {
         idField: "term",
         populate: { path: 'registrations', select: 'id' }
       }, function(err, terms) {
+        var sorted = _.sortBy(terms, 'start_date');
+        return res.json(sorted.reverse());
     		return res.json(terms);
     	});
     });

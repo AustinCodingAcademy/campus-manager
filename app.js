@@ -1,18 +1,9 @@
 var express = require('express');
 var app = express();
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(function (req, res, next) {
-    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-    if (schema === 'https') {
-      next();
-    } else {
-      res.redirect('https://' + req.headers.host + req.url);
-    }
-  });
-} else if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test') {
   process.env.MONGOLAB_URI = process.env.TEST_DB;
-} else {
+} else if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
 
@@ -44,7 +35,7 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '200kb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));

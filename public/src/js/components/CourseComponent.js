@@ -2,10 +2,10 @@ var _ = require('underscore');
 var React = require('react');
 var moment = require('moment');
 var BaseModal = require('./BaseModal');
-var LineChart = require('react-chartjs').Line;
-var Chart = require('chart.heatmap.js');
 var CourseVideoUpload = require('./CourseVideoUpload');
 var Hashids = require('hashids');
+var CourseAttendanceComponent = React.createFactory(require('./CourseAttendanceComponent'));
+var utils = require('../utils');
 require('react.backbone');
 
 module.exports = React.createBackboneClass({
@@ -17,15 +17,19 @@ module.exports = React.createBackboneClass({
 
   componentDidUpdate: function() {
     Materialize.updateTextFields();
-    var ctx = this.refs.heatmap.getContext('2d');
-    var newChart = new Chart(ctx).HeatMap(this.getModel().studentAttendance().data, this.getModel().studentAttendance().options);
+    $(document).ready(function(){
+      $('.tooltipped').tooltip({delay: 50});
+    });
   },
 
   addGrade: function(e) {
     e.preventDefault();
     var gradeName = this.refs.grade.value;
     if (gradeName && this.getModel().get('grades').indexOf(gradeName) === -1) {
-      this.getModel().get('grades').push(gradeName);
+      this.getModel().get('grades').push({
+        name: gradeName,
+        checkpoint: false
+      });
       this.getModel().save();
     }
     this.refs.grade.value = '';
@@ -33,20 +37,28 @@ module.exports = React.createBackboneClass({
 
   removeGrade: function(e) {
     e.preventDefault();
-    var gradeName = $(e.currentTarget).data('grade-name');
+    var gradeIdx = $(e.currentTarget).data('grade-idx');
+    var gradeName = this.getModel().get('grades')[gradeIdx];
     var r = confirm('Are you sure you want to delete ' + gradeName + '?');
     if (r == true) {
-      var gradeIdx = this.getModel().get('grades').indexOf(gradeName);
       this.getModel().get('grades').splice(gradeIdx, 1);
       this.getModel().get('registrations').each(function(student) {
         var gradeIdx = _.findIndex(student.get('grades'), function(grade) {
-          return grade.courseId === this.getModel().id && grade.name === $(e.currentTarget).data('grade-name');
+          return grade.courseId === this.getModel().id && grade.name === gradeName;
         }, this);
         student.get('grades').splice(gradeIdx, 1);
         student.save();
       }, this);
       this.getModel().save();
     }
+  },
+
+  toggleCheckpoint: function(e) {
+    e.preventDefault();
+    var that = this;
+    var gradeIdx = $(e.currentTarget).data('grade-idx');
+    this.getModel().get('grades')[gradeIdx].checkpoint = !this.getModel().get('grades')[gradeIdx].checkpoint;
+    this.getModel().save();
   },
 
   focusGrade: function(e) {
@@ -107,39 +119,38 @@ module.exports = React.createBackboneClass({
 
   render: function() {
     var userRows = this.getModel().get('registrations').map(function(student, i) {
-
-      var courseGrades = _.filter(_.pluck(_.where(student.get('grades'), {courseId: this.getModel().id}), 'score'), function(score) {
-        return _.isNumber(score);
-      });
-      var courseAverage = Math.round(_.reduce(courseGrades, function(memo, num) { return memo + num; }) / courseGrades.length) || 0;
-
-      var courseAttendance = _.filter(student.get('attendance'), function(checkIn) {
-        return _.find(this.getModel().pastDates(), function(date) {
-          return moment(checkIn, 'YYYY-MM-DD HH:ss').isSame(date, 'day');
-        });
+      var studentCheckpointScores = [];
+      var studentDailyScores = [];
+      var courseGrades = _.each(_.filter(_.where(student.get('grades'), {courseId: this.getModel().id}), function(grade) {
+        return _.isNumber(grade.score);
+      }), function(grade){
+        if (_.findWhere(this.getModel().get('grades'), {name: grade.name}).checkpoint) {
+          studentCheckpointScores.push(Number(grade.score));
+        } else {
+          studentDailyScores.push(Number(grade.score));
+        }
       }, this);
-
-      var courseAttendanceAverage = Math.round(courseAttendance.length / this.getModel().pastDates().length * 100);
+      var courseAverage = utils.weightedGradeAverage(studentCheckpointScores, studentDailyScores);
 
       return (
         <tr key={i}>
           <td className="right-align nowrap" style={{height: '51px', padding: '0 5px'}}>
             <a href={'#users/' + student.id}>{student.fullName()}</a>
             <br />
-            <small>Course Att: <span className={'score' + courseAttendanceAverage}>{courseAttendanceAverage}</span> Avg: <span className={'score' + courseAverage}>{courseAverage}</span></small>
+            <small>Avg: <span className={'score' + courseAverage}>{courseAverage}</span></small>
           </td>
         </tr>
       );
     }, this);
 
-    var gradeNames = _.map(this.getModel().get('grades'), function(grade, i) {
-      var assignmentGrades = [];
+    var assignmentGrades = [];
+    var gradeNames = _.map(this.getModel().get('grades'), function(grade, idx) {
       this.getModel().get('registrations').each(function(student){
-        var match = _.findWhere(student.get('grades'), { name: grade, courseId: this.getModel().id });
+        var match = _.findWhere(student.get('grades'), { name: grade.name, courseId: this.getModel().id });
         if (!match) {
           student.get('grades').push({
             courseId: this.getModel().id,
-            name: grade,
+            name: grade.name,
             score: ''
           });
         } else {
@@ -152,24 +163,26 @@ module.exports = React.createBackboneClass({
       var assignmentAverage = Math.round(_.reduce(assignmentGrades, function(memo, num) { return memo + num; }) / assignmentGrades.length) || 0;
 
       return (
-        <td key={i} className='nowrap'>
-          {grade}
-          <sup><a href="#" onClick={this.removeGrade} data-grade-name={grade}>x</a></sup>
+        <td key={idx} className='nowrap'>
+          {grade.name}
+          <sup><a href="#" onClick={this.removeGrade} data-grade-idx={idx}>x</a></sup>
           <br />
+          <input id={'checkpoint-' + grade.name} type="checkbox" data-grade-idx={idx} checked={grade.checkpoint} onChange={this.toggleCheckpoint}/>
+          <label htmlFor={'checkpoint-' + grade.name} className='small-checkbox'><a><small className="tooltipped" data-position="bottom" data-tooltip="These grades are weighted more and are used as 'checkpoints' in the student's understanding of the content up until this point">chkpt?</small></a></label>
+          &nbsp;&nbsp;&nbsp;
           <small>Avg: <span className={'score' + assignmentAverage}>{assignmentAverage}</span></small>
-
         </td>
       );
     }, this);
 
-    var studentGrades = this.getModel().get('registrations').map(function(student, i) {
+    var studentGrades = this.getModel().get('registrations').map(function(student) {
       var courseGrades = _.filter(student.get('grades'), function(grade) {
         return grade.courseId === this.getModel().id;
       }, this);
 
-      var studentCells = _.map(courseGrades, function(grade, i) {
+      var studentCells = _.map(courseGrades, function(grade, idx) {
         return (
-          <td key={i} style={{height: '51px', padding: '0 5px'}} >
+          <td key={idx} style={{height: '51px', padding: '0 5px'}} >
             <input
             type="text"
             className="trim-margin disabled"
@@ -184,7 +197,7 @@ module.exports = React.createBackboneClass({
       }, this);
 
       return (
-        <tr key={i}>
+        <tr key={student.id}>
         {studentCells}
         </tr>
       );
@@ -265,13 +278,7 @@ module.exports = React.createBackboneClass({
             </table>
           </div>
         </div>
-        <div className="row">
-          <div className="col s12">
-            <h4>Attendance</h4>
-            <LineChart data={this.getModel().attendanceOverTime().data} ref="attendanceChart" options={this.getModel().attendanceOverTime().options} />
-            <canvas ref="heatmap"></canvas>
-          </div>
-        </div>
+        <CourseAttendanceComponent model={this.getModel().get('attendance')} />
         <div className="row">
           <div className="col s12 m6">
             <div className="card">

@@ -75,15 +75,6 @@ var userSchema = new Schema({
   credits: String
 }, { timestamps: true });
 
-userSchema.virtual('gradeAverage').get(function() {
-  var grades =  _.select(this.get('grades'), function(grade) { return _.isNumber(grade.score); });
-  var num = grades.length;
-  if (num) {
-    return Math.round(_.reduce(_.pluck(grades, 'score'), function(memo, num) { return memo + num; }) / num);
-  }
-  return 0;
-})
-
 userSchema.set('toJSON', {
   transform: function(doc, ret, options) {
     delete ret.password;
