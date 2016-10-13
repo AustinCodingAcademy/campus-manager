@@ -39,7 +39,6 @@ module.exports = React.createBackboneClass({
               <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Score</th>
                 <th>Role(s)</th>
                 <th></th>
                 <th></th>
