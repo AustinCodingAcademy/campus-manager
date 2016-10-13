@@ -1,16 +1,7 @@
 var express = require('express');
 var app = express();
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(function (req, res, next) {
-    var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-    if (schema === 'https') {
-      next();
-    } else {
-      res.redirect('https://' + req.headers.host + req.url);
-    }
-  });
-} else if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test') {
   process.env.MONGOLAB_URI = process.env.TEST_DB;
 } else {
   require('dotenv').config();
