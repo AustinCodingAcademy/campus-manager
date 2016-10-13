@@ -3,7 +3,7 @@ var app = express();
 
 if (process.env.NODE_ENV === 'test') {
   process.env.MONGOLAB_URI = process.env.TEST_DB;
-} else {
+} else if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
 
