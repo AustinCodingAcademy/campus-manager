@@ -3,5 +3,6 @@ var LocationModel = require('../models/LocationModel');
 
 module.exports = Backbone.Collection.extend({
   url: 'api/locations',
-  model: LocationModel
+  model: LocationModel,
+  comparator: 'name'
 });
