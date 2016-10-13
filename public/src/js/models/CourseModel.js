@@ -17,7 +17,53 @@ module.exports = Backbone.Model.extend({
     textbook: '',
     days: [],
     holidays: [],
-    cost: ''
+    cost: '',
+    attendance: new Backbone.Model({
+      overTime: {
+        data: {
+          labels: [],
+          datasets: [{
+            data: []
+          }]
+        },
+        options: {
+          legend: {
+            display: false
+          },
+          scales: {
+            yAxes: [{
+              display: true,
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      },
+      student: {
+        data: {
+          labels: [],
+          datasets: []
+        },
+        options: {
+          tooltipTemplate: "<%= xLabel %> | <%= yLabel %> | <%= value === 0 ? 'Absent' : 'Present' %>",
+          responsive: true,
+          showLabels: false,
+        }
+      }
+    })
+  },
+
+  initialize: function() {
+    var firstSync = true;
+    this.on('sync', function() {
+      if (firstSync) {
+        this.attendanceOverTime();
+        this.studentAttendance();
+        this.get('attendance').trigger('change');
+      }
+      firstSync = false;
+    }, this);
   },
 
   shortDays: function() {
@@ -39,8 +85,9 @@ module.exports = Backbone.Model.extend({
   pastDates: function() {
     if (moment().isBefore(this.get('term').get('end_date'), 'YYYY-MM-DD')) {
       return this.dates(moment());
+    } else {
+      return this.dates(moment(this.get('term').get('end_date'), 'YYYY-MM-DD'));
     }
-    return this.dates(moment(this.get('term').get('end_date'), 'YYYY-MM-DD'));
   },
 
   dates: function(endDate) {
@@ -48,7 +95,7 @@ module.exports = Backbone.Model.extend({
     var classDates = [];
     moment.range(this.get('term').get('start_date'), endDate.add(1, 'days')).by('days', function(day) {
       if (that.get('days').indexOf(day.format('dddd').toLowerCase()) > -1 &&
-        that.get('holidays').indexOf(day.format('YYYY-MM-DD')) === -1) {
+      that.get('holidays').indexOf(day.format('YYYY-MM-DD')) === -1) {
         classDates.push(day)
       }
     });
@@ -62,22 +109,20 @@ module.exports = Backbone.Model.extend({
         label: student.fullName(),
         data: _.map(this.pastDates(), function(date) {
           return _.find(student.get('attendance'), function(checkIn) {
-            return moment(checkIn, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
+            return checkIn.slice(0, 10) === date.format('YYYY-MM-DD');
           }) ? 100 : 0;
         })
       });
     }, this);
-    return {
-      data: {
-        labels: _.map(this.pastDates(), function(date) { return date.format('ddd, MMM D'); }),
-        datasets: datasets
-      },
-      options: {
-        tooltipTemplate: "<%= xLabel %> | <%= yLabel %> | <%= value === 0 ? 'Absent' : 'Present' %>",
-        responsive: true,
-        showLabels: false,
+    this.get('attendance').set({
+      student: {
+        data: {
+          labels: _.map(this.pastDates(), function(date) { return date.format('ddd, MMM D'); }),
+          datasets: datasets
+        },
+        options: this.get('attendance').get('student').options
       }
-    }
+    }, { silent: true });
   },
 
   attendanceOverTime: function() {
@@ -95,27 +140,17 @@ module.exports = Backbone.Model.extend({
       });
       data.push(checkIns);
     }, this);
-    return {
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data
-        }]
-      },
-      options: {
-        legend: {
-          display: false
+    this.get('attendance').set({
+      overTime: {
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data
+          }]
         },
-        scales: {
-            yAxes: [{
-                display: true,
-                ticks: {
-                  beginAtZero: true
-                }
-            }]
-        }
+        options: this.get('attendance').get('overTime').options
       }
-    };
+    }, { silent: true });
   },
 
   parse: function(obj) {
@@ -126,5 +161,23 @@ module.exports = Backbone.Model.extend({
       obj.registrations = new UsersCollection(obj.registrations, { parse: true });
     }
     return obj;
+  },
+
+  assignmentAverage: function(grade) {
+    var assignmentGrades = [];
+    this.get('registrations').each(function(student){
+      var match = _.findWhere(student.get('grades'), { name: grade.name, courseId: this.id });
+      if (!match) {
+        student.get('grades').push({
+          courseId: this.id,
+          name: grade.name,
+          score: ''
+        });
+      } else {
+        if (_.isNumber(match.score)){
+          assignmentGrades.push(match.score);
+        }
+      }
+    }, this);
   }
 });

@@ -50,7 +50,7 @@ module.exports = React.createBackboneClass({
   },
 
   changeAttendance: function(e) {
-    if (!this.props.currentUser.get('is_student')) {
+    if (this.props.currentUser.get('is_admin') || this.props.currentUser.get('is_instructor')) {
       this.checkIn($(e.currentTarget).data('date'));
     } else if (moment($(e.currentTarget).data('date'), 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
       var code = prompt('Enter Daily Attendance Code');
@@ -289,9 +289,9 @@ module.exports = React.createBackboneClass({
           <div className="col s12 m6 l4">
             <div className="card">
               <div className="card-content">
-                <span className="card-title">Grade Average: <span className={'score'+ this.getModel().get('gradeAverage')}>{this.getModel().get('gradeAverage')}%</span></span>
+                <span className="card-title">Grade Average: <span className={'score'+ this.getModel().gradeAverage()}>{this.getModel().gradeAverage()}%</span></span>
                 <p className="center-align">
-                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().get('gradeAverage')).data} options={this.getModel().averageChartData(this.getModel().get('gradeAverage')).options} />
+                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().gradeAverage()).data} options={this.getModel().averageChartData(this.getModel().gradeAverage()).options} />
                 </p>
               </div>
             </div>
