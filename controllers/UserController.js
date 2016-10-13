@@ -74,7 +74,10 @@ module.exports = {
               limit: 100
             },
             function(err, charges) {
-              user.charges = charges.data;
+              if (err) console.log(err);
+              if (charges) {
+                user.charges = charges.data;
+              }
               return res.json(user);
             }
           );

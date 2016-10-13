@@ -99,5 +99,43 @@ module.exports = Backbone.Model.extend({
       obj.courses = new CoursesCollection(obj.courses, { parse: true });
     }
     return obj;
+  },
+
+  gradeAverage: function() {
+    if (this.grade_average) return this.grade_average;
+    var studentDailyGrades = [];
+    var studentCheckpointGrades = [];
+    _.each(this.get('grades'), function(grade) {
+      var checkpoint = _.findWhere(this.get('courses').get(grade.courseId).get('grades'), { name: grade.name }).checkpoint;
+      if (checkpoint) {
+        studentCheckpointGrades.push(Number(grade.score))
+      } else {
+        studentDailyGrades.push(Number(grade.score))
+      }
+    }, this);
+
+    var dailyAverage = 0;
+    var dailyLength = studentDailyGrades.length;
+    if (dailyLength) {
+      dailyAverage = _.reduce(studentDailyGrades, function(memo, dailyLength) { return memo + dailyLength; }) / dailyLength;
+    }
+
+    var checkpointAverage = 0;
+    var checkpointLength = studentCheckpointGrades.length;
+    if (checkpointLength) {
+      checkpointAverage = _.reduce(studentCheckpointGrades, function(memo, checkpointLength) { return memo + checkpointLength; }) / checkpointLength;
+    }
+
+    if (!checkpointAverage && !dailyAverage){
+      this.grade_average = 0;
+    } else if (!checkpointAverage) {
+      this.grade_average = Math.round(dailyAverage);
+    } else if (!dailyAverage) {
+      this.grade_average = Math.round(checkpointAverage);
+    } else {
+      this.grade_average = Math.round(dailyAverage * .3 + checkpointAverage * .7);
+    }
+
+    return this.grade_average;
   }
 });
