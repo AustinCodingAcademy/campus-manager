@@ -102,15 +102,17 @@ module.exports = Backbone.Model.extend({
   },
 
   gradeAverage: function() {
-    if (this.grade_average) return this.grade_average;
     var studentDailyGrades = [];
     var studentCheckpointGrades = [];
     _.each(this.get('grades'), function(grade) {
-      var checkpoint = _.findWhere(this.get('courses').get(grade.courseId).get('grades'), { name: grade.name }).checkpoint;
-      if (checkpoint) {
-        studentCheckpointGrades.push(Number(grade.score))
-      } else {
-        studentDailyGrades.push(Number(grade.score))
+      var courseGrade = _.findWhere(this.get('courses').get(grade.courseId).get('grades'), { name: grade.name });
+      if (courseGrade) {
+        var checkpoint = courseGrade.checkpoint;
+        if (checkpoint) {
+          studentCheckpointGrades.push(Number(grade.score));
+        } else {
+          studentDailyGrades.push(Number(grade.score));
+        }
       }
     }, this);
 
