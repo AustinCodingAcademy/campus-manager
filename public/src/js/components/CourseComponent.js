@@ -131,6 +131,7 @@ module.exports = React.createBackboneClass({
           } else {
             studentDailyScores.push(Number(grade.score));
           }
+        }
       }, this);
       var courseAverage = utils.weightedGradeAverage(studentCheckpointScores, studentDailyScores);
 
