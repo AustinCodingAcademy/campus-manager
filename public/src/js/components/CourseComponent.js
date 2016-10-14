@@ -124,7 +124,7 @@ module.exports = React.createBackboneClass({
       var courseGrades = _.each(_.filter(_.where(student.get('grades'), {courseId: this.getModel().id}), function(grade) {
         return _.isNumber(grade.score);
       }), function(grade){
-        var courseGrade = _.findWhere(this.get('courses').get(grade.courseId).get('grades'), { name: grade.name });
+        var courseGrade = _.findWhere(this.getModel().get('grades'), { name: grade.name });
         if (courseGrade) {
           if (courseGrade.checkpoint) {
             studentCheckpointScores.push(Number(grade.score));
