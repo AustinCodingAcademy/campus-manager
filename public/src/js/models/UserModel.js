@@ -107,8 +107,7 @@ module.exports = Backbone.Model.extend({
     _.each(this.get('grades'), function(grade) {
       var courseGrade = _.findWhere(this.get('courses').get(grade.courseId).get('grades'), { name: grade.name });
       if (courseGrade) {
-        var checkpoint = courseGrade.checkpoint;
-        if (checkpoint) {
+        if (courseGrade.checkpoint) {
           studentCheckpointGrades.push(Number(grade.score));
         } else {
           studentDailyGrades.push(Number(grade.score));
