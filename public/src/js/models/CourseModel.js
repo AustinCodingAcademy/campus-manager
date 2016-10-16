@@ -17,8 +17,11 @@ module.exports = Backbone.Model.extend({
     textbook: '',
     days: [],
     holidays: [],
-    cost: '',
-    attendance: new Backbone.Model({
+    cost: ''
+  },
+
+  initialize: function() {
+    this.set('attendance', new Backbone.Model({
       overTime: {
         data: {
           labels: [],
@@ -51,10 +54,7 @@ module.exports = Backbone.Model.extend({
           showLabels: false,
         }
       }
-    })
-  },
-
-  initialize: function() {
+    }), {silent: true});
     var firstSync = true;
     this.on('sync', function() {
       if (firstSync) {

@@ -42,13 +42,6 @@ module.exports = React.createBackboneClass({
     var r = confirm('Are you sure you want to delete ' + gradeName + '?');
     if (r == true) {
       this.getModel().get('grades').splice(gradeIdx, 1);
-      this.getModel().get('registrations').each(function(student) {
-        var gradeIdx = _.findIndex(student.get('grades'), function(grade) {
-          return grade.courseId === this.getModel().id && grade.name === gradeName;
-        }, this);
-        student.get('grades').splice(gradeIdx, 1);
-        student.save();
-      }, this);
       this.getModel().save();
     }
   },
@@ -180,7 +173,7 @@ module.exports = React.createBackboneClass({
 
     var studentGrades = this.getModel().get('registrations').map(function(student) {
       var courseGrades = _.filter(student.get('grades'), function(grade) {
-        return grade.courseId === this.getModel().id;
+        return grade.courseId === this.getModel().id && _.findWhere(this.getModel().get('grades'), { name: grade.name });
       }, this);
 
       var studentCells = _.map(courseGrades, function(grade, idx) {

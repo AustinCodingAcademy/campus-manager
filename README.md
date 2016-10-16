@@ -8,18 +8,19 @@
 [![Heroku](https://heroku-badge.herokuapp.com/?app=aca-campus)](http://aca-campus.herokuapp.com)
 
 ## Development
+You first need to setup your environment. You can either develop locally on your Mac or Windows machine, or develop in the cloud using a service such as [c9.io](https://c9.io/).
 
-### Machine Dependencies
+### Local
 1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
 
-2. 
+2.
   * Mac OSX
     1. Install [Homebrew](http://brew.sh/)
     1. Install Cairo and MongoDB `brew install cairo pkg-config mongodb`
     1. Create MongoDB data directory `sudo chmod 0755 /data/db && chown $USER /data/db`
     1. Start MongoDB `mongod`
-      * Leave this running or just close the window while running
-      * You'll have to do this step everytime you restart your computer
+      * Leave this running or just close the terminal window while running
+      * You'll have to do this step every time you restart your computer
     1. Install [Homebrew Cask](https://caskroom.github.io/) `brew tap caskroom/cask`
     1. Install XQuartz `brew cask install xquartz`
   * Windows
@@ -28,8 +29,16 @@
     1. Install MongoDB `choco install mongodb`
     1. Create MongoDB data directory `mkdir /data/db`
     1. Start MongoDB `mongod.exe`
-      * Leave this running or just close the window while running
-      * You'll have to do this step everytime you restart your computer
+      * Leave this running or just close the terminal window while running
+      * You'll have to do this step every time you restart your computer
+
+### Cloud
+1. Fork the repository into your github account
+1. Create account on [c9.io](https://c9.io/) and connect it to your GitHub accuont
+1. Create a new Node.js workspace with your forked github repository
+1. In the terminal, install MongoDB `sudo apt-get install mongodb-org -y`
+1. Start MongoDB `mongod --smallfiles`
+
 
 ### App Dependencies
 After forking, cloning, and navigating into repository:
@@ -37,7 +46,6 @@ After forking, cloning, and navigating into repository:
 1. Install dependencies `npm install`
 1. Duplicate `.env.example` and name it `.env`
 1. Leave `npm run gulp` running in one terminal session
-1. Leave `npm run develop` running in another terminal session
 1. navigate to `http://localhost:3000/register` to create a user
 
 ## For testing:
