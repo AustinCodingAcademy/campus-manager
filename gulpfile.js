@@ -117,6 +117,14 @@ gulp.task('clean-db', function() {
   });
 });
 
+gulp.task('start', function () {
+  nodemon({
+    script: './bin/www'
+  , ext: 'js'
+  , env: { 'NODE_ENV': 'development' }
+  })
+});
+
 gulp.task('nodemon-start', function() {
   nodemon({
     script: './bin/www',
@@ -149,5 +157,5 @@ gulp.task('test', function(callback) {
   runSequence('clean-db', 'nodemon-start', 'nightwatch', 'nodemon-quit', callback)
 });
 
-gulp.task('develop', ['bundle-dev', 'sass-dev']);
+gulp.task('develop', ['start', 'bundle-dev', 'sass-dev']);
 gulp.task('default', ['develop', 'watch']);
