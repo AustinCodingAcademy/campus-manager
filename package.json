@@ -7,7 +7,6 @@
     "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
-    "develop": "nodemon ./bin/www",
     "mongoose-gen": "mongoose-gen",
     "test": "gulp develop && gulp test"
   },
