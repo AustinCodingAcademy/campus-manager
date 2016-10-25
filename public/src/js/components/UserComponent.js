@@ -193,7 +193,7 @@ module.exports = React.createBackboneClass({
       );
     } else if (totalPaid - totalCourseCost < 490) {
       registrationCard = (
-        <div className="card-panel orange">
+        <div className="card-panel deep-orange darken-4">
           <span className="white-text">
             To register for another course, you must have a positive balance of at least <strong>$490.00</strong>.
           </span>
@@ -226,41 +226,41 @@ module.exports = React.createBackboneClass({
                 </span>
                 <p>
                   <i className="fa fa-fw fa-envelope"></i>
-                  <a href={'mailto:' + this.getModel().get('username')} target="_blank">
+                  <a className="blue-text text-darken-2" href={'mailto:' + this.getModel().get('username')} target="_blank">
                     {this.getModel().get('username')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-mobile"></i>
-                  <a href={'tel:'+ this.getModel().get('phone')}>
-                    {this.getModel().get('phone')}
+                  <a className="blue-text text-darken-2" href={'tel:'+ this.getModel().get('phone')}>
+                    Phone: {this.getModel().get('phone')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-github"></i>
-                  <a href={'https://github.com/' + this.getModel().get('github')} target="_blank">
+                  <a className="blue-text text-darken-2" title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
                     {this.getModel().get('github')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-globe"></i>
-                  <a href={this.getModel().get('website')} target="_blank">
+                  <a className="blue-text text-darken-2" title={'Website'} href={this.getModel().get('website')} target="_blank">
                     {this.getModel().get('website')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-code"></i>
-                  <a href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
+                  <a className="blue-text text-darken-2" title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
                     {this.getModel().get('codecademy')}
                   </a>
                 </p>
                 <p>
                   <i className="fa fa-fw fa-map-marker"></i>
-                  <a href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
-                    {this.getModel().get('zipcode')}
+                  <a className="blue-text text-darken-2" href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
+                    ZIP: {this.getModel().get('zipcode')}
                   </a>
                 </p>
-                <div className="center-align" style={{position: 'absolute', right: '-20px', bottom: '95px', width: '100px'}}>
+                <div aria-hidden="true" className="center-align" style={{position: 'absolute', right: '-20px', bottom: '95px', width: '100px'}}>
                   <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
                   <DoughnutChart data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
                 </div>
@@ -290,7 +290,7 @@ module.exports = React.createBackboneClass({
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Grade Average: <span className={'score'+ this.getModel().gradeAverage()}>{this.getModel().gradeAverage()}%</span></span>
-                <p className="center-align">
+                <p aria-hidden="true" className="center-align">
                   <DoughnutChart data={this.getModel().averageChartData(this.getModel().gradeAverage()).data} options={this.getModel().averageChartData(this.getModel().gradeAverage()).options} />
                 </p>
               </div>
@@ -302,7 +302,7 @@ module.exports = React.createBackboneClass({
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Attendance: <span className={'score'+ this.getModel().attendanceAverage()}>{this.getModel().attendanceAverage()}%</span></span>
-                <p className="center-align">
+                <p aria-hidden="true" className="center-align">
                   <DoughnutChart data={this.getModel().averageChartData(this.getModel().attendanceAverage()).data} options={this.getModel().averageChartData(this.getModel().attendanceAverage()).options} />
                 </p>
               </div>
@@ -348,8 +348,8 @@ module.exports = React.createBackboneClass({
                     </tfoot>
                   </table>
                   <div className="input-field">
-                    <label htmlFor="amount">1. Enter Payment Amount ($)</label>
-                    <input ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
+                    <label className="grey-text text-darken-2" htmlFor="payment-amount">1. Enter Payment Amount ($)</label>
+                    <input id="payment-amount" ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
                   </div>
                   <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} currentUser={this.props.currentUser} ref="checkout"/>
                 </div>
