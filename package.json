@@ -8,7 +8,7 @@
     "start": "node ./bin/www",
     "gulp": "gulp",
     "mongoose-gen": "mongoose-gen",
-    "test": "gulp develop && gulp test"
+    "test": "gulp build && gulp test"
   },
   "engines": {
     "node": "6.7.0"
