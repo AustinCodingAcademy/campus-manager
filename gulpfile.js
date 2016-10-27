@@ -1,10 +1,10 @@
 'use strict';
 
-if (process.env.NODE_ENV === 'development') {
+if (['test', 'production'].indexOf(process.env.NODE_ENV) === -1) {
   require('dotenv').config();
 }
 
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV !== 'production') {
   var nodemon = require('nodemon');
   var DatabaseCleaner = require('database-cleaner');
   var databaseCleaner = new DatabaseCleaner('mongodb');
@@ -105,6 +105,8 @@ gulp.task('watch', function () {
 gulp.task('build', function(callback) {
   if (process.env.NODE_ENV === 'production') {
     runSequence(['bundle', 'sass'], 'compress', 'symlink-cb-paths', callback);
+  } else {
+    runSequence(['bundle', 'sass'], 'compress');
   }
 });
 
