@@ -233,7 +233,7 @@ module.exports = React.createBackboneClass({
                 <p>
                   <i className="fa fa-fw fa-mobile"></i>
                   <a className="blue-text text-darken-2" href={'tel:'+ this.getModel().get('phone')}>
-                    Phone: {this.getModel().get('phone')}
+                    <span className="hidden">Phone: </span>{this.getModel().get('phone')}
                   </a>
                 </p>
                 <p>
@@ -257,7 +257,7 @@ module.exports = React.createBackboneClass({
                 <p>
                   <i className="fa fa-fw fa-map-marker"></i>
                   <a className="blue-text text-darken-2" href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
-                    ZIP: {this.getModel().get('zipcode')}
+                    <span className="hidden">ZIP: </span>{this.getModel().get('zipcode')}
                   </a>
                 </p>
                 <div aria-hidden="true" className="center-align" style={{position: 'absolute', right: '-20px', bottom: '95px', width: '100px'}}>
