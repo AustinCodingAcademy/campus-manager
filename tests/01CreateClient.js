@@ -73,7 +73,7 @@ module.exports = {
     .pause(500)
     .click('[href="#locations"]')
     .pause(1000)
-    .click('a[class="waves-effect waves-teal btn modal-trigger"]')
+    .click('a[data-test="new-location"]')
     .pause(500)
     .click('input[id="name"]')
     .keys('Test Location')
@@ -99,7 +99,7 @@ module.exports = {
     browser
     .click('[href="#terms"]')
     .pause(1000)
-    .click('a[class="waves-effect waves-teal btn modal-trigger"]')
+    .click('a[data-test="new-term"]')
     .pause(500)
     .keys('\uE004')
     .keys('test term')
@@ -125,7 +125,7 @@ module.exports = {
     browser
     .click('[href="#courses"]')
     .pause(1000)
-    .click('a[class="waves-effect waves-teal btn modal-trigger"]')
+    .click('a[data-test="new-course"]')
     .pause(500)
     .keys('\uE004')
     .keys('test course')
