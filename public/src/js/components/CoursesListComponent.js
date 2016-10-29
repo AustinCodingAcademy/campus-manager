@@ -32,7 +32,7 @@ module.exports = React.createBackboneClass({
       <div className="row">
         <div className="col s12">
           <br />
-          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newCourseModal}><i className="material-icons left">add</i> course</a>
+          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newCourseModal} data-test="new-course"><i className="material-icons left">add</i> course</a>
           <br />
           <table>
             <thead>
