@@ -8,6 +8,11 @@ $fa-font-path: '/fonts/fontawesome/';
   './modal',
   './youtube_uploader';
 
+  *:focus { /* removes Chrome's default outline around input boxes */
+    outline-style: none !important;
+    outline: 0 !important;
+  }
+
 .z-top {
   z-index: 1004;
 }

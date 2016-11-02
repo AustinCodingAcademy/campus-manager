@@ -36,6 +36,23 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
+router.get('/feedback', function(req, res, next) {
+  var user = {
+    name: '',
+    phone: '',
+    username: ''
+  };
+  if (req.user) {
+    user.name = req.user.first_name + ' ' + req.user.last_name;
+    user.phone = req.user.phone || '';
+    user.username = req.user.username;
+  }
+  res.render('feedback-iframe', {
+    user: user,
+    form_url: 'https://docs.google.com/forms/d/e/' + process.env.FEEDBACK_FORM_ID + '/formResponse'
+  });
+});
+
 router.get('/register', function(req, res, next) {
   if (!process.env.REGISTRATION_ENABLED) { return res.redirect('/'); }
   if(req.isAuthenticated()) {

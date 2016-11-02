@@ -45,6 +45,12 @@ $(function() {
     }
   });
 
+  $('#feedback').modal({
+    complete: function(modal, trigger) {
+      document.getElementById('feedback-iframe').contentWindow.location = '/feedback';
+    },
+  });
+
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'index',
