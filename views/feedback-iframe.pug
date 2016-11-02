@@ -1,0 +1,39 @@
+doctype html
+html(lang='us-en')
+  head
+    title Campus Manager: Course Management Tool for ACA
+    meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1')
+    if env == 'production'
+      link(rel='stylesheet', href='{{cache-break:css/app.css}}')
+    else
+      link(rel='stylesheet', href='/css/app.css')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+  body
+    .row
+      form.col.s12(action=form_url, method='POST', target='_self', onsubmit='')
+        .modal-content
+          h5 Have some feedback? Spotted a bug? A feature idea!
+          .row
+            .input-field.col.s12.m6
+              input.validate(type='text', name='entry_1635986456', value=user.name, dir='auto', aria-label='Name', title='')
+              label(for='entry_1635986456') Name
+            .input-field.col.s12.m6
+              input.validate(type='text', name='entry.1147586333', value=user.username, dir='auto', aria-label='Email', title='')
+              label(for='entry_1147586333') Email
+            .input-field.col.s12.m6
+              input.validate(type='text', name='entry.677431156', value=user.phone, dir='auto', aria-label='Phone', title='')
+              label(for='entry_677431156') Phone
+            .input-field.col.s12.m6
+              input.validate(type='text', name='entry.2100705449', value='', dir='auto', aria-label='Current Course / Location / Class Days', title='')
+              label(for='entry_2100705449') Current Course / Location / Class Days
+            .input-field.col.s12
+              textarea.materialize-textarea(name='entry.1349808760', rows='8', cols='0', dir='auto', aria-label='Feedback')
+              label(for='entry_1349808760') Feedback
+          input(type='hidden', name='draftResponse', value='[,,"5995000998175107185"]')
+          input(type='hidden', name='pageHistory', value='0')
+          input(type='hidden', name='fbzx', value='5995000998175107185')
+        .modal-footer.row
+          button.btn.waves-effect.waves-light(type='submit', name='submit') Submit
+            i.material-icons.right send
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js')

@@ -10,7 +10,7 @@ module.exports = React.createBackboneClass({
     return (
       <div className="nav-wrapper white">
         <a href="#" className="brand-logo">
-          <img src="/img/aca-logo-header.jpg" style={{width:195}}/>
+          <img alt="ACA Logo" src="/img/aca-logo-header.jpg" style={{width:195}}/>
         </a>
         <a href="#" data-activates="mobile-demo" className="button-collapse">
           <i className="material-icons black-text">menu</i>
@@ -40,7 +40,7 @@ module.exports = React.createBackboneClass({
           <li><a href="/logout">Logout</a></li>
         </ul>
         <ul id="nav-user" className="dropdown-content">
-          <li><a href="/logout">Logout</a></li>
+          <li><a className="teal-text text-darken-4" href="/logout">Logout</a></li>
         </ul>
       </div>
     );

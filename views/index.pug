@@ -1,7 +1,7 @@
 doctype html
-html
+html(lang='us-en')
   head
-    title Campus Manager
+    title Campus Manager: Course Management Tool for ACA
     meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1')
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='mobile-web-app-capable' content='yes')
@@ -16,6 +16,7 @@ html
     div(data-bootstrap=user)
     .container#container
     #modal-container
+    include feedback
     script(type='text/javascript', src='https://apis.google.com/js/client.js')
     if env == 'production'
       script(type='text/javascript', src='{{cache-break:js/bundle.js}}')

@@ -1,0 +1,8 @@
+// Modal Trigger
+.fixed-action-btn(style='bottom: 45px; right: 24px;')
+  a.btn-floating.btn-large.waves-effect.waves-light.red.btn-floating(href='#feedback')
+    i.material-icons.right announcement
+// Modal Structure
+#feedback.modal
+  div(style="position: relative;padding-bottom: 56.25%;padding-top: 35px;height: 0;overflow: hidden; min-height: 400px")
+    iframe#feedback-iframe(src='/feedback', frameborder=0, style="position: absolute; top:0; left: 0; width: 100%; height: 100%;")
