@@ -16,6 +16,7 @@ html(lang='us-en')
     div(data-bootstrap=user)
     .container#container
     #modal-container
+    include feedback
     script(type='text/javascript', src='https://apis.google.com/js/client.js')
     if env == 'production'
       script(type='text/javascript', src='{{cache-break:js/bundle.js}}')
