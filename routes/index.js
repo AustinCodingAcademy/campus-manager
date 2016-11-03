@@ -21,7 +21,10 @@ router.get('/login', function(req, res, next) {
   if(req.isAuthenticated()) {
     res.redirect('/');
   } else {
-    res.render('login', {csrfToken: req.csrfToken()});
+    res.render('login', {
+      csrfToken: req.csrfToken(),
+      register: process.env.REGISTRATION_ENABLED
+    });
   }
 });
 
@@ -58,7 +61,10 @@ router.get('/register', function(req, res, next) {
   if(req.isAuthenticated()) {
     return res.redirect('/');
   } else {
-    return res.render('register', {csrfToken: req.csrfToken()});
+    return res.render('register', {
+      csrfToken: req.csrfToken(),
+      register: process.env.REGISTRATION_ENABLED
+    });
   }
 });
 

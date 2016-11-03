@@ -15,7 +15,10 @@ router.get('/', function(req, res, next) {
   if(req.isAuthenticated()) {
     res.redirect('/');
   } else {
-    res.render('reset', {csrfToken: req.csrfToken()});
+    res.render('reset', {
+      csrfToken: req.csrfToken(),
+      register: process.env.REGISTRATION_ENABLED
+    });
   }
 });
 

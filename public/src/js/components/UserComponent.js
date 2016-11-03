@@ -217,7 +217,7 @@ module.exports = React.createBackboneClass({
                       <i className="material-icons">mode_edit</i>
                     </a>
                     <a href="http://en.gravatar.com/" target="_blank">
-                      <Gravatar email={this.getModel().get('username')} className="circle" https />
+                      <Gravatar email={this.getModel().get('username')} className="circle" protocol="https://" />
                     </a>
                     <div className="valign">
                       &nbsp;&nbsp;{this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
