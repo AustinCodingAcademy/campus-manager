@@ -11,7 +11,7 @@ module.exports = React.createBackboneClass({
       collection: this.getCollection(),
       model: this.getModel()
     }), $('#modal-container')[0]);
-    $('#course-modal' + this.getModel().id).openModal();
+    $('#course-modal' + this.getModel().id).modal('open');
     Materialize.updateTextFields();
   },
 

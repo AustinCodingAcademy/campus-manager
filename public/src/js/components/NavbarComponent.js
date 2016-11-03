@@ -8,27 +8,33 @@ module.exports = React.createBackboneClass({
       hidden = '';
     }
     return (
-      <div className="nav-wrapper white">
-        <a href="#" className="brand-logo">
-          <img alt="ACA Logo" src="/img/aca-logo-header.jpg" style={{width:195}}/>
-        </a>
-        <a href="#" data-activates="mobile-demo" className="button-collapse">
-          <i className="material-icons black-text">menu</i>
-        </a>
-        <ul className="right hide-on-med-and-down">
-          <li><a href="#" className="black-text">Dashboard</a></li>
-          <li className={hidden}><a href="#registration" className="black-text">Registration</a></li>
-          <li className={hidden}><a href="#users" className="black-text">Users</a></li>
-          <li className={hidden}><a href="#locations" className="black-text">Locations</a></li>
-          <li className={hidden}><a href="#terms" className="black-text">Terms</a></li>
-          <li className={hidden}><a href="#courses" className="black-text">Courses</a></li>
-          <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
-          <li>
-            <a className="dropdown-button black-text" href="#!" data-activates="nav-user">
-              {this.getModel().get('username')} <i className="material-icons right">arrow_drop_down</i>
-            </a>
-          </li>
-        </ul>
+      <div>
+        <div className="navbar-fixed">
+          <nav>
+            <div className="nav-wrapper white">
+              <a href="#" className="brand-logo">
+                <img alt="ACA Logo" src="/img/aca-logo-header.jpg" style={{width:195}}/>
+              </a>
+              <a href="#" data-activates="mobile-demo" className="button-collapse">
+                <i className="material-icons black-text">menu</i>
+              </a>
+              <ul className="right hide-on-med-and-down">
+                <li><a href="#" className="black-text">Dashboard</a></li>
+                <li className={hidden}><a href="#registration" className="black-text">Registration</a></li>
+                <li className={hidden}><a href="#users" className="black-text">Users</a></li>
+                <li className={hidden}><a href="#locations" className="black-text">Locations</a></li>
+                <li className={hidden}><a href="#terms" className="black-text">Terms</a></li>
+                <li className={hidden}><a href="#courses" className="black-text">Courses</a></li>
+                <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
+                <li>
+                  <a className="dropdown-button black-text" href="#!" data-activates="nav-user">
+                    {this.getModel().get('username')} <i className="material-icons right">arrow_drop_down</i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
         <ul className="side-nav" id="mobile-demo">
           <li><a href="#" className="black-text">Dashboard</a></li>
           <li className={hidden}><a href="#registration">Registration</a></li>

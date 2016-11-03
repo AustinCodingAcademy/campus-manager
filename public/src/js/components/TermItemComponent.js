@@ -12,7 +12,7 @@ module.exports = React.createBackboneClass({
       model: this.getModel(),
       locations: this.props.locations
     }), $('#modal-container')[0]);
-    $('#term-modal' + this.getModel().id).openModal();
+    $('#term-modal' + this.getModel().id).modal('open');
     Materialize.updateTextFields();
   },
 

@@ -15,7 +15,7 @@ module.exports = React.createBackboneClass({
       collection: this.getCollection(),
       model: new UserModel()
     }), $('#modal-container')[0]);
-    $('#user-modal').openModal();
+    $('#user-modal').modal('open');
   },
 
   render: function() {
@@ -32,7 +32,9 @@ module.exports = React.createBackboneClass({
       <div className="row">
         <div className="col s12">
           <br />
-          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newUserModal}><i className="material-icons left">add</i> user</a>
+          <a href="#modal" className="waves-effect waves-teal btn modal-trigger" onClick={this.newUserModal}>
+            <i className="material-icons left">add</i> user
+          </a>
           <br />
           <table>
             <thead>

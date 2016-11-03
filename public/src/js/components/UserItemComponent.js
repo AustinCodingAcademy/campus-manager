@@ -8,7 +8,7 @@ module.exports = React.createBackboneClass({
     e.preventDefault();
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(<UserModalComponent collection={this.getCollection()} model={this.getModel()}/>, $('#modal-container')[0]);
-    $('#user-modal' + this.getModel().id).openModal();
+    $('#user-modal' + this.getModel().id).modal('open');
     Materialize.updateTextFields();
   },
 

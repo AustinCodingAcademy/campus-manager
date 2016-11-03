@@ -26,10 +26,9 @@ module.exports = React.createBackboneClass({
     this.refs.holidays.value = this.getModel().get('holidays').join(', ');
     this.refs.cost.value = Number(this.getModel().get('cost')).toFixed(2);
 
-    $(document).ready(function() {
-      $('select').material_select();
-      Materialize.updateTextFields();
-    });
+    $('select').material_select();
+    Materialize.updateTextFields();
+    $('.modal').modal();
   },
 
   saveCourse: function(e) {

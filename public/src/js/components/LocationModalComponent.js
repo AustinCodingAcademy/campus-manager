@@ -19,6 +19,7 @@ module.exports = React.createBackboneClass({
       this.refs[attr].value = this.getModel().get(attr);
     }, this);
     Materialize.updateTextFields();
+    $('.modal').modal();
   },
 
   saveLocation: function(e) {
@@ -42,7 +43,7 @@ module.exports = React.createBackboneClass({
       this.getModel().destroy({
         wait: true,
         success: function() {
-          $('.modal').closeModal();
+          $('.modal').modal('close');
         }
       });
     }

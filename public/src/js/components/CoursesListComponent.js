@@ -14,7 +14,7 @@ module.exports = React.createBackboneClass({
       collection: this.getCollection(),
       model: new CourseModel()
     }), $('#modal-container')[0]);
-    $('#course-modal').openModal();
+    $('#course-modal').modal('open');
   },
 
   render: function() {

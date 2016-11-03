@@ -69,8 +69,8 @@ $(function() {
     currentView: undefined,
 
     initialize: function() {
-      $('<div class="navbar-fixed"><nav></nav></div>').insertBefore('#container');
-      ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('nav')[0]);
+      $('<div id="nav-container"></div>').insertBefore('#container');
+      ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('#nav-container')[0]);
     },
 
     execute: function(callback, args, name) {

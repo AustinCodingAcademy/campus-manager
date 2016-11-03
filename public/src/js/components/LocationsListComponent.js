@@ -13,7 +13,7 @@ module.exports = React.createBackboneClass({
       collection: this.getCollection(),
       model: new LocationModel(),
     }), $('#modal-container')[0]);
-    $('#location-modal').openModal();
+    $('#location-modal').modal('open');
   },
 
   render: function() {
