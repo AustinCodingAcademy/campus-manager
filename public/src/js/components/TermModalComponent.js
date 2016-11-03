@@ -8,9 +8,8 @@ module.exports = React.createBackboneClass({
     this.refs.name.value = this.getModel().get('name');
     $(this.refs.start_date).pickadate().pickadate('picker').set('select', moment.utc(this.getModel().get('start_date')).format('D MMMM, YYYY'), { muted: true });
     $(this.refs.end_date).pickadate().pickadate('picker').set('select', moment.utc(this.getModel().get('end_date')).format('D MMMM, YYYY'), { muted: true });
-    $(document).ready(function() {
-      $('select').material_select();
-    });
+    $('select').material_select();
+    $('.modal').modal();
   },
 
   saveTerm: function(e) {
@@ -36,7 +35,7 @@ module.exports = React.createBackboneClass({
       this.getModel().destroy({
         wait: true,
         success: function() {
-          $('#term-modal').closeModal();
+          $('#term-modal').modal('close');
         }
       });
     }

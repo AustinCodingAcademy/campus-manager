@@ -31,7 +31,7 @@ module.exports = React.createBackboneClass({
       model: this.getModel(),
       rolesHidden: true
     }), $('#modal-container')[0]);
-    $('#user-modal' + this.getModel().id).openModal();
+    $('#user-modal' + this.getModel().id).modal('open');
     Materialize.updateTextFields();
   },
 

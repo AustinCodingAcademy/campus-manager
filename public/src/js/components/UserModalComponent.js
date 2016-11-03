@@ -6,8 +6,12 @@ var UserModel = require('../models/UserModel');
 module.exports = React.createBackboneClass({
 
   getInitialState: function () {
-      return {model: this.getModel().attributes};
-    },
+    return {model: this.getModel().attributes};
+  },
+
+  componentDidMount: function() {
+    $('.modal').modal();
+  },
 
   // On input change update the state with the given
   // attribute and value retreived from the event
@@ -32,7 +36,7 @@ module.exports = React.createBackboneClass({
 
     this.getModel().save(this.state.model, {
       success: function (user) {
-        $('#' + 'user-modal' + (that.getModel().id || '')).closeModal();
+        $('#' + 'user-modal' + (that.getModel().id || '')).modal('close');
         if (that.getCollection()) {
           that.getCollection().add(user);
         }
@@ -49,7 +53,7 @@ module.exports = React.createBackboneClass({
       this.getModel().destroy({
         wait: true,
         success: function() {
-          $('#' + 'user-modal' + (that.getModel().id || '')).closeModal();
+          $('#' + 'user-modal' + (that.getModel().id || '')).modal('close');
         }
       });
     }

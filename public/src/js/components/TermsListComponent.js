@@ -13,7 +13,7 @@ module.exports = React.createBackboneClass({
       model: new TermModel(),
       locations: this.props.locations
     }), $('#modal-container')[0]);
-    $('#term-modal').openModal();
+    $('#term-modal').modal('open');
   },
 
   render: function() {

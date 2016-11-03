@@ -37,7 +37,7 @@ html(lang='us-en')
           }
         });
 
-        $('.modal').modal({
+        $('#feedback').modal({
           complete: function(modal, trigger) {
             document.getElementById('feedback-iframe').contentWindow.location = '/feedback';
           },
