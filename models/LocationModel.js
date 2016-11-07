@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var mongooseToCsv = require('mongoose-to-csv');
 
-var locationSchema = new Schema({	'address' : String,	'name' : String,	'city' : String,	'state' : String,	'zipcode' : String,	'contact' : String,  'client' : {	 	type: Schema.Types.ObjectId,	 	ref: 'user'	},  'phone': String});
+var locationSchema = new Schema({  'address' : String,  'name' : String,  'city' : String,  'state' : String,  'zipcode' : String,  'contact' : String,  'client' : {    type: Schema.Types.ObjectId,    ref: 'user'  },  'phone': String});
 
 locationSchema.plugin(mongooseToCsv, {
   headers: 'id name city',
