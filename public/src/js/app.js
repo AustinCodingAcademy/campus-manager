@@ -30,6 +30,7 @@ var LocationsListComponent = React.createFactory(require('./components/Locations
 var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
 var UserComponent = React.createFactory(require('./components/UserComponent'));
+var ReportComponent = React.createFactory(require('./components/ReportComponent'));
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -62,7 +63,8 @@ $(function() {
       'courses': 'courses',
       'locations': 'locations',
       'courses/:id': 'course',
-      'registration': 'registration'
+      'registration': 'registration',
+      'report': 'report'
     },
 
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -168,6 +170,16 @@ $(function() {
           });
         }
       });
+    },
+
+    report: function() {
+      ReactDOM.render(ReportComponent({
+        model: new Backbone.Model({
+          columns: [],
+          values:[],
+          code: 'SELECT idn, first_name, last_name, email, phone, COUNT(users.email) as courses FROM users\nINNER JOIN registrations ON users.id = registrations.user_id\nGROUP BY users.email\nHAVING COUNT(users.email) < 3 AND COUNT(users.email) > 1\nORDER BY courses DESC, cast(idn as Number) ASC;'
+        })
+      }), $('#container')[0]);
     }
   });
 

@@ -5,6 +5,7 @@ $fa-font-path: '/fonts/fontawesome/';
 @import
   '../../../node_modules/materialize-css/dist/css/materialize',
   '../../../node_modules/font-awesome/scss/font-awesome.scss',
+  '../../../node_modules/codemirror/lib/codemirror',
   './modal',
   './youtube_uploader';
 

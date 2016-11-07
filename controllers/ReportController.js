@@ -77,8 +77,8 @@ module.exports = {
       if (idx < tables.length) {
         createTable(tables[idx])
       } else {
-        res.type('text/plain');
-        res.send(db);
+        res.type('arraybuffer');
+        res.send(fs.readFileSync(tmpDir + timestamp + '-report.sqlite3'));
       }
     }
     createTable(tables[0]);

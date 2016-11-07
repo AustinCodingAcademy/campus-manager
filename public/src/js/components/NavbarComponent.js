@@ -26,6 +26,7 @@ module.exports = React.createBackboneClass({
                 <li className={hidden}><a href="#terms" className="black-text">Terms</a></li>
                 <li className={hidden}><a href="#courses" className="black-text">Courses</a></li>
                 <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
+                <li className={hidden}><a href="#report" className="black-text">Report</a></li>
                 <li>
                   <a className="dropdown-button black-text" href="#!" data-activates="nav-user">
                     {this.getModel().get('username')} <i className="material-icons right">arrow_drop_down</i>
@@ -43,6 +44,7 @@ module.exports = React.createBackboneClass({
           <li className={hidden}><a href="#terms">Terms</a></li>
           <li className={hidden}><a href="#courses">Courses</a></li>
           <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
+          <li className={hidden}><a href="#report" className="black-text">Report</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
         <ul id="nav-user" className="dropdown-content">
