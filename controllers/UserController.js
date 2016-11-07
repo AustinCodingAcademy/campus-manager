@@ -106,7 +106,6 @@ module.exports = {
       'is_student',
       'codecademy',
       'zipcode',
-      'photo',
       'grades',
       'credits'
     ];
@@ -162,7 +161,6 @@ module.exports = {
         'attendance',
         'codecademy',
         'zipcode',
-        'photo',
         'grades',
         'credits'
       ];
@@ -248,8 +246,7 @@ module.exports = {
               'website',
               'github',
               'codecademy',
-              'zipcode',
-              'photo'
+              'zipcode'
             ];
 
             _.each(attributes, function(attr) {

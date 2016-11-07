@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
+var mongooseToCsv = require('mongoose-to-csv');
 
 var courseSchema = new Schema({
 	"name" : String,
@@ -24,5 +25,15 @@ var courseSchema = new Schema({
     default: 0.00
   }
 }, { timestamps: true });
+
+courseSchema.plugin(mongooseToCsv, {
+  headers: 'id name seats',
+  constraints: {},
+  virtuals: {
+    'id': function(doc) {
+      return doc._id.toString();
+    }
+  }
+});
 
 module.exports = mongoose.model('course', courseSchema);
