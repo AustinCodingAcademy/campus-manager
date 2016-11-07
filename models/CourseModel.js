@@ -27,11 +27,14 @@ var courseSchema = new Schema({
 }, { timestamps: true });
 
 courseSchema.plugin(mongooseToCsv, {
-  headers: 'id name seats',
+  headers: 'id name seats term_id',
   constraints: {},
   virtuals: {
-    'id': function(doc) {
+    id: function(doc) {
       return doc._id.toString();
+    },
+    term_id: function(doc) {
+      return doc.term.toString();
     }
   }
 });

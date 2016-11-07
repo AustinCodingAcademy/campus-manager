@@ -177,7 +177,7 @@ $(function() {
         model: new Backbone.Model({
           columns: [],
           values:[],
-          code: 'SELECT idn, first_name, last_name, email, phone, COUNT(users.email) as courses FROM users\nINNER JOIN registrations ON users.id = registrations.user_id\nGROUP BY users.email\nHAVING COUNT(users.email) < 3 AND COUNT(users.email) > 1\nORDER BY courses DESC, cast(idn as Number) ASC;'
+          code: "SELECT name FROM sqlite_master WHERE type='table';"
         })
       }), $('#container')[0]);
     }

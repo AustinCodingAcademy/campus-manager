@@ -19,7 +19,7 @@ var termSchema = new Schema({
 }, { timestamps: true });
 
 termSchema.plugin(mongooseToCsv, {
-  headers: 'id name date_start date_end',
+  headers: 'id name date_start date_end location_id',
   constraints: {},
   virtuals: {
     id: function(doc) {
@@ -30,6 +30,9 @@ termSchema.plugin(mongooseToCsv, {
     },
     date_end: function(doc) {
       return moment.utc(doc.end_date).format('YYYY-MM-DD');
+    },
+    location_id: function(doc) {
+      return doc.location.toString();
     }
   }
 });
