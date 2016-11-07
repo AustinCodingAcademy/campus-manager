@@ -30,6 +30,7 @@ var LocationsListComponent = React.createFactory(require('./components/Locations
 var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
 var UserComponent = React.createFactory(require('./components/UserComponent'));
+var ReportComponent = React.createFactory(require('./components/ReportComponent'));
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -62,7 +63,8 @@ $(function() {
       'courses': 'courses',
       'locations': 'locations',
       'courses/:id': 'course',
-      'registration': 'registration'
+      'registration': 'registration',
+      'report': 'report'
     },
 
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -168,6 +170,16 @@ $(function() {
           });
         }
       });
+    },
+
+    report: function() {
+      ReactDOM.render(ReportComponent({
+        model: new Backbone.Model({
+          columns: [],
+          values:[],
+          code: "SELECT name FROM sqlite_master WHERE type='table';"
+        })
+      }), $('#container')[0]);
     }
   });
 

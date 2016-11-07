@@ -3,8 +3,9 @@ npm-debug.log
 *.sqlite
 config/env.js
 public/css
-public/js/bundle*
+public/js
 .env
 reports
 *.log
 .vscode
+tmp
