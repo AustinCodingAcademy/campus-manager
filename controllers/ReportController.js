@@ -8,6 +8,7 @@ var CourseModel = require('../models/CourseModel');
 var TermModel = require('../models/TermModel');
 var LocationModel = require('../models/LocationModel');
 var moment = require('moment');
+var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 require('moment-range');
 
 /**
@@ -52,7 +53,10 @@ module.exports = {
       },
       {
         name: 'course_dates'
-      }
+      },
+      // {
+      //   name: 'stripe_payments'
+      // }
     ];
     var idx = 0;
     function createTable(table) {
@@ -153,6 +157,23 @@ module.exports = {
               importCsv(table, fileName);
             });
             break;
+          case 'stripe_payments':
+          var collection = [];
+            function fetchAllStripeCharges(startingAfter) {
+              stripe.charges.list({ limit: 100, starting_after: startingAfter }, function(err, charges) {
+                if (err) { return res.json(500, { message: 'Error fetching charges', error: err }); }
+                _.each(charges.data, function(charge) {
+                  collection.push(charge);
+                });
+                if (charges.has_more) {
+                  fetchAllStripeCharges(_.last(charges.data).id);
+                } else {
+                  fs.writeFileSync(fileName, json2csv({ data: collection }));
+                  importCsv(table, fileName);
+                }
+              });
+            }
+          fetchAllStripeCharges();
         }
       }
     }
