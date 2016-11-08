@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "preinstall": "npm prune && npm install --build-from-source sqlite3",
+    "preinstall": "npm prune",
     "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
@@ -78,7 +78,8 @@
     "reactify": "1.1.1",
     "run-sequence": "1.2.2",
     "serve-favicon": "2.3.0",
-    "sql.js": "^0.3.2",
+    "sql.js": "0.3.2",
+    "sqlite3": "3.1.8",
     "stripe": "4.12.0",
     "underscore": "1.8.3",
     "vinyl-buffer": "1.0.0",
