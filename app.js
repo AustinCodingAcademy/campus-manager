@@ -16,8 +16,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
-var cookieParser = require('cookie-parser')
-var csrf = require('csurf')
+var cookieParser = require('cookie-parser');
+var csrf = require('csurf');
+var compression = require('compression');
 
 var passport = require('./config/passport');
 
@@ -54,6 +55,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
 app.use(csrf({cookie: true}));
+
+// compress all responses
+app.use(compression())
 
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
