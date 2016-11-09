@@ -106,7 +106,7 @@ gulp.task('build', function(callback) {
   if (process.env.NODE_ENV === 'production') {
     runSequence(['bundle', 'sass'], 'compress', 'symlink-cb-paths', callback);
   } else {
-    runSequence(['bundle', 'sass'], 'compress');
+    runSequence(['bundle-dev', 'sass-dev']);
   }
 });
 
