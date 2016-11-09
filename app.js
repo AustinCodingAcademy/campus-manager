@@ -57,7 +57,7 @@ app.use(cookieParser());
 app.use(csrf({cookie: true}));
 
 // compress all responses
-app.use(compression())
+app.use(compression({ threshold: 0 }))
 
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));

@@ -38,6 +38,7 @@ gulp.task('bundle', function () {
       [
         uglifyify,
         {
+          global: true,
           ignore: [
             './node_modules/sql.js/js/sql.js'
           ]
