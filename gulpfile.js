@@ -40,8 +40,9 @@ gulp.task('bundle', function () {
         {
           global: true,
           ignore: [
-            './node_modules/sql.js/js/sql.js'
-          ]
+            '**/node_modules/sql.js/**'
+          ],
+          dot: true
         }
       ]
     ]
