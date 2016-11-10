@@ -80,10 +80,11 @@
     "sql.js": "0.3.2",
     "sqlite3": "^3.1.8",
     "stripe": "4.12.0",
-    "uglifyify": "^3.0.4",
+    "uglifyify": "kevincolten/uglifyify",
     "underscore": "1.8.3",
     "vinyl-buffer": "1.0.0",
-    "vinyl-source-stream": "1.1.0"
+    "vinyl-source-stream": "1.1.0",
+    "webworkify": "1.4.0"
   },
   "browser": {
     "jquery": "jquery",
@@ -91,7 +92,8 @@
     "picker": "./node_modules/pickadate/lib/picker.js",
     "picker.date": "./node_modules/pickadate/lib/picker.date.js",
     "picker.time": "./node_modules/pickadate/lib/picker.time.js",
-    "cm-sql": "./node_modules/codemirror/mode/sql/sql.js"
+    "cm-sql": "./node_modules/codemirror/mode/sql/sql.js",
+    "worker.sql.js": "./node_modules/sql.js/js/worker.sql.js"
   },
   "browserify": {
     "transform": [
