@@ -158,13 +158,22 @@ module.exports = {
             });
             break;
           case 'stripe_payments':
-            importCsv(table, 'tmp/stripe_payments.csv');
+            try {
+              fs.statSync('tmp/stripe_payments.csv');
+              importCsv(table, 'tmp/stripe_payments.csv');
+            } catch (e) {
+              console.log(e);
+              importCsv(table, null, true);
+            }
+
           break;
         }
       }
     }
-    function importCsv(table, fileName) {
-      child_process.execSync('(echo .separator ,; echo .import ' + fileName + ' ' + table.name + ') | sqlite3 ' + tmpDir + timestamp + '-report.sqlite3');
+    function importCsv(table, fileName, skip) {
+      if (!skip) {
+        child_process.execSync('(echo .separator ,; echo .import ' + fileName + ' ' + table.name + ') | sqlite3 ' + tmpDir + timestamp + '-report.sqlite3');
+      }
       idx++;
       if (idx < tables.length) {
         createTable(tables[idx])
