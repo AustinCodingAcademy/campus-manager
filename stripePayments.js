@@ -13,6 +13,7 @@ function fetchAllStripeCharges(startingAfter) {
     if (charges.has_more) {
       fetchAllStripeCharges(_.last(charges.data).id);
     } else {
+      fs.mkdirsSync('tmp')
       fs.writeFileSync('tmp/stripe_payments.csv', json2csv({ data: collection }));
     }
   });
