@@ -4,11 +4,13 @@ var _ = require('underscore');
 var Codemirror = require('react-codemirror');
 require('cm-sql');
 var work = require('webworkify');
-var worker = work(require('worker.sql.js'));
 var tableToCsv = require('node-table-to-csv');
 
 module.exports = React.createBackboneClass({
+  worker: undefined,
+
   componentDidMount: function() {
+    this.worker = work(require('worker.sql.js'));
     this.loadDatabase();
   },
 
@@ -23,20 +25,20 @@ module.exports = React.createBackboneClass({
     xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
-      worker.onmessage = function() {
-        URL.revokeObjectURL(worker.objectURL);
+      this.worker.onmessage = function() {
+        URL.revokeObjectURL(this.worker.objectURL);
         $('.database-toast').fadeOut();
-        worker.onmessage = function(event){
+        this.worker.onmessage = function(event){
           $('.database-query').fadeOut();
           that.getModel().set(event.data.results[0]); // The result of the query
         };
         that.executeCode();
       }
-      worker.onerror = function(e) {
+      this.worker.onerror = function(e) {
         $('.database-query').fadeOut();
         that.refs.error.textContent = e.message
        };
-      worker.postMessage({
+      this.worker.postMessage({
         id: 1,
         action: 'open',
         buffer: new Uint8Array(this.response),
@@ -76,7 +78,7 @@ module.exports = React.createBackboneClass({
 
   executeCode: function() {
     Materialize.toast($('<span>Executing Query <i class="fa fa-cog fa-spin fa-fw"></i><span>'), null, 'database-query');
-    worker.postMessage({
+    this.worker.postMessage({
       id: 2,
       action: 'exec',
       sql: this.getModel().get('code')

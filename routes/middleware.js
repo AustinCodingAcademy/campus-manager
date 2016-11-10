@@ -8,16 +8,7 @@ module.exports = {
     res.status(401).send({ error: "You are not logged in." });
   },
 
-  super: function(req, res, next) {
-    if (req.isAuthenticated() && req.user.is_super) {
-      return next();
-    }
-
-    res.status(403).send({ error: "Must be a super user." });
-  },
-
   client: function(req, res, next) {
-
     if (req.isAuthenticated() && req.user.is_client) {
       return next();
     }
@@ -26,7 +17,6 @@ module.exports = {
   },
 
   admin: function(req, res, next) {
-
     if (req.isAuthenticated() && (req.user.is_client || req.user.is_admin)) {
       return next();
     }
@@ -39,11 +29,10 @@ module.exports = {
       return next();
     }
 
-    res.status(403).send({ error: "Must be at least admin level." });
+    res.status(403).send({ error: "Not authorized." });
   },
 
   instructor: function(req, res, next) {
-
     if (req.isAuthenticated() &&
       (req.user.is_client || req.user.is_admin || req.user.is_instructor)) {
       return next();
@@ -53,12 +42,19 @@ module.exports = {
   },
 
   student: function(req, res, next) {
-
     if (req.isAuthenticated() &&
       (req.user.is_client || req.user.is_admin || req.user.is_instructor || req.user.student)) {
       return next();
     }
 
     res.status(403).send({ error: "Must be at least student level." });
+  },
+
+  instructorOrMe: function(req, res, next) {
+    if (req.isAuthenticated() &&
+      (req.user.is_client || req.user.is_admin || req.user.is_instructor || req.params.id == req.user._id)) {
+        return next();
+    }
+    res.status(403).send({ error: "Not authorized." });
   }
 };

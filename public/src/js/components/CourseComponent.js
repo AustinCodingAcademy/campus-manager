@@ -139,8 +139,8 @@ module.exports = React.createBackboneClass({
       );
     }, this);
 
-    var assignmentGrades = [];
     var gradeNames = _.map(this.getModel().get('grades'), function(grade, idx) {
+      var assignmentGrades = [];
       this.getModel().get('registrations').each(function(student){
         var match = _.findWhere(student.get('grades'), { name: grade.name, courseId: this.getModel().id });
         if (!match) {

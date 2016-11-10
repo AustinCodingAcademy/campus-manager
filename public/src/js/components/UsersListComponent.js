@@ -24,7 +24,8 @@ module.exports = React.createBackboneClass({
       return UserItemComponent({
         model: user,
         collection: that.getCollection(),
-        key: user.id
+        key: user.id,
+        currentUser: that.props.currentUser
       });
     });
 

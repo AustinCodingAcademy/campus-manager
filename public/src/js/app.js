@@ -46,12 +46,6 @@ $(function() {
     }
   });
 
-  $('#feedback').modal({
-    complete: function(modal, trigger) {
-      document.getElementById('feedback-iframe').contentWindow.location = '/feedback';
-    },
-  });
-
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'index',
@@ -121,7 +115,10 @@ $(function() {
     users: function() {
       var users = new UsersCollection();
       users.fetch();
-      ReactDOM.render(UsersListComponent({ collection: users }), $('#container')[0]);
+      ReactDOM.render(UsersListComponent({
+        collection: users,
+        currentUser: this.currentUser
+       }), $('#container')[0]);
     },
 
     locations: function() {
@@ -131,6 +128,7 @@ $(function() {
     },
 
     courses: function() {
+      var that = this;
       var courses = new CoursesCollection();
       courses.fetch();
       var terms = new TermsCollection();
@@ -138,7 +136,8 @@ $(function() {
         success: function() {
           ReactDOM.render(CoursesListComponent({
             terms: terms,
-            collection: courses
+            collection: courses,
+            currentUser: that.currentUser
           }), $('#container')[0]);
         }
       });

@@ -13,7 +13,7 @@ router.get('/', middleware.admin, function(req, res) {
 /*
 * GET
 */
-router.get('/:id', middleware.me, function(req, res) {
+router.get('/:id', middleware.instructorOrMe, function(req, res) {
   UserController.show(req, res);
 });
 
@@ -27,7 +27,7 @@ router.post('/', middleware.admin, function(req, res) {
 /*
 * PUT
 */
-router.put('/:id', middleware.me, function(req, res) {
+router.put('/:id', middleware.instructorOrMe, function(req, res) {
   UserController.update(req, res);
 });
 
