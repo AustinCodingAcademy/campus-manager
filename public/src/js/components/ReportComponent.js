@@ -25,20 +25,20 @@ module.exports = React.createBackboneClass({
     xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
-      this.worker.onmessage = function() {
-        URL.revokeObjectURL(this.worker.objectURL);
+      that.worker.onmessage = function() {
+        URL.revokeObjectURL(that.worker.objectURL);
         $('.database-toast').fadeOut();
-        this.worker.onmessage = function(event){
+        that.worker.onmessage = function(event){
           $('.database-query').fadeOut();
           that.getModel().set(event.data.results[0]); // The result of the query
         };
         that.executeCode();
       }
-      this.worker.onerror = function(e) {
+      that.worker.onerror = function(e) {
         $('.database-query').fadeOut();
         that.refs.error.textContent = e.message
        };
-      this.worker.postMessage({
+      that.worker.postMessage({
         id: 1,
         action: 'open',
         buffer: new Uint8Array(this.response),
