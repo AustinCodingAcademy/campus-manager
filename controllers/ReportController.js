@@ -53,11 +53,13 @@ module.exports = {
       },
       {
         name: 'course_dates'
-      },
-      // {
-      //   name: 'stripe_payments'
-      // }
+      }
     ];
+
+    if (req.query.payments === 'true') {
+      tables.push({ name: 'stripe_payments' });
+    }
+
     var idx = 0;
     function createTable(table) {
       var fileName = tmpDir + timestamp + '-' + table.name + '.csv';
@@ -158,7 +160,7 @@ module.exports = {
             });
             break;
           case 'stripe_payments':
-          var collection = [];
+            var collection = [];
             function fetchAllStripeCharges(startingAfter) {
               stripe.charges.list({ limit: 100, starting_after: startingAfter }, function(err, charges) {
                 if (err) { return res.json(500, { message: 'Error fetching charges', error: err }); }
@@ -173,7 +175,8 @@ module.exports = {
                 }
               });
             }
-          fetchAllStripeCharges();
+            fetchAllStripeCharges();
+            break;
         }
       }
     }

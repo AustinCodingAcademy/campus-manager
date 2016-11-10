@@ -36,7 +36,7 @@ module.exports = React.createBackboneClass({
             <i className="material-icons left">add</i> user
           </a>
           <br />
-          <table>
+          <table className="striped">
             <thead>
               <tr>
                 <th>Name</th>
