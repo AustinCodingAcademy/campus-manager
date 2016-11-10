@@ -36,11 +36,6 @@ html(lang='us-en')
             window.location.replace('/login');
           }
         });
-
-        $('#feedback').modal({
-          complete: function(modal, trigger) {
-            document.getElementById('feedback-iframe').contentWindow.location = '/feedback';
-          },
-        });
       });
+    include feedback-js
     block bottom_scripts

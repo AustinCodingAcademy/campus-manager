@@ -22,6 +22,7 @@ module.exports = React.createBackboneClass({
   },
 
   render: function() {
+    var hidden = this.props.currentUser.get('is_admin') ? '' : ' hidden';
     return (
       <tr>
         <td><a href={'#courses/' + this.getModel().id}>{this.getModel().get('name')}</a></td>
@@ -29,11 +30,11 @@ module.exports = React.createBackboneClass({
         <td>{this.getModel().shortDays()}</td>
         <td>{this.getModel().get('registrations').length + ' / ' + this.getModel().get('seats')}</td>
         <td>
-          <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.courseModal}>
+          <a className={'waves-effect waves-teal btn-flat modal-trigger' + hidden} onClick={this.courseModal}>
             <i className="material-icons">mode_edit</i>
           </a>
         </td>
-        <td><a className="waves-effect waves-teal btn-flat" onClick={this.deleteCourse}><i className="material-icons">delete</i></a></td>
+        <td><a className={'waves-effect waves-teal btn-flat' + hidden} onClick={this.deleteCourse}><i className="material-icons">delete</i></a></td>
       </tr>
     );
   }

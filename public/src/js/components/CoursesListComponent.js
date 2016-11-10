@@ -24,15 +24,18 @@ module.exports = React.createBackboneClass({
         key: courseItem.id,
         terms: that.props.terms,
         model: courseItem,
-        collection: that.getCollection()
+        collection: that.getCollection(),
+        currentUser: that.props.currentUser
       });
     });
+
+    var hidden = this.props.currentUser.get('is_admin') ? '' : ' hidden';
 
     return (
       <div className="row">
         <div className="col s12">
           <br />
-          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newCourseModal} data-test="new-course"><i className="material-icons left">add</i> course</a>
+          <a className={'waves-effect waves-teal btn modal-trigger' + hidden} onClick={this.newCourseModal} data-test="new-course"><i className="material-icons left">add</i> course</a>
           <br />
           <table>
             <thead>

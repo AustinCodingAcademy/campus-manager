@@ -13,10 +13,7 @@ var userSchema = new Schema({
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   "password" : String,
-  "is_super": {
-    type: Boolean,
-    default: false
-  },
+
   "is_client" : {
     type: Boolean,
     default: false

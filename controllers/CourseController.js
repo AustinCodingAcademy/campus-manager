@@ -116,7 +116,7 @@ module.exports = {
         });
       }
 
-      var attributes = [
+      var adminAttributes = [
         'name',
         'session',
         'client',
@@ -130,9 +130,20 @@ module.exports = {
         'term'
       ];
 
-      _.each(attributes, function(attr) {
-        course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
-      });
+      var instructorAttributes = [
+        'grades',
+        'videos'
+      ];
+
+      if (req.user.is_admin) {
+        _.each(adminAttributes, function(attr) {
+          course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+        });
+      } else {
+        _.each(instructorAttributes, function(attr) {
+          course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+        });
+      }
 
       course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
 

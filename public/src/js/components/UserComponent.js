@@ -205,6 +205,8 @@ module.exports = React.createBackboneClass({
       );
     }
 
+    var hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
+
     return (
       <div>
         <div className="row">
@@ -213,7 +215,7 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">
                   <div className="valign-wrapper">
-                    <a className="modal-trigger" onClick={this.userModal} style={{position: 'absolute', right: '10px', top: '0px'}}>
+                    <a className={"modal-trigger" + hidden} onClick={this.userModal} style={{position: 'absolute', right: '10px', top: '0px'}}>
                       <i className="material-icons">mode_edit</i>
                     </a>
                     <a href="http://en.gravatar.com/" target="_blank">
@@ -263,6 +265,7 @@ module.exports = React.createBackboneClass({
                 <div aria-hidden="true" className="center-align" style={{position: 'absolute', right: '-20px', bottom: '95px', width: '100px'}}>
                   <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
                   <DoughnutChart data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
+                  <small>Profile</small>
                 </div>
               </div>
               <div className="card-action trim-padding">

@@ -40,6 +40,9 @@ module.exports = React.createBackboneClass({
         if (that.getCollection()) {
           that.getCollection().add(user);
         }
+        if (that.props.currentUser && user.id === that.props.currentUser.id) {
+          that.props.currentUser.set(user.attributes);
+        }
         user.trigger('change');
       }
     });
