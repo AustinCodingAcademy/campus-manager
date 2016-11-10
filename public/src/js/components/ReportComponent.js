@@ -14,14 +14,10 @@ module.exports = React.createBackboneClass({
     this.loadDatabase();
   },
 
-  _loadPayments: function() {
-    this.loadDatabase(true);
-  },
-
-  loadDatabase: function(payments) {
+  loadDatabase: function() {
     var that = this;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/report?payments=' + payments, true);
+    xhr.open('GET', '/api/report', true);
     xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
@@ -116,14 +112,11 @@ module.exports = React.createBackboneClass({
           </div>
         </div>
         <div className="row">
-          <div className="col s12 m4">
+          <div className="col s6">
             <a onClick={this._handleSubmit} className="btn waves-effect waves-light">Execute<i className="material-icons right">code</i></a>
           </div>
-          <div className="col s12 m3">
-            <a onClick={this._exportCSV} className="btn waves-effect waves-light">CSV <i className="material-icons right">file_download</i></a>
-          </div>
-          <div className="col s12 m5">
-            <a onClick={this._loadPayments} className="btn waves-effect waves-light">Load Payments <i className="material-icons right">attach_money</i></a>
+          <div className="col s6">
+            <a onClick={this._exportCSV} className="btn waves-effect waves-light right">CSV <i className="material-icons right">file_download</i></a>
           </div>
         </div>
         <div className="row">
