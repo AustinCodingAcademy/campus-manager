@@ -177,7 +177,7 @@ $(function() {
         model: new Backbone.Model({
           columns: [],
           values:[],
-          code: "SELECT name FROM sqlite_master WHERE type='table';"
+          code: "SELECT name, sql FROM sqlite_master WHERE type='table';"
         })
       }), $('#container')[0]);
     }
