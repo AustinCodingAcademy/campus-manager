@@ -9,16 +9,25 @@ var tableToCsv = require('node-table-to-csv');
 
 module.exports = React.createBackboneClass({
   componentDidMount: function() {
+    this.loadDatabase();
+  },
+
+  _loadPayments: function() {
+    this.loadDatabase(true);
+  },
+
+  loadDatabase: function(payments) {
     var that = this;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/report', true);
+    xhr.open('GET', '/api/report?payments=' + payments, true);
     xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
       worker.onmessage = function() {
         URL.revokeObjectURL(worker.objectURL);
-        console.log("Database opened");
+        $('.database-toast').fadeOut();
         worker.onmessage = function(event){
+          $('.database-query').fadeOut();
           that.getModel().set(event.data.results[0]); // The result of the query
         };
         that.executeCode();
@@ -31,6 +40,7 @@ module.exports = React.createBackboneClass({
       });
     };
     xhr.send();
+    Materialize.toast($('<span>Loading Database <i class="fa fa-cog fa-spin fa-fw"></i><span>'), null, 'database-toast');
   },
 
   updateCode: function(newCode) {
@@ -41,7 +51,7 @@ module.exports = React.createBackboneClass({
     });
   },
 
-  exportCSV: function() {
+  _exportCSV: function() {
     var csv = tableToCsv('<table>' + this.refs.report.innerHTML + '</table>');
     var uri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
     var downloadLink = document.createElement("a");
@@ -62,6 +72,7 @@ module.exports = React.createBackboneClass({
   },
 
   executeCode: function() {
+    Materialize.toast($('<span>Executing Query <i class="fa fa-cog fa-spin fa-fw"></i><span>'), null, 'database-query');
     worker.postMessage({
       id: 2,
       action: 'exec',
@@ -103,11 +114,11 @@ module.exports = React.createBackboneClass({
           <div className="col s12 m4">
             <a onClick={this._handleSubmit} className="btn waves-effect waves-light">Execute<i className="material-icons right">code</i></a>
           </div>
-          <div className="col s12 m4">
-            <a onClick={this.exportCSV} className="btn waves-effect waves-light">Export to CSV <i className="material-icons right">file_download</i></a>
+          <div className="col s12 m3">
+            <a onClick={this._exportCSV} className="btn waves-effect waves-light">CSV <i className="material-icons right">file_download</i></a>
           </div>
-          <div className="col s12 m4">
-            <a onClick={this.exportCSV} className="btn waves-effect waves-light">Load Payments <i className="material-icons right">attach_money</i></a>
+          <div className="col s12 m5">
+            <a onClick={this._loadPayments} className="btn waves-effect waves-light">Load Payments <i className="material-icons right">attach_money</i></a>
           </div>
         </div>
         <div className="row">
