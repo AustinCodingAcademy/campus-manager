@@ -106,7 +106,6 @@ module.exports = {
       'is_student',
       'codecademy',
       'zipcode',
-      'photo',
       'grades',
       'credits'
     ];
@@ -162,7 +161,6 @@ module.exports = {
         'attendance',
         'codecademy',
         'zipcode',
-        'photo',
         'grades',
         'credits'
       ];
@@ -173,12 +171,23 @@ module.exports = {
         'is_student',
       ];
 
-      _.each(attributes, function(attr) {
-        user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
-      });
-      user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
+      var instructorAttributes = [
+        'grades',
+        'attendance'
+      ];
 
-      if (req.user.is_admin || req.user.is_client || req.user.is_super) {
+      if (!(req.user.is_admin || req.user.is_client) && req.user.is_instructor) {
+        _.each(instructorAttributes, function(attr) {
+          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+        });
+      } else {
+        _.each(attributes, function(attr) {
+          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+        });
+        user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
+      }
+
+      if (req.user.is_admin || req.user.is_client) {
         _.each(protectedAttrs, function(attr) {
           user[attr] =  req.body[attr];
         });
@@ -248,8 +257,7 @@ module.exports = {
               'website',
               'github',
               'codecademy',
-              'zipcode',
-              'photo'
+              'zipcode'
             ];
 
             _.each(attributes, function(attr) {

@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
 var _ = require('underscore');
+var mongooseToCsv = require('mongoose-to-csv');
 
 var userSchema = new Schema({
   "username" : {
@@ -12,10 +13,7 @@ var userSchema = new Schema({
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   "password" : String,
-  "is_super": {
-    type: Boolean,
-    default: false
-  },
+
   "is_client" : {
     type: Boolean,
     default: false
@@ -65,13 +63,11 @@ var userSchema = new Schema({
   attendance: Array,
   codecademy: String,
   zipcode: String,
-  photo: String,
   grades: Array,
   courses: Array,
   reset_password: String,
   charges: Array,
   customer_id: String,
-  client_hash: String,
   credits: String
 }, { timestamps: true });
 
@@ -87,5 +83,17 @@ userSchema.set('toJSON', {
 });
 
 userSchema.plugin(uniqueValidator);
+
+userSchema.plugin(mongooseToCsv, {
+  headers: 'id idn first_name last_name email phone zipcode github website customer_id',
+  constraints: {
+    'email': 'username'
+  },
+  virtuals: {
+    'id': function(doc) {
+      return doc._id.toString();
+    }
+  }
+});
 
 module.exports = mongoose.model('user', userSchema);

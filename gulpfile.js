@@ -18,78 +18,87 @@ var runSequence = require('run-sequence');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
-var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var cssnano = require('gulp-cssnano');
 var pixrem  = require('pixrem');
 var postcss = require('gulp-postcss');
-var pump = require('pump');
 var CacheBreaker = require('gulp-cache-breaker');
 var cb = new CacheBreaker();
+var uglifyify = require('uglifyify');
+var envify = require('envify');
+var reactify = require('reactify');
 
 gulp.task('bundle', function () {
   return browserify({
     entries: ['public/src/js/app.js'],
+    transform: [
+      reactify,
+      envify,
+      [
+        uglifyify,
+        {
+          global: true,
+          ignore: [
+            '**/node_modules/sql.js/**'
+          ],
+          dot: true
+        }
+      ]
+    ]
   })
-    .bundle()
-    .pipe(source('bundle.js'))
-    .pipe(gulp.dest('public/js/'));
-});
-
-gulp.task('compress', function (cb) {
-  pump([
-        gulp.src('public/js/bundle.js'),
-        uglify(),
-        gulp.dest('public/js/')
-    ],
-    cb
-  );
+  .bundle()
+  .pipe(source('bundle.js'))
+  .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('bundle-dev', function() {
   return browserify({
     entries: ['public/src/js/app.js'],
     debug: true,
+    transform: [
+      reactify,
+      envify
+    ]
   })
   .bundle().on('error', function(error) {
     console.log(error.toString());
     this.emit('end');
   })
-    .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('public/js/'));
+  .pipe(source('bundle.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('sass', function () {
   return gulp.src('public/src/scss/app.scss')
-    .pipe(sass())
-    .pipe(postcss([pixrem]))
-    .pipe(autoprefixer({
-      browsers: ['> 5%', 'last 2 versions']
-    }))
-    .pipe(cssnano({zindex: false}))
-    .pipe(gulp.dest('public/css/'));
+  .pipe(sass())
+  .pipe(postcss([pixrem]))
+  .pipe(autoprefixer({
+    browsers: ['> 5%', 'last 2 versions']
+  }))
+  .pipe(cssnano({zindex: false}))
+  .pipe(gulp.dest('public/css/'));
 });
 
 gulp.task('sass-dev', function () {
   return gulp.src('public/src/scss/app.scss')
-    .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
-    .pipe(postcss([pixrem]))
-    .pipe(autoprefixer({
-      browsers: ['> 5%', 'last 2 versions']
-    }))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('public/css/'));
+  .pipe(sourcemaps.init())
+  .pipe(sass().on('error', sass.logError))
+  .pipe(postcss([pixrem]))
+  .pipe(autoprefixer({
+    browsers: ['> 5%', 'last 2 versions']
+  }))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('public/css/'));
 });
 
 gulp.task('html', function() {
   return gulp.src('views/*.pug')
-    .pipe(cb.gulpCbPath('public'))
-    .pipe(gulp.dest('views'));
+  .pipe(cb.gulpCbPath('public'))
+  .pipe(gulp.dest('views'));
 });
 
 // Write symlinks for all cache-broken paths from previous tasks.
@@ -104,9 +113,9 @@ gulp.task('watch', function () {
 
 gulp.task('build', function(callback) {
   if (process.env.NODE_ENV === 'production') {
-    runSequence(['bundle', 'sass'], 'compress', 'symlink-cb-paths', callback);
+    runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
   } else {
-    runSequence(['bundle', 'sass'], 'compress');
+    runSequence(['bundle', 'sass'], callback);
   }
 });
 
@@ -121,9 +130,9 @@ gulp.task('clean-db', function() {
 
 gulp.task('start', function () {
   nodemon({
-    script: './bin/www'
-  , ext: 'js'
-  , env: { 'NODE_ENV': 'development' }
+    script: './bin/www',
+    ext: 'js',
+    env: { 'NODE_ENV': 'development' }
   })
 });
 

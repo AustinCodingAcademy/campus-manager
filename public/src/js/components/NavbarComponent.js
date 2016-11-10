@@ -2,11 +2,25 @@ var React = require('react');
 require('react.backbone');
 
 module.exports = React.createBackboneClass({
-  render: function() {
-    var hidden = 'hidden';
-    if (this.getModel().get('is_admin') || this.getModel().get('is_instructor') || this.getModel().get('is_client')) {
-      hidden = '';
+  links: {
+    'courses': 'is_instructor',
+    'attendance': 'is_admin',
+    'terms': 'is_admin',
+    'registration': 'is_admin',
+    'report': 'is_admin',
+    'users': 'is_admin',
+    'locations': 'is_admin'
+  },
+
+  hidden: function(link) {
+    if (this.getModel().get(this.links[link]) || this.getModel().get('is_client')) {
+      return '';
+    } else {
+      return 'hidden';
     }
+  },
+
+  render: function() {
     return (
       <div>
         <div className="navbar-fixed">
@@ -20,12 +34,13 @@ module.exports = React.createBackboneClass({
               </a>
               <ul className="right hide-on-med-and-down">
                 <li><a href="#" className="black-text">Dashboard</a></li>
-                <li className={hidden}><a href="#registration" className="black-text">Registration</a></li>
-                <li className={hidden}><a href="#users" className="black-text">Users</a></li>
-                <li className={hidden}><a href="#locations" className="black-text">Locations</a></li>
-                <li className={hidden}><a href="#terms" className="black-text">Terms</a></li>
-                <li className={hidden}><a href="#courses" className="black-text">Courses</a></li>
-                <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
+                <li className={this.hidden('users')}><a href="#users" className="black-text">Users</a></li>
+                <li className={this.hidden('courses')}><a href="#courses" className="black-text">Courses</a></li>
+                <li className={this.hidden('terms')}><a href="#terms" className="black-text">Terms</a></li>
+                <li className={this.hidden('locations')}><a href="#locations" className="black-text">Locations</a></li>
+                <li className={this.hidden('attendance')}><a href="#attendance" className="black-text">Attendance</a></li>
+                <li className={this.hidden('registration')}><a href="#registration" className="black-text">Registration</a></li>
+                <li className={this.hidden('report')}><a href="#report" className="black-text">Report</a></li>
                 <li>
                   <a className="dropdown-button black-text" href="#!" data-activates="nav-user">
                     {this.getModel().get('username')} <i className="material-icons right">arrow_drop_down</i>
@@ -37,12 +52,13 @@ module.exports = React.createBackboneClass({
         </div>
         <ul className="side-nav" id="mobile-demo">
           <li><a href="#" className="black-text">Dashboard</a></li>
-          <li className={hidden}><a href="#registration">Registration</a></li>
-          <li className={hidden}><a href="#users">Users</a></li>
-          <li className={hidden}><a href="#locations">Locations</a></li>
-          <li className={hidden}><a href="#terms">Terms</a></li>
-          <li className={hidden}><a href="#courses">Courses</a></li>
-          <li className={hidden}><a href="#attendance" className="black-text">Attendance</a></li>
+          <li className={this.hidden('users')}><a href="#users">Users</a></li>
+          <li className={this.hidden('courses')}><a href="#courses">Courses</a></li>
+          <li className={this.hidden('terms')}><a href="#terms">Terms</a></li>
+          <li className={this.hidden('locations')}><a href="#locations">Locations</a></li>
+          <li className={this.hidden('attendance')}><a href="#attendance" className="black-text">Attendance</a></li>
+          <li className={this.hidden('registration')}><a href="#registration">Registration</a></li>
+          <li className={this.hidden('report')}><a href="#report" className="black-text">Report</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
         <ul id="nav-user" className="dropdown-content">

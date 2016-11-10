@@ -24,7 +24,8 @@ module.exports = React.createBackboneClass({
       return UserItemComponent({
         model: user,
         collection: that.getCollection(),
-        key: user.id
+        key: user.id,
+        currentUser: that.props.currentUser
       });
     });
 
@@ -36,7 +37,7 @@ module.exports = React.createBackboneClass({
             <i className="material-icons left">add</i> user
           </a>
           <br />
-          <table>
+          <table className="striped">
             <thead>
               <tr>
                 <th>Name</th>

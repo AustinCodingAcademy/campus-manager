@@ -30,6 +30,7 @@ var LocationsListComponent = React.createFactory(require('./components/Locations
 var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 var TermModel = require('./models/TermModel');
 var UserComponent = React.createFactory(require('./components/UserComponent'));
+var ReportComponent = React.createFactory(require('./components/ReportComponent'));
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -45,12 +46,6 @@ $(function() {
     }
   });
 
-  $('#feedback').modal({
-    complete: function(modal, trigger) {
-      document.getElementById('feedback-iframe').contentWindow.location = '/feedback';
-    },
-  });
-
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'index',
@@ -62,7 +57,8 @@ $(function() {
       'courses': 'courses',
       'locations': 'locations',
       'courses/:id': 'course',
-      'registration': 'registration'
+      'registration': 'registration',
+      'report': 'report'
     },
 
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -119,7 +115,10 @@ $(function() {
     users: function() {
       var users = new UsersCollection();
       users.fetch();
-      ReactDOM.render(UsersListComponent({ collection: users }), $('#container')[0]);
+      ReactDOM.render(UsersListComponent({
+        collection: users,
+        currentUser: this.currentUser
+       }), $('#container')[0]);
     },
 
     locations: function() {
@@ -129,6 +128,7 @@ $(function() {
     },
 
     courses: function() {
+      var that = this;
       var courses = new CoursesCollection();
       courses.fetch();
       var terms = new TermsCollection();
@@ -136,7 +136,8 @@ $(function() {
         success: function() {
           ReactDOM.render(CoursesListComponent({
             terms: terms,
-            collection: courses
+            collection: courses,
+            currentUser: that.currentUser
           }), $('#container')[0]);
         }
       });
@@ -168,6 +169,16 @@ $(function() {
           });
         }
       });
+    },
+
+    report: function() {
+      ReactDOM.render(ReportComponent({
+        model: new Backbone.Model({
+          columns: [],
+          values:[],
+          code: "SELECT name, sql FROM sqlite_master WHERE type='table';"
+        })
+      }), $('#container')[0]);
     }
   });
 

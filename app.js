@@ -16,8 +16,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
-var cookieParser = require('cookie-parser')
-var csrf = require('csurf')
+var cookieParser = require('cookie-parser');
+var csrf = require('csurf');
+var compression = require('compression');
 
 var passport = require('./config/passport');
 
@@ -55,6 +56,9 @@ app.use(passport.session());
 app.use(cookieParser());
 app.use(csrf({cookie: true}));
 
+// compress all responses
+app.use(compression({ threshold: 0 }))
+
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
 app.use('/api/users', middleware.auth, require('./routes/users'));
@@ -63,6 +67,7 @@ app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
 app.use('/api/locations', middleware.admin, require('./routes/locations'));
 app.use('/api/import', middleware.admin, require('./routes/import'));
+app.use('/api/report', middleware.admin, require('./routes/report'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
