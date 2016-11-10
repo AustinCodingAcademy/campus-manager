@@ -32,7 +32,10 @@ module.exports = React.createBackboneClass({
         };
         that.executeCode();
       }
-      worker.onerror = function(e) { that.refs.error.textContent = e.message };
+      worker.onerror = function(e) {
+        $('.database-query').fadeOut();
+        that.refs.error.textContent = e.message
+       };
       worker.postMessage({
         id: 1,
         action: 'open',
