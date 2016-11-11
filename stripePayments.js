@@ -2,6 +2,8 @@ var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 var _ = require('underscore');
 var fs = require('fs-extra');
 var json2csv = require('json2csv');
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
 
 var collection = [];
 function fetchAllStripeCharges(startingAfter) {
@@ -13,8 +15,13 @@ function fetchAllStripeCharges(startingAfter) {
     if (charges.has_more) {
       fetchAllStripeCharges(_.last(charges.data).id);
     } else {
-      fs.mkdirsSync('tmp')
-      fs.writeFileSync('tmp/stripe_payments.csv', json2csv({ data: collection }));
+      s3.putObject({Bucket: process.env.S3_BUCKET_NAME, Key: 'stripe_payments.csv', Body: json2csv({ data: collection })}, function(err, data) {
+        if (err) {
+          console.log(err)
+        }  else  {
+          console.log("Successfully uploaded data to " + process.env.S3_BUCKET_NAME + "/stripe_payments.csv");
+        }
+      });
     }
   });
 }

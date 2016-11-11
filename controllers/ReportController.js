@@ -9,6 +9,7 @@ var TermModel = require('../models/TermModel');
 var LocationModel = require('../models/LocationModel');
 var moment = require('moment');
 require('moment-range');
+var AWS = require('aws-sdk');
 
 /**
 * ReportController.js
@@ -158,14 +159,17 @@ module.exports = {
             });
             break;
           case 'stripe_payments':
-            try {
-              fs.statSync('tmp/stripe_payments.csv');
-              importCsv(table, 'tmp/stripe_payments.csv');
-            } catch (e) {
-              console.log(e);
-              importCsv(table, null, true);
-            }
-
+            var s3 = new AWS.S3();
+            s3.getObject({Bucket: process.env.S3_BUCKET_NAME, Key: 'stripe_payments.csv'}, function(err, data) {
+              if (err) {
+                console.log(err);
+                importCsv(null, null, true);
+              }  else  {
+                console.log(data.Body)
+                fs.writeFileSync(fileName, data.Body);
+                importCsv(table, fileName);
+              }
+            });
           break;
         }
       }
