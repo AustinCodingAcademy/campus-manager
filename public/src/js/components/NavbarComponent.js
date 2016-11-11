@@ -1,19 +1,23 @@
 var React = require('react');
+var _ = require('underscore');
 require('react.backbone');
 
 module.exports = React.createBackboneClass({
   links: {
-    'courses': 'is_instructor',
-    'attendance': 'is_admin',
-    'terms': 'is_admin',
-    'registration': 'is_admin',
-    'report': 'is_admin',
-    'users': 'is_admin',
-    'locations': 'is_admin'
+    'courses': ['is_instructor', 'is_admin'],
+    'attendance': ['is_admin'],
+    'terms': ['is_admin'],
+    'registration': ['is_admin'],
+    'report': ['is_admin'],
+    'users': ['is_admin'],
+    'locations': ['is_admin']
   },
 
   hidden: function(link) {
-    if (this.getModel().get(this.links[link]) || this.getModel().get('is_client')) {
+    var show = _.some(this.links[link], function(level) {
+      return this.getModel().get(level);
+    }, this);
+    if (show || this.getModel().get('is_client')) {
       return '';
     } else {
       return 'hidden';
