@@ -18,6 +18,7 @@ gulp.task('build', function(callback) {
   if (process.env.NODE_ENV === 'production') {
     runSequence(['bundle', 'sass'], 'symlink-cb-paths', callback);
   } else {
+    process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_LIWkhhJVRCPoGBO3SXaUXmTS';
     runSequence(['bundle', 'sass'], callback);
   }
 });
