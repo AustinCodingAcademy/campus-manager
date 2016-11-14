@@ -28,7 +28,7 @@ module.exports = React.createBackboneClass({
         <td>{this.getModel().get('phone')}</td>
         <td>{this.getModel().get('contact')}</td>
         <td>
-          <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.locationModal}>
+          <a className="waves-effect waves-teal btn-flat" onClick={this.locationModal}>
             <i className="material-icons">mode_edit</i>
           </a>
         </td>

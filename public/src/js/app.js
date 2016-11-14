@@ -45,6 +45,7 @@ $(function() {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+  $('.modal').modal();
 
   var AppRouter = Backbone.Router.extend({
     routes: {

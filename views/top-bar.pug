@@ -7,11 +7,17 @@ div.navbar-fixed
         i.material-icons.black-text menu
       ul.right.hide-on-med-and-down
         li
+          a.modal-trigger.black-text(href='#apps')
+            i.material-icons apps
+        li
           a.black-text(href='/login') Login
         if register
           li
             a.black-text(href='/register') Register
 ul#mobile-demo.side-nav
+  li
+    a.modal-trigger(href='#apps')
+      i.material-icons.black-text apps
   li
     a(href='/login') Login
   if register
