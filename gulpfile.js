@@ -11,7 +11,7 @@ if (['test', 'production'].indexOf(process.env.NODE_ENV) === -1) {
 if (process.env.NODE_ENV !== 'production') {
   requireDir('./gulp');
 } else {
-  requireDir('./gulp/prod.gulpfile');
+  requireDir('./gulp/prod.gulpfile.js');
 }
 
 gulp.task('build', function(callback) {
