@@ -17,7 +17,8 @@ You first need to setup your environment. You can either develop locally on your
   * Mac OSX
     1. Install [Homebrew](http://brew.sh/)
     1. Install Cairo and MongoDB `brew install cairo pkg-config mongodb`
-    1. Create MongoDB data directory `sudo chmod 0755 /data/db && chown $USER /data/db`
+    1. Create MongoDB data directory `sudo mkdir -p /data/db`
+    1. Correct permissions `sudo chmod -R 0755 /data/db && sudo chown $USER /data/db`
     1. Start MongoDB `mongod`
       * Leave this running or just close the terminal window while running
       * You'll have to do this step every time you restart your computer

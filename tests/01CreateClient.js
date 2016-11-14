@@ -15,9 +15,11 @@ module.exports = {
 
   'Make Student': function (browser) {
     browser
+    .click('[data-activates="nav-admin"]')
+    .pause(500)
     .click('[href="#users"]')
     .pause(500)
-    .click('i[class="material-icons"]')
+    .click('[data-test="edit-user"]')
     .pause(300)
     .click('label[for="is_student"]')
     .pause(500)
@@ -27,11 +29,11 @@ module.exports = {
 
   'Make Payment': function (browser) {
     browser
-    .click('tr td a')
+    .click('.brand-logo[href="#"]')
     .pause(500)
-    .setValue('input', '200')
+    .setValue('input', '200.00')
     .pause(1000)
-    .click('button.btn.btn-primary')
+    .click('[data-test="make-payment"]')
     .pause(3000)
     .keys('4242')
     .pause(100)
@@ -61,16 +63,8 @@ module.exports = {
 
   'Create Location': function (browser) {
     browser
-    .click('[href="#users"]')
-    .pause(500)
-    .click('i[class="material-icons"]')
-    .pause(300)
-    .click('label[for="is_admin"]')
-    .pause(500)
-    .click('label[for="is_instructor"]')
-    .pause(500)
-    .click('input[type="submit"]')
-    .pause(500)
+    .click('[data-activates="nav-admin"]')
+    .pause(5000)
     .click('[href="#locations"]')
     .pause(1000)
     .click('a[data-test="new-location"]')
@@ -80,15 +74,15 @@ module.exports = {
     .keys('\uE004')
     .keys('test@test.com')
     .keys('\uE004')
-    .keys('420 Lane')
+    .keys('555 Austin Lane')
     .keys('\uE004')
-    .keys('420-420-6969')
+    .keys('555-555-5555')
     .keys('\uE004')
-    .keys('Test')
+    .keys('Austin')
     .keys('\uE004')
     .keys('Texas')
     .keys('\uE004')
-    .keys('42069')
+    .keys('55555')
     .pause(100)
     .click('input[type="submit"]')
     .pause(1000)
@@ -97,6 +91,8 @@ module.exports = {
 
   'Create Term': function (browser) {
     browser
+    .click('[data-activates="nav-admin"]')
+    .pause(1000)
     .click('[href="#terms"]')
     .pause(1000)
     .click('a[data-test="new-term"]')
@@ -123,6 +119,8 @@ module.exports = {
 
   'Make Course': function (browser) {
     browser
+    .click('[data-activates="nav-admin"]')
+    .pause(1000)
     .click('[href="#courses"]')
     .pause(1000)
     .click('a[data-test="new-course"]')
@@ -142,7 +140,7 @@ module.exports = {
     .keys('\uE007') // Presses ENTER btn
     .pause(500)
     .keys('\uE004')
-    .keys('http://localhost:4202/#courses')
+    .keys('http://example.com')
     .pause(500)
     .click('input[type="submit"]')
     .pause(5000)
