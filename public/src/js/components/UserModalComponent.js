@@ -11,6 +11,7 @@ module.exports = React.createBackboneClass({
 
   componentDidMount: function() {
     $('.modal').modal();
+    Materialize.updateTextFields();
   },
 
   // On input change update the state with the given

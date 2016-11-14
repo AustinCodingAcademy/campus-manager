@@ -215,7 +215,7 @@ module.exports = React.createBackboneClass({
               <div className="card-content">
                 <span className="card-title">
                   <div className="valign-wrapper">
-                    <a className={"modal-trigger" + hidden} onClick={this.userModal} style={{position: 'absolute', right: '10px', top: '0px'}}>
+                    <a className={hidden} onClick={this.userModal} style={{position: 'absolute', right: '10px', top: '0px'}}>
                       <i className="material-icons">mode_edit</i>
                     </a>
                     <a href="http://en.gravatar.com/" target="_blank">
@@ -322,7 +322,7 @@ module.exports = React.createBackboneClass({
               <div className="card">
                 <div className="card-content">
                   <span className="card-title">Account</span>
-                  <table>
+                  <table className="striped">
                     <thead>
                       <tr>
                         <th>Cost</th>
@@ -333,7 +333,7 @@ module.exports = React.createBackboneClass({
                     <tfoot></tfoot>
                   </table>
                   <hr />
-                  <table>
+                  <table className="striped">
                     <thead>
                       <tr>
                         <th>Paid</th>

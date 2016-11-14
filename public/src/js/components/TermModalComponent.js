@@ -10,6 +10,7 @@ module.exports = React.createBackboneClass({
     $(this.refs.end_date).pickadate().pickadate('picker').set('select', moment.utc(this.getModel().get('end_date')).format('D MMMM, YYYY'), { muted: true });
     $('select').material_select();
     $('.modal').modal();
+    Materialize.updateTextFields();
   },
 
   saveTerm: function(e) {

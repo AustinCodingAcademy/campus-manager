@@ -13,7 +13,6 @@ module.exports = React.createBackboneClass({
       locations: this.props.locations
     }), $('#modal-container')[0]);
     $('#term-modal' + this.getModel().id).modal('open');
-    Materialize.updateTextFields();
   },
 
   render: function() {
@@ -23,7 +22,7 @@ module.exports = React.createBackboneClass({
         <td>{moment.utc(this.getModel().get('start_date')).format("MMM D, YYYY") + ' - ' + moment.utc(this.getModel().get('end_date')).format("MMM D, YYYY")}</td>
         <td>{this.getModel().get('location') ? this.getModel().get('location').get('name') : ''}</td>
         <td>
-          <a className="waves-effect waves-teal btn-flat modal-trigger" onClick={this.termModal}>
+          <a className="waves-effect waves-teal btn-flat" onClick={this.termModal}>
             <i className="material-icons">mode_edit</i>
           </a>
         </td>

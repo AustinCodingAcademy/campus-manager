@@ -8,7 +8,6 @@ var UserModel = require('../models/UserModel');
 
 module.exports = React.createBackboneClass({
 
-
   newUserModal: function() {
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(UserModalComponent({
@@ -33,7 +32,7 @@ module.exports = React.createBackboneClass({
       <div className="row">
         <div className="col s12">
           <br />
-          <a href="#modal" className="waves-effect waves-teal btn modal-trigger" onClick={this.newUserModal}>
+          <a className="waves-effect waves-teal btn" onClick={this.newUserModal}>
             <i className="material-icons left">add</i> user
           </a>
           <br />

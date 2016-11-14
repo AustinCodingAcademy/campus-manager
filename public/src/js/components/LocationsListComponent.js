@@ -29,9 +29,9 @@ module.exports = React.createBackboneClass({
       <div className="row">
         <div className="col s12">
           <br />
-          <a className="waves-effect waves-teal btn modal-trigger" onClick={this.newLocationModal} data-test="new-location"><i className="material-icons left">add</i> location</a>
+          <a className="waves-effect waves-teal btn" onClick={this.newLocationModal} data-test="new-location"><i className="material-icons left">add</i> location</a>
           <br />
-          <table>
+          <table className="striped">
             <thead>
               <tr>
                 <th>Location</th>

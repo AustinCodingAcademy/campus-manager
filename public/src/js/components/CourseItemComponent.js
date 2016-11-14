@@ -30,7 +30,7 @@ module.exports = React.createBackboneClass({
         <td>{this.getModel().shortDays()}</td>
         <td>{this.getModel().get('registrations').length + ' / ' + this.getModel().get('seats')}</td>
         <td>
-          <a className={'waves-effect waves-teal btn-flat modal-trigger' + hidden} onClick={this.courseModal}>
+          <a className={'waves-effect waves-teal btn-flat' + hidden} onClick={this.courseModal}>
             <i className="material-icons">mode_edit</i>
           </a>
         </td>
