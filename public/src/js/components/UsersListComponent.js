@@ -32,7 +32,7 @@ module.exports = React.createBackboneClass({
       <div className="row">
         <div className="col s12">
           <br />
-          <a className="waves-effect waves-teal btn" onClick={this.newUserModal}>
+          <a className="waves-effect waves-teal btn" onClick={this.newUserModal} data-test="new-user">
             <i className="material-icons left">add</i> user
           </a>
           <br />

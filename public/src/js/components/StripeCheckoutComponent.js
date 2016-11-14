@@ -37,8 +37,8 @@ module.exports = React.createBackboneClass({
         amount={this.getModel().get('paymentAmount')}
         email={this.getModel().get('username')}
       >
-        <button className={'btn btn-primary '+disabled} disabled={disabled}>2. Pay With Card
-          <i className="material-icons right grey-text text-darken-2">send</i>
+        <button className={'btn btn-primary '+disabled} disabled={disabled} data-test="make-payment">2. Pay With Card
+          <i className="material-icons right">send</i>
         </button>
       </StripeCheckout>
     );

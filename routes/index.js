@@ -95,35 +95,38 @@ router.post('/register', function(req, res, next) {
     }
 
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+      UserModel.find({}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
+        var newUser = new UserModel({
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          username: req.body.username.toLowerCase(),
+          password: hash,
+          is_client: true,
+          is_admin: true,
+          idn: users.length ? users[0].idn + 1 : 1
+        });
 
-      var newUser = new UserModel({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        username: req.body.username.toLowerCase(),
-        password: hash,
-        is_client: true
-      });
-
-      newUser.save(function (error, user) {
-
-        if (error) {
-          req.flash('error', error.message);
-          res.redirect('/register');
-        }
-
-        user.client = user._id;
-        user.save(function (error, user) {
+        newUser.save(function (error, user) {
 
           if (error) {
             req.flash('error', error.message);
             res.redirect('/register');
           }
 
-          // If the users has been created successfully, log them in with
-          // passport to start their session and redirect to the home route
-          req.login(user, function(err) {
-            if (err) { return res.redirect('/register'); }
-            return res.redirect('/');
+          user.client = user._id;
+          user.save(function (error, user) {
+
+            if (error) {
+              req.flash('error', error.message);
+              res.redirect('/register');
+            }
+
+            // If the users has been created successfully, log them in with
+            // passport to start their session and redirect to the home route
+            req.login(user, function(err) {
+              if (err) { return res.redirect('/register'); }
+              return res.redirect('/');
+            });
           });
         });
       });

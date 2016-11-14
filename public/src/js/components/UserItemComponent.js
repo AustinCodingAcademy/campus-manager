@@ -19,7 +19,7 @@ module.exports = React.createBackboneClass({
         <td><a href={'mailto:' + this.getModel().get('username')} target="_blank">{this.getModel().get('username')}</a></td>
         <td>{this.getModel().roles()}</td>
         <td>
-          <a className="waves-effect waves-teal btn-flat" onClick={this.userModal}>
+          <a className="waves-effect waves-teal btn-flat" onClick={this.userModal} data-test="edit-user">
             <i className="material-icons">mode_edit</i>
           </a>
         </td>
