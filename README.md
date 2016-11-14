@@ -8,9 +8,9 @@
 [![Heroku](https://heroku-badge.herokuapp.com/?app=aca-campus)](http://aca-campus.herokuapp.com)
 
 ## Development
-You first need to setup your environment. You can either develop locally on your Mac or Windows machine, or develop in the cloud using a service such as [c9.io](https://c9.io/).
+You first need to setup your environment.
 
-### Local
+### Machine Dependencies
 1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
 
 2.
@@ -32,14 +32,6 @@ You first need to setup your environment. You can either develop locally on your
     1. Start MongoDB `mongod.exe`
       * Leave this running or just close the terminal window while running
       * You'll have to do this step every time you restart your computer
-
-### Cloud
-1. Fork the repository into your github account
-1. Create account on [c9.io](https://c9.io/) and connect it to your GitHub accuont
-1. Create a new Node.js workspace with your forked github repository
-1. In the terminal, install MongoDB `sudo apt-get install mongodb-org -y`
-1. Start MongoDB `mongod --smallfiles`
-
 
 ### App Dependencies
 After forking, cloning, and navigating into repository:
