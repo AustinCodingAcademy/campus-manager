@@ -3,15 +3,10 @@
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var requireDir = require('require-dir');
+requireDir('./gulp');
 
 if (['test', 'production'].indexOf(process.env.NODE_ENV) === -1) {
   require('dotenv').config();
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  requireDir('./gulp');
-} else {
-  requireDir('./gulp/prod.gulpfile.js');
 }
 
 gulp.task('build', function(callback) {
