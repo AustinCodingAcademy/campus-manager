@@ -46,7 +46,8 @@ module.exports = {
   */
   create: function (req, res) {
     var location = new LocationModel({			address : req.body.address,			name : req.body.name,			city : req.body.city,			state : req.body.state,			zipcode : req.body.zipcode,			contact : req.body.contact,			phone : req.body.phone,
-      client: req.user.client
+      client: req.user.client,
+      note: req.body.note
     });
 
     location.save(function (err, location) {
@@ -79,6 +80,7 @@ module.exports = {
       }
 
       location.address = req.body.address ? req.body.address : location.address;			location.name = req.body.name ? req.body.name : location.name;			location.city = req.body.city ? req.body.city : location.city;			location.state = req.body.state ? req.body.state : location.state;			location.zipcode = req.body.zipcode ? req.body.zipcode : location.zipcode;			location.contact = req.body.contact ? req.body.contact : location.contact;			location.phone = req.body.phone ? req.body.phone : location.phone;
+      location.note = req.body.note ? req.body.note : location.note;
       location.save(function (err, location) {
         if (err) {
           return res.json(500, {

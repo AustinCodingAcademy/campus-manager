@@ -19,7 +19,7 @@ module.exports = {
       client: req.user.client
     }, null, {
       sort: 'start_date'
-    }).populate('location').exec(function(err, terms){
+    }, function(err, terms){
       if(err) {
         return res.json(500, {
           message: 'Error getting term.',
@@ -49,7 +49,7 @@ module.exports = {
     TermModel.findOne({
       _id: id,
       client: req.user.client
-    }).populate('location').exec(function(err, term){
+    }, function(err, term){
       if(err) {
         return res.json(500, {
           message: 'Error getting term.',
@@ -69,11 +69,11 @@ module.exports = {
   * TermController.create()
   */
   create: function(req, res) {
-    var term = new TermModel({      start_date : req.body.start_date,      end_date : req.body.end_date,      name : req.body.name,      location : req.body.location._id    });
+    var term = new TermModel({      start_date : req.body.start_date,      end_date : req.body.end_date,      name : req.body.name    });
 
     UserModel.findOne({
       _id: req.user.id
-    }).populate('location').exec(function(err, currentUser) {
+    }, function(err, currentUser) {
       term.client = req.user.client;
       term.save(function(err, term){
         if(err) {
@@ -111,7 +111,7 @@ module.exports = {
         });
       }
 
-      term.start_date =  req.body.start_date ? req.body.start_date : term.start_date;      term.end_date =  req.body.end_date ? req.body.end_date : term.end_date;      term.name =  req.body.name ? req.body.name : term.name;      term.location =  req.body.location._id ? req.body.location._id : term.location;      term.save(function(err, term){
+      term.start_date =  req.body.start_date ? req.body.start_date : term.start_date;      term.end_date =  req.body.end_date ? req.body.end_date : term.end_date;      term.name =  req.body.name ? req.body.name : term.name;      term.save(function(err, term){
         if(err) {
           return res.json(500, {
             message: 'Error getting term.',
@@ -123,9 +123,7 @@ module.exports = {
             message: 'No such term'
           });
         }
-        term.populate('location').populate(function(err, term) {
-          return res.json(term);
-        });
+        return res.json(term);
       });
     });
   },

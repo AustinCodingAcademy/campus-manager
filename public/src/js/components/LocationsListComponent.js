@@ -37,6 +37,7 @@ module.exports = React.createBackboneClass({
                 <th>Location</th>
                 <th>Phone</th>
                 <th>Contact</th>
+                <th>Note</th>
                 <th></th>
               </tr>
             </thead>

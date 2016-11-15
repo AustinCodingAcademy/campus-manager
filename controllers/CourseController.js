@@ -16,7 +16,7 @@ module.exports = {
   list: function(req, res) {
     CourseModel.find({
       client: req.user.client
-    }).populate('term registrations').exec(function(err, courses){
+    }).populate('term registrations location').exec(function(err, courses){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
@@ -47,7 +47,7 @@ module.exports = {
     CourseModel.findOne({
       _id: id,
       client: req.user.client
-    }).populate('term registrations').exec(function(err, course){
+    }).populate('term registrations location').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
@@ -67,29 +67,30 @@ module.exports = {
   * CourseController.create()
   */
   create: function(req, res) {
-    var course = new CourseModel({
-      name : req.body.name,
-      term : req.body.term._id,
-      days : req.body.days,
-      seats : req.body.seats,
-      textbook: req.body.textbook,
-      videos: req.body.videos,
-      cost: req.body.cost
-    });
     UserModel.findOne({
       _id: req.user.id
     }).populate('client').exec(function(err, currentUser) {
-      course.client = currentUser.client.id;
-      course.save(function(err, course){
+      var course = new CourseModel({
+        name : req.body.name,
+        term : req.body.term._id,
+        days : req.body.days,
+        seats : req.body.seats,
+        textbook: req.body.textbook,
+        videos: req.body.videos,
+        cost: req.body.cost,
+        location : req.body.location._id,
+        client: currentUser.client._id
+      });
+
+      course.save(function(err, course) {
         if(err) {
           return res.json(500, {
             message: 'Error saving course',
             error: err
           });
         }
-        return res.json({
-          message: 'saved',
-          _id: course._id
+        course.populate('location term').populate(function(err, course) {
+          return res.json(200, course);
         });
       });
     });
@@ -103,7 +104,7 @@ module.exports = {
     CourseModel.findOne({
       _id: id,
       client: req.user.client
-    }).populate('term registrations').exec(function(err, course){
+    }, function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error saving course',
@@ -139,6 +140,7 @@ module.exports = {
         _.each(adminAttributes, function(attr) {
           course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
         });
+        course.location =  req.body.location._id ? req.body.location._id : course.location;
       } else {
         _.each(instructorAttributes, function(attr) {
           course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
@@ -159,7 +161,7 @@ module.exports = {
             message: 'No such course'
           });
         }
-        course.populate('registrations').populate(function(err, course) {
+        course.populate('registrations location term').populate(function(err, course) {
           return res.json(course);
         });
       });

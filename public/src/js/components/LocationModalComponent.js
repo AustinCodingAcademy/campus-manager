@@ -11,7 +11,8 @@ module.exports = React.createBackboneClass({
     'state',
     'zipcode',
     'phone',
-    'contact'
+    'contact',
+    'note'
   ],
 
   componentDidMount: function() {
@@ -87,6 +88,12 @@ module.exports = React.createBackboneClass({
                 <div className="input-field col s12 m4">
                   <label htmlFor="zipcode">Zipcode</label>
                   <input ref="zipcode" type="text" name="zipcode" id="zipcode" />
+                </div>
+              </div>
+              <div className="row">
+                <div className="input-field col s12">
+                  <input ref="note" type="text" id="note" />
+                  <label htmlFor="note">Note</label>
                 </div>
               </div>
               <div className="row">

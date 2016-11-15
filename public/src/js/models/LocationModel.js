@@ -11,6 +11,7 @@ module.exports = Backbone.Model.extend({
     state: '',
     zipcode: '',
     phone: '',
-    contact: ''
+    contact: '',
+    note: ''
   }
 });

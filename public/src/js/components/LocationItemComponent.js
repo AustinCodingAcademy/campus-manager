@@ -27,6 +27,7 @@ module.exports = React.createBackboneClass({
         <td>{this.getModel().get('name') + ', ' + this.getModel().get('address') + ', ' + this.getModel().get('city') + ', ' + this.getModel().get('state') + ' ' + this.getModel().get('zipcode')}</td>
         <td>{this.getModel().get('phone')}</td>
         <td>{this.getModel().get('contact')}</td>
+        <td>{this.getModel().get('note')}</td>
         <td>
           <a className="waves-effect waves-teal btn-flat" onClick={this.locationModal}>
             <i className="material-icons">mode_edit</i>

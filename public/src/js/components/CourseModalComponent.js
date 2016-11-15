@@ -21,7 +21,6 @@ module.exports = React.createBackboneClass({
     _.each(this.days, function(day) {
       that.refs[day].checked = _.indexOf(that.getModel().get('days'), day) > -1;
     });
-    this.refs.term.value = this.getModel().get('term').id;
     this.refs.textbook.value = this.getModel().get('textbook');
     this.refs.holidays.value = this.getModel().get('holidays').join(', ');
     this.refs.cost.value = Number(this.getModel().get('cost')).toFixed(2);
@@ -41,7 +40,8 @@ module.exports = React.createBackboneClass({
       seats: this.refs.seats.value,
       term: this.props.terms.get(this.refs.term.value),
       holidays: _.map(this.refs.holidays.value.split(','), function(holiday) { return holiday.trim(); }),
-      cost: Number(this.refs.cost.value)
+      cost: Number(this.refs.cost.value),
+      location: this.props.locations.get(this.refs.location.value),
     }, {
       success: function() {
         that.getCollection().add(that.getModel());
@@ -54,6 +54,11 @@ module.exports = React.createBackboneClass({
     var termOptions = [];
     this.props.terms.each(function(term) {
       termOptions.push(<option key={term.id} value={term.id}>{term.get('name')}</option>);
+    });
+
+    var locationOptions = [];
+    this.props.locations.each(function(location) {
+      locationOptions.push(<option key={location.id} value={location.id}>{location.get('name')}</option>);
     });
 
     return (
@@ -73,6 +78,14 @@ module.exports = React.createBackboneClass({
                 <div className="input-field col s6 m3">
                   <label htmlFor="seats">Seats</label>
                   <input ref="seats" type="text" name="seats" id="seats" />
+                </div>
+              </div>
+              <div className="row">
+                <div className="input-field col s12">
+                  <select defaultValue={this.getModel().get('location') ? this.getModel().get('location').id : this.props.locations.first().id} ref="location" id="location">
+                    {locationOptions}
+                  </select>
+                  <label htmlFor="location">Location</label>
                 </div>
               </div>
               <div className="row">
@@ -109,7 +122,7 @@ module.exports = React.createBackboneClass({
               </div>
               <div className="row">
                 <div className="input-field col s12 m6">
-                  <select defaultValue={this.props.terms.first().id} ref="term">
+                  <select defaultValue={this.getModel().get('term') ? this.getModel().get('term').id : this.props.terms.first().id} ref="term">
                     {termOptions}
                   </select>
                   <label>Term</label>

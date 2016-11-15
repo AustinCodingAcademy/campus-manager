@@ -12,7 +12,8 @@ module.exports = React.createBackboneClass({
     ReactDOM.render(CourseModalComponent({
       terms: this.props.terms,
       collection: this.getCollection(),
-      model: new CourseModel()
+      model: new CourseModel(),
+      locations: this.props.locations
     }), $('#modal-container')[0]);
     $('#course-modal').modal('open');
   },
@@ -25,7 +26,8 @@ module.exports = React.createBackboneClass({
         terms: that.props.terms,
         model: courseItem,
         collection: that.getCollection(),
-        currentUser: that.props.currentUser
+        currentUser: that.props.currentUser,
+        locations: that.props.locations
       });
     });
 
@@ -41,6 +43,7 @@ module.exports = React.createBackboneClass({
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Location</th>
                 <th>Term</th>
                 <th>Days</th>
                 <th>Seats</th>
