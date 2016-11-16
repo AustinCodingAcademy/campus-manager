@@ -10,7 +10,9 @@ module.exports = React.createBackboneClass({
       method: 'POST',
       data: {
         amount: this.getModel().get('paymentAmount'),
-        card_id: token.card.id
+        card_id: token.card.id,
+        course_id: this.getModel().get('value').course.id,
+        user_id: that.props.user.id
       },
       success: function() {
         that.getModel().set('paymentAmount', 0);
@@ -23,7 +25,11 @@ module.exports = React.createBackboneClass({
   render: function() {
 
     var disabled = '';
-    if (isNaN(this.getModel().get('paymentAmount')) || this.getModel().get('paymentAmount')<= 0 || this.props.user.id !== this.props.currentUser.id) {
+    if (
+      isNaN(this.getModel().get('paymentAmount')) ||
+      this.getModel().get('paymentAmount')<= 0 ||
+      !this.getModel().get('value')
+    ) {
       disabled = 'disabled';
     }
 

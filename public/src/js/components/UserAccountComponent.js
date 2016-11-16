@@ -4,26 +4,69 @@ var _ = require('underscore');
 var moment = require('moment');
 require('react.backbone');
 var StripeCheckoutComponent = React.createFactory(require('./StripeCheckoutComponent'));
+var Select = require('react-select');
+var CourseOptionComponent = require('./CourseOptionComponent');
+var CourseValueComponent = require('./CourseValueComponent');
 
 module.exports = React.createBackboneClass({
-  paymentModel: new Backbone.Model({
-    paymentAmount: 0,
-    username: ''
-  }),
+  mixins: [
+    React.BackboneMixin('terms', 'update'),
+    React.BackboneMixin('paymentModel', 'change')
+  ],
+
+  setValue (value) {
+    this.props.paymentModel.set('value', value);
+  },
 
   _changeAmount (e) {
-    this.paymentModel.set({
+    this.props.paymentModel.set({
       paymentAmount: Number(this.refs.amount.value) * 100,
       username: this.getModel().get('username')
     });
   },
 
   render () {
-    var that = this
+    var courses = [];
+    var currentCourse = this.getModel().currentCourse();
+    var futureCourse = this.getModel().futureCourse();
+
+    if (currentCourse) {
+      currentCourse.set('registered', true);
+      courses.push(currentCourse);
+    }
+
+    if (futureCourse) {
+      futureCourse.set('registered', true);
+      courses.push(futureCourse)
+    } else {
+      this.props.terms.each(term => {
+        term.get('courses').each(course => {
+          courses.push(course);
+        });
+      });
+    }
+
+    var options = [];
+
+    _.each(courses, course => {
+      var label = course.get('name') +
+      course.get('location').get('name') +
+      course.get('location').get('address') +
+      course.get('location').get('city') +
+      course.get('location').get('state') +
+      course.get('location').get('zipcode');
+      options.push({
+        value: course.id,
+        label: label,
+        course: course
+      });
+    });
+
+    this.props.userAccountModel.set('totalPaid', 0);
     var charges = _.map(_.filter(this.getModel().get('charges'), charge => {
       return !charge.refunded && charge.paid;
     }), charge => {
-      that.props.userAccountModel.set('totalPaid', that.props.userAccountModel.get('totalPaid') + (charge.amount / 100));
+      this.props.userAccountModel.set('totalPaid', this.props.userAccountModel.get('totalPaid') + (charge.amount / 100));
       return(
         <tr key={charge.created}>
           <td>{('$' + (charge.amount / 100).toFixed(2))}</td>
@@ -65,11 +108,25 @@ module.exports = React.createBackboneClass({
               </tr>
             </tfoot>
           </table>
+          <label className="grey-text text-darken-2" htmlFor="course-payment">
+            1. What are you paying for?
+          </label>
+          <Select
+            name="courses"
+            options={options}
+            optionComponent={CourseOptionComponent}
+            placeholder="Select a course"
+            valueComponent={CourseValueComponent}
+            value={this.props.paymentModel.get('value')}
+            onChange={this.setValue}
+            id="course-payment"
+          />
+          <br />
           <div className="input-field">
             <label className="grey-text text-darken-2" htmlFor="payment-amount">2. Enter Payment Amount ($)</label>
-            <input id="payment-amount" ref="amount" onChange={this._changeAmount} placeholder={Number(this.paymentModel.get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
+            <input id="payment-amount" ref="amount" onChange={this._changeAmount} placeholder={Number(this.props.paymentModel.get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
           </div>
-          <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} currentUser={this.props.currentUser} />
+          <StripeCheckoutComponent user={this.getModel()} model={this.props.paymentModel} currentUser={this.props.currentUser} />
         </div>
       </div>
     );

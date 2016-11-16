@@ -280,7 +280,7 @@ module.exports = React.createBackboneClass({
               <CourseRegistrationComponent user={this.getModel()} collection={terms} model={userAccountModel}/>
             </div>
             <div className="col s12 m6">
-              <UserAccountComponent model={this.getModel()} userAccountModel={userAccountModel} currentUser={this.props.currentUser}/>
+              <UserAccountComponent model={this.getModel()} userAccountModel={userAccountModel} currentUser={this.props.currentUser} terms={terms} paymentModel = {new Backbone.Model({ paymentAmount: 0, username: '' })}/>
             </div>
           </div>
         :

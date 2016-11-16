@@ -32,13 +32,19 @@ module.exports = React.createClass({
 			top: -2,
 			verticalAlign: 'middle',
 		};
+		var badge = '';
+		if (this.props.option.course.get('registered')) {
+			badge = (
+				<small><span className="new badge" data-badge-caption="registered"></span></small>
+			);
+		}
 		return (
 			<div className={this.props.className}
 				onMouseDown={this.handleMouseDown}
 				onMouseEnter={this.handleMouseEnter}
 				onMouseMove={this.handleMouseMove}
 				title={this.props.option.title}>
-				<h5>{this.props.option.course.get('name')}</h5>
+				<h5>{this.props.option.course.get('name')}{badge}</h5>
 				{this.props.option.course.get('location').get('name')}
 				<br />
 				{this.props.option.course.get('location').get('address') + ', '}

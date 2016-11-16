@@ -72,7 +72,6 @@ module.exports = React.createBackboneClass({
                 value: course.id,
                 label: label,
                 course: course,
-                term: term,
                 disabled: course.full()
               });
             });
