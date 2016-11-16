@@ -13,5 +13,9 @@ module.exports = Backbone.Model.extend({
     phone: '',
     contact: '',
     note: ''
+  },
+
+  fullAddress: function() {
+    return this.get('name') + ', ' + this.get('address') + ', ' + this.get('city') + ', ' + this.get('state') + ' ' + this.get('zipcode');
   }
 });

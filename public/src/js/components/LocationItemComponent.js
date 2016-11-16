@@ -24,7 +24,7 @@ module.exports = React.createBackboneClass({
   render: function() {
     return (
       <tr>
-        <td>{this.getModel().get('name') + ', ' + this.getModel().get('address') + ', ' + this.getModel().get('city') + ', ' + this.getModel().get('state') + ' ' + this.getModel().get('zipcode')}</td>
+        <td>{this.getModel().fullAddress()}</td>
         <td>{this.getModel().get('phone')}</td>
         <td>{this.getModel().get('contact')}</td>
         <td>{this.getModel().get('note')}</td>

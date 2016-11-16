@@ -11,7 +11,7 @@ var Gravatar = require('react-gravatar');
 var Hashids = require('hashids');
 var StripeCheckoutComponent = React.createFactory(require('./StripeCheckoutComponent'));
 var TermsCollection = require('../collections/TermsCollection');
-var UserRegistrationComponent = require('./UserRegistrationComponent');
+var CourseRegistrationComponent = require('./CourseRegistrationComponent');
 
 module.exports = React.createBackboneClass({
 
@@ -122,7 +122,7 @@ module.exports = React.createBackboneClass({
                 </a>
               </span>
               <br />
-              <p dangerouslySetInnerHTML={{__html:course.get('term').locationAddress().split('\n').join('<br />')}}></p>
+              <p dangerouslySetInnerHTML={{__html:course.locationAddress().split('\n').join('<br />')}}></p>
               <div className="row">
                 <div className="col s6">
                   <h5>Attendance</h5>
@@ -201,7 +201,7 @@ module.exports = React.createBackboneClass({
       );
     } else {
       registrationCard = (
-        <UserRegistrationComponent user={this.getModel()} collection={terms} model={new Backbone.Model()}/>
+        <CourseRegistrationComponent user={this.getModel()} collection={terms} model={new Backbone.Model()}/>
       );
     }
 

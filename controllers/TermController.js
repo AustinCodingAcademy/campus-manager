@@ -32,7 +32,7 @@ module.exports = {
         arrayPop: true,
         mongooseModel: CourseModel,
         idField: "term",
-        populate: { path: 'registrations', select: 'id' }
+        populate: [{ path: 'registrations', select: 'id' }, { path: 'location' }]
       }, function(err, terms) {
         var sorted = _.sortBy(terms, 'start_date');
         return res.json(sorted.reverse());
