@@ -13,6 +13,7 @@ module.exports = React.createBackboneClass({
         card_id: token.card.id
       },
       success: function() {
+        that.getModel().set('paymentAmount', 0);
         that.props.user.fetch();
       }
     });
@@ -37,7 +38,7 @@ module.exports = React.createBackboneClass({
         amount={this.getModel().get('paymentAmount')}
         email={this.getModel().get('username')}
       >
-        <button className={'btn btn-primary '+disabled} disabled={disabled} data-test="make-payment">2. Pay With Card
+        <button className={'btn btn-primary '+disabled} disabled={disabled} data-test="make-payment">3. Pay With Card
           <i className="material-icons right">send</i>
         </button>
       </StripeCheckout>

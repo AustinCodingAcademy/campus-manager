@@ -6,10 +6,6 @@ var CourseOptionComponent = require('./CourseOptionComponent');
 var CourseValueComponent = require('./CourseValueComponent');
 
 module.exports = React.createBackboneClass({
-  mixins: [
-    React.BackboneMixin("user", "change"),
-  ],
-
   setValue (value) {
     this.getModel().set('value', value);
   },
@@ -35,7 +31,7 @@ module.exports = React.createBackboneClass({
 
     var registrationCard;
 
-    if (this.getModel().get('status') === -1) {
+    if (this.getModel().get('totalPaid') - this.getModel().get('totalCourseCost') < 0) {
       registrationCard = (
         <div className="card-panel red">
           <span className="white-text">
@@ -53,7 +49,7 @@ module.exports = React.createBackboneClass({
       );
     } else {
       if (this.getCollection().length) {
-        if (this.getModel().get('status') === 0) {
+        if (this.getModel().get('totalPaid') - this.getModel().get('totalCourseCost') < 490) {
           registrationCard = (
             <div className="card-panel deep-orange darken-4">
               <span className="white-text">

@@ -9,16 +9,11 @@ var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
 var Gravatar = require('react-gravatar');
 var Hashids = require('hashids');
-var StripeCheckoutComponent = React.createFactory(require('./StripeCheckoutComponent'));
 var TermsCollection = require('../collections/TermsCollection');
 var CourseRegistrationComponent = require('./CourseRegistrationComponent');
+var UserAccountComponent = require('./UserAccountComponent');
 
 module.exports = React.createBackboneClass({
-
-  paymentModel: new Backbone.Model({
-    paymentAmount: 0,
-    username: ''
-  }),
 
   componentDidMount: function() {
     Materialize.updateTextFields();
@@ -62,21 +57,18 @@ module.exports = React.createBackboneClass({
     }
   },
 
-  changeAmount: function(e) {
-    this.paymentModel.set({
-      paymentAmount: Number(this.refs.amount.value) * 100,
-      username: this.getModel().get('username')
-    });
-  },
-
   render: function() {
-    var courseCharges = [];
-    var totalCourseCost = 0;
+    var userAccountModel = new Backbone.Model({
+      totalPaid: 0,
+      totalCourseCost: 0,
+      courseCharges: []
+    });
+
     var courseCards = this.getModel().get('courses').map(function(course, idx) {
       if (course.get('cost') && course.get('cost') > 0) {
-        totalCourseCost += course.get('cost');
-        courseCharges.push(
-          <tr>
+        userAccountModel.set('totalCourseCost', userAccountModel.get('totalCourseCost') + course.get('cost'));
+        userAccountModel.get('courseCharges').push(
+          <tr key={course.id + course.get('cost')}>
             <td>${course.get('cost').toFixed(2)}</td>
             <td>{course.get('name')}</td>
           </tr>
@@ -122,7 +114,7 @@ module.exports = React.createBackboneClass({
                 </a>
               </span>
               <br />
-              <p dangerouslySetInnerHTML={{__html:course.locationAddress().split('\n').join('<br />')}}></p>
+              <p dangerouslySetInnerHTML={{__html:course.get('location').locationAddress().split('\n').join('<br />')}}></p>
               <div className="row">
                 <div className="col s6">
                   <h5>Attendance</h5>
@@ -146,29 +138,14 @@ module.exports = React.createBackboneClass({
           });
         }), function(credit) {
       return credit.length === 2 && Number(credit[1]);
-    }), function(credit) {
-      totalCourseCost -= Number(credit[1]);
-      courseCharges.push(
-        <tr>
+    }), (credit, idx) => {
+      userAccountModel.set('totalCourseCost', userAccountModel.get('totalCourseCost') - Number(credit[1]));
+      userAccountModel.get('courseCharges').push(
+        <tr key={idx}>
           <td>(- ${Number(credit[1]).toFixed(2)})</td>
           <td>{credit[0]}</td>
         </tr>
       );
-    });
-
-    var totalPaid = 0;
-
-    var charges = _.map(_.filter(this.getModel().get('charges'), function(charge) {
-      return !charge.refunded && charge.paid;
-    }), function(charge) {
-      totalPaid += (charge.amount / 100);
-      return(
-        <tr>
-          <td>{('$' + (charge.amount / 100).toFixed(2))}</td>
-          <td>*{charge.source.last4}</td>
-          <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
-        </tr>
-      )
     });
 
     var terms = new TermsCollection();
@@ -181,12 +158,10 @@ module.exports = React.createBackboneClass({
       }
     });
 
-    var registrationModel = new Backbone.Model();
-
-    if (totalPaid - totalCourseCost < 0) {
-      registrationModel.set('status', -1);
-    } else if (totalPaid - totalCourseCost < 490) {
-      registrationModel.set('status', 0);
+    if (userAccountModel.get('totalPaid') - userAccountModel.get('totalCourseCost') < 0) {
+      userAccountModel.set('status', -1);
+    } else if (userAccountModel.get('totalPaid') - userAccountModel.get('totalCourseCost') < 490) {
+      userAccountModel.set('status', 0);
     }
 
     var hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
@@ -264,8 +239,10 @@ module.exports = React.createBackboneClass({
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Admin Tips</span>
-                <p>New User Registration can be found at <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small></p>
-                <p>Users can reset their password at <small><pre>{process.env.DOMAIN + '/reset'}</pre></small></p>
+                <p>New User Registration can be found at</p>
+                <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small>
+                <p>Users can reset their password at</p>
+                <small><pre>{process.env.DOMAIN + '/reset'}</pre></small>
               </div>
             </div>
           </div>
@@ -300,47 +277,10 @@ module.exports = React.createBackboneClass({
         {this.getModel().get('is_student') ?
         <div className="row">
             <div className="col s12 m6">
-              <CourseRegistrationComponent user={this.getModel()} collection={terms} model={registrationModel}/>
+              <CourseRegistrationComponent user={this.getModel()} collection={terms} model={userAccountModel}/>
             </div>
             <div className="col s12 m6">
-              <div className="card">
-                <div className="card-content">
-                  <span className="card-title">Account</span>
-                  <table className="striped">
-                    <thead>
-                      <tr>
-                        <th>Cost</th>
-                        <th>Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>{courseCharges}</tbody>
-                    <tfoot></tfoot>
-                  </table>
-                  <hr />
-                  <table className="striped">
-                    <thead>
-                      <tr>
-                        <th>Paid</th>
-                        <th>Card</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>{charges}</tbody>
-                    <tfoot>
-                      <tr>
-                        <th><span className={ (totalPaid - totalCourseCost < 0) ? 'score60' : '' }>${(totalPaid - totalCourseCost).toFixed(2)}</span></th>
-                        <th>Balance</th>
-                        <th></th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                  <div className="input-field">
-                    <label className="grey-text text-darken-2" htmlFor="payment-amount">1. Enter Payment Amount ($)</label>
-                    <input id="payment-amount" ref="amount" onChange={this.changeAmount} placeholder={Number(this.getModel().get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
-                  </div>
-                  <StripeCheckoutComponent user={this.getModel()} model={this.paymentModel} currentUser={this.props.currentUser} ref="checkout"/>
-                </div>
-              </div>
+              <UserAccountComponent model={this.getModel()} userAccountModel={userAccountModel} currentUser={this.props.currentUser}/>
             </div>
           </div>
         :

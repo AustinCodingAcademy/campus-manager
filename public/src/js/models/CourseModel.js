@@ -72,10 +72,6 @@ module.exports = Backbone.Model.extend({
     return this.get('registrations').length >= this.get('seats');
   },
 
-  locationAddress: function() {
-    return this.get('location').get('name') + '\n' + this.get('location').get('address') + '\n' + this.get('location').get('city') + ', ' + this.get('location').get('state') + '  ' + this.get('location').get('zipcode');
-  },
-
   shortDays: function() {
     return this.get('days').map(function(day) {
       return day.charAt(0).toUpperCase() + day.slice(1,3);
