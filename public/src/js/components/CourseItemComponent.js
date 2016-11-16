@@ -9,7 +9,8 @@ module.exports = React.createBackboneClass({
     ReactDOM.render(CourseModalComponent({
       terms: this.props.terms,
       collection: this.getCollection(),
-      model: this.getModel()
+      model: this.getModel(),
+      locations: this.props.locations
     }), $('#modal-container')[0]);
     $('#course-modal' + this.getModel().id).modal('open');
     Materialize.updateTextFields();
@@ -26,6 +27,7 @@ module.exports = React.createBackboneClass({
     return (
       <tr>
         <td><a href={'#courses/' + this.getModel().id}>{this.getModel().get('name')}</a></td>
+        <td>{this.getModel().get('location') ? this.getModel().get('location').get('name') : ''}</td>
         <td>{this.getModel().get('term').get('name')}</td>
         <td>{this.getModel().shortDays()}</td>
         <td>{this.getModel().get('registrations').length + ' / ' + this.getModel().get('seats')}</td>

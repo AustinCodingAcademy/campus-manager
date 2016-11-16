@@ -84,6 +84,7 @@
     "react-dropzone": "3.7.2",
     "react-gravatar": "2.6.1",
     "react-modal": "1.5.2",
+    "react-select": "^1.0.0-rc.2",
     "react-stripe-checkout": "2.2.5",
     "react.backbone": "0.9.0",
     "reactify": "1.1.1",

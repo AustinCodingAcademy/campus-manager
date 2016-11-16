@@ -10,8 +10,7 @@ module.exports = React.createBackboneClass({
     ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
     ReactDOM.render(TermModalComponent({
       collection: this.getCollection(),
-      model: new TermModel(),
-      locations: this.props.locations
+      model: new TermModel()
     }), $('#modal-container')[0]);
     $('#term-modal').modal('open');
   },
@@ -21,8 +20,7 @@ module.exports = React.createBackboneClass({
       return TermItemComponent({
         key: termItem.id,
         model: termItem,
-        collection: this.getCollection(),
-        locations: this.props.locations
+        collection: this.getCollection()
       })
     }, this);
 
@@ -37,7 +35,6 @@ module.exports = React.createBackboneClass({
               <tr>
                 <th>Name</th>
                 <th>Dates</th>
-                <th>Location</th>
                 <th></th>
               </tr>
             </thead>
