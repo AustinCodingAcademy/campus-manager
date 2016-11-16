@@ -120,6 +120,7 @@ module.exports = React.createBackboneClass({
             value={this.props.paymentModel.get('value')}
             onChange={this.setValue}
             id="course-payment"
+            data-test="course-payment"
           />
           <br />
           <div className="input-field">

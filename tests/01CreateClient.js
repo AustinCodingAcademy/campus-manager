@@ -27,39 +27,39 @@ module.exports = {
     .pause(500)
   },
 
-  'Make Payment': function (browser) {
-    browser
-    .click('.brand-logo[href="#"]')
-    .pause(500)
-    .setValue('input', '200.00')
-    .pause(1000)
-    .click('[data-test="make-payment"]')
-    .pause(3000)
-    .keys('4242')
-    .pause(100)
-    .keys('4242')
-    .pause(100)
-    .keys('4242')
-    .pause(100)
-    .keys('4242')
-    .pause(500)
-    .keys('\uE004')
-    .pause(500)
-    .keys('11')
-    .keys('2020')
-    .pause(500)
-    .keys('\uE004')
-    .pause(500)
-    .keys('123')
-    .pause(500)
-    .keys('\uE004')
-    .pause(500)
-    .keys('77777')
-    .pause(500)
-    .keys('\uE007')
-    .pause(5000)
-    // Pause may need to be longer on other test clients
-  },
+  // 'Make Payment': function (browser) {
+  //   browser
+  //   .click('.brand-logo[href="#"]')
+  //   .pause(500)
+  //   .setValue('input', '200.00')
+  //   .pause(1000)
+  //   .click('[data-test="make-payment"]')
+  //   .pause(3000)
+  //   .keys('4242')
+  //   .pause(100)
+  //   .keys('4242')
+  //   .pause(100)
+  //   .keys('4242')
+  //   .pause(100)
+  //   .keys('4242')
+  //   .pause(500)
+  //   .keys('\uE004')
+  //   .pause(500)
+  //   .keys('11')
+  //   .keys('2020')
+  //   .pause(500)
+  //   .keys('\uE004')
+  //   .pause(500)
+  //   .keys('123')
+  //   .pause(500)
+  //   .keys('\uE004')
+  //   .pause(500)
+  //   .keys('77777')
+  //   .pause(500)
+  //   .keys('\uE007')
+  //   .pause(5000)
+  //   // Pause may need to be longer on other test clients
+  // },
 
   'Create Location': function (browser) {
     browser
@@ -107,20 +107,12 @@ module.exports = {
     .pause(500)
     .keys('\uE007') // Presses ENTER btn
     .pause(500)
-    .keys('\uE004')
-    .pause(500)
-    .keys('\uE007') // Presses ENTER btn
-    .pause(500)
-    .keys('\uE004')
-    .pause(500)
-    .keys('\uE007') // Presses ENTER btn
-    .pause(1000)
+    .click('input[type="submit"]')
+    .pause(1000);
   },
 
   'Make Course': function (browser) {
     browser
-    .click('[data-activates="nav-admin"]')
-    .pause(1000)
     .click('[href="#courses"]')
     .pause(1000)
     .click('a[data-test="new-course"]')
