@@ -181,28 +181,12 @@ module.exports = React.createBackboneClass({
       }
     });
 
-    var registrationCard;
+    var registrationModel = new Backbone.Model();
 
     if (totalPaid - totalCourseCost < 0) {
-      registrationCard = (
-        <div className="card-panel red">
-          <span className="white-text">
-            You have a negative balance! To register for another course, you must have a positive balance of at least $490.00.
-          </span>
-        </div>
-      );
+      registrationModel.set('status', -1);
     } else if (totalPaid - totalCourseCost < 490) {
-      registrationCard = (
-        <div className="card-panel deep-orange darken-4">
-          <span className="white-text">
-            To register for another course, you must have a positive balance of at least <strong>$490.00</strong>.
-          </span>
-        </div>
-      );
-    } else {
-      registrationCard = (
-        <CourseRegistrationComponent user={this.getModel()} collection={terms} model={new Backbone.Model()}/>
-      );
+      registrationModel.set('status', 0);
     }
 
     var hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
@@ -316,7 +300,7 @@ module.exports = React.createBackboneClass({
         {this.getModel().get('is_student') ?
         <div className="row">
             <div className="col s12 m6">
-              {registrationCard}
+              <CourseRegistrationComponent user={this.getModel()} collection={terms} model={registrationModel}/>
             </div>
             <div className="col s12 m6">
               <div className="card">

@@ -6,6 +6,9 @@ var CourseOptionComponent = require('./CourseOptionComponent');
 var CourseValueComponent = require('./CourseValueComponent');
 
 module.exports = React.createBackboneClass({
+  mixins: [
+    React.BackboneMixin("user", "change"),
+  ],
 
   setValue (value) {
     this.getModel().set('value', value);
@@ -26,67 +29,93 @@ module.exports = React.createBackboneClass({
   },
 
   render: function() {
-    var options = [];
-
-    this.getCollection().each(term => {
-      term.get('courses').each(course => {
-        var label = course.get('name') +
-        course.get('location').get('name') +
-        course.get('location').get('address') +
-        course.get('location').get('city') +
-        course.get('location').get('state') +
-        course.get('location').get('zipcode');
-        options.push({
-          value: course.id,
-          label: label,
-          course: course,
-          term: term,
-          disabled: course.full()
-        });
-      });
-    });
-
     var alreadyRegistered = this.getCollection().some(function(term) {
       return _.intersection(this.props.user.get('courses').pluck('_id'), term.get('courses').pluck('_id')).length > 0;
     }, this);
 
-    var disabled = this.getModel().get('value') ? '' : 'disabled';
+    var registrationCard;
+
+    if (this.getModel().get('status') === -1) {
+      registrationCard = (
+        <div className="card-panel red">
+          <span className="white-text">
+            You have a negative balance!
+          </span>
+        </div>
+      );
+    } else if (alreadyRegistered) {
+      registrationCard = (
+        <div className="card-panel green">
+          <span className="white-text">
+            You are all registered and ready to go! See the course textbook, details, and dates below.
+          </span>
+        </div>
+      );
+    } else {
+      if (this.getCollection().length) {
+        if (this.getModel().get('status') === 0) {
+          registrationCard = (
+            <div className="card-panel deep-orange darken-4">
+              <span className="white-text">
+                Registration for the next session is open! To register for another course, you must pay a deposit of at least <strong>$490.00</strong>.
+              </span>
+            </div>
+          );
+        } else {
+          var options = [];
+
+          this.getCollection().each(term => {
+            term.get('courses').each(course => {
+              var label = course.get('name') +
+              course.get('location').get('name') +
+              course.get('location').get('address') +
+              course.get('location').get('city') +
+              course.get('location').get('state') +
+              course.get('location').get('zipcode');
+              options.push({
+                value: course.id,
+                label: label,
+                course: course,
+                term: term,
+                disabled: course.full()
+              });
+            });
+          });
+
+          var disabled = this.getModel().get('value') ? '' : 'disabled';
+
+          registrationCard = (
+            <div>
+              <Select
+                name="courses"
+                options={options}
+                optionComponent={CourseOptionComponent}
+                placeholder="Select a course"
+                valueComponent={CourseValueComponent}
+                value={this.getModel().get('value')}
+                onChange={this.setValue}
+              />
+              <br />
+              <button className={'btn btn-primary '+disabled} disabled={disabled} onClick={this._courseRegister}>Register
+                <i className="material-icons right">send</i>
+              </button>
+            </div>
+          );
+        }
+      } else {
+        registrationCard = (
+          <div className="card-panel teal">
+            <span className="white-text">Stay tuned for upcoming courses!</span>
+          </div>
+        );
+      }
+    }
 
     return (
       <div className="card">
         <div className="card-content">
           <span className="card-title">Registration</span>
-          {this.getCollection().length ?
-            <div>
-              {alreadyRegistered ?
-              <div className="card-panel green">
-                <span className="white-text">
-                  You are all registered and ready to go! See the course textbook, details, and dates below.
-                </span>
-              </div>
-              :
-              <div>
-                <Select
-                  name="courses"
-                  options={options}
-                  optionComponent={CourseOptionComponent}
-                  placeholder="Select a course"
-                  valueComponent={CourseValueComponent}
-                  value={this.getModel().get('value')}
-                  onChange={this.setValue}
-                />
-                <br />
-                <button className={'btn btn-primary '+disabled} disabled={disabled} onClick={this._courseRegister}>Register
-                  <i className="material-icons right">send</i>
-                </button>
-              </div>
-              }
-            </div>
-            :
-            <div className="card-panel teal">
-              <span className="white-text">Stay tuned for upcoming courses!</span>
-            </div>
-          }
+          {registrationCard}
         </div>
       </div>
     );
