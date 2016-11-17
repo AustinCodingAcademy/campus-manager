@@ -106,18 +106,18 @@ router.post('/register', function(req, res, next) {
           idn: users.length ? users[0].idn + 1 : 1
         });
 
-        newUser.save(function (error, user) {
+        newUser.save(function (err, user) {
 
-          if (error) {
-            req.flash('error', error.message);
+          if (err) {
+            req.flash('error', err.message);
             res.redirect('/register');
           }
 
           user.client = user._id;
-          user.save(function (error, user) {
+          user.save(function (err, user) {
 
-            if (error) {
-              req.flash('error', error.message);
+            if (err) {
+              req.flash('error', err.message);
               res.redirect('/register');
             }
 
@@ -174,7 +174,7 @@ router.post('/register/:id', function(req, res, next) {
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
       UserModel.find({}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
         if (err) {
-          req.flash('error', error.message);
+          req.flash('error', err.message);
           return res.redirect('/register/' + req.params.id);
         }
 
@@ -191,7 +191,7 @@ router.post('/register/:id', function(req, res, next) {
         newUser.save(function (err, user) {
 
           if (err) {
-            req.flash('error', error.message);
+            req.flash('error', err.message);
             return res.redirect('/register/' + req.params.id);
           }
 
