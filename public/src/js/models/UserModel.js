@@ -141,5 +141,17 @@ module.exports = Backbone.Model.extend({
     }
 
     return this.grade_average;
+  },
+
+  currentCourse: function() {
+    return this.get('courses').find(course => {
+      return moment().isBetween(course.get('term').get('start_date'), course.get('term').get('end_date'));
+    });
+  },
+
+  futureCourse: function() {
+    return this.get('courses').find(course => {
+      return moment().isBefore(course.get('term').get('start_date'));
+    });
   }
 });

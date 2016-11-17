@@ -105,12 +105,7 @@ $(function() {
     terms: function() {
       var terms = new TermsCollection();
       terms.fetch();
-      var locations = new LocationsCollection();
-      locations.fetch({
-        success: function() {
-          ReactDOM.render(TermsListComponent({ collection: terms, locations: locations}), $('#container')[0]);
-        }
-      });
+      ReactDOM.render(TermsListComponent({ collection: terms }), $('#container')[0]);
     },
 
     users: function() {
@@ -135,11 +130,17 @@ $(function() {
       var terms = new TermsCollection();
       terms.fetch({
         success: function() {
-          ReactDOM.render(CoursesListComponent({
-            terms: terms,
-            collection: courses,
-            currentUser: that.currentUser
-          }), $('#container')[0]);
+          var locations = new LocationsCollection();
+          locations.fetch({
+            success: function() {
+              ReactDOM.render(CoursesListComponent({
+                terms: terms,
+                collection: courses,
+                currentUser: that.currentUser,
+                locations: locations
+              }), $('#container')[0]);
+            }
+          });
         }
       });
     },

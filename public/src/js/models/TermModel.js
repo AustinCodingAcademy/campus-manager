@@ -1,4 +1,5 @@
 var Backbone = require('backbone');
+var _ = require('underscore');
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/terms',
@@ -17,19 +18,13 @@ module.exports = Backbone.Model.extend({
   parse: function(obj) {
     if (obj.courses) {
       var CoursesCollection = require('../collections/CoursesCollection');
+      _.each(obj.courses, course => {
+        return course.term = _.omit(obj, 'courses');
+      });
       obj.courses = new CoursesCollection(obj.courses, { parse: true });
     }
 
-    if (obj.location) {
-      var LocationModel = require('./LocationModel');
-      obj.location = new LocationModel(obj.location, { parse: true });
-    }
-
     return obj;
-  },
-
-  locationAddress: function() {
-    return this.get('location').get('name') + '\n' + this.get('location').get('address') + '\n' + this.get('location').get('city') + ', ' + this.get('location').get('state') + '  ' + this.get('location').get('zipcode');
   },
 
   percentFull: function() {
