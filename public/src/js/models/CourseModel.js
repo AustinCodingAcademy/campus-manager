@@ -2,6 +2,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 var TermModel = require('./TermModel');
 var UsersCollection = require('../collections/UsersCollection');
+var LocationModel = require('../models/LocationModel');
 var moment = require('moment');
 require('moment-range');
 
@@ -17,7 +18,8 @@ module.exports = Backbone.Model.extend({
     textbook: '',
     days: [],
     holidays: [],
-    cost: ''
+    cost: '',
+    location: new LocationModel()
   },
 
   initialize: function() {
@@ -66,9 +68,13 @@ module.exports = Backbone.Model.extend({
     }, this);
   },
 
+  full: function() {
+    return this.get('registrations').length >= this.get('seats');
+  },
+
   shortDays: function() {
     return this.get('days').map(function(day) {
-      return day.slice(0,3);
+      return day.charAt(0).toUpperCase() + day.slice(1,3);
     }).join(', ');
   },
 
@@ -160,6 +166,12 @@ module.exports = Backbone.Model.extend({
     if (obj.registrations) {
       obj.registrations = new UsersCollection(obj.registrations, { parse: true });
     }
+
+    if (obj.location) {
+      var LocationModel = require('./LocationModel');
+      obj.location = new LocationModel(obj.location, { parse: true });
+    }
+
     return obj;
   },
 

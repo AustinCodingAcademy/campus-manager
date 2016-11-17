@@ -4,15 +4,16 @@ $fa-font-path: '/fonts/fontawesome/';
 
 @import
   '../../../node_modules/materialize-css/dist/css/materialize',
-  '../../../node_modules/font-awesome/scss/font-awesome.scss',
+  '../../../node_modules/font-awesome/scss/font-awesome',
   '../../../node_modules/codemirror/lib/codemirror',
+  '../../../node_modules/react-select/dist/react-select',
   './modal',
   './youtube_uploader';
 
-  *:focus { /* removes Chrome's default outline around input boxes */
-    outline-style: none !important;
-    outline: 0 !important;
-  }
+*:focus { /* removes Chrome's default outline around input boxes */
+  outline-style: none !important;
+  outline: 0 !important;
+}
 
 .z-top {
   z-index: 1004;
@@ -91,4 +92,8 @@ nav .brand-logo {
   [type="checkbox"] + & {
     padding-left: 20px;
   }
+}
+
+.Select-input input {
+  height: 1.25rem;
 }

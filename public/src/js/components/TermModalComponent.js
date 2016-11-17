@@ -20,8 +20,7 @@ module.exports = React.createBackboneClass({
     this.getModel().save({
       name: this.refs.name.value,
       start_date: this.refs.start_date.value,
-      end_date: this.refs.end_date.value,
-      location: this.props.locations.get(this.refs.location.value),
+      end_date: this.refs.end_date.value
     }, {
       success: function (term) {
         that.getCollection().add(term);
@@ -44,26 +43,15 @@ module.exports = React.createBackboneClass({
 
   render: function() {
 
-    var locationOptions = [];
-    this.props.locations.each(function(location) {
-      locationOptions.push(<option key={location.id} value={location.id}>{location.get('name')}</option>);
-    });
-
     return (
       <div id={'term-modal' + (this.getModel().id ? this.getModel().id  : '')} className="modal">
         <div className="modal-content">
           <div className="row">
             <form className="col s12" onSubmit={this.saveTerm}>
               <div className="row">
-                <div className="input-field col s12 m6">
-                  <input ref="name" type="text" />
+                <div className="input-field col s12">
+                  <input ref="name" type="text" className="validate"/>
                   <label htmlFor="name">Name</label>
-                </div>
-                <div className="input-field col s12 m6">
-                  <select defaultValue={this.getModel().get('location') ? this.getModel().get('location').id : this.props.locations.first().id} ref="location" id="location">
-                    {locationOptions}
-                  </select>
-                  <label htmlFor="location">Location</label>
                 </div>
               </div>
               <div className="row">
