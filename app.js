@@ -65,7 +65,7 @@ app.use('/api/users', middleware.auth, require('./routes/users'));
 app.use('/api/terms', middleware.auth, require('./routes/terms'));
 app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
-app.use('/api/locations', middleware.admin, require('./routes/locations'));
+app.use('/api/locations', middleware.auth, require('./routes/locations'));
 app.use('/api/import', middleware.admin, require('./routes/import'));
 app.use('/api/report', middleware.admin, require('./routes/report'));
 
