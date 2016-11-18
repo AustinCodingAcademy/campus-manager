@@ -59,8 +59,15 @@ module.exports = React.createBackboneClass({
 
   generateApiKey: function(e) {
     e.preventDefault();
+    var that = this;
     this.getModel().save({
       generate_api_key: true
+    }, {
+      success: function() {
+        if (that.getModel().id === that.props.currentUser.id) {
+          that.props.currentUser.set('api_key', that.getModel().get('api_key'));
+        }
+      }
     });
     this.getModel().unset('generate_api_key', { silent: true });
   },
