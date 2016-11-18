@@ -39,5 +39,19 @@ module.exports = {
     } else {
       return Math.round(dailyAverage * .3 + checkpointAverage * .7);
     }
+  },
+
+  urlParse: function(url) {
+    var parser = document.createElement('a');
+    parser.href = url;
+    return parser;
+
+    // parser.protocol; // => "http:"
+    // parser.hostname; // => "example.com"
+    // parser.port;     // => "3000"
+    // parser.pathname; // => "/pathname/"
+    // parser.search;   // => "?search=test"
+    // parser.hash;     // => "#hash"
+    // parser.host;     // => "example.com:3000"
   }
 }

@@ -7,6 +7,7 @@ require('cm-sql');
 var work = require('webworkify');
 var tableToCsv = require('node-table-to-csv');
 var Clipboard = require('clipboard');
+var utils = require('../utils');
 
 module.exports = React.createBackboneClass({
   worker: undefined,
@@ -14,9 +15,9 @@ module.exports = React.createBackboneClass({
   componentDidMount: function() {
     this.worker = work(require('worker.sql.js'));
     this.loadDatabase();
-    var clipboard = new Clipboard('[data-clipboard-target]');
+    var clipboard = new Clipboard('[data-clipboard-text]');
     clipboard.on('success', function(e) {
-      Materialize.toast('Shareable link copied!', 3000);
+      Materialize.toast('Link copied!', 3000);
       e.clearSelection();
     });
   },
@@ -111,14 +112,24 @@ module.exports = React.createBackboneClass({
       autofocus: true
     };
 
+    var url = utils.urlParse(window.location);
+
     return (
       <div>
         <br />
         <div className="row">
           <div className="col s12">
-            Share this report: <a data-clipboard-target="#url" href="#" onClick={function(e) { e.preventDefault(); }}>copy url</a>
+            <strong>Copy: </strong>
+            <a data-clipboard-text={window.location.href} href="#" onClick={function(e) { e.preventDefault(); }}>Shareable Link</a> |&nbsp;
+            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=html'} href="#" onClick={function(e) { e.preventDefault(); }}>API (HTML)</a> |&nbsp;
+            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=csv'} href="#" onClick={function(e) { e.preventDefault(); }}>API (CSV)</a> |&nbsp;
+            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=json'} href="#" onClick={function(e) { e.preventDefault(); }}>API (JSON)</a>
             <br />
-            <pre style={{whiteSpace: 'pre-wrap'}} id="url">{window.location.href}</pre>
+            <small>
+              To use the API links, you must generate an API token on your dashboard.
+              <br />
+              These links are not meant to be shared with anyone, but are used for API services.
+            </small>
           </div>
         </div>
         <div className="row">
