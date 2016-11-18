@@ -121,9 +121,9 @@ module.exports = React.createBackboneClass({
           <div className="col s12">
             <strong>Copy: </strong>
             <a data-clipboard-text={window.location.href} href="#" onClick={function(e) { e.preventDefault(); }}>Shareable Link</a> |&nbsp;
-            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=html'} href="#" onClick={function(e) { e.preventDefault(); }}>API (HTML)</a> |&nbsp;
-            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=csv'} href="#" onClick={function(e) { e.preventDefault(); }}>API (CSV)</a> |&nbsp;
-            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=json'} href="#" onClick={function(e) { e.preventDefault(); }}>API (JSON)</a>
+            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=html&key=' + this.props.currentUser.get('api_key')} href="#" onClick={function(e) { e.preventDefault(); }}>API (HTML)</a> |&nbsp;
+            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=csv&key=' + this.props.currentUser.get('api_key')} href="#" onClick={function(e) { e.preventDefault(); }}>API (CSV)</a> |&nbsp;
+            <a data-clipboard-text={url.host + '/api/' + url.hash.slice(1, -1) + '?format=json&key=' + this.props.currentUser.get('api_key')} href="#" onClick={function(e) { e.preventDefault(); }}>API (JSON)</a>
             <br />
             <small>
               To use the API links, you must generate an API token on your dashboard.

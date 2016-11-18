@@ -180,7 +180,8 @@ $(function() {
           columns: [],
           values:[],
           sql: query ? atob(query) : "SELECT name, sql FROM sqlite_master WHERE type='table';"
-        })
+        }),
+        currentUser: this.currentUser
       }), $('#container')[0]);
     }
   });

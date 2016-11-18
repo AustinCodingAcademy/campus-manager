@@ -57,6 +57,14 @@ module.exports = React.createBackboneClass({
     }
   },
 
+  generateApiKey: function(e) {
+    e.preventDefault();
+    this.getModel().save({
+      generate_api_key: true
+    });
+    this.getModel().unset('generate_api_key', { silent: true });
+  },
+
   render: function() {
     var userAccountModel = new Backbone.Model({
       totalPaid: 0,
@@ -243,6 +251,8 @@ module.exports = React.createBackboneClass({
                 <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small>
                 <p>Users can reset their password at</p>
                 <small><pre>{process.env.DOMAIN + '/reset'}</pre></small>
+                <p>Your API Key is</p>
+                <small><pre>{this.getModel().get('api_key')}</pre> <a href="#" onClick={this.generateApiKey}>generate</a></small>
               </div>
             </div>
           </div>

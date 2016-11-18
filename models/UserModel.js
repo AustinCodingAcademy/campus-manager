@@ -5,58 +5,57 @@ var _ = require('underscore');
 var mongooseToCsv = require('mongoose-to-csv');
 
 var userSchema = new Schema({
-  "username" : {
+  username: {
     type: String,
     required: true,
     unique: true,
     index: true,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
-  "password" : String,
-
-  "is_client" : {
+  password: String,
+  is_client: {
     type: Boolean,
     default: false
   },
-  "is_admin" : {
+  is_admin: {
     type: Boolean,
     default: false
   },
-  "is_instructor": {
+  is_instructor: {
     type: Boolean,
     default: false
   },
-  "is_student": {
+  is_student: {
     type: Boolean,
     default: false
   },
-  "first_name" : {
+  first_name: {
     type: String,
     required: true
   },
-  "last_name" : {
+  last_name: {
     type: String,
     required: true
   },
-  "phone": {
+  phone: {
     type: String,
     default: ""
   },
-  "github": {
+  github: {
     type: String,
     default: ""
   },
-  "website": {
+  website: {
     type: String,
     default: ""
   },
-  "idn": {
+  idn: {
     type: Number,
     required: true,
     default: 1,
     unique: true
   },
-  "client" : {
+  client : {
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
@@ -68,7 +67,8 @@ var userSchema = new Schema({
   reset_password: String,
   charges: Array,
   customer_id: String,
-  credits: String
+  credits: String,
+  api_key: String
 }, { timestamps: true });
 
 userSchema.set('toJSON', {
@@ -87,10 +87,10 @@ userSchema.plugin(uniqueValidator);
 userSchema.plugin(mongooseToCsv, {
   headers: 'id idn first_name last_name email phone zipcode github website customer_id',
   constraints: {
-    'email': 'username'
+    email: 'username'
   },
   virtuals: {
-    'id': function(doc) {
+    id: function(doc) {
       return doc._id.toString();
     }
   }
