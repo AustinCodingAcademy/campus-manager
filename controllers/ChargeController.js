@@ -75,7 +75,11 @@ module.exports = {
                 location_city: course.location.city,
                 location_state: course.location.state,
                 user_id: user._id.toString(),
-                user_idn: user.idn
+                user_idn: user.idn,
+                user_email: user.username,
+                user_first_name: user.first_name,
+                user_last_name: user.last_name,
+                user_phone: user.phone
               }
             }, function(err, charge) {
               if (err) { return res.json(500, { message: 'Error making charge.', error: err }); }
