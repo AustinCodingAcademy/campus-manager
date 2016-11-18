@@ -191,7 +191,8 @@ module.exports = {
               res.type('text/csv');
               res.send(200, json2csv({ data: rows}));
             } else if (req.query.format === 'html'){
-              res.json(200, {html: tableify(rows)});
+              res.type('html');
+              res.send(200, tableify(rows));
             }
           });
         });
