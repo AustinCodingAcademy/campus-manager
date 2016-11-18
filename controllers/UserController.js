@@ -105,9 +105,9 @@ module.exports = {
     ];
 
     _.each(attributes, function(attr) {
-      user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+      user[attr] =  req.body[attr];
     });
-    user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
+    user.username = req.body.username.toLowerCase();
 
     UserModel.find({}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
       user.idn = users[0].idn + 1;
@@ -183,8 +183,19 @@ module.exports = {
 
       if (req.user.is_admin || req.user.is_client) {
         _.each(protectedAttrs, function(attr) {
-          user[attr] =  req.body[attr];
+          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
         });
+        if (req.body.generate_api_key) {
+          var rand = function() {
+            return Math.random().toString(36).substr(2); // remove `0.`
+          };
+
+          var token = function() {
+            return rand() + rand(); // to make it longer
+          };
+
+          user.api_key = token();
+        }
       }
 
       user.save(function(err, user){

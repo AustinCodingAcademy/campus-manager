@@ -10,6 +10,8 @@ var LocationModel = require('../models/LocationModel');
 var moment = require('moment');
 require('moment-range');
 var AWS = require('aws-sdk');
+var atob = require('atob');
+var tableify = require('tableify');
 
 /**
 * ReportController.js
@@ -165,7 +167,6 @@ module.exports = {
                 console.log(err);
                 importCsv(null, null, true);
               }  else  {
-                console.log(data.Body)
                 fs.writeFileSync(fileName, data.Body);
                 importCsv(table, fileName);
               }
@@ -180,7 +181,21 @@ module.exports = {
       }
       idx++;
       if (idx < tables.length) {
-        createTable(tables[idx])
+        createTable(tables[idx]);
+      } else if (req.params.query) {
+        db.serialize(function() {
+          db.all(atob(req.params.query), function(err, rows) {
+            if (req.query.format === 'json' || !req.query.format)  {
+              res.json(200, rows);
+            } else if (req.query.format === 'csv') {
+              res.type('text/csv');
+              res.send(200, json2csv({ data: rows}));
+            } else if (req.query.format === 'html'){
+              res.type('html');
+              res.send(200, tableify(rows));
+            }
+          });
+        });
       } else {
         res.type('arraybuffer');
         res.send(fs.readFileSync(tmpDir + timestamp + '-report.sqlite3'));

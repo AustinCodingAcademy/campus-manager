@@ -19,9 +19,23 @@ module.exports = {
   admin: function(req, res, next) {
     if (req.isAuthenticated() && (req.user.is_client || req.user.is_admin)) {
       return next();
+    } else if (req.query.key) {
+      var UserModel = require('../models/UserModel');
+      console.log(req.query.key);
+      UserModel.findOne({ api_key: req.query.key }, function(err, user) {
+        if (err) {
+          return res.status(500).send({ error: err });
+        }
+        console.log(user);
+        if (user && (user.is_admin || user.is_client)) {
+          req.user = user;
+          return next();
+        }
+        return res.status(401).send({ error: "Not a valid API key" });
+      })
+    } else {
+      return res.status(403).send({ error: "Must be at least admin level." });
     }
-
-    res.status(403).send({ error: "Must be at least admin level." });
   },
 
   me: function(req, res, next) {

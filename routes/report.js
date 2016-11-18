@@ -10,4 +10,11 @@ router.get('/', middleware.admin, function(req, res) {
   ReportController.index(req, res);
 });
 
+/*
+* GET
+*/
+router.get('/:query', middleware.admin, function(req, res) {
+  ReportController.index(req, res);
+});
+
 module.exports = router;
