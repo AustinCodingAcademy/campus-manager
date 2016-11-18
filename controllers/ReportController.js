@@ -165,7 +165,6 @@ module.exports = {
                 console.log(err);
                 importCsv(null, null, true);
               }  else  {
-                console.log(data.Body)
                 fs.writeFileSync(fileName, data.Body);
                 importCsv(table, fileName);
               }

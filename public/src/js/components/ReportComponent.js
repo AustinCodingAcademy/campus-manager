@@ -1,3 +1,4 @@
+var Backbone = require('backbone');
 var React = require('react');
 require('react.backbone');
 var _ = require('underscore');
@@ -5,6 +6,7 @@ var Codemirror = require('react-codemirror');
 require('cm-sql');
 var work = require('webworkify');
 var tableToCsv = require('node-table-to-csv');
+var Clipboard = require('clipboard');
 
 module.exports = React.createBackboneClass({
   worker: undefined,
@@ -12,6 +14,11 @@ module.exports = React.createBackboneClass({
   componentDidMount: function() {
     this.worker = work(require('worker.sql.js'));
     this.loadDatabase();
+    var clipboard = new Clipboard('[data-clipboard-target]');
+    clipboard.on('success', function(e) {
+      Materialize.toast('Shareable link copied!', 3000);
+      e.clearSelection();
+    });
   },
 
   loadDatabase: function() {
@@ -26,7 +33,7 @@ module.exports = React.createBackboneClass({
         $('.database-toast').fadeOut();
         that.worker.onmessage = function(event){
           $('.database-query').fadeOut();
-          that.getModel().set(event.data.results[0]); // The result of the query
+          that.getModel().set(event.data.results[0] || {columns: [], values: []}); // The result of the query
         };
         that.executeCode();
       }
@@ -44,9 +51,9 @@ module.exports = React.createBackboneClass({
     Materialize.toast($('<span>Loading Database <i class="fa fa-cog fa-spin fa-fw"></i><span>'), null, 'database-toast');
   },
 
-  updateCode: function(newCode) {
+  updateCode: function(sql) {
     this.getModel().set({
-      code: newCode
+      sql: sql
     }, {
       silent: true
     });
@@ -77,11 +84,12 @@ module.exports = React.createBackboneClass({
     this.worker.postMessage({
       id: 2,
       action: 'exec',
-      sql: this.getModel().get('code')
+      sql: this.getModel().get('sql')
     });
   },
 
   render: function() {
+    Backbone.history.navigate('#report/' + btoa(this.getModel().get('sql')));
     var ths = _.map(this.getModel().get('columns'), function(column) {
       return <th key={column}>{column}</th>
     });
@@ -108,7 +116,14 @@ module.exports = React.createBackboneClass({
         <br />
         <div className="row">
           <div className="col s12">
-            <Codemirror value={this.getModel().get('code')} ref="commands" options={options} onChange={this.updateCode} />
+            Share this report: <a data-clipboard-target="#url" href="#" onClick={function(e) { e.preventDefault(); }}>copy url</a>
+            <br />
+            <pre style={{whiteSpace: 'pre-wrap'}} id="url">{window.location.href}</pre>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <Codemirror value={this.getModel().get('sql')} ref="commands" options={options} onChange={this.updateCode} />
           </div>
         </div>
         <div className="row">

@@ -59,7 +59,8 @@ $(function() {
       'locations': 'locations',
       'courses/:id': 'course',
       'registration': 'registration',
-      'report': 'report'
+      'report': 'report',
+      'report/:query': 'report'
     },
 
     currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
@@ -173,12 +174,12 @@ $(function() {
       });
     },
 
-    report: function() {
+    report: function(query) {
       ReactDOM.render(ReportComponent({
         model: new Backbone.Model({
           columns: [],
           values:[],
-          code: "SELECT name, sql FROM sqlite_master WHERE type='table';"
+          sql: query ? atob(query) : "SELECT name, sql FROM sqlite_master WHERE type='table';"
         })
       }), $('#container')[0]);
     }
