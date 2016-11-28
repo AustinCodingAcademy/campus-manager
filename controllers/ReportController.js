@@ -1,5 +1,5 @@
 var fs = require('fs-extra');
-var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3');
 var child_process = require('child_process');
 var json2csv = require('json2csv');
 var _ = require('underscore');
