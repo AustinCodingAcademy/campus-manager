@@ -55,6 +55,8 @@ module.exports = React.createClass({
 				{this.props.option.course.properDays()}
 				<br />
 				Starts on {this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY')}
+        <br/ >
+        {'$' + Number(this.props.option.user.get('price') || this.props.option.course.get('cost')).toFixed(2)}
 				<br/ >
 				{this.props.option.course.get('seats') - this.props.option.course.get('registrations').length} seats left
 			</div>

@@ -68,7 +68,8 @@ var userSchema = new Schema({
   charges: Array,
   customer_id: String,
   credits: String,
-  api_key: String
+  api_key: String,
+  price: Number
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

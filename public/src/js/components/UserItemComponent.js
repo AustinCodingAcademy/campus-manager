@@ -13,6 +13,7 @@ module.exports = React.createBackboneClass({
   render: function() {
     return (
       <tr>
+        <td>{this.getModel().get('idn')}</td>
         <td>
           <a href={'#users/' + this.getModel().id}>{this.getModel().fullName()}</a>
         </td>
