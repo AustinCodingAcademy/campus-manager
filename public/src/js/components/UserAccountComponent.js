@@ -58,7 +58,8 @@ module.exports = React.createBackboneClass({
       options.push({
         value: course.id,
         label: label,
-        course: course
+        course: course,
+        user: this.props.user
       });
     });
 
@@ -127,7 +128,7 @@ module.exports = React.createBackboneClass({
             <label className="grey-text text-darken-2" htmlFor="payment-amount">2. Enter Payment Amount ($)</label>
             <input id="payment-amount" ref="amount" onChange={this._changeAmount} placeholder={Number(this.props.paymentModel.get('paymentAmount')).toFixed(2)} type="text" className="validate active"/>
           </div>
-          <StripeCheckoutComponent user={this.getModel()} model={this.props.paymentModel} currentUser={this.props.currentUser} />
+          <StripeCheckoutComponent user={this.getModel()} model={this.props.paymentModel} />
         </div>
       </div>
     );

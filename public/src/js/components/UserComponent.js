@@ -84,7 +84,7 @@ module.exports = React.createBackboneClass({
         userAccountModel.set('totalCourseCost', userAccountModel.get('totalCourseCost') + course.get('cost'));
         userAccountModel.get('courseCharges').push(
           <tr key={course.id + course.get('cost')}>
-            <td>${course.get('cost').toFixed(2)}</td>
+            <td>${Number(this.getModel().get('price') || course.get('cost')).toFixed(2)}</td>
             <td>{course.get('name')}</td>
           </tr>
         )
@@ -297,7 +297,7 @@ module.exports = React.createBackboneClass({
               <CourseRegistrationComponent user={this.getModel()} collection={terms} model={userAccountModel}/>
             </div>
             <div className="col s12 m6">
-              <UserAccountComponent model={this.getModel()} userAccountModel={userAccountModel} currentUser={this.props.currentUser} terms={terms} paymentModel = {new Backbone.Model({ paymentAmount: 0, username: '' })}/>
+              <UserAccountComponent model={this.getModel()} userAccountModel={userAccountModel} user={this.getModel()} terms={terms} paymentModel = {new Backbone.Model({ paymentAmount: 0, username: '' })}/>
             </div>
           </div>
         :

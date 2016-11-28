@@ -72,7 +72,8 @@ module.exports = React.createBackboneClass({
                 value: course.id,
                 label: label,
                 course: course,
-                disabled: course.full()
+                disabled: course.full(),
+                user: this.props.user
               });
             });
           });
