@@ -39,6 +39,7 @@ module.exports = React.createBackboneClass({
           <table className="striped">
             <thead>
               <tr>
+                <th>IDN</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role(s)</th>

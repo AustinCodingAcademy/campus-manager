@@ -228,8 +228,18 @@ module.exports = React.createBackboneClass({
 
               </div>
               <div className={"row " + rolesHidden}>
-
-                <div className="input-field col s12">
+                <div className="input-field col s12 m2">
+                  <input
+                    type="text"
+                    id="price"
+                    value={this.state.model.price}
+                    onChange={function(evt) {
+                      that.handleInputChange('price', evt);
+                    }}/>
+                  <label htmlFor="price">Price ($)</label>
+                </div>
+              
+                <div className="input-field col s12 m10">
                   <input
                     type="text"
                     id="credits"

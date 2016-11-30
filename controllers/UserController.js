@@ -156,13 +156,14 @@ module.exports = {
         'codecademy',
         'zipcode',
         'grades',
-        'credits'
       ];
 
       var protectedAttrs = [
         'is_admin',
         'is_instructor',
         'is_student',
+        'price',
+        'credits'
       ];
 
       var instructorAttributes = [
