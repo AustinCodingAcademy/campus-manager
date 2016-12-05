@@ -2,11 +2,11 @@ module.exports = {
   'Create Client': function (browser) {
     browser
     .resizeWindow(1500, 1000)
-    .url('http://localhost:3000/register')
+    .url('http://localhost:8080/register')
     .waitForElementVisible('body', 1000)
     .setValue('input[name="first_name"]', 'Test')
-    .setValue('input[name="last_name"]', 'User13')
-    .setValue('input[name="username"]', 'test@user13.com')
+    .setValue('input[name="last_name"]', 'Client')
+    .setValue('input[name="username"]', 'test@client.com')
     .setValue('input[name="password"]', 'testpw')
     .waitForElementVisible('button[type="submit"]', 1000)
     .click('button[type="submit"]')
@@ -115,9 +115,9 @@ module.exports = {
 
   'Make Payment': function (browser) {
     browser
-    .url('http://localhost:3000/#')
+    .url('http://localhost:8080/#')
     .waitForElementVisible('body', 1000)
-    .setValue('input[name="username"]', 'test@user13.com')
+    .setValue('input[name="username"]', 'test@client.com')
     .setValue('input[name="password"]', 'testpw')
     .click('button[type="submit"]')
     .pause(5000)
