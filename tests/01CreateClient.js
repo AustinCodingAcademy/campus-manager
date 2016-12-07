@@ -117,6 +117,7 @@ module.exports = {
     browser
     .url('http://localhost:8080/#')
     .waitForElementVisible('body', 1000)
+    .pause(5000)
     .click('div.Select-placeholder')
     .pause(500)
     .click('div.Select-option.is-focused')
