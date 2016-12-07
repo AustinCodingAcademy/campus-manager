@@ -47,6 +47,7 @@ module.exports = React.createBackboneClass({
                 <th>Term</th>
                 <th>Days</th>
                 <th>Seats</th>
+                <th>Cost</th>
                 <th></th>
                 <th></th>
               </tr>
