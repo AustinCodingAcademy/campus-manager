@@ -31,7 +31,7 @@ module.exports = React.createBackboneClass({
         <td>{this.getModel().get('term').get('name')}</td>
         <td>{this.getModel().shortDays()}</td>
         <td>{this.getModel().get('registrations').length + ' / ' + this.getModel().get('seats')}</td>
-        <td>{this.getModel().get('cost')}</td>
+        <td>${Number(this.getModel().get('cost')).toFixed(2)}</td>
         <td>
           <a className={'waves-effect waves-teal btn-flat' + hidden} onClick={this.courseModal}>
             <i className="material-icons">mode_edit</i>
