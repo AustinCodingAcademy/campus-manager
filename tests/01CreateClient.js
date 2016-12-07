@@ -116,9 +116,6 @@ module.exports = {
     browser
     .url('http://localhost:8080/#')
     .waitForElementVisible('body', 1000)
-    .setValue('input[name="username"]', 'test@client.com')
-    .setValue('input[name="password"]', 'testpw')
-    .click('button[type="submit"]')
     .pause(5000)
     .click('div.Select-placeholder')
     .pause(500)
