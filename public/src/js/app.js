@@ -31,6 +31,7 @@ var RegistrationsListComponent = React.createFactory(require('./components/Regis
 var TermModel = require('./models/TermModel');
 var UserComponent = React.createFactory(require('./components/UserComponent'));
 var ReportComponent = React.createFactory(require('./components/ReportComponent'));
+var ReportModel = require('./models/ReportModel');
 
 $(function() {
   $(document).ajaxError(function(e, xhr) {
@@ -176,9 +177,7 @@ $(function() {
 
     report: function(query) {
       ReactDOM.render(ReportComponent({
-        model: new Backbone.Model({
-          columns: [],
-          values:[],
+        model: new ReportModel({
           sql: query ? atob(query) : "SELECT name, sql FROM sqlite_master WHERE type='table';"
         }),
         currentUser: this.currentUser
