@@ -110,17 +110,12 @@ module.exports = {
     .pause(500)
     .click('input[type="submit"]')
     .pause(5000)
-    .end();
   },
 
   'Make Payment': function (browser) {
     browser
     .url('http://localhost:8080/#')
     .waitForElementVisible('body', 1000)
-    .setValue('input[name="username"]', 'test@client.com')
-    .setValue('input[name="password"]', 'testpw')
-    .click('button[type="submit"]')
-    .pause(5000)
     .click('div.Select-placeholder')
     .pause(500)
     .click('div.Select-option.is-focused')
@@ -152,6 +147,6 @@ module.exports = {
     .pause(500)
     .keys('\uE007')
     .pause(5000)
-    // Pause may need to be longer on other test clients
+    .end();
   }
 }
