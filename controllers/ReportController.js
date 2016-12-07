@@ -20,11 +20,15 @@ var tableify = require('tableify');
 */
 module.exports = {
   index: function(req, res) {
-    var timestamp = new Date().getTime()
+    var timestamp = req.query.timestamp || new Date().getTime();
     var tmpDir = 'tmp/';
     fs.mkdirsSync(tmpDir)
     var db = new sqlite3.Database(tmpDir + timestamp + '-report.sqlite3');
-    var tables = [
+    var tables = [];
+    if (req.query.timestamp) {
+      return importCsv(null, null, true);
+    }
+    tables = [
       {
         model: UserModel,
         name: 'users'
@@ -185,20 +189,22 @@ module.exports = {
       } else if (req.params.query) {
         db.serialize(function() {
           db.all(atob(req.params.query), function(err, rows) {
+            if (err) {
+              return res.json(500, { message: err.message, error: err });
+            }
             if (req.query.format === 'json' || !req.query.format)  {
-              res.json(200, rows);
+              return res.json(200, {results: rows, timestamp: timestamp});
             } else if (req.query.format === 'csv') {
               res.type('text/csv');
-              res.send(200, json2csv({ data: rows}));
+              return res.send(200, json2csv({ data: rows}));
             } else if (req.query.format === 'html'){
               res.type('html');
-              res.send(200, tableify(rows));
+              return res.send(200, tableify(rows));
             }
           });
         });
       } else {
-        res.type('arraybuffer');
-        res.send(fs.readFileSync(tmpDir + timestamp + '-report.sqlite3'));
+        return res.json(500, { message: 'Enter a query', error: { message: 'Enter a query' }});
       }
     }
     createTable(tables[0]);
