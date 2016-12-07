@@ -110,6 +110,7 @@ module.exports = {
     .pause(500)
     .click('input[type="submit"]')
     .pause(5000)
+    .pause(5000);
   },
 
   'Make Payment': function (browser) {
@@ -147,6 +148,7 @@ module.exports = {
     .pause(500)
     .keys('\uE007')
     .pause(5000)
+    // Pause may need to be longer on other test clients
     .end();
   }
 }
