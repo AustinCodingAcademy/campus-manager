@@ -148,7 +148,7 @@ module.exports = React.createBackboneClass({
               </span>
               <br />
               <br />
-              <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(this.getModel().get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank">
+              <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank">
                 <i className="fa fa-video-camera"></i> Conference
               </a>
               <br />
