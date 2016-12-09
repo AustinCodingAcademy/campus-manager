@@ -3,20 +3,30 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Backbone = require('backbone');
 require('react.backbone');
+var BaseModal = require('./BaseModal');
 var UserModalComponent = React.createFactory(require('./UserModalComponent'));
 var Barcode = require('react-barcode');
 var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
 var Gravatar = require('react-gravatar');
 var Hashids = require('hashids');
+var hashids = new Hashids();
 var TermsCollection = require('../collections/TermsCollection');
 var CourseRegistrationComponent = require('./CourseRegistrationComponent');
 var UserAccountComponent = require('./UserAccountComponent');
+var ScreenShareModal = require('./ScreenShareModal');
 
 module.exports = React.createBackboneClass({
 
   componentDidMount: function() {
     Materialize.updateTextFields();
+  },
+
+  getInitialState: function() {
+    return {
+      modalIsOpen: false,
+      screenShareModalIsOpen: false
+    };
   },
 
   userModal: function() {
@@ -28,6 +38,15 @@ module.exports = React.createBackboneClass({
     }), $('#modal-container')[0]);
     $('#user-modal' + this.getModel().id).modal('open');
     Materialize.updateTextFields();
+  },
+
+  showScreenShareModal: function(e) {
+    e.preventDefault();
+    this.setState({screenShareModalIsOpen: true});
+  },
+
+  closeScreenShareModal: function() {
+    this.setState({screenShareModalIsOpen: false});
   },
 
   checkIn: function(date) {
@@ -49,7 +68,6 @@ module.exports = React.createBackboneClass({
       this.checkIn($(e.currentTarget).data('date'));
     } else if (moment($(e.currentTarget).data('date'), 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
       var code = prompt('Enter Daily Attendance Code');
-      var hashids = new Hashids();
       var hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
       if (code && code.toUpperCase() === hash) {
         this.checkIn($(e.currentTarget).data('date'));
@@ -128,6 +146,14 @@ module.exports = React.createBackboneClass({
                   {course.get('name')}
                 </a>
               </span>
+              <br />
+              <br />
+              <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(this.getModel().get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank">
+                <i className="fa fa-video-camera"></i> Conference
+              </a>
+              <br />
+              <small><a href="#" onClick={this.showScreenShareModal}><i className="fa fa-info-circle" aria-hidden="true"></i> Screenshare Instructions</a></small>
+              <br />
               <br />
               <p dangerouslySetInnerHTML={{__html:course.get('location').locationAddress().split('\n').join('<br />')}}></p>
               <div className="row">
@@ -306,6 +332,12 @@ module.exports = React.createBackboneClass({
         <div className="row">
           {courseCards}
         </div>
+        <BaseModal
+          isOpen={this.state.screenShareModalIsOpen}
+          onRequestClose={this.closeScreenShareModal}
+          shouldCloseOnOverlayClick={true}>
+          <ScreenShareModal />
+        </BaseModal>
       </div>
     );
   }
