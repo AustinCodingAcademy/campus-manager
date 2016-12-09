@@ -34,14 +34,7 @@ module.exports = React.createBackboneClass({
   },
 
   _exportCSV: function() {
-    var csv = tableToCsv('<table>' + this.refs.report.innerHTML + '</table>');
-    var uri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
-    var downloadLink = document.createElement("a");
-    downloadLink.href = uri;
-    downloadLink.download = "report.csv";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+    window.location = this.getModel().link(this.url, 'csv');
   },
 
   _executeCode: function() {
@@ -114,7 +107,7 @@ module.exports = React.createBackboneClass({
         <div className="row">
           <div className="col s12">
             <div style={{overflowX: 'scroll'}}>
-              <Table className="striped" refs="report" data={this.getModel().get('results')} />
+              <Table className="striped" data={this.getModel().get('results')} />
             </div>
           </div>
         </div>
