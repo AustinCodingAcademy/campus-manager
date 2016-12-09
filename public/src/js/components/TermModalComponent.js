@@ -50,18 +50,18 @@ module.exports = React.createBackboneClass({
             <form className="col s12" onSubmit={this.saveTerm}>
               <div className="row">
                 <div className="input-field col s12">
-                  <input ref="name" type="text" className="validate"/>
+                  <input ref="name" type="text" className="validate" data-test="term-name"/>
                   <label htmlFor="name">Name</label>
                 </div>
               </div>
               <div className="row">
                 <div className="col s6">
                   <label htmlFor="start-date">Start Date</label>
-                  <input ref="start_date" type="date" />
+                  <input ref="start_date" type="date" data-test="term-start-date" />
                 </div>
                 <div className="col s6">
                   <label htmlFor="end-date">End Date</label>
-                  <input ref="end_date" type="date" />
+                  <input ref="end_date" type="date" data-test="term-end-date"/>
                 </div>
               </div>
               <input type="submit" className="modal-action modal-close waves-effect waves-green btn" value="Submit"/>

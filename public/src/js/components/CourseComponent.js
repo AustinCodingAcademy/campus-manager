@@ -3,6 +3,7 @@ var React = require('react');
 var moment = require('moment');
 var BaseModal = require('./BaseModal');
 var CourseVideoUpload = require('./CourseVideoUpload');
+var ScreenShareModal = require('./ScreenShareModal');
 var Hashids = require('hashids');
 var CourseAttendanceComponent = React.createFactory(require('./CourseAttendanceComponent'));
 var utils = require('../utils');
@@ -11,7 +12,8 @@ require('react.backbone');
 module.exports = React.createBackboneClass({
   getInitialState: function() {
     return {
-      modalIsOpen: false
+      modalIsOpen: false,
+      screenShareModalIsOpen: false
     };
   },
 
@@ -93,6 +95,15 @@ module.exports = React.createBackboneClass({
   // <Modal> <CourseVideoUpload /> </Modal>
   showUploadModal: function() {
     this.setState({modalIsOpen: true});
+  },
+
+  showScreenShareModal: function(e) {
+    e.preventDefault();
+    this.setState({screenShareModalIsOpen: true});
+  },
+
+  closeScreenShareModal: function() {
+    this.setState({screenShareModalIsOpen: false});
   },
 
   closeModal: function() {
@@ -222,24 +233,32 @@ module.exports = React.createBackboneClass({
           </div>
         </div>
         <div className="row">
-          <div className="col s12 m4">
+          <div className="col s12 m3">
             <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
-              <i className="material-icons left">mail</i> Email Class
+              <i className="material-icons left">mail</i> Email
             </a>
             <br /><br />
           </div>
-          <div className="col s12 m4">
+          <div className="col s12 m3">
             <a
               onClick={this.showUploadModal}
               className="waves-effect waves-teal btn">
-              <i className="fa fa-youtube-play left"></i> Add Video
+              <i className="fa fa-youtube-play left"></i> Conference
             </a>
             <br /><br />
           </div>
-          <div className="col s12 m4">
+          <div className="col s12 m3">
             <a href={this.getModel().get('textbook')} target="_blank" className="waves-effect waves-teal btn">
               <i className="fa fa-book left"></i> Textbook
             </a>
+          </div>
+          <div className="col s12 m3">
+            <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(this.getModel().get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank" className="waves-effect waves-teal btn">
+              <i className="fa fa-video-camera left"></i> Video
+            </a>
+            <br />
+            <small><a href="#" onClick={this.showScreenShareModal}><i className="fa fa-info-circle" aria-hidden="true"></i> Screenshare Instructions</a></small>
+            <br /><br />
           </div>
         </div>
         <div className="row">
@@ -290,6 +309,12 @@ module.exports = React.createBackboneClass({
           onRequestClose={this.closeModal}
           shouldCloseOnOverlayClick={false}>
           <CourseVideoUpload model={this.getModel()} />
+        </BaseModal>
+        <BaseModal
+          isOpen={this.state.screenShareModalIsOpen}
+          onRequestClose={this.closeScreenShareModal}
+          shouldCloseOnOverlayClick={true}>
+          <ScreenShareModal />
         </BaseModal>
       </div>
     );
