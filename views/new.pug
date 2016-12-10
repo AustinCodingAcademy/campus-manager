@@ -14,6 +14,10 @@ block content
         label(for='last_name') Last Name
     .row
       .input-field.col.s12
+        input#phone.validate(type='tel', name='phone', pattern=".{10,}", required)
+        label(for='phone') Phone (555-555-5555)
+    .row
+      .input-field.col.s12
         input#email.validate(type='email', name='username')
         label(for='email') Email
     .row
