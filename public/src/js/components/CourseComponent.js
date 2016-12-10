@@ -233,28 +233,29 @@ module.exports = React.createBackboneClass({
           </div>
         </div>
         <div className="row">
-          <div className="col s12 m3">
+          <div className="col s12 m6 l3">
             <a href={'mailto:' + this.props.currentUser.get('username') + '?bcc=' + emails} className="waves-effect waves-teal btn" target="_blank">
               <i className="material-icons left">mail</i> Email
             </a>
             <br /><br />
           </div>
-          <div className="col s12 m3">
+          <div className="col s12 m6 l3">
             <a
               onClick={this.showUploadModal}
               className="waves-effect waves-teal btn">
-              <i className="fa fa-youtube-play left"></i> Conference
+              <i className="fa fa-youtube-play left"></i> Screencasts
             </a>
             <br /><br />
           </div>
-          <div className="col s12 m3">
+          <div className="col s12 m6 l3">
             <a href={this.getModel().get('textbook')} target="_blank" className="waves-effect waves-teal btn">
               <i className="fa fa-book left"></i> Textbook
             </a>
+            <br /><br />
           </div>
-          <div className="col s12 m3">
+          <div className="col s12 m6 l3">
             <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(this.getModel().get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank" className="waves-effect waves-teal btn">
-              <i className="fa fa-video-camera left"></i> Video
+              <i className="fa fa-video-camera left"></i> Conference
             </a>
             <br />
             <small><a href="#" onClick={this.showScreenShareModal}><i className="fa fa-info-circle" aria-hidden="true"></i> Screenshare Instructions</a></small>
