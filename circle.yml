@@ -1,6 +1,8 @@
 machine:
   environment:
     NODE_ENV: test
+    OAUTH_CLIENT_ID: id.apps.googleusercontent.com
+    OAUTH_CLIENT_SECRET: secret
   node:
     version: 6.7.0
 dependencies:
