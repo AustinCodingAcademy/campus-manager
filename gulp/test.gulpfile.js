@@ -24,7 +24,9 @@ gulp.task('nodemon-start', function() {
       // These are one-off keys, not attached to any account
       STRIPE_SECRET_KEY: 'sk_test_lu7gj0g3NUFEfx31GwbdSxca',
       REGISTRATION_ENABLED: true,
-      SESSION_KEY: 'foo'
+      SESSION_KEY: 'foo',
+      OAUTH_CLIENT_ID: 'id.apps.googleusercontent.com',
+      OAUTH_CLIENT_SECRET: 'secret'
     }
   });
 });
