@@ -3,6 +3,7 @@ var Schema   = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
 var _ = require('underscore');
 var mongooseToCsv = require('mongoose-to-csv');
+var version = require('mongoose-version');
 
 var userSchema = new Schema({
   username: {
@@ -55,7 +56,7 @@ var userSchema = new Schema({
     default: 1,
     unique: true
   },
-  client : {
+  client: {
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
@@ -96,5 +97,7 @@ userSchema.plugin(mongooseToCsv, {
     }
   }
 });
+
+userSchema.plugin(version, { collection: 'users__versions' });
 
 module.exports = mongoose.model('user', userSchema);

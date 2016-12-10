@@ -1,19 +1,20 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var mongooseToCsv = require('mongoose-to-csv');
+var version = require('mongoose-version');
 
 var courseSchema = new Schema({
-	name : String,
-	term : {
+	name: String,
+	term: {
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'term',
     required: true
 	},
-	client : {
+	client: {
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'user'
 	},
-	days : Array,
+	days: Array,
   seats: Number,
   registrations: [{
     type: Schema.Types.ObjectId,
@@ -49,5 +50,7 @@ courseSchema.plugin(mongooseToCsv, {
     }
   }
 });
+
+courseSchema.plugin(version, { collection: 'courses__versions' });
 
 module.exports = mongoose.model('course', courseSchema);

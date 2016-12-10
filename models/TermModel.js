@@ -2,12 +2,13 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var mongooseToCsv = require('mongoose-to-csv');
 var moment = require('moment');
+var version = require('mongoose-version');
 
 var termSchema = new Schema({
-	start_date : Date,
-	end_date : Date,
-	name : String,
-	client : {
+	start_date: Date,
+	end_date: Date,
+	name: String,
+	client: {
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'user'
 	},
@@ -29,5 +30,7 @@ termSchema.plugin(mongooseToCsv, {
     }
   }
 });
+
+termSchema.plugin(version, { collection: 'terms__versions' });
 
 module.exports = mongoose.model('term', termSchema);
