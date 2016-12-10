@@ -6,19 +6,23 @@ block content
     input(type='hidden', name='_csrf', value=csrfToken)
     .row
       .input-field.col.s12
-        input#first_name.validate(type='text', name='first_name')
+        input#first_name.validate(type='text', name='first_name', required)
         label(for='first_name') First Name
     .row
       .input-field.col.s12
-        input#last_name.validate(type='text', name='last_name')
+        input#last_name.validate(type='text', name='last_name', required)
         label(for='last_name') Last Name
     .row
       .input-field.col.s12
-        input#email.validate(type='email', name='username')
+        input#phone.validate(type='tel', name='phone', pattern=".{10,}", required)
+        label(for='phone') Phone (555-555-5555)
+    .row
+      .input-field.col.s12
+        input#email.validate(type='email', name='username', required)
         label(for='email') Email
     .row
       .input-field.col.s12
-        input#password.validate(type='password', name='password')
-        label(for='password') Password
+        input#password.validate(type='password', name='password', pattern=".{6,}", required)
+        label(for='password') Password (6 character minimum)
     button.btn.waves-effect.waves-light(type='submit', name='action') Submit
       i.material-icons.right send

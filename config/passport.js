@@ -1,7 +1,7 @@
-var passport = require('passport')
-var LocalStrategy = require('passport-local').Strategy
-var bcrypt = require('bcrypt')
-
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var OAuth2Strategy = require('passport-google-oauth').OAuth2Strategy;
+var bcrypt = require('bcrypt');
 var User = require('../models/UserModel');
 
 passport.use(new LocalStrategy(
@@ -22,6 +22,20 @@ passport.use(new LocalStrategy(
     });
   }
 ));
+
+passport.use(new OAuth2Strategy(
+  {
+    clientID: process.env.OAUTH_CLIENT_ID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    callbackURL: process.env.DOMAIN + '/auth/google/callback'
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOne({ username: profile.emails[0].value }, function (err, user) {
+      console.log(user);
+      return cb(err, user);
+    });
+  })
+);
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);

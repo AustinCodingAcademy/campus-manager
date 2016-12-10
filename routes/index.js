@@ -79,6 +79,11 @@ router.post('/register', function(req, res, next) {
       return res.redirect('/register');
     }
 
+    if (req.body.phone.length < 10) {
+      req.flash('error', 'Please enter your phone number.')
+      return res.redirect('/register');
+    }
+
     if (req.body.password.length <= 5) {
       req.flash('error', 'Password must be at least 6 characters');
       return res.redirect('/register');
@@ -100,6 +105,7 @@ router.post('/register', function(req, res, next) {
           first_name: req.body.first_name,
           last_name: req.body.last_name,
           username: req.body.username.toLowerCase(),
+          phone: req.body.phone,
           password: hash,
           is_client: true,
           is_admin: true,
@@ -171,6 +177,11 @@ router.post('/register/:id', function(req, res, next) {
       return res.redirect('/register/' + req.params.id);
     }
 
+    if (req.body.phone.length < 10) {
+      req.flash('error', 'Please enter your phone number.')
+      return res.redirect('/register/' + req.params.id);
+    }
+
     bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
       UserModel.find({}, 'idn', { limit: 1, sort: { idn: -1 } }, function(err, users) {
         if (err) {
@@ -181,6 +192,7 @@ router.post('/register/:id', function(req, res, next) {
         var newUser = new UserModel({
           first_name: req.body.first_name,
           last_name: req.body.last_name,
+          phone: req.body.phone,
           username: req.body.username.toLowerCase(),
           password: hash,
           is_student: true,
@@ -206,5 +218,15 @@ router.post('/register/:id', function(req, res, next) {
     });
   });
 });
+
+router.get('/auth/google', passport.authenticate('google', { scope: ['email'] }));
+
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 module.exports = router;
