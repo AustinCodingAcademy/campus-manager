@@ -152,7 +152,6 @@ module.exports = {
         'phone',
         'website',
         'github',
-        'attendance',
         'codecademy',
         'zipcode',
         'grades',
