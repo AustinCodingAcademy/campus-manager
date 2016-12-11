@@ -152,7 +152,6 @@ module.exports = {
         'phone',
         'website',
         'github',
-        'attendance',
         'codecademy',
         'zipcode',
         'grades',
@@ -167,8 +166,7 @@ module.exports = {
       ];
 
       var instructorAttributes = [
-        'grades',
-        'attendance'
+        'grades'
       ];
 
       if (!(req.user.is_admin || req.user.is_client) && req.user.is_instructor) {
