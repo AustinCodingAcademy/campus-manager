@@ -5,3 +5,9 @@
 .btn.btn-white {
   @include button-variant($brand-primary, #ffffff, #ffffff);
 }
+
+.btn.btn-feedback {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
