@@ -1,0 +1,7 @@
+.btn.btn-google {
+  @include button-variant(#ffffff, #DD4B39, #DD4B39);
+}
+
+.btn.btn-white {
+  @include button-variant($brand-primary, #ffffff, #ffffff);
+}
