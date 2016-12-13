@@ -258,7 +258,7 @@ module.exports = React.createBackboneClass({
               <i className="fa fa-video-camera left"></i> Conference
             </a>
             <br />
-            <small><a href="https://chrome.google.com/webstore/detail/aca-desktop-streamer/imnhhcdlfbbhajjgbagfagnjgkmfppcg"><i className="fa fa-info-circle" aria-hidden="true"></i> Enable Screensharing</a></small>
+            <small><a href="https://chrome.google.com/webstore/detail/aca-desktop-streamer/imnhhcdlfbbhajjgbagfagnjgkmfppcg" target="_blank"><i className="fa fa-info-circle" aria-hidden="true"></i> Enable Screensharing</a></small>
             <br /><br />
           </div>
         </div>
