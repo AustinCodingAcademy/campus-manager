@@ -27,6 +27,10 @@ module.exports = Backbone.Model.extend({
     return this.get('last_name') + ', ' + this.get('first_name');
   },
 
+  displayName() {
+    return `${this.get('first_name')} ${this.get('last_name')}`;
+  },
+
   roles: function() {
     var roles = [];
     if (this.get('is_client')) {
@@ -41,7 +45,7 @@ module.exports = Backbone.Model.extend({
     if (this.get('is_student')) {
       roles.push('student');
     }
-    return roles.join(', ');
+    return roles;
   },
 
   attendanceAverage: function() {

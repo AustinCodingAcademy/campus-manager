@@ -1,152 +1,224 @@
-var _ = require('underscore');
-var React = require('react');
+import * as React from 'react';
 require('react.backbone');
-var CourseModel = require('../models/CourseModel');
+import {
+  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
+  InputGroup, Alert
+} from 'react-bootstrap';
+const Select = require('react-select');
+const CourseModel = require('../models/CourseModel');
+const TermOptionComponent = require('./TermOptionComponent');
+const TermValueComponent = require('./TermValueComponent');
+const LocationOptionComponent = require('./LocationOptionComponent');
+const LocationValueComponent = require('./LocationValueComponent');
 
 module.exports = React.createBackboneClass({
-  days: [
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-    'sunday'
+  mixins: [
+    React.BackboneMixin('term', 'change'),
+    React.BackboneMixin('location', 'change')
   ],
 
-  componentDidMount: function() {
-    var that = this;
-    this.refs.name.value = this.getModel().get('name');
-    this.refs.seats.value = this.getModel().get('seats');
-    _.each(this.days, function(day) {
-      that.refs[day].checked = _.indexOf(that.getModel().get('days'), day) > -1;
-    });
-    this.refs.textbook.value = this.getModel().get('textbook');
-    this.refs.holidays.value = this.getModel().get('holidays').join(', ');
-    this.refs.cost.value = Number(this.getModel().get('cost')).toFixed(2);
+  days:  [
+    { value: 'monday', label: 'Monday' },
+    { value: 'tuesday', label: 'Tuesday' },
+    { value: 'wednesday', label: 'Wednesday' },
+    { value: 'thursday', label: 'Thursday' },
+    { value: 'friday', label: 'Friday' },
+    { value: 'saturday', label: 'Saturday' },
+    { value: 'sunday', label: 'Sunday' }
+  ],
 
-    $('select').material_select();
-    Materialize.updateTextFields();
-    $('.modal').modal();
+  getInitialState() {
+    return {
+      location: this.props.location,
+      term: this.props.term,
+      course: this.getModel().attributes,
+      days: this.props.days,
+      alertVisible: 'hidden',
+      error: ''
+    }
   },
 
-  saveCourse: function(e) {
+  setLocationValue(option) {
+    const location = option.location || this.getModel().get('location');
+    this.state.location.clear().set(location.attributes);
+    this.state.course.location = location;
+  },
+
+  setTermValue(option) {
+    const term = option.term || this.getModel().get('term');
+    this.state.term.clear().set(term.attributes);
+    this.state.course.term = term;
+  },
+
+  selectDays(options) {
+    this.setState({ days: options });
+    this.state.course.days = options.map(day => { return day.value; });
+  },
+
+  changeTextValue(e) {
+    const attr = e.currentTarget.getAttribute('id');
+    if (e.currentTarget.getAttribute('id') === 'holidays') {
+      this.state.course[attr] = e.currentTarget.value.split(',').map(holiday => {
+        return holiday.trim();
+      });
+    } else {
+      this.state.course[attr] = e.currentTarget.value;
+    }
+  },
+
+  checkDays(e) {
+    if (e.currentTarget.checked) {
+      this.state.course.days.push(e.currentTarget.getAttribute('id'));
+    } else {
+      this.state.course.days.splice(this.state.days.indexOf(e.currentTarget.getAttribute('id')), 1);
+    }
+  },
+
+  save(e) {
     e.preventDefault();
-    var that = this;
-    this.getModel().save({
-      name: this.refs.name.value,
-      textbook: this.refs.textbook.value,
-      days: _.filter(this.days, function(day) { return that.refs[day].checked; }),
-      seats: this.refs.seats.value,
-      term: this.props.terms.get(this.refs.term.value),
-      holidays: _.map(this.refs.holidays.value.split(','), function(holiday) { return holiday.trim(); }),
-      cost: Number(this.refs.cost.value),
-      location: this.props.locations.get(this.refs.location.value),
-    }, {
-      success: function() {
-        that.getCollection().add(that.getModel());
+    this.getModel().save(this.state.course, {
+      success: () => {
+        this.props.courses.add(this.getModel(), {
+          merge: true
+        });
+        this.props.onHide();
       }
     });
-
   },
 
-  render: function() {
-    var termOptions = [];
-    this.props.terms.each(function(term) {
-      termOptions.push(<option key={term.id} value={term.id}>{term.get('name')}</option>);
+  delete(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to delete this course?')) {
+      this.getModel().destroy({
+        success: () => {
+          this.props.courses.remove(this.getModel());
+          this.props.onHide();
+        },
+        error: (model, res) => {
+          this.setState({
+            error: res.responseJSON.message,
+            alertVisible: ''
+          });
+        }
+      });
+    }
+  },
+
+  handleAlertDismiss() {
+    this.setState({ alertVisible: 'hidden' });
+  },
+
+  render() {
+    const termOptions = this.props.terms.map(term => {
+      return {
+        value: term.id,
+        label: term.get('name'),
+        term: term
+      };
     });
 
-    var locationOptions = [];
-    this.props.locations.each(function(location) {
-      locationOptions.push(<option key={location.id} value={location.id}>{location.get('name')}</option>);
+    const locationOptions = this.props.locations.map(location => {
+      return {
+        value: location.id,
+        label: location.get('name') +
+        location.get('address') +
+        location.get('city') +
+        location.get('state') +
+        location.get('zipcode'),
+        location: location
+      };
     });
 
     return (
-      <div id={'course-modal' + (this.getModel().id ? this.getModel().id  : '')} className="modal">
-        <div className="modal-content">
-          <div className="row">
-            <form className="col s12" onSubmit={this.saveCourse}>
-              <div className="row">
-                <div className="input-field col s12 m6">
-                  <input ref="name" type="text" id="name" />
-                  <label htmlFor="name">Name</label>
-                </div>
-                <div className="input-field col s6 m3">
-                  <input ref="cost" type="text" id="cost" />
-                  <label htmlFor="cost">Cost</label>
-                </div>
-                <div className="input-field col s6 m3">
-                  <label htmlFor="seats">Seats</label>
-                  <input ref="seats" type="text" name="seats" id="seats" />
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <select defaultValue={this.getModel().get('location') ? this.getModel().get('location').id : this.props.locations.first().id} ref="location" id="location">
-                    {locationOptions}
-                  </select>
-                  <label htmlFor="location">Location</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col s6 m3">
-                  <input ref="monday" type="checkbox" id="monday" />
-                  <label htmlFor="monday">Mon</label>
-                </div>
-                <div className="col s6 m3">
-                  <input ref="tuesday" type="checkbox" id="tuesday" />
-                  <label htmlFor="tuesday">Tues</label>
-                </div>
-                <div className="col s6 m3">
-                  <input type="checkbox" id="wednesday" name="days" ref="wednesday" />
-                  <label htmlFor="wednesday">Wed</label>
-                </div>
-                <div className="col s6 m3">
-                  <input type="checkbox" id="thursday" name="days" ref="thursday" />
-                  <label htmlFor="thursday">Thur</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col s6 m3">
-                  <input type="checkbox" id="friday" name="days" ref="friday" />
-                  <label htmlFor="friday">Fri</label>
-                </div>
-                <div className="col s6 m3">
-                  <input type="checkbox" id="saturday" name="days" ref="saturday" />
-                  <label htmlFor="saturday">Sat</label>
-                </div>
-                <div className="col s6 m3">
-                  <input type="checkbox" id="sunday" name="days" ref="sunday" />
-                  <label htmlFor="sunday">Sun</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12 m6">
-                  <select defaultValue={this.getModel().get('term') ? this.getModel().get('term').id : this.props.terms.first().id} ref="term">
-                    {termOptions}
-                  </select>
-                  <label>Term</label>
-                </div>
-                <div className="input-field col s12 m6">
-                  <input ref="textbook" type="text" id="textbook" />
-                  <label htmlFor="textbook">Textbook URL</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input ref="holidays" type="text" id="holidays" placeholder="YYYY-MM-DD, YYYY-MM-DD, etc"/>
-                  <label htmlFor="holidays">Holidays</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col s12">
-                  <input type="submit" className="modal-action modal-close waves-effect waves-green btn" value="Submit"/>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      <Modal show={this.props.show} onHide={this.props.onHide}>
+        <Modal.Header closeButton>
+          <Modal.Title>{this.props.title}</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={this.saveCourse}>
+          <Modal.Body>
+            <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
+              <h4>{this.state.error}</h4>
+            </Alert>
+            <FormGroup controlId="name">
+              <ControlLabel>Name</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Name"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('name')}
+              />
+            </FormGroup>
+            <FormGroup controlId="cost">
+              <ControlLabel>Cost</ControlLabel>
+              <InputGroup>
+                <InputGroup.Addon>$</InputGroup.Addon>
+                <FormControl
+                  type="text"
+                  placeholder="0.00"
+                  onChange={this.changeTextValue}
+                  defaultValue={Number(this.getModel().get('cost')).toFixed(2)}
+                />
+              </InputGroup>
+            </FormGroup>
+            <FormGroup controlId="seats">
+              <ControlLabel>Seats</ControlLabel>
+              <FormControl
+                type="number"
+                placeholder="0"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('seats')}
+              />
+            </FormGroup>
+            <FormGroup controlId="term">
+              <ControlLabel>Term</ControlLabel>
+              <Select
+                name="terms"
+                options={termOptions}
+                optionComponent={TermOptionComponent}
+                placeholder="Type to search..."
+                valueComponent={TermValueComponent}
+                value={this.props.term.id}
+                onChange={this.setTermValue}
+              />
+            </FormGroup>
+            <FormGroup controlId="location">
+              <ControlLabel>Location</ControlLabel>
+              <Select
+                name="locations"
+                options={locationOptions}
+                optionComponent={LocationOptionComponent}
+                placeholder="Type to search..."
+                valueComponent={LocationValueComponent}
+                value={this.props.location.id}
+                onChange={this.setLocationValue}
+              />
+            </FormGroup>
+            <FormGroup controlId="days">
+              <ControlLabel>Days</ControlLabel>
+              <Select
+                name="days"
+                value={this.state.days}
+                options={this.days}
+                onChange={this.selectDays}
+                multi={true}
+              />
+            </FormGroup>
+            <FormGroup controlId="holidays">
+              <ControlLabel>Holidays</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="YYYY-MM-DD, YYYY-MM-DD, etc"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('holidays').join(', ')}
+              />
+            </FormGroup>
+            <a href="#" className="link-danger" onClick={this.delete}>Delete Course</a>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="primary" type="submit" block onClick={this.save}>Save</Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     );
   }
 });

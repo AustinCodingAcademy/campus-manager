@@ -5,7 +5,7 @@ module.exports = React.createClass({
 		return (
 			<div className="Select-value" title={this.props.value.title}>
 				<span className="Select-value-label">
-					{this.props.value.course.get('name') + ', ' + this.props.value.course.get('location').get('name') + ', ' + this.props.value.course.get('location').get('city')+ ' (' + this.props.value.course.shortDays() + ')'}
+					{`${this.props.value.location.get('name')}, ${this.props.value.location.get('city')}, ${this.props.value.location.get('state')}`}
 				</span>
 			</div>
 		);

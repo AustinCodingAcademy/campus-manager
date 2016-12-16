@@ -72,14 +72,14 @@ module.exports = {
     }).populate('client').exec(function(err, currentUser) {
       var course = new CourseModel({
         name : req.body.name,
-        term : req.body.term._id,
+        term : req.body.term,
         days : req.body.days,
         seats : req.body.seats,
         textbook: req.body.textbook,
         videos: req.body.videos,
         cost: req.body.cost,
-        location : req.body.location._id,
-        client: currentUser.client._id
+        location : req.body.location,
+        client: currentUser.client
       });
 
       course.save(function(err, course) {
@@ -224,17 +224,29 @@ module.exports = {
   */
   remove: function(req, res) {
     var id = req.params.id;
-    CourseModel.remove({
+    CourseModel.findOne({
       client: req.user.client,
       _id: id
-    }, function(err, course){
+    }, function(err, course) {
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
           error: err
         });
       }
-      return res.json(course);
+      if (!course) {
+        return res.json(404, {
+          message: 'No such course'
+        });
+      }
+      if (course.registrations.length > 0) {
+        return res.json(500, {
+          message: "Can't delete a course with registrations"
+        });
+      }
+      return course.remove().exec(() => {
+        return res.json(course);
+      });
     });
   },
 

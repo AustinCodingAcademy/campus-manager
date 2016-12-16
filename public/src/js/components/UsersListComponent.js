@@ -1,10 +1,10 @@
-var Backbone = require('backbone');
-var React = require('react');
-var ReactDOM = require('react-dom');
-require('react.backbone');
-var UserItemComponent = React.createFactory(require('./UserItemComponent'));
-var UserModalComponent = React.createFactory(require('./UserModalComponent'));
-var UserModel = require('../models/UserModel');
+import * as Backbone from 'backbone';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import 'react.backbone';
+const UserItemComponent = React.createFactory(require('./UserItemComponent'));
+const UserModalComponent = React.createFactory(require('./UserModalComponent'));
+const UserModel = require('../models/UserModel');
 
 module.exports = React.createBackboneClass({
 
@@ -30,13 +30,13 @@ module.exports = React.createBackboneClass({
 
     return (
       <div className="row">
-        <div className="col s12">
+        <div className="col-xs-12">
           <br />
           <a className="waves-effect waves-teal btn" onClick={this.newUserModal} data-test="new-user">
             <i className="material-icons left">add</i> user
           </a>
           <br />
-          <table className="striped">
+          <table className="table table-striped table-condensed table-hover">
             <thead>
               <tr>
                 <th>IDN</th>

@@ -11,3 +11,16 @@
   bottom: 1rem;
   right: 1rem;
 }
+
+a.link-danger {
+  color: $brand-danger;
+
+  &:hover,
+  &:focus {
+    color: darken($brand-danger, 15%);
+  }
+
+  &:focus {
+    @include tab-focus;
+  }
+}

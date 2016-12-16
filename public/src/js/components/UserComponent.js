@@ -18,10 +18,6 @@ var ScreenShareModal = require('./ScreenShareModal');
 
 module.exports = React.createBackboneClass({
 
-  componentDidMount: function() {
-    Materialize.updateTextFields();
-  },
-
   getInitialState: function() {
     return {
       modalIsOpen: false,
