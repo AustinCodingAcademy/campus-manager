@@ -5,8 +5,8 @@ import {
   InputGroup, Alert
 } from 'react-bootstrap';
 const Select = require('react-select');
-const UserModel = require('../models/UserModel');
 import ReactPhoneInput from 'react-phone-input';
+const UserModel = require('../models/UserModel');
 
 module.exports = React.createBackboneClass({
   roleOptions: [
@@ -104,7 +104,7 @@ module.exports = React.createBackboneClass({
         <form onSubmit={this.save}>
           <Modal.Body>
             <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
-              <h4>{this.state.error}</h4>
+              <p>{this.state.error}</p>
             </Alert>
             <FormGroup controlId="first-name">
               <ControlLabel>First Name</ControlLabel>
@@ -142,7 +142,7 @@ module.exports = React.createBackboneClass({
                 value={this.state.user.phone}
               />
             </FormGroup>
-            <FormGroup controlId="roles">
+            <FormGroup controlId="roles" className={`${hidden}`}>
               <ControlLabel>Roles</ControlLabel>
               <Select
                 name="roles"
@@ -188,7 +188,7 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.zipcode}
               />
             </FormGroup>
-            <FormGroup controlId="price">
+            <FormGroup controlId="price" className={`${hidden}`}>
               <ControlLabel>Price</ControlLabel>
               <InputGroup>
                 <InputGroup.Addon>$</InputGroup.Addon>
@@ -200,7 +200,7 @@ module.exports = React.createBackboneClass({
                 />
               </InputGroup>
             </FormGroup>
-            <FormGroup controlId="credits">
+            <FormGroup controlId="credits"  className={`${hidden}`}>
               <ControlLabel>Credits</ControlLabel>
               <FormControl
                 type="text"
@@ -209,7 +209,7 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.credits}
               />
             </FormGroup>
-            <a href="#" className="link-danger" onClick={this.delete}>Delete User</a>
+            <a href="#" className={`link-danger ${hidden}`} onClick={this.delete}>Delete User</a>
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="primary" type="submit" block onClick={this.save}>Save</Button>

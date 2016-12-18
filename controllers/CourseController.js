@@ -160,7 +160,7 @@ module.exports = {
               _id: userId,
               client: req.user.client
             }, (err, user) => {
-              if(err) {
+              if(err || !user) {
                 return res.json(500, {
                   message: 'Error finding user.',
                   error: err

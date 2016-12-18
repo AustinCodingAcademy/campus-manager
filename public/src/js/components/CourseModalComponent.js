@@ -23,11 +23,6 @@ module.exports = React.createBackboneClass({
     { value: 'sunday', label: 'Sunday' }
   ],
 
-  mixins: [
-    React.BackboneMixin('term', 'change'),
-    React.BackboneMixin('location', 'change')
-  ],
-
   getInitialState() {
     return {
       location: new LocationModel(),
@@ -147,7 +142,7 @@ module.exports = React.createBackboneClass({
         <form onSubmit={this.save}>
           <Modal.Body>
             <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
-              <h4>{this.state.error}</h4>
+              <p>{this.state.error}</p>
             </Alert>
             <FormGroup controlId="name">
               <ControlLabel>Name</ControlLabel>
@@ -182,7 +177,6 @@ module.exports = React.createBackboneClass({
             <FormGroup controlId="term">
               <ControlLabel>Term</ControlLabel>
               <Select
-                name="terms"
                 options={termOptions}
                 optionComponent={TermOptionComponent}
                 placeholder="Type to search..."
@@ -194,7 +188,6 @@ module.exports = React.createBackboneClass({
             <FormGroup controlId="location">
               <ControlLabel>Location</ControlLabel>
               <Select
-                name="locations"
                 options={locationOptions}
                 optionComponent={LocationOptionComponent}
                 placeholder="Type to search..."

@@ -1,52 +1,50 @@
 'use strict';
 
-require('es6-shim');
+import 'es6-shim';
+import 'whatwg-fetch';
+const Backbone = require('backbone');
+// Backbone.ajax = require('backbone.fetch');
+const React = require('react');
+const ReactDOM = require('react-dom');
 var $ = window.$ = window.jQuery = require('jquery');
-require('materialize');
-require('picker');
-require('picker.date');
-require('picker.time');
 
-var _ = require('underscore');
-var Backbone = require('backbone');
-var React = require('react');
-var ReactDOM = require('react-dom');
-var moment = require('moment');
+const UserModel = require('./models/UserModel');
+const TermModel = require('./models/TermModel');
+const ReportModel = require('./models/ReportModel');
+const CourseModel = require('./models/CourseModel');
 
-var AttendanceListComponent = React.createFactory(require('./components/AttendanceListComponent'));
-var TermsCollection = require('./collections/TermsCollection');
-var TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
-var CoursesCollection = require('./collections/CoursesCollection');
-var CourseModel = require('./models/CourseModel');
-var CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
-var CourseComponent = React.createFactory(require('./components/CourseComponent'));
-var HomeLayoutComponent = React.createFactory(require('./components/HomeLayoutComponent'));
-var NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
-var UserModel = require('./models/UserModel');
-var UsersCollection = require('./collections/UsersCollection');
-var LocationsCollection = require('./collections/LocationsCollection');
-var UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
-var LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
-var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
-var TermModel = require('./models/TermModel');
-var UserComponent = React.createFactory(require('./components/UserComponent'));
-var ReportComponent = React.createFactory(require('./components/ReportComponent'));
-var ReportModel = require('./models/ReportModel');
+const TermsCollection = require('./collections/TermsCollection');
+const CoursesCollection = require('./collections/CoursesCollection');
+const UsersCollection = require('./collections/UsersCollection');
+const LocationsCollection = require('./collections/LocationsCollection');
 
-$(function() {
+const AttendanceListComponent = React.createFactory(require('./components/AttendanceListComponent'));
+const TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
+const CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
+const CourseComponent = React.createFactory(require('./components/CourseComponent'));
+const HomeLayoutComponent = React.createFactory(require('./components/HomeLayoutComponent'));
+const NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
+const UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
+const LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
+const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
+const UserComponent = React.createFactory(require('./components/UserComponent'));
+const ReportComponent = React.createFactory(require('./components/ReportComponent'));
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('error', function (e) {
+    console.log(e.error);
+  });
   $(document).ajaxError(function(e, xhr) {
     if (xhr.status === 401) {
       window.location.replace('/login');
     }
-    Materialize.toast(JSON.parse(xhr.responseText).message + ' See console for more info.', 4000, 'red darken-1');
-    console.log(JSON.parse(xhr.responseText).error);
   });
   Backbone.$.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
-  $('.modal').modal();
 
   var AppRouter = Backbone.Router.extend({
     routes: {
@@ -64,10 +62,10 @@ $(function() {
       'report/:query': 'report'
     },
 
-    currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
-    currentView: undefined,
+    currentUser: new UserModel(JSON.parse(document.querySelector('[data-bootstrap]').getAttribute('data-bootstrap'))),
 
     initialize: function() {
+      document.querySelector('[data-bootstrap]').remove();
       $('<div id="nav-container"></div>').insertBefore('#container');
       ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('#nav-container')[0]);
     },
@@ -187,4 +185,4 @@ $(function() {
 
   new AppRouter();
   Backbone.history.start();
-});
+}, false);

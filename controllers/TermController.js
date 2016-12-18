@@ -111,7 +111,7 @@ module.exports = {
         });
       }
 
-      const attr = [
+      const attrs = [
         'start_date',
         'end_date',
         'name'

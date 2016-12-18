@@ -87,6 +87,7 @@
     "react-bootstrap": "^0.30.7",
     "react-chartjs": "github:jhudson8/react-chartjs#c711d75",
     "react-codemirror": "^0.2.6",
+    "react-datepicker": "^0.39.0",
     "react-dom": "15.3.2",
     "react-dropzone": "3.7.2",
     "react-fontawesome": "^1.5.0",

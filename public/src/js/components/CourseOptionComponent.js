@@ -29,7 +29,7 @@ module.exports = React.createClass({
 			onMouseEnter={this.handleMouseEnter}
 			onMouseMove={this.handleMouseMove}
 			title={this.props.option.title}>
-				<h5>{this.props.option.course.get('name')}{badge}</h5>
+				<h4><strong>{this.props.option.course.get('name')}</strong>{badge}</h4>
 				{this.props.option.course.get('location').get('name')}
 				<br />
 				{this.props.option.course.get('location').get('address') + ', '}
@@ -40,10 +40,12 @@ module.exports = React.createClass({
 				{this.props.option.course.properDays()}
 				<br />
 				Starts on {this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY')}
-        <br/ >
-        {'$' + Number(this.props.option.user.get('price') || this.props.option.course.get('cost')).toFixed(2)}
-				<br/ >
+        <br />
+        {`$${this.props.option.user && this.props.option.user.get('price') ? Number(this.props.option.user.get('price')).toFixed(2) : Number(this.props.option.course.get('cost')).toFixed(2)}`}
+				<br />
 				{this.props.option.course.get('seats') - this.props.option.course.get('registrations').length} seats left
+        <br />
+				{this.props.option.course.get('term').get('name')}
 			</div>
 		);
 	}

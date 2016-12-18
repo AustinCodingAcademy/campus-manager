@@ -1,111 +1,168 @@
-var _ = require('underscore');
-var React = require('react');
-require('react.backbone');
-var LocationModel = require('../models/LocationModel');
+import * as React from 'react';
+import 'react.backbone';
+import {
+  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
+  InputGroup, Alert
+} from 'react-bootstrap';
+import ReactPhoneInput from 'react-phone-input';
+const LocationModel = require('../models/LocationModel');
 
 module.exports = React.createBackboneClass({
-  attrs: [
-    'name',
-    'address',
-    'city',
-    'state',
-    'zipcode',
-    'phone',
-    'contact',
-    'note'
-  ],
-
-  componentDidMount: function() {
-    _.each(this.attrs, function(attr) {
-      this.refs[attr].value = this.getModel().get(attr);
-    }, this);
-    Materialize.updateTextFields();
-    $('.modal').modal();
+  getInitialState() {
+    return {
+      location: this.getModel().attributes,
+      alertVisible: 'hidden',
+      error: '',
+      title: this.props.title
+    }
   },
 
-  saveLocation: function(e) {
+  changeTextValue(e) {
+    const attr = e.currentTarget.getAttribute('id');
+    this.state.location[attr] = e.currentTarget.value;
+  },
+
+  changePhone(phone) {
+    this.state.location.phone = phone;
+  },
+
+  save(e) {
     e.preventDefault();
-    var that = this;
-    var data = {};
-    _.each(this.attrs, function(attr) {
-      data[attr] = this.refs[attr].value;
-    }, this);
-    this.getModel().save(data, {
-      success: function() {
-        that.getCollection().add(that.getModel());
+    this.getModel().save(this.state.location, {
+      success: () => {
+        this.props.locations.add(this.getModel(), {
+          merge: true
+        });
+        this.props.onHide();
+      },
+      error: (model, res) => {
+        this.setState({
+          error: res.responseJSON.message,
+          alertVisible: ''
+        });
       }
     });
   },
 
-  deleteLocation: function(e) {
+  delete(e) {
     e.preventDefault();
-    var r = confirm('Are you sure you want to delete this location?');
-    if (r == true) {
+    if (confirm('Are you sure you want to delete this location?')) {
       this.getModel().destroy({
-        wait: true,
-        success: function() {
-          $('.modal').modal('close');
+        success: () => {
+          this.props.locations.remove(this.getModel());
+          this.props.onHide();
+        },
+        error: (model, res) => {
+          this.setState({
+            error: res.responseJSON.message,
+            alertVisible: ''
+          });
         }
       });
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      title: nextProps.title,
+      location: this.getModel().attributes
+    });
+  },
+
+  handleAlertDismiss() {
+    this.setState({ alertVisible: 'hidden' });
+  },
+
   render: function() {
     return (
-      <div className="modal" id="location-modal">
-        <div className="modal-content">
-          <div className="row">
-            <form className="col s12" onSubmit={this.saveLocation}>
-              <div className="row">
-                <div className="input-field col s12 m4">
-                  <input ref="name" type="text" id="name" />
-                  <label htmlFor="name">Name</label>
-                </div>
-                <div className="input-field col s12 m8">
-                  <label htmlFor="contact">Contact</label>
-                  <input ref="contact" type="text" name="contact" id="contact" />
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12 m8">
-                  <input ref="address" type="text" id="address" />
-                  <label htmlFor="address">Address</label>
-                </div>
-                <div className="input-field col s12 m4">
-                  <input ref="phone" type="text" id="phone" />
-                  <label htmlFor="phone">Phone</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12 m4">
-                  <label htmlFor="city">City</label>
-                  <input ref="city" type="text" name="city" id="city" />
-                </div>
-                <div className="input-field col s12 m4">
-                  <label htmlFor="city">State</label>
-                  <input ref="state" type="text" name="state" id="state" />
-                </div>
-                <div className="input-field col s12 m4">
-                  <label htmlFor="zipcode">Zipcode</label>
-                  <input ref="zipcode" type="text" name="zipcode" id="zipcode" />
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input ref="note" type="text" id="note" />
-                  <label htmlFor="note">Note</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col s12">
-                  <input type="submit" className="modal-action modal-close waves-effect waves-green btn" value="Submit"/>
-                  <a href="#" className="waves-effect waves-light btn red right" onClick={this.deleteLocation}><i className="fa fa-trash fa-2x"></i></a>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      <Modal show={this.props.show} onHide={this.props.onHide}>
+        <Modal.Header closeButton>
+          <Modal.Title>{this.state.title}</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={this.save}>
+          <Modal.Body>
+            <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
+              <p>{this.state.error}</p>
+            </Alert>
+            <FormGroup controlId="name">
+              <ControlLabel>Name</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Name"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.name}
+              />
+            </FormGroup>
+            <FormGroup controlId="address">
+              <ControlLabel>Address</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Address"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.address}
+              />
+            </FormGroup>
+            <FormGroup controlId="city">
+              <ControlLabel>City</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="City"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.city}
+              />
+            </FormGroup>
+            <FormGroup controlId="state">
+              <ControlLabel>State</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="State"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.state}
+              />
+            </FormGroup>
+            <FormGroup controlId="zipcode">
+              <ControlLabel>Zipcode</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Zipcode"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.zipcode}
+              />
+            </FormGroup>
+            <FormGroup controlId="phone">
+              <ControlLabel>Phone</ControlLabel>
+              <ReactPhoneInput
+                defaultCountry={'us'}
+                onlyCountries={['us']}
+                onChange={this.changePhone}
+                value={this.state.location.phone}
+              />
+            </FormGroup>
+            <FormGroup controlId="contact">
+              <ControlLabel>Contact</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Contact"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.contact}
+              />
+            </FormGroup>
+            <FormGroup controlId="note">
+              <ControlLabel>Note</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Note"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.location.note}
+              />
+            </FormGroup>
+            <a href="#" className="link-danger" onClick={this.delete}>Delete Location</a>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="primary" type="submit" block onClick={this.save}>Save</Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     );
   }
 });

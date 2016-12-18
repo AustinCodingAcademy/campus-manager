@@ -1,103 +1,138 @@
-var _ = require('underscore');
-var React = require('react');
-require('react.backbone');
-var RegistrationItemComponent = React.createFactory(require('./RegistrationItemComponent'));
+import * as React from 'react';
+import 'react.backbone';
+import { Table, Tr, Td, Th, Thead } from 'reactable';
+import { Col, Row, Button, FormControl } from 'react-bootstrap';
+const FontAwesome = require('react-fontawesome');
+const RegistrationModalComponent = require('./RegistrationModalComponent');
 
 module.exports = React.createBackboneClass({
-  componentDidMount: function() {
-    $('select').material_select();
-  },
-
-  componentDidUpdate: function() {
-    $('select').material_select('update');
-  },
-
-  registerUser: function(e) {
-    e.preventDefault();
-    var that = this;
-    if (this.refs.course.value) {
-      var course = this.getCollection().get(this.refs.course.value);
-      course.get('registrations').push(this.props.users.get(this.refs.user.value));
-      course.save(null, {
-        success: function() {
-          that.getCollection().trigger('add');
-          Materialize.toast('Student Registered!', 4000)
-        }
-      });
-
+  getInitialState() {
+    return {
+      filterBy: '',
+      alertVisible: false
     }
   },
 
-  render: function() {
-    var registrations = [];
-
-    this.getCollection().each(function(course) {
-      course.get('registrations').each(function(user) {
-        if (this.props.currentUser.get('is_admin') || user.id === this.props.currentUser.id) {
-          registrations.push({ course: course, user: user });
+  delete(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to delete this registration?')) {
+      const course = this.getCollection().get(e.currentTarget.getAttribute('data-course-id'));
+      course.get('registrations').remove(e.currentTarget.getAttribute('data-user-id'));
+      course.save(null, {
+        success: () => {
+          this.getCollection().trigger('remove');
+        },
+        error: (model, res) => {
+          this.setState({
+            error: res.responseJSON.message,
+            alertVisible: ''
+          });
         }
-      }, this);
-    }, this);
+      });
+    }
+  },
 
-    var registrationItems = _.map(registrations, function(registration) {
-      return <RegistrationItemComponent user={registration.user} course={registration.course} collection={this.getCollection()} key={registration.user.id + registration.course.id} />
-    }, this);
+  handleAlertDismiss() {
+    this.setState({ alertVisible: 'hidden' });
+  },
 
-    var courseOptions = [];
-    this.getCollection().each(function(course) {
-      courseOptions.push(<option key={course.id} value={course.id}>{course.get('term').get('name') + ' - ' + course.get('name')}</option>);
+  show(e) {
+    e.preventDefault();
+    Backbone.history.navigate('users/' + e.currentTarget.getAttribute('data-id'), true);
+  },
+
+  changeFilterValue(e) {
+    this.setState({
+      filterBy: e.currentTarget.value
     });
+  },
 
-    var userOptions = [];
-    this.props.users.each(function(user) {
-      userOptions.push(<option key={user.id} value={user.id}>{user.fullName() + ' (' + user.get('username') + ')'}</option>);
+  open(e) {
+    e.preventDefault();
+    this.setState({
+      showModal: true
+    });
+  },
+
+  close() {
+    this.setState({ showModal: false });
+  },
+
+  render: function() {
+    const registrationRows = [];
+    this.getCollection().each(course => {
+      course.get('registrations').each(user => {
+        registrationRows.push(
+          <Tr key={`${course.id}-${user.id}`}>
+            <Td column="IDN">{user.get('idn')}</Td>
+            <Td column="Name" value={user.fullName()}>
+              <a href="#" onClick={this.show} data-id={user.id}>{user.fullName()}</a>
+            </Td>
+            <Td column="Email" value={user.get('username')}>
+              <div>
+                <a href={`mailto:${user.get('username')}`} target="_blank">{user.get('username')}</a>
+              </div>
+            </Td>
+            <Td column="Phone">{user.get('phone')}</Td>
+            <Td column="Course">{course.get('name')}</Td>
+            <Td column="Term">{course.get('term').get('name')}</Td>
+            <Td column="delete">
+              <a href="#" onClick={this.delete} data-course-id={course.id} data-user-id={user.id} className="link-danger">
+                <FontAwesome name='trash-o' />
+              </a>
+            </Td>
+          </Tr>
+        );
+      });
     });
 
     return (
-      <div>
-        <br/>
-        <form className="col s12" onSubmit={this.registerUser}>
-          <div className="row">
-            <div className="input-field col m6 s12">
-              <select defaultValue={this.props.users.first().id} ref="user">
-                {userOptions}
-              </select>
-              <label>User</label>
-            </div>
-            <div className="input-field col m6 s12">
-              <select ref="course" defaultValue="">
-                <option value="" disabled>Select a Course</option>
-                {courseOptions}
-              </select>
-              <label>Course</label>
-            </div>
+      <Row>
+        <Col xs={12}>
+          <h3>
+            Registrations
+            <small>
+              <a href="#" className="pull-right" onClick={this.open}>
+                <FontAwesome name='plus' />
+                &nbsp;Registration
+              </a>
+            </small>
+          </h3>
+          <FormControl
+            type="text"
+            placeholder="Filter..."
+            onChange={this.changeFilterValue}
+            defaultValue={this.state.filterBy}
+          />
+          <br />
+          <div className="x-scroll">
+            <Table
+              className="table table-condensed table-striped"
+              itemsPerPage={20}
+              filterable={['IDN', 'Name', 'Email', 'Phone', 'Course', 'Term']}
+              sortable={['IDN', 'Name', 'Email', 'Course', 'Term']}
+              filterBy={this.state.filterBy}
+            >
+              <Thead>
+                <Th>IDN</Th>
+                <Th>Name</Th>
+                <Th>Email</Th>
+                <Th>Phone</Th>
+                <Th>Course</Th>
+                <Th>Term</Th>
+                <Th>delete</Th>
+              </Thead>
+              {registrationRows}
+            </Table>
           </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <button className="btn waves-effect waves-light" type="submit" name="action">Register
-                <i className="material-icons right">send</i>
-              </button>
-            </div>
-          </div>
-        </form>
-        <div className="row">
-          <div className="col s12">
-            <table className="striped">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Term</th>
-                  <th>Course</th>
-                </tr>
-              </thead>
-              <tbody>
-                {registrationItems}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+          <RegistrationModalComponent
+            show={this.state.showModal}
+            onHide={this.close}
+            collection={this.getCollection()}
+            users={this.props.users}
+          />
+        </Col>
+      </Row>
     );
   }
 });

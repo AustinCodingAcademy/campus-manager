@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import * as Backbone from 'backbone';
 import 'react.backbone';
 import { Table, Tr, Td, Th, Thead } from 'reactable';

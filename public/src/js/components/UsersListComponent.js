@@ -1,6 +1,5 @@
 import * as Backbone from 'backbone';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import 'react.backbone';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
@@ -43,7 +42,7 @@ module.exports = React.createBackboneClass({
     });
   },
 
-  render: function() {
+  render() {
     const userRows = this.getCollection().map(user => {
       return (
         <Tr key={user.id}>
@@ -53,13 +52,13 @@ module.exports = React.createBackboneClass({
           </Td>
           <Td column="Email" value={user.get('username')}>
             <div>
-              <a href="mailto:{user.get('username')}" target="_blank">{user.get('username')}</a>
+              <a href={`mailto:${user.get('username')}`} target="_blank">{user.get('username')}</a>
             </div>
           </Td>
           <Td column="Phone">{user.get('phone')}</Td>
           <Td column="Roles">{user.roles().join(', ')}</Td>
           <Td column="edit">
-            <a href="#" onClick={this.open} data-id={user.id} className={`${this.state.hidden}`}>
+            <a href="#" onClick={this.open} data-id={user.id}>
               <FontAwesome name='pencil' />
             </a>
           </Td>
@@ -73,7 +72,7 @@ module.exports = React.createBackboneClass({
           <h3>
             Users
             <small>
-              <a href="#" className={`${this.state.hidden} pull-right`} onClick={this.open}>
+              <a href="#" className="pull-right" onClick={this.open}>
                 <FontAwesome name='plus' />
                 &nbsp;User
               </a>
@@ -100,7 +99,7 @@ module.exports = React.createBackboneClass({
                 <Th>Email</Th>
                 <Th>Phone</Th>
                 <Th>Roles</Th>
-                <Th className={`${this.state.hidden}`}>edit</Th>
+                <Th>edit</Th>
               </Thead>
               {userRows}
             </Table>

@@ -9,6 +9,7 @@ $icon-font-path: '../../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
   './theme/bootstrap/bootstrap',
   '../../../node_modules/codemirror/lib/codemirror',
   '../../../node_modules/react-select/dist/react-select',
+  '../../../node_modules/react-datepicker/dist/react-datepicker',
   '../../../node_modules/font-awesome/scss/font-awesome',
   './components/buttons',
   './components/modal',
@@ -94,4 +95,8 @@ html, body {
 
 .reactable-filterer {
   display: none;
+}
+
+.react-datepicker__input-container {
+  display: block;
 }

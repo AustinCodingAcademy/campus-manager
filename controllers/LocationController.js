@@ -79,7 +79,7 @@ module.exports = {
         });
       }
 
-      const attr = [
+      const attrs = [
         'address',
         'name',
         'city',
