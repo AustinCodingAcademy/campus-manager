@@ -5,19 +5,15 @@ import {
   InputGroup, Alert
 } from 'react-bootstrap';
 const Select = require('react-select');
-const CourseModel = require('../models/CourseModel');
 const TermOptionComponent = require('./TermOptionComponent');
 const TermValueComponent = require('./TermValueComponent');
 const LocationOptionComponent = require('./LocationOptionComponent');
 const LocationValueComponent = require('./LocationValueComponent');
+const LocationModel = require('../models/LocationModel');
+const TermModel = require('../models/TermModel');
 
 module.exports = React.createBackboneClass({
-  mixins: [
-    React.BackboneMixin('term', 'change'),
-    React.BackboneMixin('location', 'change')
-  ],
-
-  days:  [
+  dayOptions:[
     { value: 'monday', label: 'Monday' },
     { value: 'tuesday', label: 'Tuesday' },
     { value: 'wednesday', label: 'Wednesday' },
@@ -27,32 +23,40 @@ module.exports = React.createBackboneClass({
     { value: 'sunday', label: 'Sunday' }
   ],
 
+  mixins: [
+    React.BackboneMixin('term', 'change'),
+    React.BackboneMixin('location', 'change')
+  ],
+
   getInitialState() {
     return {
-      location: this.props.location,
-      term: this.props.term,
+      location: new LocationModel(),
+      term: new TermModel(),
       course: this.getModel().attributes,
-      days: this.props.days,
+      days: [],
       alertVisible: 'hidden',
-      error: ''
+      error: '',
+      title: this.props.title
     }
   },
 
   setLocationValue(option) {
     const location = option.location || this.getModel().get('location');
-    this.state.location.clear().set(location.attributes);
+    this.setState({ location });
     this.state.course.location = location;
   },
 
   setTermValue(option) {
     const term = option.term || this.getModel().get('term');
-    this.state.term.clear().set(term.attributes);
+    this.setState({ term });
     this.state.course.term = term;
   },
 
   selectDays(options) {
     this.setState({ days: options });
-    this.state.course.days = options.map(day => { return day.value; });
+    this.state.course.days = options.map(day => {
+      return day.value;
+    });
   },
 
   changeTextValue(e) {
@@ -66,14 +70,6 @@ module.exports = React.createBackboneClass({
     }
   },
 
-  checkDays(e) {
-    if (e.currentTarget.checked) {
-      this.state.course.days.push(e.currentTarget.getAttribute('id'));
-    } else {
-      this.state.course.days.splice(this.state.days.indexOf(e.currentTarget.getAttribute('id')), 1);
-    }
-  },
-
   save(e) {
     e.preventDefault();
     this.getModel().save(this.state.course, {
@@ -82,6 +78,12 @@ module.exports = React.createBackboneClass({
           merge: true
         });
         this.props.onHide();
+      },
+      error: (model, res) => {
+        this.setState({
+          error: res.responseJSON.message,
+          alertVisible: ''
+        });
       }
     });
   },
@@ -104,8 +106,16 @@ module.exports = React.createBackboneClass({
     }
   },
 
-  handleAlertDismiss() {
-    this.setState({ alertVisible: 'hidden' });
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      title: nextProps.title,
+      course: this.getModel().attributes,
+      term: this.getModel().get('term'),
+      location: this.getModel().get('location'),
+      days: this.dayOptions.filter(day => {
+        return this.getModel().get('days').includes(day.value);
+      })
+    });
   },
 
   render() {
@@ -134,7 +144,7 @@ module.exports = React.createBackboneClass({
         <Modal.Header closeButton>
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
-        <form onSubmit={this.saveCourse}>
+        <form onSubmit={this.save}>
           <Modal.Body>
             <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
               <h4>{this.state.error}</h4>
@@ -177,7 +187,7 @@ module.exports = React.createBackboneClass({
                 optionComponent={TermOptionComponent}
                 placeholder="Type to search..."
                 valueComponent={TermValueComponent}
-                value={this.props.term.id}
+                value={this.state.term.id}
                 onChange={this.setTermValue}
               />
             </FormGroup>
@@ -189,7 +199,7 @@ module.exports = React.createBackboneClass({
                 optionComponent={LocationOptionComponent}
                 placeholder="Type to search..."
                 valueComponent={LocationValueComponent}
-                value={this.props.location.id}
+                value={this.state.location.id}
                 onChange={this.setLocationValue}
               />
             </FormGroup>
@@ -198,7 +208,7 @@ module.exports = React.createBackboneClass({
               <Select
                 name="days"
                 value={this.state.days}
-                options={this.days}
+                options={this.dayOptions}
                 onChange={this.selectDays}
                 multi={true}
               />

@@ -128,7 +128,8 @@ module.exports = {
         'textbook',
         'videos',
         'cost',
-        'term'
+        'term',
+        'location'
       ];
 
       var instructorAttributes = [
@@ -138,12 +139,11 @@ module.exports = {
 
       if (req.user.is_admin) {
         _.each(adminAttributes, function(attr) {
-          course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+          course[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : course[attr];
         });
-        course.location =  req.body.location._id ? req.body.location._id : course.location;
       } else {
         _.each(instructorAttributes, function(attr) {
-          course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+          course[attr] =  req.body.hasOwnProperty(attr) ? req.body[attr] : course[attr];
         });
       }
 

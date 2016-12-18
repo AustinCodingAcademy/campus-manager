@@ -148,16 +148,15 @@ module.exports = {
       var attributes = [
         'first_name',
         'last_name',
-        'email',
+        'username',
         'phone',
         'website',
         'github',
         'codecademy',
-        'zipcode',
-        'grades',
+        'zipcode'
       ];
 
-      var protectedAttrs = [
+      var adminAttrs = [
         'is_admin',
         'is_instructor',
         'is_student',
@@ -169,20 +168,15 @@ module.exports = {
         'grades'
       ];
 
-      if (!(req.user.is_admin || req.user.is_client) && req.user.is_instructor) {
+      if (req.user.is_instructor) {
         _.each(instructorAttributes, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+          user[attr] =  req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
         });
-      } else {
-        _.each(attributes, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
-        });
-        user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
       }
 
-      if (req.user.is_admin || req.user.is_client) {
-        _.each(protectedAttrs, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+      if (req.user.is_admin) {
+        _.each(adminAttrs, function(attr) {
+          user[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
         });
         if (req.body.generate_api_key) {
           var rand = function() {
@@ -195,6 +189,12 @@ module.exports = {
 
           user.api_key = token();
         }
+      }
+
+      if (req.user.is_admin || req.user._id === req.body._id) {
+        _.each(attributes, function(attr) {
+          user[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
+        });
       }
 
       user.save(function(err, user){

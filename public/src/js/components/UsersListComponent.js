@@ -2,56 +2,119 @@ import * as Backbone from 'backbone';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import 'react.backbone';
-const UserItemComponent = React.createFactory(require('./UserItemComponent'));
-const UserModalComponent = React.createFactory(require('./UserModalComponent'));
+import { Table, Tr, Td, Th, Thead } from 'reactable';
+import { Col, Row, Button, FormControl } from 'react-bootstrap';
+const FontAwesome = require('react-fontawesome');
+const UserModalComponent = require('./UserModalComponent');
 const UserModel = require('../models/UserModel');
 
 module.exports = React.createBackboneClass({
+  getInitialState() {
+    return {
+      showModal: false,
+      user: new UserModel(),
+      modalTitle: 'New User',
+      filterBy: ''
+    }
+  },
 
-  newUserModal: function() {
-    ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(UserModalComponent({
-      collection: this.getCollection(),
-      model: new UserModel()
-    }), $('#modal-container')[0]);
-    $('#user-modal').modal('open');
+  close() {
+    this.setState({ showModal: false });
+  },
+
+  open(e) {
+    e.preventDefault();
+    const user = this.getCollection().get(e.currentTarget.getAttribute('data-id')) || new UserModel();
+    this.state.user.clear().set(user.attributes);
+    this.setState({
+      showModal: true,
+      modalTitle: user.id ? 'Edit User' : 'New User'
+    });
+  },
+
+  show(e) {
+    e.preventDefault();
+    Backbone.history.navigate('users/' + e.currentTarget.getAttribute('data-id'), true);
+  },
+
+  changeFilterValue(e) {
+    this.setState({
+      filterBy: e.currentTarget.value
+    });
   },
 
   render: function() {
-    var that = this;
-    var userItems = this.getCollection().map(function(user) {
-      return UserItemComponent({
-        model: user,
-        collection: that.getCollection(),
-        key: user.id,
-        currentUser: that.props.currentUser
-      });
+    const userRows = this.getCollection().map(user => {
+      return (
+        <Tr key={user.id}>
+          <Td column="IDN">{user.get('idn')}</Td>
+          <Td column="Name" value={user.fullName()}>
+            <a href="#" onClick={this.show} data-id={user.id}>{user.fullName()}</a>
+          </Td>
+          <Td column="Email" value={user.get('username')}>
+            <div>
+              <a href="mailto:{user.get('username')}" target="_blank">{user.get('username')}</a>
+            </div>
+          </Td>
+          <Td column="Phone">{user.get('phone')}</Td>
+          <Td column="Roles">{user.roles().join(', ')}</Td>
+          <Td column="edit">
+            <a href="#" onClick={this.open} data-id={user.id} className={`${this.state.hidden}`}>
+              <FontAwesome name='pencil' />
+            </a>
+          </Td>
+        </Tr>
+      );
     });
 
     return (
-      <div className="row">
-        <div className="col-xs-12">
+      <Row>
+        <Col xs={12}>
+          <h3>
+            Users
+            <small>
+              <a href="#" className={`${this.state.hidden} pull-right`} onClick={this.open}>
+                <FontAwesome name='plus' />
+                &nbsp;User
+              </a>
+            </small>
+          </h3>
+          <FormControl
+            type="text"
+            placeholder="Filter..."
+            onChange={this.changeFilterValue}
+            defaultValue={this.state.filterBy}
+          />
           <br />
-          <a className="waves-effect waves-teal btn" onClick={this.newUserModal} data-test="new-user">
-            <i className="material-icons left">add</i> user
-          </a>
-          <br />
-          <table className="table table-striped table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>IDN</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role(s)</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {userItems}
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <div className="x-scroll">
+            <Table
+              className="table table-condensed table-striped"
+              itemsPerPage={20}
+              filterable={['IDN', 'Name', 'Email', 'Phone', 'Roles']}
+              sortable={['IDN', 'Name', 'Email']}
+              filterBy={this.state.filterBy}
+            >
+              <Thead>
+                <Th>IDN</Th>
+                <Th>Name</Th>
+                <Th>Email</Th>
+                <Th>Phone</Th>
+                <Th>Roles</Th>
+                <Th className={`${this.state.hidden}`}>edit</Th>
+              </Thead>
+              {userRows}
+            </Table>
+          </div>
+          <UserModalComponent
+            show={this.state.showModal}
+            onHide={this.close}
+            users={this.getCollection()}
+            model={this.state.user}
+            title={this.state.modalTitle}
+            currentUser={this.props.currentUser}
+          />
+        </Col>
+      </Row>
     );
   }
 });

@@ -1,10 +1,10 @@
-var Backbone = require('backbone');
-var _ = require('underscore');
-var TermModel = require('./TermModel');
-var UsersCollection = require('../collections/UsersCollection');
-var LocationModel = require('../models/LocationModel');
-var moment = require('moment');
-require('moment-range');
+import * as Backbone from 'backbone';
+import * as _ from 'underscore';
+const moment = require('moment');
+import 'moment-range';
+const TermModel = require('./TermModel');
+const UsersCollection = require('../collections/UsersCollection');
+const LocationModel = require('../models/LocationModel');
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/courses',
