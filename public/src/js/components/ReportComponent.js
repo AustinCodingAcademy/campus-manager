@@ -1,29 +1,41 @@
-var Backbone = require('backbone');
-var React = require('react');
-var _ = require('underscore');
-var Codemirror = require('react-codemirror');
-require('cm-sql');
-var tableToCsv = require('node-table-to-csv');
-var Clipboard = require('clipboard');
-var utils = require('../utils');
-var Table = require('reactable').Table;
+import * as Backbone from 'backbone';
+import * as React from 'react';
+const CodeMirror = require('react-codemirror');
+import 'cm-sql';
+const Clipboard = require('clipboard');
+const utils = require('../utils');
+import { Table } from 'reactable';
+import {
+  Col, Row, Button, FormControl, ButtonGroup, OverlayTrigger, Tooltip
+} from 'react-bootstrap';
+const FontAwesome = require('react-fontawesome');
 
 module.exports = React.createBackboneClass({
-  componentDidMount: function() {
-    var clipboard = new Clipboard('[data-clipboard-text]');
-    clipboard.on('success', function(e) {
-      Materialize.toast('Link copied!', 3000);
-      e.clearSelection();
-    });
-    this._executeCode();
+  getInitialState() {
+    return {
+      consoleClass: '',
+      consoleText: '',
+      filterBy: ''
+    };
   },
 
-  updateAddress: function() {
+  componentDidMount() {
+    var clipboard = new Clipboard('[data-clipboard-text]');
+    this.executeCode();
+  },
+
+  changeFilterValue(e) {
+    this.setState({
+      filterBy: e.currentTarget.value
+    });
+  },
+
+  updateAddress() {
     Backbone.history.navigate('#report/' + btoa(this.getModel().get('sql')));
     this.url = utils.urlParse(window.location);
   },
 
-  updateCode: function(sql) {
+  updateCode(sql) {
     this.getModel().set({
       sql: sql
     }, {
@@ -32,24 +44,30 @@ module.exports = React.createBackboneClass({
     this.updateAddress();
   },
 
-  _exportCSV: function() {
+  exportCSV() {
     window.location = this.getModel().link(this.url, 'csv');
   },
 
-  _executeCode: function() {
-    var that = this;
-    this.refs.error.textContent = '';
-    Materialize.toast($('<span>Executing Query <i class="fa fa-cog fa-spin fa-fw"></i><span>'), null, 'database-query');
+  executeCode: function() {
+    this.setState({
+      consoleClass: '',
+      consoleText: `Executing query...`
+    });
     this.getModel().url = this.getModel().link(this.url, 'json');
     this.getModel().fetch({
-      data: {timestamp: that.getModel().get('timestamp')},
+      data: { timestamp: this.getModel().get('timestamp') },
       global: false,
-      success: function(response) {
-        $('.database-query').fadeOut();
+      success: () => {
+        this.setState({
+          consoleClass: '',
+          consoleText: `${this.getModel().get('results').length} results returned.`
+        });
       },
-      error: function(response, err) {
-        $('.database-query').fadeOut();
-        that.refs.error.textContent = err.responseJSON.message;
+      error: (response, err) => {
+        this.setState({
+          consoleClass: 'text-danger',
+          consoleText: err.responseJSON.message
+        });
       }
     })
   },
@@ -57,7 +75,7 @@ module.exports = React.createBackboneClass({
   render: function() {
     this.updateAddress();
 
-    var options = {
+    const options = {
       mode: 'text/x-mysql',
       viewportMargin: Infinity,
       indentWithTabs: true,
@@ -67,49 +85,109 @@ module.exports = React.createBackboneClass({
       autofocus: true
     };
 
+    const tooltip = <Tooltip id="tooltip">Copied!</Tooltip>;
+
     return (
       <div>
-        <br />
-        <div className="row">
-          <div className="col s12">
+        <Row>
+          <Col xs={12}>
             <strong>Copy: </strong>
-            <a data-clipboard-text={window.location.href} href="#" onClick={function(e) { e.preventDefault(); }}>Shareable Link</a> |&nbsp;
-            <a data-clipboard-text={this.getModel().link(this.url, 'html', this.props.currentUser.get('api_key'))} href="#" onClick={function(e) { e.preventDefault(); }}>API (HTML)</a> |&nbsp;
-            <a data-clipboard-text={this.getModel().link(this.url, 'csv', this.props.currentUser.get('api_key'))} href="#" onClick={function(e) { e.preventDefault(); }}>API (CSV)</a> |&nbsp;
-            <a data-clipboard-text={this.getModel().link(this.url, 'json', this.props.currentUser.get('api_key'))} href="#" onClick={function(e) { e.preventDefault(); }}>API (JSON)</a>
+            <OverlayTrigger
+              placement="top"
+              overlay={tooltip}
+              trigger={['focus']}
+            >
+              <a
+                data-clipboard-text={window.location.href}
+                href="#"
+                onClick={function(e) { e.preventDefault(); }}
+              >
+                  Shareable Link
+              </a>
+            </OverlayTrigger>
+            &nbsp;|&nbsp;
+            <OverlayTrigger
+              placement="top"
+              overlay={tooltip}
+              trigger={['focus']}
+            >
+              <a
+                data-clipboard-text={this.getModel().link(this.url, 'html', this.props.currentUser.get('api_key'))}
+                href="#"
+                onClick={function(e) { e.preventDefault(); }}
+              >
+                API (HTML)
+              </a>
+            </OverlayTrigger>
+            &nbsp;|&nbsp;
+            <OverlayTrigger
+              placement="top"
+              overlay={tooltip}
+              trigger={['focus']}
+            >
+              <a
+                data-clipboard-text={this.getModel().link(this.url, 'csv', this.props.currentUser.get('api_key'))}
+                href="#"
+                onClick={function(e) { e.preventDefault(); }}
+              >
+                API (CSV)
+              </a>
+            </OverlayTrigger>
+            &nbsp;|&nbsp;
+            <OverlayTrigger
+              placement="top"
+              overlay={tooltip}
+              trigger={['focus']}
+            >
+              <a
+                data-clipboard-text={this.getModel().link(this.url, 'json', this.props.currentUser.get('api_key'))}
+                href="#"
+                onClick={function(e) { e.preventDefault(); }}
+              >
+                API (JSON)
+              </a>
+            </OverlayTrigger>
             <br />
             <small>
               To use the API links, you must generate an API token on your dashboard.
               <br />
-              These links are not meant to be shared with anyone, but are used for API services.
+              API links are not meant to be shared with anyone, but are used for API services.
             </small>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s12">
-            <Codemirror value={this.getModel().get('sql')} ref="commands" options={options} onChange={this.updateCode} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s6">
-            <a onClick={this._executeCode} className="btn waves-effect waves-light">Execute<i className="material-icons right">code</i></a>
-          </div>
-          <div className="col s6">
-            <a onClick={this._exportCSV} className="btn waves-effect waves-light right">CSV <i className="material-icons right">file_download</i></a>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s12">
-            <pre style={{color: '#a20000'}} ref="error"></pre>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s12">
-            <div style={{overflowX: 'scroll'}}>
-              <Table className="striped" data={this.getModel().get('results')} />
+            <br />
+            <CodeMirror value={this.getModel().get('sql')} options={options} onChange={this.updateCode} />
+            <br />
+            <ButtonGroup>
+              <Button bsStyle="primary" onClick={this.executeCode}>
+                <FontAwesome name="play" />
+                &nbsp; Execute
+              </Button>
+              <Button onClick={this.exportCSV}>
+                <FontAwesome name="download" />
+                &nbsp; CSV
+              </Button>
+            </ButtonGroup>
+            <br />
+            <br />
+            <pre className={this.state.consoleClass}>{this.state.consoleText}</pre>
+            <br />
+            <FormControl
+              type="text"
+              placeholder="Filter..."
+              onChange={this.changeFilterValue}
+              defaultValue={this.state.filterBy}
+            />
+            <br/>
+            <div className="x-scroll">
+              <Table
+                className="table table-condensed table-striped"
+                itemsPerPage={20}
+                data={this.getModel().get('results')}
+                filterable={this.getModel().get('results').length ? Object.keys(this.getModel().get('results')[0]) : []}
+                filterBy={this.state.filterBy}
+              />
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     );
   }

@@ -10,22 +10,19 @@
 You first need to setup your environment.
 
 ### Machine Dependencies
-1. Download and install [Node.js](https://nodejs.org/en/) (at least version 6.7.0)
+1. Download and install [Node.js](https://nodejs.org/en/) (at least version 7.2.1)
 
 2.
   * Mac OSX
     1. Install [Homebrew](http://brew.sh/)
-    1. Install Cairo and MongoDB `brew install cairo pkg-config mongodb`
+    1. Install Cairo and MongoDB `brew install mongodb`
     1. Create MongoDB data directory `sudo mkdir -p /data/db`
     1. Correct permissions `sudo chmod -R 0755 /data/db && sudo chown $USER /data/db`
     1. Start MongoDB `mongod`
       * Leave this running or just close the terminal window while running
       * You'll have to do this step every time you restart your computer
-    1. Install [Homebrew Cask](https://caskroom.github.io/) `brew tap caskroom/cask`
-    1. Install XQuartz `brew cask install xquartz`
   * Windows
     1. Install [Chocolatey](https://chocolatey.org/install)
-    1. Install Cairo `choco install gtk-runtime`
     1. Install MongoDB `choco install mongodb`
     1. Create MongoDB data directory `mkdir /data/db`
     1. Start MongoDB `mongod.exe`
