@@ -83,7 +83,6 @@
     "pixrem": "3.0.2",
     "pug": "2.0.0-beta6",
     "react": "15.3.2",
-    "react-barcode": "1.1.0",
     "react-bootstrap": "^0.30.7",
     "react-chartjs": "github:jhudson8/react-chartjs#c711d75",
     "react-codemirror": "^0.2.6",
@@ -115,10 +114,6 @@
   },
   "browser": {
     "jquery": "jquery",
-    "materialize": "./node_modules/materialize-css/dist/js/materialize.js",
-    "picker": "./node_modules/pickadate/lib/picker.js",
-    "picker.date": "./node_modules/pickadate/lib/picker.date.js",
-    "picker.time": "./node_modules/pickadate/lib/picker.time.js",
     "cm-sql": "./node_modules/codemirror/mode/sql/sql.js"
   },
   "browserify": {
@@ -128,8 +123,7 @@
     ]
   },
   "browserify-shim": {
-    "jquery": "$",
-    "materialize": "materialize"
+    "jquery": "$"
   },
   "devDependencies": {
     "chromedriver": "^2.25.1",

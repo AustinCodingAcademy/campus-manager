@@ -6,6 +6,7 @@ const Backbone = require('backbone');
 // Backbone.ajax = require('backbone.fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
+import 'react.backbone';
 var $ = window.$ = window.jQuery = require('jquery');
 
 const UserModel = require('./models/UserModel');
@@ -18,7 +19,6 @@ const CoursesCollection = require('./collections/CoursesCollection');
 const UsersCollection = require('./collections/UsersCollection');
 const LocationsCollection = require('./collections/LocationsCollection');
 
-const AttendanceListComponent = React.createFactory(require('./components/AttendanceListComponent'));
 const TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
 const CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
 const CourseComponent = React.createFactory(require('./components/CourseComponent'));
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     routes: {
       '': 'index',
       '/': 'index',
-      'attendance': 'attendance',
       'terms': 'terms',
       'users': 'users',
       'users/:id': 'user',
@@ -87,15 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }), $('#container')[0]);
         }
       });
-    },
-
-    attendance: function() {
-      var users = new UsersCollection();
-      users.fetch();
-      ReactDOM.render(AttendanceListComponent({
-        users: users,
-        model: new UserModel()
-      }), $('#container')[0]);
     },
 
     index: function() {

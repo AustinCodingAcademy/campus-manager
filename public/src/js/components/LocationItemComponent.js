@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-require('react.backbone');
+
 var LocationModalComponent = React.createFactory(require('./LocationModalComponent'));
 
 module.exports = React.createBackboneClass({

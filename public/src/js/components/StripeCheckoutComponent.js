@@ -1,5 +1,4 @@
 var React = require('react');
-require('react.backbone');
 var StripeCheckout = require('react-stripe-checkout').default;
 
 module.exports = React.createBackboneClass({

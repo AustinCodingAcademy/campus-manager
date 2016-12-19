@@ -2,10 +2,8 @@ var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Backbone = require('backbone');
-require('react.backbone');
 var BaseModal = require('./BaseModal');
-var UserModalComponent = React.createFactory(require('./UserModalComponent'));
-var Barcode = require('react-barcode');
+var UserModalComponent = require('./UserModalComponent');
 var moment = require('moment');
 var DoughnutChart = require('react-chartjs').Doughnut;
 var Gravatar = require('react-gravatar');
@@ -262,11 +260,6 @@ module.exports = React.createBackboneClass({
                   <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
                   <DoughnutChart data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
                   <small>Profile</small>
-                </div>
-              </div>
-              <div className="card-action trim-padding">
-                <div className="center-align">
-                  <Barcode value={'' + this.getModel().get('idn')} format={'CODE128'} height={40} width={4} />
                 </div>
               </div>
             </div>

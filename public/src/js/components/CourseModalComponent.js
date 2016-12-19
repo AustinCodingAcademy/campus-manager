@@ -1,5 +1,4 @@
 import * as React from 'react';
-require('react.backbone');
 import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert

@@ -2,7 +2,7 @@ var React = require('react');
 var moment = require('moment');
 var LineChart = require('react-chartjs').Line;
 var Chart = require('chart.heatmap.js');
-require('react.backbone');
+
 
 module.exports = React.createBackboneClass({
   rendered: false,

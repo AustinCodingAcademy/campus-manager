@@ -1,5 +1,4 @@
 var React = require('react');
-require('react.backbone');
 var _ = require('underscore');
 var Select = require('react-select');
 var CourseOptionComponent = require('./CourseOptionComponent');

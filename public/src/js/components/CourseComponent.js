@@ -7,7 +7,6 @@ var ScreenShareModal = require('./ScreenShareModal');
 var Hashids = require('hashids');
 var CourseAttendanceComponent = React.createFactory(require('./CourseAttendanceComponent'));
 var utils = require('../utils');
-require('react.backbone');
 
 module.exports = React.createBackboneClass({
   getInitialState: function() {

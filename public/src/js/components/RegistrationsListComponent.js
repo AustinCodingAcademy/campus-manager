@@ -1,5 +1,4 @@
 import * as React from 'react';
-import 'react.backbone';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');

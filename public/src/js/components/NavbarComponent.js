@@ -1,6 +1,5 @@
 var React = require('react');
 var _ = require('underscore');
-require('react.backbone');
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 module.exports = React.createBackboneClass({
@@ -35,9 +34,7 @@ module.exports = React.createBackboneClass({
               <MenuItem eventKey={3.3} href="#locations">Locations</MenuItem>
               <MenuItem divider />
               <MenuItem eventKey={3.4} href="#registration">Registration</MenuItem>
-              <MenuItem eventKey={3.5} href="#attendance">Attendance</MenuItem>
-              <MenuItem divider />
-              <MenuItem eventKey={3.6} href="#report">Report</MenuItem>
+              <MenuItem eventKey={3.5} href="#report">Report</MenuItem>
             </NavDropdown>
             <NavDropdown eventKey={4} title={`${this.getModel().get('first_name')} ${this.getModel().get('last_name')}`} id="user-dropdown">
               <MenuItem eventKey={4.1} href="logout">Logout</MenuItem>

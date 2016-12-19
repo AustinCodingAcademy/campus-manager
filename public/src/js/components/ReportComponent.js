@@ -1,6 +1,5 @@
 var Backbone = require('backbone');
 var React = require('react');
-require('react.backbone');
 var _ = require('underscore');
 var Codemirror = require('react-codemirror');
 require('cm-sql');

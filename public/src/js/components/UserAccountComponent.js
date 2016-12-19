@@ -1,8 +1,6 @@
 var React = require('react');
-var Backbone = require('backbone');
 var _ = require('underscore');
 var moment = require('moment');
-require('react.backbone');
 var StripeCheckoutComponent = React.createFactory(require('./StripeCheckoutComponent'));
 var Select = require('react-select');
 var CourseOptionComponent = require('./CourseOptionComponent');
