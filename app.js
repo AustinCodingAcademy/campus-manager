@@ -55,10 +55,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
 app.use(csrf({cookie: true}));
-
 // compress all responses
 app.use(compression({ threshold: 0 }))
 
+app.use('/docs', express.static(path.join(__dirname + '/docs')));
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
 app.use('/api/users', middleware.auth, require('./routes/users'));

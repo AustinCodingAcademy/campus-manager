@@ -3,7 +3,7 @@
     "allowUnknownTags": true
   },
   "opts": {
-    "destination": "./docs/"
+    "destination": "./public/docs/"
   },
   "plugins": ["plugins/markdown"],
   "templates": {
