@@ -1,3 +1,8 @@
+/**
+ * @module controllers/UserController
+ * @description Server-side logic for managing users.
+ */
+
 var UserModel = require('../models/UserModel');
 var _ = require('underscore');
 var moment = require('moment');
@@ -5,15 +10,12 @@ var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
 var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-/**
-* UserController.js
-*
-* @description :: Server-side logic for managing users.
-*/
 module.exports = {
 
   /**
-  * UserController.list()
+  * List all users attached to the current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   list: function(req, res) {
     UserModel.find({
@@ -32,7 +34,9 @@ module.exports = {
   },
 
   /**
-  * UserController.show()
+  * Show all details of a particular user if attached to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   show: function(req, res) {
     var id = req.params.id;
@@ -83,7 +87,9 @@ module.exports = {
   },
 
   /**
-  * UserController.create()
+  * Create a new user and attach to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   create: function(req, res) {
     var user = new UserModel();
@@ -125,7 +131,9 @@ module.exports = {
   },
 
   /**
-  * UserController.update()
+  * Update an existing user if attached to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   update: function(req, res) {
     var id = req.params.id;
@@ -226,7 +234,9 @@ module.exports = {
   },
 
   /**
-  * UserController.remove()
+  * Destroy a user if attached to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   remove: function(req, res) {
     var id = req.params.id;

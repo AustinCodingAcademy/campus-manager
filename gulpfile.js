@@ -5,6 +5,8 @@ var runSequence = require('run-sequence');
 var requireDir = require('require-dir');
 var webserver = require('gulp-webserver');
 var jsdoc = require('gulp-jsdoc3');
+var ghpages = require('gh-pages');
+var path = require('path');
 requireDir('./gulp');
 
 if (['test', 'production'].indexOf(process.env.NODE_ENV) === -1) {
@@ -40,5 +42,9 @@ gulp.task('webserver', function() {
   }));
 });
 
-gulp.task('develop', ['start', 'bundle-dev', 'sass-dev']);
+gulp.task('publish', function() {
+  ghpages.publish(path.join(__dirname, 'docs'));
+});
+
+gulp.task('develop', ['start', 'bundle-dev', 'sass-dev', 'docs', 'webserver']);
 gulp.task('default', ['develop', 'watch']);
