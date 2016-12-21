@@ -1,8 +1,8 @@
-<img src="https://campus.austincodingacademy.com/img/aca-logo-header.jpg" width="200" />
+<img src="../img/aca-logo-header.png" width="400" />
 
 # Campus Manager
 
-[![CircleCI](https://circleci.com/gh/AustinCodingAcademy/aca-campus/tree/master.svg?style=svg)](https://circleci.com/gh/AustinCodingAcademy/aca-campus/tree/master)
+[![CircleCI](https://circleci.com/gh/AustinCodingAcademy/campus-manager/tree/master.svg?style=svg)](https://circleci.com/gh/AustinCodingAcademy/campus-manager/tree/master)
 
 [![Heroku](https://heroku-badge.herokuapp.com/?app=aca-campus)](http://aca-campus.herokuapp.com)
 
@@ -15,7 +15,7 @@ You first need to setup your environment.
 2.
   * Mac OSX
     1. Install [Homebrew](http://brew.sh/)
-    1. Install Cairo and MongoDB `brew install mongodb`
+    1. Install MongoDB `brew install mongodb`
     1. Create MongoDB data directory `sudo mkdir -p /data/db`
     1. Correct permissions `sudo chmod -R 0755 /data/db && sudo chown $USER /data/db`
     1. Start MongoDB `mongod`
@@ -37,7 +37,7 @@ After forking, cloning, and navigating into repository:
 1. Leave `npm run gulp` running in one terminal session
 1. navigate to `http://localhost:3000/register` to create a user
 
-## For testing:
+## Testing
 
 1. Download [Google Chrome](https://www.google.com/chrome/browser/desktop/index.html)
 1. Install Java JDK

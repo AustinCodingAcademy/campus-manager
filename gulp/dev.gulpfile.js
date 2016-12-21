@@ -76,7 +76,7 @@ gulp.task('sass-dev', function () {
 
 gulp.task('watch', function () {
   gulp.watch('public/src/scss/**', ['sass-dev']);
-  gulp.watch('../[!node_modules]**/*.js', ['docs']);
+  gulp.watch(['../[!node_modules]**/*.js', '../*.md'], ['docs']);
 });
 
 gulp.task('start', function () {

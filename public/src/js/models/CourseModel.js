@@ -54,6 +54,11 @@ module.exports = Backbone.Model.extend({
           tooltipTemplate: "<%= xLabel %> | <%= yLabel %> | <%= value === 0 ? 'Absent' : 'Present' %>",
           responsive: true,
           showLabels: false,
+          rounded: false,
+          paddingScale: 0.15,
+          colors: [ '#ffffff', '#5cb85c'],
+          labelFontFamily: 'Lato'
+
         }
       }
     }), {silent: true});
