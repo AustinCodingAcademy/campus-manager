@@ -1,12 +1,15 @@
 'use strict';
 
+require('add-to-homescreen');
+addToHomescreen();
 import 'es6-shim';
 import 'whatwg-fetch';
 const Backbone = require('backbone');
 // Backbone.ajax = require('backbone.fetch');
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import 'react.backbone';
+const moment = require('moment');
 var $ = window.$ = window.jQuery = require('jquery');
 
 const UserModel = require('./models/UserModel');
@@ -29,7 +32,6 @@ const LocationsListComponent = React.createFactory(require('./components/Locatio
 const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 const UserComponent = React.createFactory(require('./components/UserComponent'));
 const ReportComponent = React.createFactory(require('./components/ReportComponent'));
-
 
 document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('error', function (e) {
@@ -76,13 +78,22 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     user: function(id) {
-      var that = this;
-      var user = new UserModel({ _id: id });
+      const user = new UserModel({ _id: id });
+      const terms = new TermsCollection();
+      terms.fetch({
+        success: () => {
+          terms.reset(terms.filter(term => {
+            return moment.utc(term.get('start_date')).isAfter(moment());
+          }));
+          terms.trigger('add');
+        }
+      });
       user.fetch({
-        success: function() {
+        success: () => {
           ReactDOM.render(UserComponent({
             model: user,
-            currentUser: that.currentUser
+            currentUser: this.currentUser,
+            terms: terms
           }), $('#container')[0]);
         }
       });

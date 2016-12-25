@@ -42,7 +42,7 @@ module.exports = React.createBackboneClass({
           <Td column="Name">{location.get('name')}</Td>
           <Td column="Address" value={`${location.get('address')} ${location.get('city')} ${location.get('state')} ${location.get('zipcode')}`}>
             <a
-              href={`https://www.google.com/maps/search/${location.get('name')} ${location.get('address')} ${location.get('city')} ${location.get('state')} ${location.get('zipcode')}`.split(' ').join('+')}
+              href={location.link()}
               target="_blank"
             >
               {`${location.get('address')}, ${location.get('city')}, ${location.get('state')} ${location.get('zipcode')}`}

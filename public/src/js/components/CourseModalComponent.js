@@ -152,6 +152,15 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.getModel().get('name')}
               />
             </FormGroup>
+            <FormGroup controlId="textbook">
+              <ControlLabel>Textbook URL</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Textbook URL"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('textbook')}
+              />
+            </FormGroup>
             <FormGroup controlId="cost">
               <ControlLabel>Cost</ControlLabel>
               <InputGroup>

@@ -1,7 +1,7 @@
-var Backbone = require('backbone');
-var utils = require('../utils');
-var _ = require('underscore');
-var moment = require('moment');
+import * as Backbone from 'backbone';
+const utils = require('../utils');
+const _ = require('underscore');
+const moment = require('moment');
 
 module.exports = Backbone.Model.extend({
   urlRoot: 'api/users',
@@ -23,15 +23,15 @@ module.exports = Backbone.Model.extend({
     api_key: ''
   },
 
-  fullName: function() {
-    return this.get('last_name') + ', ' + this.get('first_name');
+  fullName() {
+    return `${this.get('last_name')}, ${this.get('first_name')}`;
   },
 
   displayName() {
     return `${this.get('first_name')} ${this.get('last_name')}`;
   },
 
-  roles: function() {
+  roles() {
     var roles = [];
     if (this.get('is_client')) {
       roles.push('client');
@@ -48,19 +48,31 @@ module.exports = Backbone.Model.extend({
     return roles;
   },
 
-  attendanceAverage: function() {
-    var courseDates = [];
-    this.get('courses').each(function(course) {
-      _.each(course.pastDates(), function(date) {
-        courseDates.push(date.format('YYYY-MM-DD'));
-      });
+  overallAttendance() {
+    const courseDates = [];
+    this.get('courses').each(course => {
+      courseDates.push.apply(courseDates, _.map(course.pastDates(), date => {
+        return date.format('YYYY-MM-DD');
+      }));
     });
-    courseDates = _.uniq(courseDates);
-    var attendance = _.uniq(_.map(this.get('attendance'), function(date) { return moment(date, 'YYYY-MM-DD HH:ss').format('YYYY-MM-DD'); }));
-    return Math.round(_.intersection(courseDates, attendance).length / courseDates.length * 100) || 0;
+    return this.attendanceAverage(courseDates);
   },
 
-  averageChartData: function(score) {
+  courseAttendance(course) {
+    return this.attendanceAverage(_.map(course.pastDates(), date => {
+      return date.format('YYYY-MM-DD');
+    }));
+  },
+
+  attendanceAverage(attendedDates) {
+    attendedDates = _.uniq(attendedDates);
+    const attendance = _.uniq(_.map(this.get('attendance'), date => {
+      return moment(date, 'YYYY-MM-DD HH:ss').format('YYYY-MM-DD');
+    }));
+    return Math.round(_.intersection(attendedDates, attendance).length / attendedDates.length * 100) || 0;
+  },
+
+  averageChartData(score) {
     return {
       data: {
         labels: ['', ''],
@@ -82,8 +94,8 @@ module.exports = Backbone.Model.extend({
     };
   },
 
-  profileComplete: function() {
-    var attrs = [
+  profileComplete() {
+    const attrs = [
       'first_name',
       'last_name',
       'username',
@@ -93,26 +105,26 @@ module.exports = Backbone.Model.extend({
       'codecademy',
       'zipcode'
     ]
-    return Math.round(_.filter(attrs, function(attr) {
-      return !!this.get(attr);
+    return Math.round(_.filter(attrs, attr => {
+      return this.get(attr);
     }, this).length / attrs.length * 100);
   },
 
-  parse: function(obj) {
+  parse(obj) {
     if (obj.courses) {
-      var CoursesCollection = require('../collections/CoursesCollection');
+      const CoursesCollection = require('../collections/CoursesCollection');
       obj.courses = new CoursesCollection(obj.courses, { parse: true });
     }
     return obj;
   },
 
-  gradeAverage: function() {
-    var studentDailyGrades = [];
-    var studentCheckpointGrades = [];
-    _.each(this.get('grades'), function(grade) {
-      var course = this.get('courses').get(grade.courseId);
+  overallGrade() {
+    const studentDailyGrades = [];
+    const studentCheckpointGrades = [];
+    _.each(this.get('grades'), grade => {
+      const course = this.get('courses').get(grade.courseId);
       if (course) {
-        var courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
+        const courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
         if (courseGrade) {
           if (courseGrade.checkpoint) {
             studentCheckpointGrades.push(Number(grade.score));
@@ -121,18 +133,37 @@ module.exports = Backbone.Model.extend({
           }
         }
       }
-    }, this);
+    });
+    return this.gradeAverage(studentDailyGrades, studentCheckpointGrades)
+  },
 
-    var dailyAverage = 0;
-    var dailyLength = studentDailyGrades.length;
+  courseGrade(course) {
+    const studentDailyGrades = [];
+    const studentCheckpointGrades = [];
+    _.each(this.get('grades'), grade => {
+      const courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
+      if (courseGrade) {
+        if (courseGrade.checkpoint) {
+          studentCheckpointGrades.push(Number(grade.score));
+        } else {
+          studentDailyGrades.push(Number(grade.score));
+        }
+      }
+    });
+    return this.gradeAverage(studentDailyGrades, studentCheckpointGrades)
+  },
+
+  gradeAverage(studentDailyGrades, studentCheckpointGrades) {
+    let dailyAverage = 0;
+    const dailyLength = studentDailyGrades.length;
     if (dailyLength) {
-      dailyAverage = _.reduce(studentDailyGrades, function(memo, dailyLength) { return memo + dailyLength; }) / dailyLength;
+      dailyAverage = _.reduce(studentDailyGrades, (memo, dailyLength) => { return memo + dailyLength; }) / dailyLength;
     }
 
-    var checkpointAverage = 0;
-    var checkpointLength = studentCheckpointGrades.length;
+    let checkpointAverage = 0;
+    const checkpointLength = studentCheckpointGrades.length;
     if (checkpointLength) {
-      checkpointAverage = _.reduce(studentCheckpointGrades, function(memo, checkpointLength) { return memo + checkpointLength; }) / checkpointLength;
+      checkpointAverage = _.reduce(studentCheckpointGrades, (memo, checkpointLength) => { return memo + checkpointLength; }) / checkpointLength;
     }
 
     if (!checkpointAverage && !dailyAverage){
@@ -148,15 +179,24 @@ module.exports = Backbone.Model.extend({
     return this.grade_average;
   },
 
-  currentCourse: function() {
+  currentCourse() {
     return this.get('courses').find(course => {
       return moment().isBetween(course.get('term').get('start_date'), course.get('term').get('end_date'));
-    });
+    }) || this.futureCourse() || this.lastCourse() || this.blankCourse();
   },
 
-  futureCourse: function() {
+  futureCourse() {
     return this.get('courses').find(course => {
       return moment().isBefore(course.get('term').get('start_date'));
     });
+  },
+
+  lastCourse() {
+    return this.get('courses').first();
+  },
+
+  blankCourse() {
+    const CourseModel = require('./CourseModel');
+    return new CourseModel();
   }
 });

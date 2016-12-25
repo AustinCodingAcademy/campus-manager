@@ -13,6 +13,7 @@
     "node": "6.7.0"
   },
   "dependencies": {
+    "add-to-homescreen": "^3.2.6",
     "atob": "^2.0.3",
     "aws-sdk": "^2.7.0",
     "babel-preset-es2015": "^6.18.0",
@@ -82,10 +83,10 @@
     "react-bootstrap": "^0.30.7",
     "react-chartjs": "github:jhudson8/react-chartjs#da9f718c19b8b3904fd9c46c151ae48b401b7a97",
     "react-codemirror": "^0.2.6",
-    "react-data-grid": "^1.0.71",
     "react-datepicker": "^0.39.0",
     "react-dom": "15.3.2",
     "react-dropzone": "3.7.2",
+    "react-equalizer": "^1.0.4",
     "react-fontawesome": "^1.5.0",
     "react-gravatar": "2.6.1",
     "react-modal": "1.5.2",

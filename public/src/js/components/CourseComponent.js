@@ -277,7 +277,7 @@ module.exports = React.createBackboneClass({
                 className="btn btn-default"
               >
                 <FontAwesome name="video-camera" />
-                &nbsp; Start Conference
+                &nbsp; Virtual Classroom
               </a>
             </ButtonGroup>
           </Col>

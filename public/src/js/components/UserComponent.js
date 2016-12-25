@@ -1,332 +1,393 @@
-var _ = require('underscore');
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Backbone = require('backbone');
-var BaseModal = require('./BaseModal');
-var UserModalComponent = require('./UserModalComponent');
-var moment = require('moment');
-var DoughnutChart = require('react-chartjs').Doughnut;
-var Gravatar = require('react-gravatar');
-var Hashids = require('hashids');
-var hashids = new Hashids();
-var TermsCollection = require('../collections/TermsCollection');
-var CourseRegistrationComponent = require('./CourseRegistrationComponent');
-var UserAccountComponent = require('./UserAccountComponent');
-var ScreenShareModal = require('./ScreenShareModal');
+import * as _ from 'underscore';
+import * as React from 'react';
+import * as Backbone from 'backbone';
+const moment = require('moment');
+import { Doughnut } from 'react-chartjs';
+import { Col, Row, Panel, PanelGroup, Table, Well, ControlLabel } from 'react-bootstrap';
+const Gravatar = require('react-gravatar');
+import Equalizer from 'react-equalizer';
+const Hashids = require('hashids');
+const hashids = new Hashids();
+const FontAwesome = require('react-fontawesome');
+const TermsCollection = require('../collections/TermsCollection');
+const UserAccountComponent = require('./UserAccountComponent');
+const UserModalComponent = require('./UserModalComponent');
 
 module.exports = React.createBackboneClass({
-
-  getInitialState: function() {
+  getInitialState() {
     return {
-      modalIsOpen: false,
-      screenShareModalIsOpen: false
-    };
+      showModal: false,
+      user: this.getModel(),
+      activeKey: this.getModel().currentCourse().id
+    }
   },
 
-  userModal: function() {
-    ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(UserModalComponent({
-      collection: this.getCollection(),
-      model: this.getModel(),
-      rolesHidden: true
-    }), $('#modal-container')[0]);
-    $('#user-modal' + this.getModel().id).modal('open');
-    Materialize.updateTextFields();
+  close() {
+    this.setState({ showModal: false });
   },
 
-  showScreenShareModal: function(e) {
+  open(e) {
     e.preventDefault();
-    this.setState({screenShareModalIsOpen: true});
+    this.setState({
+      showModal: true,
+    });
   },
 
-  closeScreenShareModal: function() {
-    this.setState({screenShareModalIsOpen: false});
-  },
-
-  checkIn: function(date) {
-    var that = this;
+  checkIn(date) {
     $.ajax('/api/users/attendance', {
       method: 'post',
       data: {
         idn: this.getModel().get('idn'),
         date: date
       },
-      success: function() {
-        that.getModel().fetch();
+      success: () => {
+        this.getModel().fetch();
       }
     });
   },
 
-  changeAttendance: function(e) {
+  changeAttendance(e) {
+    e.preventDefault();
+    const date = e.currentTarget.getAttribute('data-date');
     if (this.props.currentUser.get('is_admin') || this.props.currentUser.get('is_instructor')) {
-      this.checkIn($(e.currentTarget).data('date'));
-    } else if (moment($(e.currentTarget).data('date'), 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
-      var code = prompt('Enter Daily Attendance Code');
-      var hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
+      this.checkIn(date);
+    } else if (moment(date, 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
+      const code = prompt('Enter Daily Attendance Code');
+      const hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
       if (code && code.toUpperCase() === hash) {
-        this.checkIn($(e.currentTarget).data('date'));
+        this.checkIn(date);
       }
     }
   },
 
-  generateApiKey: function(e) {
+  generateApiKey(e) {
     e.preventDefault();
-    var that = this;
     this.getModel().save({
       generate_api_key: true
     }, {
-      success: function() {
-        if (that.getModel().id === that.props.currentUser.id) {
-          that.props.currentUser.set('api_key', that.getModel().get('api_key'));
+      success: () => {
+        if (this.getModel().id === this.props.currentUser.id) {
+          this.props.currentUser.set('api_key', this.getModel().get('api_key'));
         }
       }
     });
     this.getModel().unset('generate_api_key', { silent: true });
   },
 
-  render: function() {
-    var userAccountModel = new Backbone.Model({
-      totalPaid: 0,
-      totalCourseCost: 0,
-      courseCharges: []
-    });
+  handleSelect(activeKey) {
+    this.setState({ activeKey });
+  },
 
-    var courseCards = this.getModel().get('courses').map(function(course, idx) {
-      if (course.get('cost') && course.get('cost') > 0) {
-        userAccountModel.set('totalCourseCost', userAccountModel.get('totalCourseCost') + course.get('cost'));
-        userAccountModel.get('courseCharges').push(
-          <tr key={course.id + course.get('cost')}>
-            <td>${Number(this.getModel().get('price') || course.get('cost')).toFixed(2)}</td>
-            <td>{course.get('name')}</td>
-          </tr>
-        )
-      }
-      var dates = _.map(course.classDates(), function(date, idx) {
-        var attended = 'fa fa-calendar-o';
+  render() {
+    const courses = this.getModel().get('courses').map((course, i) => {
+      const dates = course.classDates().map((date, j) => {
+        let attended = <FontAwesome name="calendar-o" />;
+        let matched;
+        let checkin = <span>Absent</span>;
+        const video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (date.isSameOrBefore(moment(), 'day')) {
-          attended = 'fa fa-calendar-times-o red-text';
-          var matched = _.find(this.getModel().get('attendance'), function(attended) {
-            return moment(attended, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
+          attended = <FontAwesome name="calendar-times-o" className="text-danger" />
+          matched = _.find(this.getModel().get('attendance'), (attendedDate) => {
+            return moment(attendedDate, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
           });
           if (matched) {
-            attended = 'fa fa-calendar-check-o green-text';
+            attended = <FontAwesome name="calendar-check-o" className="text-success" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')} />
+            checkin = <span>Present</span>
           }
         }
-        var video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
-        if (video) {
-          return (
-            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> <a href={video.link} target="_blank">{date.format("ddd, MMM D")}</a></p>
-          );
-        } else {
-          return (
-            <p className='nowrap' key={idx}><i className={attended} onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}></i> {date.format("ddd, MMM D")}</p>
-          );
+        if (!matched && (date.isSame(moment(), 'day') || this.props.currentUser.roles().some(role => ['instructor', 'admin'].includes(role)))) {
+          checkin = <a href="#" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}>Check In</a>;
         }
-      }, this);
-
-      var grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), function(grade, idx) {
         return (
-          <p key={idx}>{grade.name}: <span className={'score'+ grade.score}>{grade.score}</span></p>
+          <tr key={`${i}-${j}`}>
+            <td>{date.format("ddd, MMM D")}</td>
+            <td>{attended} {checkin}</td>
+            <td>
+              { video ?
+                <a href={video.link} target="_blank">
+                  <FontAwesome name="youtube-play" />
+                  &nbsp; Watch
+                </a>
+                : '' }
+            </td>
+          </tr>
         );
       });
-      var clearfix = idx === 0 ? 'clearfix' : '';
+
+      const grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), (grade, idx) => {
+        return (
+          <tr key={idx}>
+            <td>{grade.name}</td>
+            <td className={'score'+ grade.score}>{grade.score}</td>
+          </tr>
+        );
+      });
       return (
-        <div key={idx} className={'col s12 m6 l4 ' + clearfix}>
-          <div className="card">
-            <div className="card-content">
-              <span className="card-title">
-                <a href={course.get('textbook')} target="_blank">
-                  <i className="fa fa-book fa-fw"></i>
-                  {course.get('name')}
-                </a>
-              </span>
-              <br />
-              <br />
-              <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank">
-                <i className="fa fa-video-camera"></i> Conference
-              </a>
-              <br />
-              <small><a href="#" onClick={this.showScreenShareModal}><i className="fa fa-info-circle" aria-hidden="true"></i> Screenshare Instructions</a></small>
-              <br />
-              <br />
-              <p dangerouslySetInnerHTML={{__html:course.get('location').locationAddress().split('\n').join('<br />')}}></p>
-              <div className="row">
-                <div className="col s6">
-                  <h5>Attendance</h5>
+        <Panel
+          key={course.id}
+          header={
+            <h3>
+              {course.get('name')}
+              <small className="pull-right">
+                {course.get('term').get('name')}
+              </small>
+            </h3>
+          }
+          eventKey={course.id}
+        >
+          <Row>
+            <Col xs={12} md={4}>
+              <h4 className="text-center">Details</h4>
+              <Well bsSize="small">
+                <Row>
+                  <Col xs={6}>
+                    <p>
+                      <ControlLabel>Textbook</ControlLabel>
+                      <br />
+                      <a href={course.get('textbook')} target="_blank">
+                      <FontAwesome name="book" fixedWidth={true} />
+                      &nbsp; Textbook
+                      </a>
+                    </p>
+                    <p>
+                      <ControlLabel>Virtual Classroom</ControlLabel>
+                      <br />
+                      <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank">
+                        <FontAwesome name="video-camera" fixedWidth={true} />
+                        &nbsp; Enter Room
+                      </a>
+                      <br />
+                      <small>
+                        <a
+                          href="https://chrome.google.com/webstore/detail/aca-desktop-streamer/imnhhcdlfbbhajjgbagfagnjgkmfppcg"
+                          target="_blank"
+                        >
+                          <FontAwesome name="info-circle" fixedWidth={true} />
+                          &nbsp; Screenshare
+                        </a>
+                      </small>
+                    </p>
+                  </Col>
+                  <Col xs={6}>
+                    <p>
+                      <ControlLabel>Address</ControlLabel>
+                      <br />
+                      <a href={course.get('location').link()} target="_blank">
+                        <strong>{course.get('location').get('name')}</strong>
+                        <br />
+                        {course.get('location').get('address')}
+                        <br />
+                        {`${course.get('location').get('city')}, ${course.get('location').get('state')}`}
+                      </a>
+                    </p>
+                  </Col>
+                </Row>
+              </Well>
+              <Row>
+                <Col xs={6} md={12}>
+                  <h4 className="text-center">Course Attendance</h4>
+                  <h4 className={`score${this.getModel().courseAttendance(course)} text-center`}>
+                    {this.getModel().courseAttendance(course)}%
+                  </h4>
+                  <p aria-hidden="true" className="center-align">
+                    <Doughnut
+                      data={this.getModel().averageChartData(this.getModel().courseAttendance(course)).data}
+                      options={this.getModel().averageChartData(this.getModel().courseAttendance(course)).options}
+                    />
+                  </p>
+                </Col>
+                <Col xs={6} md={12}>
+                  <h4 className="text-center">Course Grade Average</h4>
+                  <h4 className={`score${this.getModel().courseGrade(course)} text-center`}>
+                    {this.getModel().courseGrade(course)}%
+                  </h4>
+                  <p aria-hidden="true" className="center-align">
+                    <Doughnut
+                      data={this.getModel().averageChartData(this.getModel().courseGrade(course)).data}
+                      options={this.getModel().averageChartData(this.getModel().courseGrade(course)).options}
+                    />
+                  </p>
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={12} md={4}>
+              <h4 className="text-center">Attendance</h4>
+              <Table striped>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Attended</th>
+                    <th>Screencast</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {dates}
-                </div>
-                <div className="col s6">
-                  <h5>Grades</h5>
+                </tbody>
+              </Table>
+            </Col>
+            <Col xs={12} md={4}>
+              <h4 className="text-center">Grades</h4>
+              <Table striped>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {grades}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }, this);
-
-    _.each(
-        _.filter(this.getModel().get('credits').trim().split(',').map(function(credit) {
-          return _.map(credit.trim().split(':'), function(item) {
-            return item.trim();
-          });
-        }), function(credit) {
-      return credit.length === 2 && Number(credit[1]);
-    }), (credit, idx) => {
-      userAccountModel.set('totalCourseCost', userAccountModel.get('totalCourseCost') - Number(credit[1]));
-      userAccountModel.get('courseCharges').push(
-        <tr key={idx}>
-          <td>(- ${Number(credit[1]).toFixed(2)})</td>
-          <td>{credit[0]}</td>
-        </tr>
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+        </Panel>
       );
     });
 
-    var terms = new TermsCollection();
-    terms.fetch({
-      success: function() {
-        terms.reset(terms.filter(function(term) {
-          return moment.utc(term.get('start_date')).isAfter(moment());
-        }));
-        terms.trigger('add');
-      }
-    });
-
-    if (userAccountModel.get('totalPaid') - userAccountModel.get('totalCourseCost') < 0) {
-      userAccountModel.set('status', -1);
-    } else if (userAccountModel.get('totalPaid') - userAccountModel.get('totalCourseCost') < 490) {
-      userAccountModel.set('status', 0);
-    }
-
-    var hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
+    const hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
 
     return (
       <div>
-        <div className="row">
-          <div className="col s12 m6 l4">
-            <div className="card">
-              <div className="card-content">
-                <span className="card-title">
-                  <div className="valign-wrapper">
-                    <a className={hidden} onClick={this.userModal} style={{position: 'absolute', right: '10px', top: '0px'}}>
-                      <i className="material-icons">mode_edit</i>
+        <Row>
+          <Equalizer>
+            <Col xs={12} md={6} lg={4}>
+              <Panel
+                header={
+                  <h3>
+                    Profile
+                    <a className={`${hidden} pull-right`} onClick={this.open}>
+                      <FontAwesome name="pencil" fixedWidth={true} />
                     </a>
-                    <a href="http://en.gravatar.com/" target="_blank">
-                      <Gravatar email={this.getModel().get('username')} className="circle" protocol="https://" />
-                    </a>
-                    <div className="valign">
-                      &nbsp;&nbsp;{this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
-                    </div>
-                  </div>
-                </span>
+                  </h3>
+                }
+              >
+                <h4>
+                  <a
+                    href="http://en.gravatar.com/"
+                    target="_blank"
+                    className="pull-left"
+                    style={{marginRight: '1rem'}}
+                  >
+                    <Gravatar email={this.getModel().get('username')} protocol="https://" />
+                  </a>
+                  {this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
+                </h4>
                 <p>
-                  <i className="fa fa-fw fa-envelope"></i>
-                  <a className="blue-text text-darken-2" href={'mailto:' + this.getModel().get('username')} target="_blank">
+                  <a href={'mailto:' + this.getModel().get('username')} target="_blank">
                     {this.getModel().get('username')}
                   </a>
                 </p>
                 <p>
-                  <i className="fa fa-fw fa-mobile"></i>
-                  <a className="blue-text text-darken-2" href={'tel:'+ this.getModel().get('phone')}>
-                    <span className="hidden">Phone: </span>{this.getModel().get('phone')}
-                  </a>
-                </p>
-                <p>
-                  <i className="fa fa-fw fa-github"></i>
-                  <a className="blue-text text-darken-2" title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
-                    {this.getModel().get('github')}
-                  </a>
-                </p>
-                <p>
-                  <i className="fa fa-fw fa-globe"></i>
-                  <a className="blue-text text-darken-2" title={'Website'} href={this.getModel().get('website')} target="_blank">
+                  <FontAwesome name="globe" fixedWidth={true} />
+                  <a title={'Website'} href={this.getModel().get('website')} target="_blank">
                     {this.getModel().get('website')}
                   </a>
                 </p>
-                <p>
-                  <i className="fa fa-fw fa-code"></i>
-                  <a className="blue-text text-darken-2" title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
-                    {this.getModel().get('codecademy')}
-                  </a>
-                </p>
-                <p>
-                  <i className="fa fa-fw fa-map-marker"></i>
-                  <a className="blue-text text-darken-2" href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
-                    <span className="hidden">ZIP: </span>{this.getModel().get('zipcode')}
-                  </a>
-                </p>
-                <div aria-hidden="true" className="center-align" style={{position: 'absolute', right: '-20px', bottom: '95px', width: '100px'}}>
-                  <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
-                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
-                  <small>Profile</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          {this.getModel().get('is_admin') ?
-          <div className="col s12 m6 l6">
-            <div className="card">
-              <div className="card-content">
-                <span className="card-title">Admin Tips</span>
+                <Row>
+                  <Col xs={6}>
+                    <p>
+                      <FontAwesome name="mobile" fixedWidth={true} />
+                      <a href={'tel:'+ this.getModel().get('phone')}>
+                        {this.getModel().get('phone')}
+                      </a>
+                    </p>
+                    <p>
+                      <FontAwesome name="github" fixedWidth={true} />
+                      <a title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
+                        {this.getModel().get('github')}
+                      </a>
+                    </p>
+                    <p>
+                      <FontAwesome name="code" fixedWidth={true} />
+                      <a title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
+                        {this.getModel().get('codecademy')}
+                      </a>
+                    </p>
+                    <p>
+                      <FontAwesome name="map-marker" fixedWidth={true} />
+                      <a href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
+                        {this.getModel().get('zipcode')}
+                      </a>
+                    </p>
+                  </Col>
+                  <Col xs={6} className="text-center">
+                    <div aria-hidden="true">
+                      <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
+                      <Doughnut data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
+                      <small>Profile Complete</small>
+                    </div>
+                  </Col>
+                </Row>
+              </Panel>
+            </Col>
+            {this.getModel().get('is_admin') ?
+            <Col xs={12} md={6} lg={4}>
+              <Panel header={<h3>Admin Tips</h3>}>
                 <p>New User Registration can be found at</p>
                 <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small>
                 <p>Users can reset their password at</p>
                 <small><pre>{process.env.DOMAIN + '/reset'}</pre></small>
                 <p>Your API Key is</p>
                 <small><pre>{this.getModel().get('api_key')}</pre> <a href="#" onClick={this.generateApiKey}>generate</a></small>
-              </div>
-            </div>
-          </div>
+              </Panel>
+            </Col>
+            :
+            ''
+            }
+            {this.getModel().get('courses').length ?
+            <Col xs={6} md={3} lg={2}>
+              <Panel header={<h3>Overall Grade Average</h3>}>
+                <h4 className={`score${this.getModel().overallGrade()} text-center`}>
+                  {this.getModel().overallGrade()}%
+                </h4>
+                <p aria-hidden="true">
+                  <Doughnut
+                    data={this.getModel().averageChartData(this.getModel().overallGrade()).data}
+                    options={this.getModel().averageChartData(this.getModel().overallGrade()).options}
+                  />
+                </p>
+              </Panel>
+            </Col>
+            : ''}
+          </Equalizer>
+          {this.getModel().get('courses').length ?
+          <Col xs={6} md={3} lg={2}>
+            <Panel header={<h3>Overall Attendance</h3>}>
+              <h4 className={`score${this.getModel().overallAttendance()} text-center`}>
+                {this.getModel().overallAttendance()}%
+              </h4>
+              <p aria-hidden="true" className="center-align">
+                <Doughnut
+                  data={this.getModel().averageChartData(this.getModel().overallAttendance()).data}
+                  options={this.getModel().averageChartData(this.getModel().overallAttendance()).options}
+                />
+              </p>
+            </Panel>
+          </Col>
+          : ''}
+          {this.getModel().get('is_student') ?
+          <Col xs={12} lg={4}>
+            <UserAccountComponent
+              model={this.getModel()}
+              terms={this.props.terms}
+            />
+          </Col>
           :
           ''
           }
-          {this.getModel().get('courses').length ?
-          <div className="col s12 m6 l4">
-            <div className="card">
-              <div className="card-content">
-                <span className="card-title">Grade Average: <span className={'score'+ this.getModel().gradeAverage()}>{this.getModel().gradeAverage()}%</span></span>
-                <p aria-hidden="true" className="center-align">
-                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().gradeAverage()).data} options={this.getModel().averageChartData(this.getModel().gradeAverage()).options} />
-                </p>
-              </div>
-            </div>
-          </div>
-          : ''}
-          {this.getModel().get('courses').length ?
-          <div className="col s12 m6 l4">
-            <div className="card">
-              <div className="card-content">
-                <span className="card-title">Attendance: <span className={'score'+ this.getModel().attendanceAverage()}>{this.getModel().attendanceAverage()}%</span></span>
-                <p aria-hidden="true" className="center-align">
-                  <DoughnutChart data={this.getModel().averageChartData(this.getModel().attendanceAverage()).data} options={this.getModel().averageChartData(this.getModel().attendanceAverage()).options} />
-                </p>
-              </div>
-            </div>
-          </div>
-          : ''}
-        </div>
-        {this.getModel().get('is_student') ?
-        <div className="row">
-            <div className="col s12 m6">
-              <CourseRegistrationComponent user={this.getModel()} collection={terms} model={userAccountModel}/>
-            </div>
-            <div className="col s12 m6">
-              <UserAccountComponent model={this.getModel()} userAccountModel={userAccountModel} user={this.getModel()} terms={terms} paymentModel = {new Backbone.Model({ paymentAmount: 0, username: '' })}/>
-            </div>
-          </div>
-        :
-        ''
-        }
-        <div className="row">
-          {courseCards}
-        </div>
-        <BaseModal
-          isOpen={this.state.screenShareModalIsOpen}
-          onRequestClose={this.closeScreenShareModal}
-          shouldCloseOnOverlayClick={true}>
-          <ScreenShareModal />
-        </BaseModal>
+          <Col xs={12}>
+            <PanelGroup activeKey={this.state.activeKey} onSelect={this.handleSelect} accordion>
+              {courses}
+            </PanelGroup>
+          </Col>
+        </Row>
+        <UserModalComponent
+          show={this.state.showModal}
+          onHide={this.close}
+          model={this.state.user}
+          title='Edit Profile'
+          currentUser={this.props.currentUser}
+        />
       </div>
     );
   }

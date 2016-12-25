@@ -11,6 +11,7 @@ $icon-font-path: '../../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
   '../../../node_modules/react-select/dist/react-select',
   '../../../node_modules/react-datepicker/dist/react-datepicker',
   '../../../node_modules/font-awesome/scss/font-awesome',
+  '../../../node_modules/add-to-homescreen/dist/style/addtohomescreen',
   './components/buttons',
   './components/modal',
   './components/youtube-uploader';
@@ -103,4 +104,16 @@ html, body {
 
 .text-danger {
   color: $brand-danger;
+}
+
+.text-success {
+  color: $brand-success;
+}
+
+.input-group .form-control {
+  z-index: 0;
+}
+
+.panel-title a {
+  cursor: pointer;
 }
