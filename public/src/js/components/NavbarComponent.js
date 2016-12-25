@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as _ from 'underscore';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Button } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
 const AppsModalComponent = require('./AppsModalComponent');
-
+const FeedbackModalComponent = require('./FeedbackModalComponent');
 
 module.exports = React.createBackboneClass({
   links: {
@@ -12,16 +12,28 @@ module.exports = React.createBackboneClass({
   },
 
   getInitialState() {
-    return { showModal: false };
+    return {
+      showAppsModal: false,
+      showFeedbackModal: false
+    };
   },
 
-  close() {
-    this.setState({ showModal: false });
+  closeAppsModal() {
+    this.setState({ showAppsModal: false });
   },
 
-  open(e) {
+  openAppsModal(e) {
     e.preventDefault();
-    this.setState({ showModal: true });
+    this.setState({ showAppsModal: true });
+  },
+
+  closeFeedbackModal() {
+    this.setState({ showFeedbackModal: false });
+  },
+
+  openFeedbackModal(e) {
+    e.preventDefault();
+    this.setState({ showFeedbackModal: true });
   },
 
   display(link) {
@@ -50,7 +62,7 @@ module.exports = React.createBackboneClass({
           <Navbar.Collapse>
             <Nav pullRight>
               <li role="presentation">
-                <a href='#' onClick={this.open}>
+                <a href='#' onClick={this.openAppsModal}>
                   <FontAwesome name="th" />
                 </a>
               </li>
@@ -70,9 +82,16 @@ module.exports = React.createBackboneClass({
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+        <Button className="btn-feedback" bsStyle="warning" onClick={this.openFeedbackModal}>
+          <FontAwesome name="comments-o" />
+        </Button>
         <AppsModalComponent
-          show={this.state.showModal}
-          onHide={this.close}
+          show={this.state.showAppsModal}
+          onHide={this.closeAppsModal}
+        />
+        <FeedbackModalComponent
+          show={this.state.showFeedbackModal}
+          onHide={this.closeFeedbackModal}
         />
       </div>
     )

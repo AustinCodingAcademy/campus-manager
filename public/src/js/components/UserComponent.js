@@ -180,6 +180,11 @@ module.exports = React.createBackboneClass({
                         {`${course.get('location').get('city')}, ${course.get('location').get('state')}`}
                       </a>
                     </p>
+                    <p>
+                      <ControlLabel>Special Note</ControlLabel>
+                      <br />
+                      {course.get('location').get('note')}
+                    </p>
                   </Col>
                 </Row>
               </Well>
@@ -317,7 +322,7 @@ module.exports = React.createBackboneClass({
                   </Col>
                   <Col xs={6} className="text-center">
                     <div aria-hidden="true">
-                      <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
+                      <h4 className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</h4>
                       <Doughnut data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
                       <small>
                         Profile
