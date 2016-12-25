@@ -279,6 +279,7 @@ module.exports = React.createBackboneClass({
                 </p>
                 <p>
                   <FontAwesome name="globe" fixedWidth={true} />
+                  &nbsp;
                   <a title={'Website'} href={this.getModel().get('website')} target="_blank">
                     {this.getModel().get('website')}
                   </a>
@@ -287,24 +288,28 @@ module.exports = React.createBackboneClass({
                   <Col xs={6}>
                     <p>
                       <FontAwesome name="mobile" fixedWidth={true} />
+                      &nbsp;
                       <a href={'tel:'+ this.getModel().get('phone')}>
                         {this.getModel().get('phone')}
                       </a>
                     </p>
                     <p>
                       <FontAwesome name="github" fixedWidth={true} />
+                      &nbsp;
                       <a title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
                         {this.getModel().get('github')}
                       </a>
                     </p>
                     <p>
                       <FontAwesome name="code" fixedWidth={true} />
+                      &nbsp;
                       <a title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
                         {this.getModel().get('codecademy')}
                       </a>
                     </p>
                     <p>
                       <FontAwesome name="map-marker" fixedWidth={true} />
+                      &nbsp;
                       <a href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
                         {this.getModel().get('zipcode')}
                       </a>
@@ -314,7 +319,11 @@ module.exports = React.createBackboneClass({
                     <div aria-hidden="true">
                       <span className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</span><br />
                       <Doughnut data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
-                      <small>Profile Complete</small>
+                      <small>
+                        Profile
+                        <br />
+                        Complete
+                      </small>
                     </div>
                   </Col>
                 </Row>

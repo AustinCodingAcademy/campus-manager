@@ -37,7 +37,13 @@ module.exports = React.createBackboneClass({
         <Navbar collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#">Campus Manager</a>
+              <a href="#">
+                <img
+                  src="img/ACA_standard_mark_small.png"
+                  style={{ maxHeight: '25px', display: 'inline', marginRight: '10px' }}
+                />
+                Campus Manager
+              </a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
