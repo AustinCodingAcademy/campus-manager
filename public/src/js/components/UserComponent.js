@@ -121,7 +121,17 @@ module.exports = React.createBackboneClass({
         );
       });
 
-      const grades = _.map(_.where(this.getModel().get('grades'), { courseId: course.id }), (grade, idx) => {
+      const grades = _.map(_.filter(this.getModel().get('grades'), grade => {
+        return grade.courseId === course.id && course.get('grades').some(courseGrade => {
+          return grade.name === courseGrade.name;
+        });
+      }).sort((a, b) => {
+        return course.get('grades').findIndex(grade => {
+          return grade.name === a.name;
+        }) < course.get('grades').findIndex(grade => {
+          return grade.name === b.name;
+        }) ? -1 : 1;
+      }), (grade, idx) => {
         return (
           <tr key={idx}>
             <td>{grade.name}</td>
@@ -197,7 +207,7 @@ module.exports = React.createBackboneClass({
               </Well>
               <Row>
                 <Col xs={6} md={12}>
-                  <h4 className="text-center">Course Attendance</h4>
+                  <h4 className="text-center">Attendance</h4>
                   <h4 className={`score${this.getModel().courseAttendance(course)} text-center`}>
                     {this.getModel().courseAttendance(course)}%
                   </h4>
@@ -209,7 +219,7 @@ module.exports = React.createBackboneClass({
                   </p>
                 </Col>
                 <Col xs={6} md={12}>
-                  <h4 className="text-center">Course Grade Average</h4>
+                  <h4 className="text-center">Grade Average</h4>
                   <h4 className={`score${this.getModel().courseGrade(course)} text-center`}>
                     {this.getModel().courseGrade(course)}%
                   </h4>
@@ -273,31 +283,38 @@ module.exports = React.createBackboneClass({
                   </h3>
                 }
               >
-                <h4>
-                  <a
-                    href="http://en.gravatar.com/"
-                    target="_blank"
-                    className="pull-left"
-                    style={{marginRight: '1rem'}}
-                  >
-                    <Gravatar email={this.getModel().get('username')} protocol="https://" />
-                  </a>
-                  {this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
-                </h4>
-                <p>
-                  <a href={'mailto:' + this.getModel().get('username')} target="_blank">
-                    {this.getModel().get('username')}
-                  </a>
-                </p>
-                <p>
-                  <FontAwesome name="globe" fixedWidth={true} />
-                  &nbsp;
-                  <a title={'Website'} href={this.getModel().get('website')} target="_blank">
-                    {this.getModel().get('website')}
-                  </a>
-                </p>
                 <Row>
-                  <Col xs={6}>
+                  <Col xs={12}>
+                    <h4>
+                      <a
+                        href="http://en.gravatar.com/"
+                        target="_blank"
+                        className="pull-left"
+                        style={{marginRight: '1rem'}}
+                      >
+                        <Gravatar email={this.getModel().get('username')} protocol="https://" />
+                      </a>
+                      {this.getModel().get('first_name') + ' ' + this.getModel().get('last_name')}
+                    </h4>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col xs={9}>
+                    <p>
+                      <FontAwesome name="envelope" fixedWidth={true} />
+                      &nbsp;
+                      <a href={'mailto:' + this.getModel().get('username')} target="_blank">
+                        {this.getModel().get('username')}
+                      </a>
+                    </p>
+                    <p>
+                      <FontAwesome name="globe" fixedWidth={true} />
+                      &nbsp;
+                      <a title={'Website'} href={this.getModel().get('website')} target="_blank">
+                        {this.getModel().get('website')}
+                      </a>
+                    </p>
                     <p>
                       <FontAwesome name="mobile" fixedWidth={true} />
                       &nbsp;
@@ -327,7 +344,7 @@ module.exports = React.createBackboneClass({
                       </a>
                     </p>
                   </Col>
-                  <Col xs={6} className="text-center">
+                  <Col xs={3} className="text-center">
                     <div aria-hidden="true">
                       <h4 className={'score' + this.getModel().profileComplete()}>{this.getModel().profileComplete() + '%'}</h4>
                       <Doughnut data={this.getModel().averageChartData(this.getModel().profileComplete()).data} options={this.getModel().averageChartData(this.getModel().profileComplete()).options} />
