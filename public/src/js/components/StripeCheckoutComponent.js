@@ -6,7 +6,6 @@ const FontAwesome = require('react-fontawesome');
 module.exports = React.createBackboneClass({
   getInitialState() {
     return {
-      disabled: false,
       paymentAmount: this.props.paymentAmount,
       course: this.props.course
     };
@@ -25,15 +24,23 @@ module.exports = React.createBackboneClass({
         this.setState({
           paymentAmount: 0
         });
-        this.getModel().fetch();
+        this.state.course.get('registrations').add(this.getModel());
+        const urlRoot = this.state.course.urlRoot;
+        this.state.course.urlRoot += '/register';
+        this.state.course.save(null, {
+          success: () => {
+            this.state.course.urlRoot = urlRoot;
+            this.getModel().fetch();
+          }
+        });
       }
     });
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      paymentAmount: this.props.paymentAmount,
-      course: this.props.course
+      paymentAmount: nextProps.paymentAmount,
+      course: nextProps.course
     });
   },
 
@@ -49,7 +56,7 @@ module.exports = React.createBackboneClass({
         amount={this.state.paymentAmount}
         email={this.getModel().get('username')}
       >
-        <Button block bsStyle="primary" disabled={this.state.disabled} data-test="make-payment">
+        <Button block bsStyle="primary" disabled={this.state.paymentAmount < 490 || !this.state.course.id} data-test="make-payment">
           <FontAwesome name="credit-card" /> 3. Pay With Card
         </Button>
       </StripeCheckout>

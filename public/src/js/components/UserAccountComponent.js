@@ -9,6 +9,7 @@ const Select = require('react-select');
 const CourseOptionComponent = require('./CourseOptionComponent');
 const CourseValueComponent = require('./CourseValueComponent');
 const CourseModel = require('../models/CourseModel');
+const CoursesCollection = require('../collections/CoursesCollection');
 
 module.exports = React.createBackboneClass({
   mixins: [
@@ -35,7 +36,7 @@ module.exports = React.createBackboneClass({
   },
 
   render() {
-    const courses = [];
+    const courses = new CoursesCollection();
     const currentCourse = this.getModel().currentCourse();
     const futureCourse = this.getModel().futureCourse();
     let totalCourseCost = 0;
@@ -71,25 +72,25 @@ module.exports = React.createBackboneClass({
       );
     });
 
-    if (currentCourse) {
+    if (currentCourse && currentCourse.id) {
       currentCourse.set('registered', true);
-      courses.push(currentCourse);
+      courses.add(currentCourse);
     }
 
     if (futureCourse) {
       futureCourse.set('registered', true);
-      courses.push(futureCourse);
+      courses.add(futureCourse);
     } else {
       this.props.terms.each(term => {
         term.get('courses').each(course => {
-          courses.push(course);
+          courses.add(course);
         });
       });
     }
 
     const options = [];
 
-    _.each(courses, course => {
+    courses.each(course => {
       const label = `${course.get('name')}
       ${course.get('location').get('name')}
       ${course.get('location').get('address')}
@@ -100,7 +101,8 @@ module.exports = React.createBackboneClass({
         value: course.id,
         label,
         course,
-        user: this.props.user
+        user: this.props.user,
+        disabled: course.full() && !course.get('registered')
       });
     });
 
@@ -157,7 +159,9 @@ module.exports = React.createBackboneClass({
           </Col>
           <Col xs={12} md={4} lg={12}>
             <FormGroup controlId="course-payment">
-              <ControlLabel>1. What are you paying for?</ControlLabel>
+              <ControlLabel>
+                1. What are you paying for?
+              </ControlLabel>
               <Select
                 name="courses"
                 options={options}
@@ -171,7 +175,10 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="payment-amount">
-              <ControlLabel>2. Enter Payment Amount</ControlLabel>
+              <ControlLabel>
+                2. Enter Payment Amount
+                <small>&nbsp; (Minimum payment is $490.00)</small>
+              </ControlLabel>
               <InputGroup>
                 <InputGroup.Addon>$</InputGroup.Addon>
                 <FormControl

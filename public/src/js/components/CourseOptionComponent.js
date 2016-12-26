@@ -1,4 +1,5 @@
-var React = require('react');
+import * as React from 'react';
+import { Label } from 'react-bootstrap';
 
 module.exports = React.createClass({
 	handleMouseDown (event) {
@@ -14,11 +15,11 @@ module.exports = React.createClass({
 		this.props.onFocus(this.props.option, event);
 	},
 	render () {
-		var badge = '';
+		let label = '';
 		if (this.props.option.course.get('registered')) {
-			badge = (
+			label = (
 				<small>
-          <span className="new badge" data-badge-caption="registered"></span>
+          <Label bsStyle="success">Registered</Label>
         </small>
 			);
 		}
@@ -29,7 +30,7 @@ module.exports = React.createClass({
 			onMouseEnter={this.handleMouseEnter}
 			onMouseMove={this.handleMouseMove}
 			title={this.props.option.title}>
-				<h4><strong>{this.props.option.course.get('name')}</strong>{badge}</h4>
+				<h4><strong>{this.props.option.course.get('name')}</strong> {label}</h4>
 				{this.props.option.course.get('location').get('name')}
 				<br />
 				{this.props.option.course.get('location').get('address') + ', '}
@@ -39,7 +40,7 @@ module.exports = React.createClass({
 				<br />
 				{this.props.option.course.properDays()}
 				<br />
-				Starts on {this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY')}
+				Starts on {this.props.option.course.classDates()[0] ? this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY') : ''}
         <br />
         {`$${this.props.option.user && this.props.option.user.get('price') ? Number(this.props.option.user.get('price')).toFixed(2) : Number(this.props.option.course.get('cost')).toFixed(2)}`}
 				<br />
