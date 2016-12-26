@@ -22,7 +22,6 @@ var courseSchema = new Schema({
   }],
   holidays: Array,
   grades: Array,
-  textbook: String,
 	videos: Array,
   cost: {
     type: Number,
@@ -32,6 +31,10 @@ var courseSchema = new Schema({
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'location',
     required: true
+	},
+  textbook: {
+	 	type: Schema.Types.ObjectId,
+	 	ref: 'textbook'
 	}
 }, { timestamps: true });
 

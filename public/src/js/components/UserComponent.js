@@ -83,7 +83,7 @@ module.exports = React.createBackboneClass({
       const dates = course.classDates().map((date, j) => {
         let attended = <FontAwesome name="calendar-o" />;
         let matched;
-        let checkin = <span>Absent</span>;
+        let checkin;
         const video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
         if (date.isSameOrBefore(moment(), 'day')) {
           attended = <FontAwesome name="calendar-times-o" className="text-danger" />
@@ -91,11 +91,18 @@ module.exports = React.createBackboneClass({
             return moment(attendedDate, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
           });
           if (matched) {
-            attended = <FontAwesome name="calendar-check-o" className="text-success" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')} />
-            checkin = <span>Present</span>
+            attended = <FontAwesome name="calendar-check-o" className="text-success" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')} />;
+            checkin = <span>Present</span>;
+          }  else {
+            checkin = <span>Absent</span>;
           }
         }
-        if (!matched && (date.isSame(moment(), 'day') || this.props.currentUser.roles().some(role => ['instructor', 'admin'].includes(role)))) {
+        if (
+          !matched &&
+          (date.isSame(moment(), 'day') ||
+            (this.props.currentUser.roles().some(role => ['instructor', 'admin'].includes(role)) && date.isSameOrBefore(moment(), 'day'))
+          )
+        ) {
           checkin = <a href="#" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}>Check In</a>;
         }
         return (
@@ -144,9 +151,9 @@ module.exports = React.createBackboneClass({
                     <p>
                       <ControlLabel>Textbook</ControlLabel>
                       <br />
-                      <a href={course.get('textbook')} target="_blank">
+                      <a href={course.get('textbook').get('student_url')} target="_blank">
                       <FontAwesome name="book" fixedWidth={true} />
-                      &nbsp; Textbook
+                      &nbsp; {course.get('textbook').get('name')}
                       </a>
                     </p>
                     <p>

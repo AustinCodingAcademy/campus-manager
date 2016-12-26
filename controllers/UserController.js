@@ -57,7 +57,7 @@ module.exports = {
       }
       CourseModel.find({
         registrations: mongoose.Types.ObjectId(user._id)
-      }).populate('term location').exec(function(err, courses) {
+      }).populate('term location textbook').exec(function(err, courses) {
         if(err) {
           return res.json(500, {
             message: 'Error getting user courses.',

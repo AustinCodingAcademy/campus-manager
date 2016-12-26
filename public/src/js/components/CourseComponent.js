@@ -277,7 +277,7 @@ module.exports = React.createBackboneClass({
               </a>
               <a
                 className="btn btn-default"
-                href={this.getModel().get('textbook')}
+                href={this.getModel().get('textbook').get('instructor_url')}
                 target="_blank"
               >
                 <FontAwesome name="book" />

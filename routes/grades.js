@@ -6,7 +6,6 @@
 const express = require('express');
 const router = express.Router();
 const GradeController = require('../controllers/GradeController');
-const middleware = require('./middleware');
 
 /**
 * POST request to add/update grade
@@ -17,7 +16,7 @@ const middleware = require('./middleware');
 * @function
 * @name /
 */
-router.post('/', middleware.instructor, function(req, res) {
+router.post('/', (req, res) => {
   GradeController.create(req, res);
 });
 

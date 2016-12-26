@@ -53,6 +53,7 @@ module.exports = React.createBackboneClass({
               <a href="#" onClick={this.show} data-id={course.id}>{course.get('name')}</a>
             </div>
           </Td>
+          <Td column="Textbook">{course.get('textbook').get('name')}</Td>
           <Td column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
           <Td column="Term">{course.get('term').get('name')}</Td>
           <Td column="Days">{course.shortDays()}</Td>
@@ -90,12 +91,13 @@ module.exports = React.createBackboneClass({
             <Table
               className="table table-condensed table-striped"
               itemsPerPage={20}
-              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost']}
-              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost']}
+              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook']}
+              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook']}
               filterBy={this.state.filterBy}
             >
               <Thead>
                 <Th>Name</Th>
+                <Th>Textbook</Th>
                 <Th>Location</Th>
                 <Th>Term</Th>
                 <Th>Days</Th>
@@ -110,6 +112,7 @@ module.exports = React.createBackboneClass({
             show={this.state.showModal}
             onHide={this.close}
             terms={this.props.terms}
+            textbooks={this.props.textbooks}
             courses={this.getCollection()}
             model={this.state.course}
             locations={this.props.locations}

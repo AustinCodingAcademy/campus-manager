@@ -12,6 +12,12 @@ const LocationModel = require('../models/LocationModel');
 const TermModel = require('../models/TermModel');
 
 module.exports = React.createBackboneClass({
+  mixins: [
+    React.BackboneMixin('terms', 'update'),
+    React.BackboneMixin('locations', 'update'),
+    React.BackboneMixin('textbooks', 'update')
+  ],
+
   dayOptions:[
     { value: 'monday', label: 'Monday' },
     { value: 'tuesday', label: 'Tuesday' },
@@ -62,6 +68,10 @@ module.exports = React.createBackboneClass({
     } else {
       this.state.course[attr] = e.currentTarget.value;
     }
+  },
+
+  changeTextbookValue(e) {
+    this.state.course.textbook = this.props.textbooks.get(e.currentTarget.value);
   },
 
   save(e) {
@@ -133,6 +143,10 @@ module.exports = React.createBackboneClass({
       };
     });
 
+    const textbookOptions = this.props.textbooks.map(textbook => {
+      return (<option key={textbook.id} value={textbook.id}>{textbook.get('name')}</option>)
+    });
+
     return (
       <Modal show={this.props.show} onHide={this.props.onHide}>
         <Modal.Header closeButton>
@@ -153,14 +167,16 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="textbook">
-              <ControlLabel>Textbook URL</ControlLabel>
+              <ControlLabel>Textbook</ControlLabel>
               <FormControl
-                type="text"
-                placeholder="Textbook URL"
-                onChange={this.changeTextValue}
-                defaultValue={this.getModel().get('textbook')}
-              />
-            </FormGroup>
+                componentClass="select"
+                placeholder="Select..."
+                onChange={this.changeTextbookValue}
+                defaultValue={this.getModel().get('textbook').id}
+              >
+               {textbookOptions}
+             </FormControl>
+           </FormGroup>
             <FormGroup controlId="cost">
               <ControlLabel>Cost</ControlLabel>
               <InputGroup>

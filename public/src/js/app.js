@@ -21,6 +21,7 @@ const TermsCollection = require('./collections/TermsCollection');
 const CoursesCollection = require('./collections/CoursesCollection');
 const UsersCollection = require('./collections/UsersCollection');
 const LocationsCollection = require('./collections/LocationsCollection');
+const TextbooksCollection = require('./collections/TextbooksCollection');
 
 const TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
 const CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
@@ -29,6 +30,7 @@ const HomeLayoutComponent = React.createFactory(require('./components/HomeLayout
 const NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
 const UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
 const LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
+const TextbooksListComponent = React.createFactory(require('./components/TextbooksListComponent'));
 const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 const UserComponent = React.createFactory(require('./components/UserComponent'));
 const ReportComponent = React.createFactory(require('./components/ReportComponent'));
@@ -57,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'users/:id': 'user',
       'courses': 'courses',
       'locations': 'locations',
+      'textbooks': 'textbooks',
       'courses/:id': 'course',
       'registration': 'registration',
       'report': 'report',
@@ -68,11 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initialize: function() {
       document.querySelector('[data-bootstrap]').remove();
       $('<div id="nav-container"></div>').insertBefore('#container');
-      ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('#nav-container')[0]);
+      ReactDOM.render(NavbarComponent({ model: this.currentUser }), document.getElementById('nav-container'));
     },
 
     execute: function(callback, args, name) {
-      ReactDOM.unmountComponentAtNode($('#container')[0]);
+      ReactDOM.unmountComponentAtNode(document.getElementById('container'));
       $(document).scrollTop(0);
       if (callback) callback.apply(this, args);
     },
@@ -94,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             model: user,
             currentUser: this.currentUser,
             terms: terms
-          }), $('#container')[0]);
+          }), document.getElementById('container'));
         }
       });
     },
@@ -106,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     terms: function() {
       var terms = new TermsCollection();
       terms.fetch();
-      ReactDOM.render(TermsListComponent({ collection: terms }), $('#container')[0]);
+      ReactDOM.render(TermsListComponent({ collection: terms }), document.getElementById('container'));
     },
 
     users: function() {
@@ -115,35 +118,37 @@ document.addEventListener('DOMContentLoaded', () => {
       ReactDOM.render(UsersListComponent({
         collection: users,
         currentUser: this.currentUser
-       }), $('#container')[0]);
+       }), document.getElementById('container'));
     },
 
     locations: function() {
       var locations = new LocationsCollection();
       locations.fetch();
-      ReactDOM.render(LocationsListComponent({ collection: locations }), $('#container')[0]);
+      ReactDOM.render(LocationsListComponent({ collection: locations }), document.getElementById('container'));
+    },
+
+    textbooks: function() {
+      const textbooks = new TextbooksCollection();
+      textbooks.fetch();
+      ReactDOM.render(TextbooksListComponent({ collection: textbooks }), document.getElementById('container'));
     },
 
     courses: function() {
-      var that = this;
-      var courses = new CoursesCollection();
+      const courses = new CoursesCollection();
       courses.fetch();
-      var terms = new TermsCollection();
-      terms.fetch({
-        success: function() {
-          var locations = new LocationsCollection();
-          locations.fetch({
-            success: function() {
-              ReactDOM.render(CoursesListComponent({
-                terms: terms,
-                collection: courses,
-                currentUser: that.currentUser,
-                locations: locations
-              }), $('#container')[0]);
-            }
-          });
-        }
-      });
+      const terms = new TermsCollection();
+      terms.fetch();
+      const locations = new LocationsCollection();
+      locations.fetch();
+      const textbooks = new TextbooksCollection();
+      textbooks.fetch();
+      ReactDOM.render(CoursesListComponent({
+        collection: courses,
+        currentUser: this.currentUser,
+        terms,
+        locations,
+        textbooks
+      }), document.getElementById('container'));
     },
 
     course: function(id) {
@@ -152,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ReactDOM.render(CourseComponent({
         model: course,
         currentUser: this.currentUser
-      }), $('#container')[0]);
+      }), document.getElementById('container'));
     },
 
     registration: function() {
@@ -167,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 collection: courses,
                 users: users,
                 currentUser: that.currentUser
-              }), $('#container')[0]);
+              }), document.getElementById('container'));
             }
           });
         }
@@ -180,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
           sql: query ? atob(query) : "SELECT name, sql FROM sqlite_master WHERE type='table';"
         }),
         currentUser: this.currentUser
-      }), $('#container')[0]);
+      }), document.getElementById('container'));
     }
   });
 
