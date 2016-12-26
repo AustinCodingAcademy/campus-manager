@@ -106,7 +106,6 @@ module.exports = {
       'is_student',
       'codecademy',
       'zipcode',
-      'grades',
       'credits'
     ];
 
@@ -171,16 +170,6 @@ module.exports = {
         'price',
         'credits'
       ];
-
-      var instructorAttributes = [
-        'grades'
-      ];
-
-      if (req.user.is_instructor) {
-        _.each(instructorAttributes, function(attr) {
-          user[attr] =  req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
-        });
-      }
 
       if (req.user.is_admin) {
         _.each(adminAttrs, function(attr) {

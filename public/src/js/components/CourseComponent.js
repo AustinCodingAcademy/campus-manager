@@ -12,6 +12,7 @@ import {
 } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
 const DatePicker = require('react-datepicker');
+const GradeModel = require('../models/GradeModel');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -54,25 +55,28 @@ module.exports = React.createBackboneClass({
   blurGrade(e) {
     e.persist();
     const student = this.getModel().get('registrations').get(e.target.getAttribute('data-student-id'));
-    const gradeIdx = _.findIndex(student.get('grades'), (grade) => {
+    const gradeIdx = _.findIndex(student.get('grades'), grade => {
       return grade.courseId === this.getModel().id && grade.name === e.target.getAttribute('data-grade-name');
-    }, this);
+    });
     const originalScore = student.get('grades')[gradeIdx].score;
-    if (e.target.value && !isNaN(e.target.value) && Number(e.target.value) > -1 ) {
-      student.get('grades')[gradeIdx].score = Number(e.target.value);
-      student.save(null, {
-        error: () => {
-          e.target.value = originalScore;
-          student.get('grades')[gradeIdx].score = originalScore;
-          this.getModel().trigger('change');
-        },
-        success: () => {
-          this.getModel().trigger('change');
-        }
-      });
-    } else {
-      e.target.value = originalScore;
-    }
+
+    const grade = new GradeModel();
+    grade.save({
+      userId: student.id,
+      name: e.target.getAttribute('data-grade-name'),
+      score: Number(e.target.value),
+      courseId: this.getModel().id
+    }, {
+      success: () => {
+        student.get('grades')[gradeIdx].score = Number(e.target.value);
+        this.getModel().trigger('change');
+      },
+      error: () => {
+        e.target.value = originalScore;
+        student.get('grades')[gradeIdx].score = originalScore;
+        this.getModel().trigger('change');
+      }
+    });
   },
 
   // I'm thinking how we show modals is in need of an update. Going into the dom
@@ -195,6 +199,14 @@ module.exports = React.createBackboneClass({
     const studentGrades = this.getModel().get('registrations').map(student => {
       const courseGrades = _.filter(student.get('grades'), grade => {
         return grade.courseId === this.getModel().id && _.findWhere(this.getModel().get('grades'), { name: grade.name });
+      });
+
+      courseGrades.sort((a, b) => {
+        return this.getModel().get('grades').findIndex(grade => {
+          return grade.name === a.name;
+        }) < this.getModel().get('grades').findIndex(grade => {
+          return grade.name === b.name;
+        }) ? -1 : 1;
       });
 
       const studentCells = _.map(courseGrades, (grade, idx) => {
