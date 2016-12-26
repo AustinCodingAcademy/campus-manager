@@ -107,14 +107,15 @@ module.exports = React.createBackboneClass({
     });
 
     const charges = _.map(_.filter(this.getModel().get('charges'), charge => {
-      return !charge.refunded && charge.paid;
+      return charge.paid;
     }), charge => {
-      totalPaid += (charge.amount / 100);
+      totalPaid += ((charge.amount - charge.amount_refunded) / 100);
       return(
         <tr key={charge.created}>
-          <td>{('$' + (charge.amount / 100).toFixed(2))}</td>
+          <td>{('$' + ((charge.amount - charge.amount_refunded) / 100).toFixed(2))}</td>
           <td>*{charge.source.last4}</td>
           <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
+          <td>{charge.metadata.course_name}</td>
         </tr>
       )
     });
@@ -141,6 +142,7 @@ module.exports = React.createBackboneClass({
                   <th>Paid</th>
                   <th>Card</th>
                   <th>Date</th>
+                  <th>Course</th>
                 </tr>
               </thead>
               <tbody>{charges}</tbody>
@@ -152,6 +154,7 @@ module.exports = React.createBackboneClass({
                     </span>
                   </th>
                   <th>Balance</th>
+                  <th></th>
                   <th></th>
                 </tr>
               </tfoot>
