@@ -1,33 +1,31 @@
-var React = require('react');
+import * as React from 'react';
+import {Row, Col, Button, Alert} from 'react-bootstrap';
 
 module.exports = React.createBackboneClass({
-  render: function() {
+  render() {
     return (
       <div>
-        <div className="row">
-          <div style={{textAlign: 'center'}} className="col s6 offset-s3">
-            <button
-              className="waves-effect waves-teal btn"
-              onClick={this.selectAccount}>
-              Select Youtube Account
-            </button>
-          </div>
-        </div>
-        <div className="row" style={{marginBottom: 0}}>
-          <div style={{textAlign: 'center', fontSize: '12px'}} className="col s8 offset-s2">
-            (You will need to select the ACA Class Screencast Account)
-          </div>
-        </div>
+        <Row>
+          <Col xs={12}>
+            <Button onClick={this.selectAccount} bsStyle="primary" block>
+              Select YouTube Account
+            </Button>
+            <br />
+            <Alert bsStyle="info">
+              You will need to select the <strong>ACA Class Screencast</strong> Account
+            </Alert>
+          </Col>
+        </Row>
       </div>
     );
   },
 
-  selectAccount: function() {
+  selectAccount() {
     // Since we are pulling this library in over cdn,
     // we need to ensure it is here...
     if (typeof gapi === 'undefined') {
       this.props.onError(
-        'We are unable to upload videos at this time.  Please try agian later.'
+        'We are unable to upload videos at this time. Please try agian later.'
       );
       return;
     }
@@ -35,7 +33,7 @@ module.exports = React.createBackboneClass({
     this.checkAuth();
   },
 
-  checkAuth: function() {
+  checkAuth() {
     gapi.auth.authorize({
       client_id: process.env.GOOGLE_CLIENT_ID,
       scope: ['https://www.googleapis.com/auth/youtube'],
@@ -43,7 +41,7 @@ module.exports = React.createBackboneClass({
     }, this.handleAuthResult);
   },
 
-  handleAuthResult: function(authResult) {
+  handleAuthResult(authResult) {
     if (authResult && !authResult.error) {
       this.checkAccount(authResult.access_token);
     } else {
@@ -53,7 +51,7 @@ module.exports = React.createBackboneClass({
     }
   },
 
-  checkAccount: function(accessToken) {
+  checkAccount(accessToken) {
     var onAccountSelect = this.props.onAccountSelect;
 
     gapi.client.load('youtube', 'v3', function() {

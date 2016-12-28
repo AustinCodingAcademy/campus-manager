@@ -6,6 +6,7 @@ const FontAwesome = require('react-fontawesome');
 const CourseModalComponent = require('./CourseModalComponent.js');
 const CourseModel = require('../models/CourseModel');
 const TermsCollection = require('../collections/TermsCollection');
+const moment = require('moment');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -56,7 +57,7 @@ module.exports = React.createBackboneClass({
           <Td column="Textbook">{course.get('textbook').get('name')}</Td>
           <Td column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
           <Td column="Term">{course.get('term').get('name')}</Td>
-          <Td column="Days">{course.shortDays()}</Td>
+          <Td column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>
           <Td column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
           <Td column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
           <Td column="edit" className={`${hidden}`}>

@@ -72,12 +72,12 @@ module.exports = React.createBackboneClass({
       );
     });
 
-    if (currentCourse && currentCourse.id) {
+    if (currentCourse && currentCourse.id && currentCourse.get('seats') > 0) {
       currentCourse.set('registered', true);
       courses.add(currentCourse);
     }
 
-    if (futureCourse) {
+    if (futureCourse && futureCourse.get('seats') > 0) {
       futureCourse.set('registered', true);
       courses.add(futureCourse);
     } else {

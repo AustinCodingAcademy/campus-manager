@@ -79,6 +79,8 @@ module.exports = {
         videos: req.body.videos,
         cost: req.body.cost,
         location : req.body.location,
+        timeStart : req.body.timeStart,
+        timeEnd: req.body.timeEnd,
         client: currentUser.client
       });
 
@@ -129,11 +131,12 @@ module.exports = {
         'videos',
         'cost',
         'term',
-        'location'
+        'location',
+        'timeStart',
+        'timeEnd'
       ];
 
       var instructorAttributes = [
-        'grades',
         'videos'
       ];
 

@@ -8,7 +8,7 @@ const CourseAttendanceComponent = require('./CourseAttendanceComponent');
 const utils = require('../utils');
 import {
   Col, Row, Button, ButtonGroup, Table, FormControl, FormGroup,
-  ControlLabel, Panel, Checkbox
+  ControlLabel, Panel, Checkbox, ListGroup, ListGroupItem,
 } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
 const DatePicker = require('react-datepicker');
@@ -18,7 +18,8 @@ module.exports = React.createBackboneClass({
   getInitialState() {
     return {
       modalIsOpen: false,
-      videoDate: moment()
+      videoDate: moment(),
+      holidayDate: moment()
     };
   },
 
@@ -50,6 +51,38 @@ module.exports = React.createBackboneClass({
     var gradeIdx = e.currentTarget.getAttribute('data-grade-idx');
     this.getModel().get('grades')[gradeIdx].checkpoint = !this.getModel().get('grades')[gradeIdx].checkpoint;
     this.getModel().save();
+  },
+
+  addHoliday(e) {
+    e.preventDefault();
+    const holidays = this.getModel().get('holidays').splice(0);
+    const idx = holidays.indexOf(e.currentTarget.getAttribute('data-date'));
+    if (idx === -1) {
+      holidays.push(e.currentTarget.getAttribute('data-date'));
+      this.getModel().save({ holidays });
+    }
+  },
+
+  removeHoliday(e) {
+    e.preventDefault();
+    const holidays = this.getModel().get('holidays').splice(0);
+    const idx = holidays.indexOf(e.currentTarget.getAttribute('data-date'));
+    if (idx > -1) {
+      holidays.splice(idx, 1);
+      this.getModel().save({ holidays });
+    }
+  },
+
+  handleHolidayChange: function(date) {
+    this.setState({
+      holidayDate: date
+    });
+  },
+
+  handleVideoDateChange: function(date) {
+    this.setState({
+      videoDate: date
+    });
   },
 
   blurGrade(e) {
@@ -240,10 +273,12 @@ module.exports = React.createBackboneClass({
       return (
         <tr key={idx}>
           <td>
-            {moment(video.timestamp, 'YYYY-MM-DD').format('ddd, MMM Do, YYYY')}
+            {moment(video.timestamp, 'YYYY-MM-DD').format('ddd, MMM Do')}
           </td>
           <td>
-            <a href={video.link} target="_blank">{video.link}</a>
+            <small>
+              <a href={video.link} target="_blank">{video.link}</a>
+            </small>
           </td>
           <td>
             <a href="#" data-idx={idx} onClick={this.removeVideo} className="link-danger">
@@ -256,6 +291,28 @@ module.exports = React.createBackboneClass({
 
     const hashids = new Hashids();
     const hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
+
+    const holidays = this.getModel().get('holidays').map(holiday => {
+      return (
+        <ListGroupItem key={holiday}>
+          {moment(holiday, 'YYYY-MM-DD').format('ddd, MMM D')}
+            <a href="#" className="link-danger pull-right" onClick={this.removeHoliday} data-date={holiday}>
+              <FontAwesome name="trash-o" />
+            </a>
+        </ListGroupItem>
+      );
+    });
+
+    const classDates = this.getModel().classDates().map(date => {
+      return (
+        <ListGroupItem key={date.format('YYYY-MM-DD')} data-date={date.format('YYYY-MM-DD')}>
+          {date.format('ddd, MMM D')}
+          <a href="#" className="pull-right" onClick={this.addHoliday} data-date={date.format('YYYY-MM-DD')}>
+            <FontAwesome name="arrow-right" />
+          </a>
+        </ListGroupItem>
+      )
+    });
 
     return (
       <div>
@@ -347,7 +404,7 @@ module.exports = React.createBackboneClass({
           </Col>
         </Row>
         <Row>
-          <Col xs={12}>
+          <Col xs={12} md={7}>
             <Panel
               header={<h3>Screencasts</h3>}
               footer={
@@ -370,7 +427,7 @@ module.exports = React.createBackboneClass({
                     <tr>
                       <th>Date</th>
                       <th>YouTube Link</th>
-                      <th></th>
+                      <th style={{minWidth: '140px'}}></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -378,7 +435,7 @@ module.exports = React.createBackboneClass({
                     <tr>
                       <td>
                         <DatePicker
-                          dateFormat="ddd, MMM D, YYYY"
+                          dateFormat="ddd, MMM D"
                           selected={this.state.videoDate}
                           className="form-control"
                           onChange={this.handleVideoDateChange}
@@ -392,18 +449,33 @@ module.exports = React.createBackboneClass({
                         />
                       </td>
                       <td>
-                        <Button bsStyle="primary" type="submit">
-                          Save
-                        </Button>
-                        &nbsp; or &nbsp;
-                        <a href="#" onClick={this.showUploadModal}>
-                          Upload
-                        </a>
+                        <ButtonGroup>
+                          <Button bsStyle="primary" type="submit">Save</Button>
+                          <Button onClick={this.showUploadModal}>Upload</Button>
+                        </ButtonGroup>
                       </td>
                     </tr>
                   </tbody>
                 </Table>
               </form>
+            </Panel>
+          </Col>
+          <Col xs={12} md={5}>
+            <Panel header={<h3>Class Dates</h3>}>
+              <Row>
+                <Col xs={6}>
+                  <h4>Class Dates</h4>
+                  <ListGroup>
+                    {classDates}
+                  </ListGroup>
+                </Col>
+                <Col xs={6}>
+                  <h4>Holidays</h4>
+                  <ListGroup>
+                    {holidays}
+                  </ListGroup>
+                </Col>
+              </Row>
             </Panel>
           </Col>
         </Row>

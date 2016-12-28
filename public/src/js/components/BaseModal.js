@@ -33,7 +33,8 @@ module.exports = React.createBackboneClass({
         shouldCloseOnOverlayClick={this.props.shouldCloseOnOverlayClick}>
         <i
           onClick={this.props.onRequestClose}
-          className="material-icons right small close-icon">close</i>
+          className="fa fa-times pull-right"></i>
+        <br /><br />
         {this.props.children}
       </Modal>
     );

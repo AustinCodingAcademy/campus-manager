@@ -162,8 +162,8 @@ module.exports = React.createBackboneClass({
                       <ControlLabel>Textbook</ControlLabel>
                       <br />
                       <a href={course.get('textbook').get('student_url')} target="_blank">
-                      <FontAwesome name="book" fixedWidth={true} />
-                      &nbsp; {course.get('textbook').get('name')}
+                        <FontAwesome name="book" fixedWidth={true} />
+                        &nbsp; {course.get('textbook').get('name')}
                       </a>
                     </p>
                     <p>
@@ -183,6 +183,13 @@ module.exports = React.createBackboneClass({
                           &nbsp; Screenshare
                         </a>
                       </small>
+                    </p>
+                    <p>
+                      <ControlLabel>Class Times</ControlLabel>
+                      <br />
+                      {course.shortDays()}
+                      <br />
+                      {`${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}
                     </p>
                   </Col>
                   <Col xs={6}>

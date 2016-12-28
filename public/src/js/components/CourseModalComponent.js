@@ -60,14 +60,7 @@ module.exports = React.createBackboneClass({
   },
 
   changeTextValue(e) {
-    const attr = e.currentTarget.getAttribute('id');
-    if (e.currentTarget.getAttribute('id') === 'holidays') {
-      this.state.course[attr] = e.currentTarget.value.split(',').map(holiday => {
-        return holiday.trim();
-      });
-    } else {
-      this.state.course[attr] = e.currentTarget.value;
-    }
+    this.state.course[e.currentTarget.getAttribute('id')] = e.currentTarget.value;
   },
 
   changeTextbookValue(e) {
@@ -172,9 +165,10 @@ module.exports = React.createBackboneClass({
                 componentClass="select"
                 placeholder="Select..."
                 onChange={this.changeTextbookValue}
-                defaultValue={this.getModel().get('textbook').id}
+                defaultValue={this.getModel().get('textbook').id || ''}
               >
-               {textbookOptions}
+                <option value="">Select a Textbook...</option>
+                {textbookOptions}
              </FormControl>
            </FormGroup>
             <FormGroup controlId="cost">
@@ -230,13 +224,20 @@ module.exports = React.createBackboneClass({
                 multi={true}
               />
             </FormGroup>
-            <FormGroup controlId="holidays">
-              <ControlLabel>Holidays</ControlLabel>
+            <FormGroup controlId="timeStart">
+              <ControlLabel>Time Start</ControlLabel>
               <FormControl
-                type="text"
-                placeholder="YYYY-MM-DD, YYYY-MM-DD, etc"
+                type="time"
                 onChange={this.changeTextValue}
-                defaultValue={this.getModel().get('holidays').join(', ')}
+                defaultValue={this.getModel().get('timeEnd')}
+              />
+            </FormGroup>
+            <FormGroup controlId="timeEnd">
+              <ControlLabel>Time End</ControlLabel>
+              <FormControl
+                type="time"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('timeStart')}
               />
             </FormGroup>
             <a href="#" className="link-danger" onClick={this.delete}>Delete Course</a>

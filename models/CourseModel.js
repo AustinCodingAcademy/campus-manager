@@ -35,7 +35,15 @@ var courseSchema = new Schema({
   textbook: {
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'textbook'
-	}
+	},
+  timeStart: {
+    type: String,
+    required: true
+  },
+  timeEnd: {
+    type: String,
+    required: true
+  }
 }, { timestamps: true });
 
 courseSchema.plugin(mongooseToCsv, {

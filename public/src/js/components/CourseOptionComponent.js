@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Label } from 'react-bootstrap';
+const moment = require('moment');
 
 module.exports = React.createClass({
 	handleMouseDown (event) {
@@ -38,7 +39,7 @@ module.exports = React.createClass({
 				{this.props.option.course.get('location').get('state') + ' '}
 				{this.props.option.course.get('location').get('zipcode')}
 				<br />
-				{this.props.option.course.properDays()}
+				{`${this.props.option.course.properDays()} ${moment(this.props.option.course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(this.props.option.course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}
 				<br />
 				Starts on {this.props.option.course.classDates()[0] ? this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY') : ''}
         <br />

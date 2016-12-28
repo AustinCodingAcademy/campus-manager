@@ -68,7 +68,7 @@ module.exports = React.createBackboneClass({
       });
     } else {
       this.setState({
-        errorMessage: "Oh no! It looks like you didn't select the ACA Class Videos account, please try again!"
+        errorMessage: "Oh no! It looks like you didn't select the ACA Class Screencasts account, please try again!"
       });
     }
   },
