@@ -7,13 +7,13 @@
     "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
-    "mongoose-gen": "mongoose-gen",
     "test": "gulp build && gulp test"
   },
   "engines": {
     "node": "6.7.0"
   },
   "dependencies": {
+    "add-to-homescreen": "^3.2.6",
     "atob": "^2.0.3",
     "aws-sdk": "^2.7.0",
     "babel-preset-es2015": "^6.18.0",
@@ -22,6 +22,7 @@
     "backbone": "1.3.3",
     "bcrypt": "0.8.7",
     "body-parser": "1.15.2",
+    "bootstrap-sass": "^3.3.7",
     "browserify": "^13.1.1",
     "browserify-shim": "3.8.12",
     "chart.heatmap.js": "0.0.1-alpha",
@@ -48,16 +49,15 @@
     "gulp-cache-breaker": "^1.0.0",
     "gulp-cssnano": "2.1.2",
     "gulp-duration": "0.0.0",
-    "gulp-live-server": "0.0.30",
+    "gulp-jsdoc3": "^1.0.1",
     "gulp-nightwatch": "^0.3.2",
     "gulp-postcss": "6.2.0",
     "gulp-sass": "2.3.2",
     "gulp-sourcemaps": "2.2.0",
     "hashids": "^1.1.1",
+    "intl-tel-input": "^10.0.2",
     "jquery": "3.1.1",
     "json2csv": "^3.7.1",
-    "material-design-icons": "3.0.1",
-    "materialize-css": "0.97.8",
     "method-override": "2.3.6",
     "moment": "2.15.2",
     "moment-range": "2.2.0",
@@ -70,28 +70,32 @@
     "morgan": "1.7.0",
     "nightwatch": "^0.9.8",
     "node-sass": "3.11.1",
-    "node-table-to-csv": "^0.1.0",
     "nodemailer": "2.6.4",
     "nodemailer-mandrill-transport": "1.2.0",
     "nodemon": "^1.11.0",
     "passport": "0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "1.0.0",
+    "path": "^0.12.7",
     "pickadate": "3.5.6",
     "pixrem": "3.0.2",
     "pug": "2.0.0-beta6",
     "react": "15.3.2",
-    "react-barcode": "1.1.0",
-    "react-chartjs": "github:jhudson8/react-chartjs#c711d75",
+    "react-bootstrap": "^0.30.7",
+    "react-chartjs": "github:jhudson8/react-chartjs#da9f718c19b8b3904fd9c46c151ae48b401b7a97",
     "react-codemirror": "^0.2.6",
+    "react-datepicker": "^0.39.0",
     "react-dom": "15.3.2",
     "react-dropzone": "3.7.2",
+    "react-equalizer": "^1.0.4",
+    "react-fontawesome": "^1.5.0",
     "react-gravatar": "2.6.1",
     "react-modal": "1.5.2",
+    "react-phone-input": "^1.1.3",
     "react-select": "^1.0.0-rc.2",
     "react-stripe-checkout": "2.2.5",
     "react.backbone": "0.9.0",
-    "reactable": "^0.14.1",
+    "reactable": "github:kevincolten/reactable#8e3b32c",
     "reactify": "1.1.1",
     "require-dir": "^0.3.1",
     "run-sequence": "1.2.2",
@@ -99,19 +103,16 @@
     "sqlite3": "^3.1.8",
     "stripe": "4.12.0",
     "tableify": "^1.0.0",
-    "uglifyify": "kevincolten/uglifyify",
+    "uglifyify": "^3.0.4",
     "underscore": "1.8.3",
     "utils-merge": "^1.0.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "whatwg-fetch": "^2.0.1"
   },
   "browser": {
     "jquery": "jquery",
-    "materialize": "./node_modules/materialize-css/dist/js/materialize.js",
-    "picker": "./node_modules/pickadate/lib/picker.js",
-    "picker.date": "./node_modules/pickadate/lib/picker.date.js",
-    "picker.time": "./node_modules/pickadate/lib/picker.time.js",
     "cm-sql": "./node_modules/codemirror/mode/sql/sql.js"
   },
   "browserify": {
@@ -121,13 +122,11 @@
     ]
   },
   "browserify-shim": {
-    "jquery": "$",
-    "materialize": "materialize"
+    "jquery": "$"
   },
   "devDependencies": {
     "chromedriver": "^2.25.1",
     "dotenv": "^2.0.0",
-    "express-mongoose-generator": "github:mistakevin/express-mongoose-generator",
     "selenium-server-standalone-jar": "3.0.1"
   }
 }

@@ -18,13 +18,13 @@ module.exports = {
   },
 
   weightedGradeAverage: function(checkpointGrades, dailyGrades) {
-    var dailyAverage = 0;
+    var dailyAverage;
     var dailyLength = dailyGrades.length;
     if (dailyLength) {
       dailyAverage = _.reduce(dailyGrades, function(memo, dailyLength) { return memo + dailyLength; }) / dailyLength;
     }
 
-    var checkpointAverage = 0;
+    var checkpointAverage;
     var checkpointLength = checkpointGrades.length;
     if (checkpointLength) {
       checkpointAverage = _.reduce(checkpointGrades, function(memo, checkpointLength) { return memo + checkpointLength; }) / checkpointLength;
@@ -32,9 +32,9 @@ module.exports = {
 
     if (!checkpointAverage && !dailyAverage){
       return 0;
-    } else if (!checkpointAverage) {
+    } else if (!_.isNumber(checkpointAverage)) {
       return Math.round(dailyAverage);
-    } else if (!dailyAverage) {
+    } else if (!_.isNumber(dailyAverage)) {
       return Math.round(checkpointAverage);
     } else {
       return Math.round(dailyAverage * .3 + checkpointAverage * .7);

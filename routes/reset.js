@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
     }
 
     if(!user) {
-      return res.json(404, {
+      return res.json(500, {
         message: 'No such user.'
       });
     }

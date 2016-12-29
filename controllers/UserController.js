@@ -1,3 +1,8 @@
+/**
+ * @module controllers/UserController
+ * @description Server-side logic for managing users.
+ */
+
 var UserModel = require('../models/UserModel');
 var _ = require('underscore');
 var moment = require('moment');
@@ -5,15 +10,12 @@ var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
 var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-/**
-* UserController.js
-*
-* @description :: Server-side logic for managing users.
-*/
 module.exports = {
 
   /**
-  * UserController.list()
+  * List all users attached to the current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   list: function(req, res) {
     UserModel.find({
@@ -32,7 +34,9 @@ module.exports = {
   },
 
   /**
-  * UserController.show()
+  * Show all details of a particular user if attached to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   show: function(req, res) {
     var id = req.params.id;
@@ -53,7 +57,7 @@ module.exports = {
       }
       CourseModel.find({
         registrations: mongoose.Types.ObjectId(user._id)
-      }).populate('term location').exec(function(err, courses) {
+      }).populate('term location textbook').exec(function(err, courses) {
         if(err) {
           return res.json(500, {
             message: 'Error getting user courses.',
@@ -83,7 +87,9 @@ module.exports = {
   },
 
   /**
-  * UserController.create()
+  * Create a new user and attach to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   create: function(req, res) {
     var user = new UserModel();
@@ -100,7 +106,6 @@ module.exports = {
       'is_student',
       'codecademy',
       'zipcode',
-      'grades',
       'credits'
     ];
 
@@ -125,7 +130,9 @@ module.exports = {
   },
 
   /**
-  * UserController.update()
+  * Update an existing user if attached to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   update: function(req, res) {
     var id = req.params.id;
@@ -148,16 +155,15 @@ module.exports = {
       var attributes = [
         'first_name',
         'last_name',
-        'email',
+        'username',
         'phone',
         'website',
         'github',
         'codecademy',
-        'zipcode',
-        'grades',
+        'zipcode'
       ];
 
-      var protectedAttrs = [
+      var adminAttrs = [
         'is_admin',
         'is_instructor',
         'is_student',
@@ -165,24 +171,9 @@ module.exports = {
         'credits'
       ];
 
-      var instructorAttributes = [
-        'grades'
-      ];
-
-      if (!(req.user.is_admin || req.user.is_client) && req.user.is_instructor) {
-        _.each(instructorAttributes, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
-        });
-      } else {
-        _.each(attributes, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
-        });
-        user.username = req.body.username ? req.body.username.toLowerCase() : user.username;
-      }
-
-      if (req.user.is_admin || req.user.is_client) {
-        _.each(protectedAttrs, function(attr) {
-          user[attr] =  req.body[attr] ? req.body[attr] : user[attr];
+      if (req.user.is_admin) {
+        _.each(adminAttrs, function(attr) {
+          user[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
         });
         if (req.body.generate_api_key) {
           var rand = function() {
@@ -195,6 +186,12 @@ module.exports = {
 
           user.api_key = token();
         }
+      }
+
+      if (req.user.is_admin || req.user._id === req.body._id) {
+        _.each(attributes, function(attr) {
+          user[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
+        });
       }
 
       user.save(function(err, user){
@@ -226,7 +223,9 @@ module.exports = {
   },
 
   /**
-  * UserController.remove()
+  * Destroy a user if attached to current user's client
+  * @param {req} req [Express.js Request object]{@link http://expressjs.com/en/api.html#req}
+  * @param {res} res [Express.js Response object]{@link http://expressjs.com/en/api.html#res}
   */
   remove: function(req, res) {
     var id = req.params.id;

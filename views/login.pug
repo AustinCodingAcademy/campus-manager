@@ -1,26 +1,28 @@
 extends layout
 
 block content
-  h2 Login
-  form(action='/login', method='post')
-    input(type='hidden', name='_csrf', value=csrfToken)
-    .row
-      .input-field.col.s12
-        input#email.validate(type='email', name='username')
-        label(for='email') Email
-    .row
-      .input-field.col.s12
-        input#password.validate(type='password', name='password')
-        label(for='password') Password
-    button.btn.waves-effect.waves-light(type='submit', name='action') Submit
-      i.material-icons.right send
-    br
-    br
-    a.btn.waves-effect.waves-light.red.darken-1(href='/auth/google', style=)
-      i.fa.fa-google.fa-2x
-      span &nbsp;Login with Google
-    br
-    br
-    .row
-      .col.s12.right-align
-        a(href='/reset') Need to reset your password?
+  .row
+    .col-xs-12.col-md-6.col-md-offset-3
+      .panel.panel-default
+        .panel-heading Login
+        .panel-body
+          form(action='/login', method='post')
+            input(type='hidden', name='_csrf', value=csrfToken)
+            .form-group
+              label(for='email') Email address
+              input#email.form-control(type='email', name='username', placeholder='Email')
+
+            .form-group
+              label(for='password') Password
+              input#password.form-control(type='password', name='password', placeholder='Password')
+            button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action')
+              i.fa.fa-envelope
+              span &nbsp;Login with Email
+            br
+            .text-center or
+            br
+            a.btn.btn-google.btn-lg.btn-block(href='/auth/google')
+              i.fa.fa-google
+              span &nbsp;Login with Google
+        .panel-footer.text-right
+          a(href='/reset') Need to reset your password?

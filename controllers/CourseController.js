@@ -16,7 +16,7 @@ module.exports = {
   list: function(req, res) {
     CourseModel.find({
       client: req.user.client
-    }).populate('term registrations location').exec(function(err, courses){
+    }).populate('term registrations location textbook').exec(function(err, courses){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
@@ -47,7 +47,7 @@ module.exports = {
     CourseModel.findOne({
       _id: id,
       client: req.user.client
-    }).populate('term registrations location').exec(function(err, course){
+    }).populate('term registrations location textbook').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
@@ -72,14 +72,16 @@ module.exports = {
     }).populate('client').exec(function(err, currentUser) {
       var course = new CourseModel({
         name : req.body.name,
-        term : req.body.term._id,
+        term : req.body.term,
         days : req.body.days,
         seats : req.body.seats,
         textbook: req.body.textbook,
         videos: req.body.videos,
         cost: req.body.cost,
-        location : req.body.location._id,
-        client: currentUser.client._id
+        location : req.body.location,
+        timeStart : req.body.timeStart,
+        timeEnd: req.body.timeEnd,
+        client: currentUser.client
       });
 
       course.save(function(err, course) {
@@ -89,7 +91,7 @@ module.exports = {
             error: err
           });
         }
-        course.populate('location term').populate(function(err, course) {
+        course.populate('location term textbook').populate(function(err, course) {
           return res.json(200, course);
         });
       });
@@ -128,22 +130,23 @@ module.exports = {
         'textbook',
         'videos',
         'cost',
-        'term'
+        'term',
+        'location',
+        'timeStart',
+        'timeEnd'
       ];
 
       var instructorAttributes = [
-        'grades',
         'videos'
       ];
 
       if (req.user.is_admin) {
         _.each(adminAttributes, function(attr) {
-          course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+          course[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : course[attr];
         });
-        course.location =  req.body.location._id ? req.body.location._id : course.location;
       } else {
         _.each(instructorAttributes, function(attr) {
-          course[attr] =  req.body[attr] ? req.body[attr] : course[attr];
+          course[attr] =  req.body.hasOwnProperty(attr) ? req.body[attr] : course[attr];
         });
       }
 
@@ -160,7 +163,7 @@ module.exports = {
               _id: userId,
               client: req.user.client
             }, (err, user) => {
-              if(err) {
+              if(err || !user) {
                 return res.json(500, {
                   message: 'Error finding user.',
                   error: err
@@ -211,7 +214,7 @@ module.exports = {
               message: 'No such course'
             });
           }
-          course.populate('registrations location term').populate(function(err, course) {
+          course.populate('registrations location term textbook').populate(function(err, course) {
             return res.json(course);
           });
         });
@@ -224,17 +227,29 @@ module.exports = {
   */
   remove: function(req, res) {
     var id = req.params.id;
-    CourseModel.remove({
+    CourseModel.findOne({
       client: req.user.client,
       _id: id
-    }, function(err, course){
+    }, function(err, course) {
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
           error: err
         });
       }
-      return res.json(course);
+      if (!course) {
+        return res.json(404, {
+          message: 'No such course'
+        });
+      }
+      if (course.registrations.length > 0) {
+        return res.json(500, {
+          message: "Can't delete a course with registrations"
+        });
+      }
+      return course.remove().exec(() => {
+        return res.json(course);
+      });
     });
   },
 

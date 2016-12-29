@@ -1,0 +1,27 @@
+.btn.btn-google {
+  @include button-variant(#ffffff, #DD4B39, #DD4B39);
+}
+
+.btn.btn-white {
+  @include button-variant($brand-primary, #ffffff, #ffffff);
+}
+
+.btn.btn-feedback {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+a.link-danger {
+  color: $brand-danger;
+
+  &:hover,
+  &:focus {
+    color: darken($brand-danger, 15%);
+  }
+
+  &:focus {
+    @include tab-focus;
+  }
+}

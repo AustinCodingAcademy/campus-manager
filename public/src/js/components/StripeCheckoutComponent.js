@@ -1,38 +1,50 @@
-var React = require('react');
-require('react.backbone');
-var StripeCheckout = require('react-stripe-checkout').default;
+import * as React from 'react';
+import StripeCheckout from 'react-stripe-checkout';
+import { Button } from 'react-bootstrap';
+const FontAwesome = require('react-fontawesome');
 
 module.exports = React.createBackboneClass({
+  getInitialState() {
+    return {
+      paymentAmount: this.props.paymentAmount,
+      course: this.props.course
+    };
+  },
 
-  onToken: function(token) {
-    var that = this;
+  onToken(token) {
     $.ajax('/api/charges/' + token.id, {
       method: 'POST',
       data: {
-        amount: this.getModel().get('paymentAmount'),
+        amount: this.state.paymentAmount,
         card_id: token.card.id,
-        course_id: this.getModel().get('value').course.id,
-        user_id: that.props.user.id
+        course_id: this.state.course.id,
+        user_id: this.getModel().id
       },
-      success: function() {
-        that.getModel().set('paymentAmount', 0);
-        that.props.user.fetch();
+      success: () => {
+        this.setState({
+          paymentAmount: 0
+        });
+        this.state.course.get('registrations').add(this.getModel());
+        const urlRoot = this.state.course.urlRoot;
+        this.state.course.urlRoot += '/register';
+        this.state.course.save(null, {
+          success: () => {
+            this.state.course.urlRoot = urlRoot;
+            this.getModel().fetch();
+          }
+        });
       }
     });
   },
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      paymentAmount: nextProps.paymentAmount,
+      course: nextProps.course
+    });
+  },
 
-  render: function() {
-
-    var disabled = '';
-    if (
-      isNaN(this.getModel().get('paymentAmount')) ||
-      this.getModel().get('paymentAmount')<= 0 ||
-      !this.getModel().get('value')
-    ) {
-      disabled = 'disabled';
-    }
-
+  render() {
     return (
       <StripeCheckout
         token={this.onToken}
@@ -41,12 +53,12 @@ module.exports = React.createBackboneClass({
         description="Campus Manager"
         data-locale="auto"
         zipCode={true}
-        amount={this.getModel().get('paymentAmount')}
+        amount={this.state.paymentAmount}
         email={this.getModel().get('username')}
       >
-        <button className={'btn btn-primary '+disabled} disabled={disabled} data-test="make-payment">3. Pay With Card
-          <i className="material-icons right">send</i>
-        </button>
+        <Button block bsStyle="primary" disabled={this.state.paymentAmount < 490 || !this.state.course.id} data-test="make-payment">
+          <FontAwesome name="credit-card" /> 3. Pay With Card
+        </Button>
       </StripeCheckout>
     );
   }

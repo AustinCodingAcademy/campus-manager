@@ -1,21 +1,42 @@
-#apps.modal.bottom-sheet
-  .modal-content
-    h4 Apps
-    a.btn-flat(href='https://chat.austincodingacademy.com', target='blank')
-      i.fa.fa-rocket
-      span &nbsp;Chat
-    a.btn-flat(href='https://calendar.austincodingacademy.com', target='blank')
-      i.fa.fa-calendar
-      span &nbsp;Calendar
-    a.btn-flat(href='https://jobs.austincodingacademy.com', target='blank')
-      i.fa.fa-usd
-      span &nbsp;Jobs
-    a.btn-flat(href='https://discourse.austincodingacademy.com', target='blank')
-      i.fa.fa-group
-      span &nbsp;Discourse
-    a.btn-flat(href='https://student.austincodingacademy.com', target='blank')
-      i.fa.fa-book
-      span &nbsp;Handbook
-    a.btn-flat(href='https://jitsi.austincodingacademy.com', target='blank')
-      i.fa.fa-video-camera
-      span &nbsp;Jitsi
+.modal#apps-modal.fade(tabindex='-1', role='dialog')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+        h4.modal-title Apps
+      .modal-body
+        .row
+          .col-xs-4.text-center
+            a.btn.btn-white(href='https://chat.austincodingacademy.com', target='blank')
+              i.fa.fa-rocket.fa-3x.fa-fw
+              br
+              span &nbsp;Chat
+          .col-xs-4.text-center
+            a.btn.btn-white(href='https://calendar.austincodingacademy.com', target='blank')
+              i.fa.fa-calendar.fa-3x.fa-fw
+              br
+              span &nbsp;Calendar
+          .col-xs-4.text-center
+            a.btn.btn-white(href='https://jobs.austincodingacademy.com', target='blank')
+              i.fa.fa-usd.fa-3x.fa-fw
+              br
+              span &nbsp;Jobs
+        br
+        br
+        .row
+          .col-xs-4.text-center
+            a.btn.btn-white(href='https://discourse.austincodingacademy.com', target='blank')
+              i.fa.fa-group.fa-3x.fa-fw
+              br
+              span &nbsp;Discourse
+          .col-xs-4.text-center
+            a.btn.btn-white(href='https://student.austincodingacademy.com', target='blank')
+              i.fa.fa-book.fa-3x.fa-fw
+              br
+              span &nbsp;Handbook
+          .col-xs-4.text-center
+            a.btn.btn-white(href='https://jitsi.austincodingacademy.com', target='blank')
+              i.fa.fa-video-camera.fa-3x.fa-fw
+              br
+              span &nbsp;Jitsi

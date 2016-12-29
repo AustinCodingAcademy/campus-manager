@@ -1,13 +1,9 @@
 machine:
   environment:
     NODE_ENV: test
-    OAUTH_CLIENT_ID: id.apps.googleusercontent.com
-    OAUTH_CLIENT_SECRET: secret
   node:
     version: 6.7.0
 dependencies:
-  pre:
-    - sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
   post:
     - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
@@ -18,3 +14,8 @@ test:
     # - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
   post:
     # - screen-capture stop
+deployment:
+  master:
+    branch: master
+    commands:
+      - npm run gulp docs && npm run gulp publish

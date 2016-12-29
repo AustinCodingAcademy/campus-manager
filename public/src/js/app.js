@@ -1,103 +1,105 @@
 'use strict';
 
-require('es6-shim');
+require('add-to-homescreen');
+addToHomescreen();
+import 'es6-shim';
+import 'whatwg-fetch';
+const Backbone = require('backbone');
+// Backbone.ajax = require('backbone.fetch');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import 'react.backbone';
+const moment = require('moment');
 var $ = window.$ = window.jQuery = require('jquery');
-require('materialize');
-require('picker');
-require('picker.date');
-require('picker.time');
 
-var _ = require('underscore');
-var Backbone = require('backbone');
-var React = require('react');
-var ReactDOM = require('react-dom');
-var moment = require('moment');
+const UserModel = require('./models/UserModel');
+const TermModel = require('./models/TermModel');
+const ReportModel = require('./models/ReportModel');
+const CourseModel = require('./models/CourseModel');
 
-var AttendanceListComponent = React.createFactory(require('./components/AttendanceListComponent'));
-var TermsCollection = require('./collections/TermsCollection');
-var TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
-var CoursesCollection = require('./collections/CoursesCollection');
-var CourseModel = require('./models/CourseModel');
-var CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
-var CourseComponent = React.createFactory(require('./components/CourseComponent'));
-var HomeLayoutComponent = React.createFactory(require('./components/HomeLayoutComponent'));
-var NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
-var UserModel = require('./models/UserModel');
-var UsersCollection = require('./collections/UsersCollection');
-var LocationsCollection = require('./collections/LocationsCollection');
-var UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
-var LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
-var RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
-var TermModel = require('./models/TermModel');
-var UserComponent = React.createFactory(require('./components/UserComponent'));
-var ReportComponent = React.createFactory(require('./components/ReportComponent'));
-var ReportModel = require('./models/ReportModel');
+const TermsCollection = require('./collections/TermsCollection');
+const CoursesCollection = require('./collections/CoursesCollection');
+const UsersCollection = require('./collections/UsersCollection');
+const LocationsCollection = require('./collections/LocationsCollection');
+const TextbooksCollection = require('./collections/TextbooksCollection');
 
-$(function() {
+const TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
+const CoursesListComponent = React.createFactory(require('./components/CoursesListComponent'));
+const CourseComponent = React.createFactory(require('./components/CourseComponent'));
+const HomeLayoutComponent = React.createFactory(require('./components/HomeLayoutComponent'));
+const NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
+const UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
+const LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
+const TextbooksListComponent = React.createFactory(require('./components/TextbooksListComponent'));
+const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
+const UserComponent = React.createFactory(require('./components/UserComponent'));
+const ReportComponent = React.createFactory(require('./components/ReportComponent'));
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('error', function (e) {
+    console.log(e.error);
+  });
   $(document).ajaxError(function(e, xhr) {
     if (xhr.status === 401) {
       window.location.replace('/login');
     }
-    Materialize.toast(JSON.parse(xhr.responseText).message + ' See console for more info.', 4000, 'red darken-1');
-    console.log(JSON.parse(xhr.responseText).error);
   });
   Backbone.$.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
-  $('.modal').modal();
 
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'index',
       '/': 'index',
-      'attendance': 'attendance',
       'terms': 'terms',
       'users': 'users',
       'users/:id': 'user',
       'courses': 'courses',
       'locations': 'locations',
+      'textbooks': 'textbooks',
       'courses/:id': 'course',
       'registration': 'registration',
       'report': 'report',
       'report/:query': 'report'
     },
 
-    currentUser: new UserModel($('[data-bootstrap]').detach().data('bootstrap')),
-    currentView: undefined,
+    currentUser: new UserModel(JSON.parse(document.querySelector('[data-bootstrap]').getAttribute('data-bootstrap'))),
 
     initialize: function() {
+      document.querySelector('[data-bootstrap]').remove();
       $('<div id="nav-container"></div>').insertBefore('#container');
-      ReactDOM.render(NavbarComponent({ model: this.currentUser }), $('#nav-container')[0]);
+      ReactDOM.render(NavbarComponent({ model: this.currentUser }), document.getElementById('nav-container'));
     },
 
     execute: function(callback, args, name) {
-      ReactDOM.unmountComponentAtNode($('#container')[0]);
+      ReactDOM.unmountComponentAtNode(document.getElementById('container'));
       $(document).scrollTop(0);
       if (callback) callback.apply(this, args);
     },
 
     user: function(id) {
-      var that = this;
-      var user = new UserModel({ _id: id });
-      user.fetch({
-        success: function() {
-          ReactDOM.render(UserComponent({
-            model: user,
-            currentUser: that.currentUser
-          }), $('#container')[0]);
+      const user = new UserModel({ _id: id });
+      const terms = new TermsCollection();
+      terms.fetch({
+        success: () => {
+          terms.reset(terms.filter(term => {
+            return moment.utc(term.get('start_date')).isAfter(moment());
+          }));
+          terms.trigger('add');
         }
       });
-    },
-
-    attendance: function() {
-      var users = new UsersCollection();
-      users.fetch();
-      ReactDOM.render(AttendanceListComponent({
-        users: users,
-        model: new UserModel()
-      }), $('#container')[0]);
+      user.fetch({
+        success: () => {
+          ReactDOM.render(UserComponent({
+            model: user,
+            currentUser: this.currentUser,
+            terms: terms
+          }), document.getElementById('container'));
+        }
+      });
     },
 
     index: function() {
@@ -107,7 +109,7 @@ $(function() {
     terms: function() {
       var terms = new TermsCollection();
       terms.fetch();
-      ReactDOM.render(TermsListComponent({ collection: terms }), $('#container')[0]);
+      ReactDOM.render(TermsListComponent({ collection: terms }), document.getElementById('container'));
     },
 
     users: function() {
@@ -116,35 +118,37 @@ $(function() {
       ReactDOM.render(UsersListComponent({
         collection: users,
         currentUser: this.currentUser
-       }), $('#container')[0]);
+       }), document.getElementById('container'));
     },
 
     locations: function() {
       var locations = new LocationsCollection();
       locations.fetch();
-      ReactDOM.render(LocationsListComponent({ collection: locations }), $('#container')[0]);
+      ReactDOM.render(LocationsListComponent({ collection: locations }), document.getElementById('container'));
+    },
+
+    textbooks: function() {
+      const textbooks = new TextbooksCollection();
+      textbooks.fetch();
+      ReactDOM.render(TextbooksListComponent({ collection: textbooks }), document.getElementById('container'));
     },
 
     courses: function() {
-      var that = this;
-      var courses = new CoursesCollection();
+      const courses = new CoursesCollection();
       courses.fetch();
-      var terms = new TermsCollection();
-      terms.fetch({
-        success: function() {
-          var locations = new LocationsCollection();
-          locations.fetch({
-            success: function() {
-              ReactDOM.render(CoursesListComponent({
-                terms: terms,
-                collection: courses,
-                currentUser: that.currentUser,
-                locations: locations
-              }), $('#container')[0]);
-            }
-          });
-        }
-      });
+      const terms = new TermsCollection();
+      terms.fetch();
+      const locations = new LocationsCollection();
+      locations.fetch();
+      const textbooks = new TextbooksCollection();
+      textbooks.fetch();
+      ReactDOM.render(CoursesListComponent({
+        collection: courses,
+        currentUser: this.currentUser,
+        terms,
+        locations,
+        textbooks
+      }), document.getElementById('container'));
     },
 
     course: function(id) {
@@ -153,7 +157,7 @@ $(function() {
       ReactDOM.render(CourseComponent({
         model: course,
         currentUser: this.currentUser
-      }), $('#container')[0]);
+      }), document.getElementById('container'));
     },
 
     registration: function() {
@@ -168,7 +172,7 @@ $(function() {
                 collection: courses,
                 users: users,
                 currentUser: that.currentUser
-              }), $('#container')[0]);
+              }), document.getElementById('container'));
             }
           });
         }
@@ -181,10 +185,10 @@ $(function() {
           sql: query ? atob(query) : "SELECT name, sql FROM sqlite_master WHERE type='table';"
         }),
         currentUser: this.currentUser
-      }), $('#container')[0]);
+      }), document.getElementById('container'));
     }
   });
 
   new AppRouter();
   Backbone.history.start();
-});
+}, false);
