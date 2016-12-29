@@ -12,6 +12,7 @@ $icon-font-path: '../../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
   '../../../node_modules/react-datepicker/dist/react-datepicker',
   '../../../node_modules/font-awesome/scss/font-awesome',
   '../../../node_modules/add-to-homescreen/dist/style/addtohomescreen',
+  '../../../node_modules/intl-tel-input/build/css/intlTelInput',
   './components/buttons',
   './components/modal',
   './components/youtube-uploader';
@@ -113,4 +114,8 @@ html, body {
 
 .panel-title a {
   cursor: pointer;
+}
+
+.intl-tel-input {
+  display: block;
 }
