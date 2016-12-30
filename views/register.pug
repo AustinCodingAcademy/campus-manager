@@ -6,7 +6,7 @@ block content
       .panel.panel-default
         .panel-heading Register
         .panel-body
-          form(action='/register' + id, method='post')
+          form(action='/register/' + id, method='post')
             input(type='hidden', name='_csrf', value=csrfToken)
             .form-group
               label(for='first-name') First name
