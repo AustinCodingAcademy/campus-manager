@@ -10,6 +10,7 @@ const LocationOptionComponent = require('./LocationOptionComponent');
 const LocationValueComponent = require('./LocationValueComponent');
 const LocationModel = require('../models/LocationModel');
 const TermModel = require('../models/TermModel');
+const TextbookModel = require('../models/TextbookModel');
 
 module.exports = React.createBackboneClass({
   mixins: [
@@ -32,6 +33,7 @@ module.exports = React.createBackboneClass({
     return {
       location: new LocationModel(),
       term: new TermModel(),
+      textbook: new TextbookModel(),
       course: this.getModel().attributes,
       days: [],
       alertVisible: 'hidden',
@@ -50,6 +52,12 @@ module.exports = React.createBackboneClass({
     const term = option.term || this.getModel().get('term');
     this.setState({ term });
     this.state.course.term = term;
+  },
+
+  setTextbookValue(option) {
+    const textbook = this.props.textbooks.get(option.value) || this.getModel().get('textbook');
+    this.setState({ textbook });
+    this.state.course.textbook = textbook;
   },
 
   selectDays(options) {
@@ -109,6 +117,7 @@ module.exports = React.createBackboneClass({
       course: this.getModel().attributes,
       term: this.getModel().get('term'),
       location: this.getModel().get('location'),
+      textbook: this.getModel().get('textbook'),
       days: this.dayOptions.filter(day => {
         return this.getModel().get('days').includes(day.value);
       })
@@ -161,15 +170,13 @@ module.exports = React.createBackboneClass({
             </FormGroup>
             <FormGroup controlId="textbook">
               <ControlLabel>Textbook</ControlLabel>
-              <FormControl
-                componentClass="select"
-                placeholder="Select..."
-                onChange={this.changeTextbookValue}
-                defaultValue={this.getModel().get('textbook').id || ''}
-              >
-                <option value="">Select a Textbook...</option>
-                {textbookOptions}
-             </FormControl>
+              <Select
+                name="textbooks"
+                value={this.state.textbook.id}
+                options={this.props.textbooks.map(textbook => { return { value: textbook.id, label: textbook.get('name')}; })}
+                onChange={this.setTextbookValue}
+                placeholder="Type to search..."
+              />
            </FormGroup>
             <FormGroup controlId="cost">
               <ControlLabel>Cost</ControlLabel>

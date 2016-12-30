@@ -284,7 +284,7 @@ module.exports = React.createBackboneClass({
                 header={
                   <h3>
                     Profile
-                    <a className={`${hidden} pull-right`} onClick={this.open}>
+                    <a className={`${hidden} pull-right`} onClick={this.open} data-test="edit-profile">
                       <FontAwesome name="pencil" fixedWidth={true} />
                     </a>
                   </h3>

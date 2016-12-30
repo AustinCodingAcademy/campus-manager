@@ -65,7 +65,7 @@ module.exports = React.createBackboneClass({
           <h3>
             Locations
             <small>
-              <a href="#" className="pull-right" onClick={this.open}>
+              <a href="#" className="pull-right" onClick={this.open} data-test="new-location">
                 <FontAwesome name='plus' />
                 &nbsp;Location
               </a>
