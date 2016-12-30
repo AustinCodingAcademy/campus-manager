@@ -103,7 +103,7 @@ module.exports = React.createBackboneClass({
           <td>{('$' + ((charge.amount - charge.amount_refunded) / 100).toFixed(2))}</td>
           <td>*{charge.source.last4}</td>
           <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
-          <td>{charge.metadata.course_name}</td>
+          <td>{charge.metadata && charge.metadata.course_name ? charge.metadata.course_name : ''}</td>
         </tr>
       )
     });

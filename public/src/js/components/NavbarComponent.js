@@ -51,7 +51,7 @@ module.exports = React.createBackboneClass({
             <Navbar.Brand>
               <a href="#">
                 <img
-                  src="img/ACA_standard_mark_small.png"
+                  src="/img/ACA_standard_mark_small.png"
                   style={{ maxHeight: '25px', display: 'inline', marginRight: '10px' }}
                 />
                 Campus Manager
