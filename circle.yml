@@ -14,8 +14,3 @@ test:
     # - screen-capture start ${CIRCLE_ARTIFACTS}/selenium.webm
   post:
     # - screen-capture stop
-deployment:
-  master:
-    branch: master
-    commands:
-      - npm run gulp docs && npm run gulp publish
