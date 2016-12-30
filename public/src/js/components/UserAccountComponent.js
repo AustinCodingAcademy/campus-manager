@@ -43,18 +43,6 @@ module.exports = React.createBackboneClass({
     const courseCharges = [];
     let totalPaid = 0;
 
-    const courseCards = this.getModel().get('courses').map((course, idx) => {
-      if (course.get('cost') && course.get('cost') > 0) {
-        totalCourseCost += course.get('cost');
-        courseCharges.push(
-          <tr key={course.id + course.get('cost')}>
-            <td>${Number(this.getModel().get('price') || course.get('cost')).toFixed(2)}</td>
-            <td>{course.get('name')}</td>
-          </tr>
-        );
-      }
-    });
-
     _.each(
         _.filter(this.getModel().get('credits').trim().split(',').map(credit => {
           return _.map(credit.trim().split(':'), item => {

@@ -20,7 +20,7 @@ gulp.task('nodemon-start', function() {
     env: {
       NODE_ENV: 'test',
       PORT: 8080,
-      TEST_DB: 'mongodb://localhost/test',
+      TEST_DB: 'mongodb://localhost/campus-manager-test',
       // These are one-off keys, not attached to any account
       STRIPE_SECRET_KEY: 'sk_test_lvCpZcnc4rdLb5s87pG642Yr',
       STRIPE_PUBLISHABLE_KEY: 'pk_test_E71Myo8fhYgUb7DqSuP6MoCM',
@@ -34,7 +34,7 @@ gulp.task('nodemon-start', function() {
 
 gulp.task('nightwatch', function() {
   return gulp.src('').pipe(nightwatch({
-    configFile: "nightwatch.json"
+    configFile: 'nightwatch.json'
   }));
 });
 
