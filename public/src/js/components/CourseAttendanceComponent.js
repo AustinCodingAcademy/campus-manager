@@ -1,29 +1,34 @@
-var React = require('react');
-var moment = require('moment');
-var LineChart = require('react-chartjs').Line;
-var Chart = require('chart.heatmap.js');
-require('react.backbone');
+import * as React from 'react';
+import {Line} from 'react-chartjs';
+const Chart = require('chart.heatmap.js');
+import { Row, Col, Panel } from 'react-bootstrap';
 
 module.exports = React.createBackboneClass({
-  rendered: false,
-
-  componentDidUpdate: function() {
-    if (this.getModel().get('student').data.datasets.length > 0 && !this.rendered) {
-      var ctx = this.refs.heatmap.getContext('2d');
-      var newChart = new Chart(ctx).HeatMap(this.getModel().get('student').data, this.getModel().get('student').options);
-      this.rendered = true;
+  componentDidUpdate() {
+    if (this.getModel().get('student').data.datasets.length > 0) {
+      const ctx = this.refs.heatmap.getContext('2d');
+      const newChart = new Chart(ctx).HeatMap(this.getModel().get('student').data, this.getModel().get('student').options);
     }
   },
 
-  render: function() {
+  shouldComponentUpdate() {
+    return false;
+  },
+
+  render() {
     return (
-      <div className="row">
-        <div className="col s12">
-          <h4>Attendance</h4>
-          <LineChart data={this.getModel().get('overTime').data} ref="attendanceChart" options={this.getModel().get('overTime').options} />
-          <canvas ref="heatmap"></canvas>
-        </div>
-      </div>
+      <Row>
+        <Col xs={12} md={5}>
+          <Panel header={<h3>Course Attendance</h3>}>
+            <Line data={this.getModel().get('overTime').data} ref="attendanceChart" options={this.getModel().get('overTime').options} />
+          </Panel>
+        </Col>
+        <Col xs={12} md={7}>
+          <Panel header={<h3>Student Attendance</h3>}>
+            <canvas ref="heatmap"></canvas>
+          </Panel>
+        </Col>
+      </Row>
     );
   }
 });

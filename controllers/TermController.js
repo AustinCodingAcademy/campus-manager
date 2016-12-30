@@ -111,7 +111,17 @@ module.exports = {
         });
       }
 
-      term.start_date =  req.body.start_date ? req.body.start_date : term.start_date;      term.end_date =  req.body.end_date ? req.body.end_date : term.end_date;      term.name =  req.body.name ? req.body.name : term.name;      term.save(function(err, term){
+      const attrs = [
+        'start_date',
+        'end_date',
+        'name'
+      ];
+
+      attrs.forEach(attr => {
+        term[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : term[attr];
+      });
+
+      term.save(function(err, term){
         if(err) {
           return res.json(500, {
             message: 'Error getting term.',

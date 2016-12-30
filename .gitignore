@@ -4,6 +4,7 @@ npm-debug.log
 config/env.js
 public/css
 public/js
+public/docs
 .env
 reports
 *.log

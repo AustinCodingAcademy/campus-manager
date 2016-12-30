@@ -1,12 +1,13 @@
-var Backbone = require('backbone');
-var _ = require('underscore');
-var TermModel = require('./TermModel');
-var UsersCollection = require('../collections/UsersCollection');
-var LocationModel = require('../models/LocationModel');
-var moment = require('moment');
-require('moment-range');
+import { Model } from 'backbone';
+import * as _ from 'underscore';
+const moment = require('moment');
+import 'moment-range';
+const TermModel = require('./TermModel');
+const UsersCollection = require('../collections/UsersCollection');
+const LocationModel = require('../models/LocationModel');
+const TextbookModel = require('../models/TextbookModel');
 
-module.exports = Backbone.Model.extend({
+module.exports = Model.extend({
   urlRoot: 'api/courses',
   idAttribute: '_id',
 
@@ -15,15 +16,15 @@ module.exports = Backbone.Model.extend({
     term: new TermModel(),
     seats: '',
     registrations: new UsersCollection(),
-    textbook: '',
     days: [],
     holidays: [],
     cost: '',
-    location: new LocationModel()
+    location: new LocationModel(),
+    textbook: new TextbookModel()
   },
 
   initialize: function() {
-    this.set('attendance', new Backbone.Model({
+    this.set('attendance', new Model({
       overTime: {
         data: {
           labels: [],
@@ -54,6 +55,11 @@ module.exports = Backbone.Model.extend({
           tooltipTemplate: "<%= xLabel %> | <%= yLabel %> | <%= value === 0 ? 'Absent' : 'Present' %>",
           responsive: true,
           showLabels: false,
+          rounded: false,
+          paddingScale: 0.15,
+          colors: [ '#ffffff', '#5cb85c'],
+          labelFontFamily: 'Lato'
+
         }
       }
     }), {silent: true});
@@ -168,8 +174,11 @@ module.exports = Backbone.Model.extend({
     }
 
     if (obj.location) {
-      var LocationModel = require('./LocationModel');
       obj.location = new LocationModel(obj.location, { parse: true });
+    }
+
+    if (obj.textbook) {
+      obj.textbook = new TextbookModel(obj.textbook, { parse: true });
     }
 
     return obj;

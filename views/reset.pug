@@ -1,15 +1,19 @@
 extends layout
 
 block content
-  h2 Enter Email
-  form(method="post")
-    input(type='hidden', name='_csrf', value=csrfToken)
-    .row
-      .input-field.col.s12
-        input#email.validate(type='email', name='username')
-        label(for='email') Email
-    button.btn.waves-effect.waves-light(type='submit', name='action') Submit
-      i.material-icons.right send
+  .row
+    .col-xs-12.col-md-6.col-md-offset-3
+      .panel.panel-default
+        .panel-heading Password Reset Email
+        .panel-body
+          form
+            input(type='hidden', name='_csrf', value=csrfToken)
+            .form-group
+              label(for='email') Enter email address
+              input#email.form-control(type='email', name='username', placeholder='Email')
+            button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action')
+              i.fa.fa-envelope
+              span &nbsp;Send Email
 block bottom_scripts
   script(type='text/javascript').
     $('form').submit(function(e) {
@@ -21,10 +25,15 @@ block bottom_scripts
           _csrf: $('[name="_csrf"]').val()
         },
         success: function(response) {
-          Materialize.toast(response.message, 4000);
-        },
-        error: function(response) {
-          Materialize.toast(JSON.parse(response.responseText).message, 4000, 'red text-white');
+          $('.alerts').append(`
+            <div class="alert alert-success" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              ${response.message}
+            </div>
+          `);
+          $('.alert').alert();
         }
       });
     });

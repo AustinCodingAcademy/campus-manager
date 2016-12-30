@@ -1,49 +1,105 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-require('react.backbone');
-var TermItemComponent = React.createFactory(require('./TermItemComponent.js'));
-var TermModalComponent = React.createFactory(require('./TermModalComponent.js'));
-var TermModel = require('../models/TermModel');
+import * as React from 'react';
+import { Table, Tr, Td, Th, Thead } from 'reactable';
+import { Col, Row, Button, FormControl } from 'react-bootstrap';
+const FontAwesome = require('react-fontawesome');
+const TermModalComponent = require('./TermModalComponent.js');
+const TermModel = require('../models/TermModel');
+const moment = require('moment');
 
 module.exports = React.createBackboneClass({
-  newTermModal: function() {
-    ReactDOM.unmountComponentAtNode($('#modal-container')[0]);
-    ReactDOM.render(TermModalComponent({
-      collection: this.getCollection(),
-      model: new TermModel()
-    }), $('#modal-container')[0]);
-    $('#term-modal').modal('open');
+  getInitialState() {
+    return {
+      showModal: false,
+      term: new TermModel(),
+      modalTitle: 'New Term',
+      filterBy: ''
+    }
+  },
+
+  close() {
+    this.setState({ showModal: false });
+  },
+
+  open(e) {
+    e.preventDefault();
+    const term = this.getCollection().get(e.currentTarget.getAttribute('data-id')) || new TermModel();
+    this.state.term.clear().set(term.attributes);
+    this.setState({
+      showModal: true,
+      modalTitle: term.id ? 'Edit Term' : 'New Term'
+    });
+  },
+
+  changeFilterValue(e) {
+    this.setState({
+      filterBy: e.currentTarget.value
+    });
   },
 
   render: function() {
-    var termItems = this.getCollection().map(function(termItem) {
-      return TermItemComponent({
-        key: termItem.id,
-        model: termItem,
-        collection: this.getCollection()
-      })
-    }, this);
+    const termRows = this.getCollection().map(term => {
+      return (
+        <Tr key={term.id}>
+          <Td column="Name">{term.get('name')}</Td>
+          <Td
+            column="Dates"
+            value={`${moment.utc(term.get('start_date')).format('ddd, MMM D, YYYY')} ${moment.utc(term.get('end_date')).format('ddd, MMM D, YYYY')}`}
+          >
+            {`${moment.utc(term.get('start_date')).format('ddd, MMM D, YYYY')} - ${moment.utc(term.get('end_date')).format('ddd, MMM D, YYYY')}`}
+          </Td>
+          <Td column="edit">
+            <a href="#" onClick={this.open} data-id={term.id}>
+              <FontAwesome name='pencil' />
+            </a>
+          </Td>
+        </Tr>
+      );
+    });
 
     return (
-      <div className="row">
-        <div className="col s12">
+      <Row>
+        <Col xs={12}>
+          <h3>
+            Terms
+            <small>
+              <a href="#" className="pull-right" onClick={this.open} data-test="new-term">
+                <FontAwesome name='plus' />
+                &nbsp;Term
+              </a>
+            </small>
+          </h3>
+          <FormControl
+            type="text"
+            placeholder="Filter..."
+            onChange={this.changeFilterValue}
+            defaultValue={this.state.filterBy}
+          />
           <br />
-          <a className="waves-effect waves-teal btn" onClick={this.newTermModal} data-test="new-term"><i className="material-icons left">add</i> term</a>
-          <br />
-          <table className="striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Dates</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {termItems}
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <div className="x-scroll">
+            <Table
+              className="table table-condensed table-striped"
+              itemsPerPage={20}
+              filterable={['Name', 'Dates']}
+              sortable={['Name', 'Dates']}
+              filterBy={this.state.filterBy}
+            >
+              <Thead>
+                <Th>Name</Th>
+                <Th>Dates</Th>
+                <Th>edit</Th>
+              </Thead>
+              {termRows}
+            </Table>
+          </div>
+          <TermModalComponent
+            show={this.state.showModal}
+            onHide={this.close}
+            terms={this.getCollection()}
+            model={this.state.term}
+            title={this.state.modalTitle}
+          />
+        </Col>
+      </Row>
     );
   }
 });

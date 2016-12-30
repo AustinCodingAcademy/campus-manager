@@ -1,11 +1,6 @@
 var React = require('react');
 
 module.exports = React.createClass({
-	propTypes: {
-		children: React.PropTypes.node,
-		placeholder: React.PropTypes.string,
-		value: React.PropTypes.object
-	},
 	render () {
 		return (
 			<div className="Select-value" title={this.props.value.title}>

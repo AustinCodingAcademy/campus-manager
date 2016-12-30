@@ -10,35 +10,45 @@ html(lang='us-en')
       link(rel='stylesheet', href='{{cache-break:css/app.css}}')
     else
       link(rel='stylesheet', href='/css/app.css')
-    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
   body
     include top-bar
     // Your content goes here
     .container
       .row
-        .col.s12
+        .col-xs-12.alerts
           if (messages.info)
-            .card-panel.yellow
-              span.white-text= messages.info
+            .alert.alert-info(role='alert')
+              button.close(type='button', data-dismiss='alert', aria-label='Close')
+                span(aria-hidden='true') ×
+              span=  messages.info
           if (messages.error)
-            .card-panel.red
-              span.white-text= messages.error
+            .alert.alert-danger(role='alert')
+              button.close(type='button', data-dismiss='alert', aria-label='Close')
+                span(aria-hidden='true') ×
+              span= messages.error
       block content
     include feedback
     include apps
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
-    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/js/intlTelInput.min.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js')
     script(type='text/javascript').
       $(function() {
-        $(".button-collapse").sideNav();
-
-        $(document).ajaxError(function(e, xhr) {
-          if (xhr.status === 401) {
+        $(document).ajaxError(function(e, response) {
+          if (response.status === 401) {
             window.location.replace('/login');
+          } else {
+            $('.alerts').append(`
+              <div class="alert alert-danger" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                ${JSON.parse(response.responseText).message}
+              </div>
+            `);
+            $('.alert').alert();
           }
         });
-
-        $('.modal').modal();
       });
-    include feedback-js
     block bottom_scripts
