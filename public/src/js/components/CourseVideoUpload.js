@@ -1,9 +1,13 @@
-var React = require('react');
-var YoutubeAccountSelect = require('./YoutubeAccountSelect');
-var YoutubeUploader = require('./YoutubeUploader');
+import * as React from 'react';
+import {
+  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
+  InputGroup, Alert
+} from 'react-bootstrap';
+const YoutubeAccountSelect = require('./YoutubeAccountSelect');
+const YoutubeUploader = require('./YoutubeUploader');
 
 module.exports = React.createBackboneClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       errorMessage: false,
       canUploadVideo: false,
@@ -11,32 +15,32 @@ module.exports = React.createBackboneClass({
     };
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         {this.state.errorMessage ? this.renderErrorMessage() : ''}
-        <div className='row'>
-          <div className="col s12">
+        <Row>
+          <Col xs={12}>
             {this.state.canUploadVideo ? this.renderUploader() : this.renderAccountSelect()}
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     );
   },
 
-  renderErrorMessage: function() {
+  renderErrorMessage() {
     return (
-      <div className="row">
-        <div className="col s12">
+      <Row>
+        <Col xs={12}>
           <div className="card-panel red darken-4 grey-text text-lighten-5">
             {this.state.errorMessage}
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   },
 
-  renderUploader: function() {
+  renderUploader() {
     return (
       <YoutubeUploader
         onUpload={this.hideErrorMessage}
@@ -47,7 +51,7 @@ module.exports = React.createBackboneClass({
     );
   },
 
-  renderAccountSelect: function() {
+  renderAccountSelect() {
     return (
       <YoutubeAccountSelect
         onAccountSelect={this.checkAccount}
@@ -55,7 +59,7 @@ module.exports = React.createBackboneClass({
     );
   },
 
-  checkAccount: function(accessToken, response) {
+  checkAccount(accessToken, response) {
     if (response.result.items[0].id === process.env.YOUTUBE_CHANNEL_ID) {
       this.setState({
         canUploadVideo: true,
@@ -64,13 +68,13 @@ module.exports = React.createBackboneClass({
       });
     } else {
       this.setState({
-        errorMessage: "Oh no! It looks like you didn't select the ACA Class Videos account, please try again!"
+        errorMessage: "Oh no! It looks like you didn't select the ACA Class Screencasts account, please try again!"
       });
     }
   },
 
-  onComplete: function(uploadResponse) {
-    var videos = this.getModel().get('videos');
+  onComplete(uploadResponse) {
+    const videos = this.getModel().get('videos');
     videos.push({
       youtubeId: uploadResponse.id,
       link: 'https://www.youtube.com/watch?v=' + uploadResponse.id,
@@ -84,11 +88,11 @@ module.exports = React.createBackboneClass({
     this.getModel().save();
   },
 
-  hideErrorMessage: function() {
+  hideErrorMessage() {
     this.setState({'errorMessage': false});
   },
 
-  showErrorMessage: function(message) {
+  showErrorMessage(message) {
     this.setState({errorMessage: message});
   }
 });

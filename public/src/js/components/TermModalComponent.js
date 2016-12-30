@@ -1,75 +1,143 @@
-var React = require('react');
-require('react.backbone');
-var TermModel = require('../models/TermModel');
-var moment = require('moment');
+import * as React from 'react';
+import {
+  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
+  InputGroup, Alert
+} from 'react-bootstrap';
+const DatePicker = require('react-datepicker');
+const TermModel = require('../models/TermModel');
+const moment = require('moment');
 
 module.exports = React.createBackboneClass({
-  componentDidMount: function() {
-    this.refs.name.value = this.getModel().get('name');
-    $(this.refs.start_date).pickadate().pickadate('picker').set('select', moment.utc(this.getModel().get('start_date')).format('D MMMM, YYYY'), { muted: true });
-    $(this.refs.end_date).pickadate().pickadate('picker').set('select', moment.utc(this.getModel().get('end_date')).format('D MMMM, YYYY'), { muted: true });
-    $('select').material_select();
-    $('.modal').modal();
-    Materialize.updateTextFields();
+  getInitialState() {
+    return {
+      term: this.getModel().attributes,
+      alertVisible: 'hidden',
+      error: '',
+      title: this.props.title,
+      startDate: moment(),
+      endDate: moment(),
+    }
   },
 
-  saveTerm: function(e) {
+  save(e) {
     e.preventDefault();
-    var that = this;
-
-    this.getModel().save({
-      name: this.refs.name.value,
-      start_date: this.refs.start_date.value,
-      end_date: this.refs.end_date.value
-    }, {
-      success: function (term) {
-        that.getCollection().add(term);
+    this.getModel().save(this.state.user, {
+      success: () => {
+        this.props.terms.add(this.getModel(), {
+          merge: true
+        });
+        this.props.onHide();
+      },
+      error: (model, res) => {
+        this.setState({
+          error: res.responseJSON.message,
+          alertVisible: ''
+        });
       }
     });
   },
 
-  deleteTerm: function(e) {
+  changeTextValue(e) {
+    const attr = e.currentTarget.getAttribute('id');
+    this.state.term[attr] = e.currentTarget.value;
+  },
+
+  handleAlertDismiss() {
+    this.setState({ alertVisible: 'hidden' });
+  },
+
+  handleStartDateChange(date) {
+    this.setState({
+      startDate: date
+    });
+    this.state.term.start_date = date.toISOString();
+  },
+
+  handleEndDateChange(date) {
+    this.setState({
+      endDate: date
+    });
+    this.state.term.end_date = date.toISOString();
+  },
+
+  delete(e) {
     e.preventDefault();
-    var r = confirm('Are you sure you want to delete this term?');
-    if (r == true) {
+    if (confirm('Are you sure you want to delete this term?')) {
       this.getModel().destroy({
-        wait: true,
-        success: function() {
-          $('#term-modal').modal('close');
+        success: () => {
+          this.props.terms.remove(this.getModel());
+          this.props.onHide();
+        },
+        error: (model, res) => {
+          this.setState({
+            error: res.responseJSON.message,
+            alertVisible: ''
+          });
         }
       });
     }
   },
 
-  render: function() {
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      title: nextProps.title,
+      term: this.getModel().attributes,
+      startDate: moment.utc(this.getModel().get('start_date')),
+      endDate: moment.utc(this.getModel().get('end_date'))
+    });
+  },
 
+  handleAlertDismiss() {
+    this.setState({ alertVisible: 'hidden' });
+  },
+
+  render: function() {
     return (
-      <div id={'term-modal' + (this.getModel().id ? this.getModel().id  : '')} className="modal">
-        <div className="modal-content">
-          <div className="row">
-            <form className="col s12" onSubmit={this.saveTerm}>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input ref="name" type="text" className="validate" data-test="term-name"/>
-                  <label htmlFor="name">Name</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col s6">
-                  <label htmlFor="start-date">Start Date</label>
-                  <input ref="start_date" type="date" data-test="term-start-date" />
-                </div>
-                <div className="col s6">
-                  <label htmlFor="end-date">End Date</label>
-                  <input ref="end_date" type="date" data-test="term-end-date"/>
-                </div>
-              </div>
-              <input type="submit" className="modal-action modal-close waves-effect waves-green btn" value="Submit"/>
-              <a href="#" className="waves-effect waves-light btn red right" onClick={this.deleteTerm}><i className="fa fa-trash fa-2x"></i></a>
-            </form>
-          </div>
-        </div>
-      </div>
+      <Modal show={this.props.show} onHide={this.props.onHide}>
+        <Modal.Header closeButton>
+          <Modal.Title>{this.state.title}</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={this.save}>
+          <Modal.Body>
+            <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
+              <p>{this.state.error}</p>
+            </Alert>
+            <FormGroup controlId="name">
+              <ControlLabel>Name</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Name"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.term.name}
+              />
+            </FormGroup>
+            <FormGroup controlId="start-date">
+              <ControlLabel>Start Date</ControlLabel>
+              <DatePicker
+                id="start-date"
+                dateFormat="ddd, MMM D, YYYY"
+                selected={this.state.startDate}
+                className="form-control"
+                onChange={this.handleStartDateChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="end-date">
+              <ControlLabel>End Date</ControlLabel>
+              <DatePicker
+                id="end-date"
+                dateFormat="ddd, MMM D, YYYY"
+                selected={this.state.endDate}
+                className="form-control"
+                onChange={this.handleEndDateChange}
+              />
+            </FormGroup>
+            <a href="#" className="link-danger" onClick={this.delete}>Delete Term</a>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="primary" type="submit" block onClick={this.save}>Save</Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     );
   }
 });

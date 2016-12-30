@@ -22,7 +22,6 @@ var courseSchema = new Schema({
   }],
   holidays: Array,
   grades: Array,
-  textbook: String,
 	videos: Array,
   cost: {
     type: Number,
@@ -32,7 +31,19 @@ var courseSchema = new Schema({
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'location',
     required: true
-	}
+	},
+  textbook: {
+	 	type: Schema.Types.ObjectId,
+	 	ref: 'textbook'
+	},
+  timeStart: {
+    type: String,
+    required: true
+  },
+  timeEnd: {
+    type: String,
+    required: true
+  }
 }, { timestamps: true });
 
 courseSchema.plugin(mongooseToCsv, {

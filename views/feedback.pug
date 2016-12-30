@@ -1,8 +1,14 @@
-// Modal Trigger
-.fixed-action-btn(style='bottom: 15px; right: 15px;')
-  a.btn-floating.waves-effect.waves-light.btn-floating(href='#feedback')
-    i.material-icons.right announcement
-// Modal Structure
-#feedback.modal
-  div(style="position: relative;padding-bottom: 56.25%;padding-top: 35px;height: 0;overflow: hidden; min-height: 400px")
-    iframe#feedback-iframe(src='/feedback', frameborder=0, style="position: absolute; top:0; left: 0; width: 100%; height: 100%;")
+button.btn.btn-warning.btn-feedback(type='button', data-toggle='modal', data-target='#feedback-modal')
+  i.fa.fa-comments-o(aria-hidden='true')
+
+.modal#feedback-modal.fade(tabindex='-1', role='dialog')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+        h4.modal-title Feedback
+      .modal-body
+        .h-iframe
+          img.ratio(src='http://placehold.it/8x6/ffffff/ffffff')
+          iframe(src='/feedback', frameborder=0)

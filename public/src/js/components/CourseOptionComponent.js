@@ -1,16 +1,8 @@
-var React = require('react');
+import * as React from 'react';
+import { Label } from 'react-bootstrap';
+const moment = require('moment');
 
 module.exports = React.createClass({
-	propTypes: {
-		children: React.PropTypes.node,
-		className: React.PropTypes.string,
-		isDisabled: React.PropTypes.bool,
-		isFocused: React.PropTypes.bool,
-		isSelected: React.PropTypes.bool,
-		onFocus: React.PropTypes.func,
-		onSelect: React.PropTypes.func,
-		option: React.PropTypes.object.isRequired,
-	},
 	handleMouseDown (event) {
 		event.preventDefault();
 		event.stopPropagation();
@@ -24,27 +16,22 @@ module.exports = React.createClass({
 		this.props.onFocus(this.props.option, event);
 	},
 	render () {
-		let gravatarStyle = {
-			borderRadius: 3,
-			display: 'inline-block',
-			marginRight: 10,
-			position: 'relative',
-			top: -2,
-			verticalAlign: 'middle',
-		};
-		var badge = '';
+		let label = '';
 		if (this.props.option.course.get('registered')) {
-			badge = (
-				<small><span className="new badge" data-badge-caption="registered"></span></small>
+			label = (
+				<small>
+          <Label bsStyle="success">Registered</Label>
+        </small>
 			);
 		}
 		return (
-			<div className={this.props.className}
-				onMouseDown={this.handleMouseDown}
-				onMouseEnter={this.handleMouseEnter}
-				onMouseMove={this.handleMouseMove}
-				title={this.props.option.title}>
-				<h5>{this.props.option.course.get('name')}{badge}</h5>
+			<div
+			className={this.props.className}
+			onMouseDown={this.handleMouseDown}
+			onMouseEnter={this.handleMouseEnter}
+			onMouseMove={this.handleMouseMove}
+			title={this.props.option.title}>
+				<h4><strong>{this.props.option.course.get('name')}</strong> {label}</h4>
 				{this.props.option.course.get('location').get('name')}
 				<br />
 				{this.props.option.course.get('location').get('address') + ', '}
@@ -52,13 +39,15 @@ module.exports = React.createClass({
 				{this.props.option.course.get('location').get('state') + ' '}
 				{this.props.option.course.get('location').get('zipcode')}
 				<br />
-				{this.props.option.course.properDays()}
+				{`${this.props.option.course.properDays()} ${moment(this.props.option.course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(this.props.option.course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}
 				<br />
-				Starts on {this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY')}
-        <br/ >
-        {'$' + Number(this.props.option.user.get('price') || this.props.option.course.get('cost')).toFixed(2)}
-				<br/ >
+				Starts on {this.props.option.course.classDates()[0] ? this.props.option.course.classDates()[0].format('ddd, MMM Do, YYYY') : ''}
+        <br />
+        {`$${this.props.option.user && this.props.option.user.get('price') ? Number(this.props.option.user.get('price')).toFixed(2) : Number(this.props.option.course.get('cost')).toFixed(2)}`}
+				<br />
 				{this.props.option.course.get('seats') - this.props.option.course.get('registrations').length} seats left
+        <br />
+				{this.props.option.course.get('term').get('name')}
 			</div>
 		);
 	}

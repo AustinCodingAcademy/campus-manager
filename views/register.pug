@@ -1,28 +1,37 @@
 extends layout
 
 block content
-  h2 Register
-  form(action='/register', method='post')
-    input(type='hidden', name='_csrf', value=csrfToken)
-    .row
-      .input-field.col.s12
-        input#first_name.validate(type='text', name='first_name', required)
-        label(for='first_name') First Name
-    .row
-      .input-field.col.s12
-        input#last_name.validate(type='text', name='last_name', required)
-        label(for='last_name') Last Name
-    .row
-      .input-field.col.s12
-        input#phone.validate(type='tel', name='phone', pattern=".{10,}", required)
-        label(for='phone') Phone (555-555-5555)
-    .row
-      .input-field.col.s12
-        input#email.validate(type='email', name='username', required)
-        label(for='email') Email
-    .row
-      .input-field.col.s12
-        input#password.validate(type='password', name='password', pattern=".{6,}", required)
-        label(for='password') Password (6 character minimum)
-    button.btn.waves-effect.waves-light(type='submit', name='action') Submit
-      i.material-icons.right send
+  .row
+    .col-xs-12.col-md-6.col-md-offset-3
+      .panel.panel-default
+        .panel-heading Register
+        .panel-body
+          form(action='/register' + id, method='post')
+            input(type='hidden', name='_csrf', value=csrfToken)
+            .form-group
+              label(for='first-name') First name
+              input#first-name.form-control(type='text', name='first_name', required, placeholder='First name')
+            .form-group
+              label(for='last-name') Last name
+              input#last-name.form-control(type='text', name='last_name', required, placeholder='Last name')
+            .form-group
+              label(for='phone') Phone
+              input#phone.form-control(type='tel', name='phone', required)
+            .form-group
+              label(for='email') Email
+              input#email.form-control(type='email', name='username', required, placeholder='Email')
+            .form-group
+              label(for='password') Password (6 character minimum)
+              input#password.form-control(type='password', name='password', pattern='.{6,}', required, placeholder='Password')
+            button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
+
+block bottom_scripts
+  script(type='text/javascript').
+    var $phone = $("#phone")
+    $phone.intlTelInput({
+      onlyCountries: ['us'],
+      utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.0.6/js/utils.js'
+    });
+    $phone.on('change', function() {
+      $phone.intlTelInput('setNumber', $phone.val());
+    });

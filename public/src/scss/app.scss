@@ -1,26 +1,25 @@
 @charset 'utf-8';
 
 $fa-font-path: '/fonts/fontawesome/';
+$icon-font-path: '../../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 
 @import
-  '../../../node_modules/materialize-css/dist/css/materialize',
-  '../../../node_modules/font-awesome/scss/font-awesome',
+  url('https://fonts.googleapis.com/css?family=Lato'),
+  './theme/bootstrap/variables',
+  './theme/bootstrap/bootstrap',
   '../../../node_modules/codemirror/lib/codemirror',
   '../../../node_modules/react-select/dist/react-select',
-  './modal',
-  './youtube_uploader';
+  '../../../node_modules/react-datepicker/dist/react-datepicker',
+  '../../../node_modules/font-awesome/scss/font-awesome',
+  '../../../node_modules/add-to-homescreen/dist/style/addtohomescreen',
+  '../../../node_modules/intl-tel-input/build/css/intlTelInput',
+  './components/buttons',
+  './components/modal',
+  './components/youtube-uploader';
 
 *:focus { /* removes Chrome's default outline around input boxes */
   outline-style: none !important;
   outline: 0 !important;
-}
-
-.z-top {
-  z-index: 1004;
-}
-
-nav .brand-logo {
-  margin-left: 1rem;
 }
 
 .trim-margin {
@@ -33,18 +32,6 @@ nav .brand-logo {
 
 .nowrap {
   white-space: nowrap;
-}
-
-@media only screen and (min-width: 993px) {
-  .container {
-      width: 90%;
-  }
-}
-
-@media only screen and (min-width: 601px) {
-  .container {
-      width: 90%;
-  }
 }
 
 .disabled {
@@ -79,21 +66,56 @@ nav .brand-logo {
   color: blue;
 }
 
-.clearfix {
-  clear: both;
+html, body {
+  height: 100%;
 }
 
-.small-checkbox {
-  [type="checkbox"] + &:before, [type="checkbox"]:not(.filled-in) + &:after {
-    top: 4px;
-    height: 15px;
-    width: 15px;
+.h-iframe {
+  position: relative;
+  .ratio {
+    display: block;
+    width: 100%;
+    height: auto;
   }
-  [type="checkbox"] + & {
-    padding-left: 20px;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 }
 
-.Select-input input {
-  height: 1.25rem;
+.x-scroll {
+  overflow-x: scroll;
+  width: 100%;
+}
+
+.reactable-filterer {
+  display: none;
+}
+
+.react-datepicker__input-container {
+  display: block;
+}
+
+.text-danger {
+  color: $brand-danger;
+}
+
+.text-success {
+  color: $brand-success;
+}
+
+.input-group .form-control {
+  z-index: 0;
+}
+
+.panel-title a {
+  cursor: pointer;
+}
+
+.intl-tel-input {
+  display: block;
 }

@@ -15,11 +15,7 @@ module.exports = Backbone.Model.extend({
     note: ''
   },
 
-  fullAddress: function() {
-    return this.get('name') + ', ' + this.get('address') + ', ' + this.get('city') + ', ' + this.get('state') + ' ' + this.get('zipcode');
-  },
-
-  locationAddress: function() {
-    return this.get('name') + '\n' + this.get('address') + '\n' + this.get('city') + ', ' + this.get('state') + '  ' + this.get('zipcode') + '\n' + this.get('note');
+  link() {
+    return `https://www.google.com/maps/search/${this.get('name')} ${this.get('address')} ${this.get('city')} ${this.get('state')} ${this.get('zipcode')}`.split(' ').join('+');
   }
 });

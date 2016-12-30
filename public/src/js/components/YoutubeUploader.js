@@ -1,35 +1,30 @@
-var React = require('react');
-var Dropzone = require('react-dropzone');
-var moment = require('moment');
-var MediaUploader = require('../modules/MediaUploader');
+import * as React from 'react';
+const Dropzone = require('react-dropzone');
+const moment = require('moment');
+const MediaUploader = require('../modules/MediaUploader');
+const DatePicker = require('react-datepicker');
+import { Row, Col, FormGroup, ControlLabel } from 'react-bootstrap';
+const FontAwesome = require('react-fontawesome');
 
 module.exports = React.createBackboneClass({
   getInitialState: function() {
     return {
       uploadStatus: 'upload',
-      uploadProgress: 0
+      uploadProgress: 0,
+      date: null
     };
-  },
-
-  componentDidMount: function() {
-    this.pickadate = $('input[type="date"]').pickadate().pickadate('picker');
-    this.pickadate.set('select', new Date().getTime(), { muted: true });
-    $('input[type="time"]').pickatime();
   },
 
   render: function() {
     return (
       <div className={this.state.uploadStatus} id={'youtube-uploader'}>
-        <div className="row">
-          <div className="col s12">
+        <Row>
+          <Col xs={12}>
             {this.renderDropZone()}
-          </div>
-        </div>
-        <div className="row" style={{marginBottom: 0}}>
-          <div className="col s12">
+            <br />
             {this.renderProgressBar()}
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     );
   },
@@ -37,43 +32,48 @@ module.exports = React.createBackboneClass({
   renderDropZone: function() {
     return (
       <div>
-        <div className="row">
-          <div className="col s12">
-            <Dropzone
-              accept={'video/*'}
-              multiple={false}
-              onDrop={this.onDrop}
-              className='dropzone-base-style'
-              activeClassName='dropzone-active-style'>
-              <div>
-                <i className="material-icons center large upload">cloud_queue</i>
-                <i className="material-icons center large uploading">cloud_upload</i>
-                <i className="material-icons center large complete">cloud_done</i>
-                <i className="material-icons center large error">error</i>
-                <div className="text">
-                  <div>Drag and Drop your video here to upload to youtube!</div>
-                  <div style={{fontSize: '11px'}}>(or click here to select your video, if you're in to that)</div>
+        <Row>
+          <Col xs={12}>
+            <FormGroup controlId="date">
+              <ControlLabel>1. Select Lecture Date</ControlLabel>
+              <DatePicker
+                dateFormat="ddd, MMM D"
+                className="form-control"
+                onChange={this.handleDateChange}
+                selected={this.state.date}
+              />
+            </FormGroup>
+            {this.state.date ?
+            <FormGroup controlId="date">
+              <ControlLabel>2. Upload Video</ControlLabel>
+              <Dropzone
+                accept={'video/*'}
+                multiple={false}
+                onDrop={this.onDrop}
+                className='dropzone-base-style'
+                activeClassName='dropzone-active-style'
+              >
+                <div>
+                  <FontAwesome name="cloud" size="3x" className={`text-primary ${this.state.uploadStatus === 'upload' ? '' : 'hidden'}`} />
+                  <FontAwesome name="cloud-upload" size="3x" className={`text-primary ${this.state.uploadStatus === 'uploading' ? '' : 'hidden'}`} />
+                  <FontAwesome name="cloud" size="3x" className={`text-success ${this.state.uploadStatus === 'complete' ? '' : 'hidden'}`} />
+                  <FontAwesome name="cloud" size="3x" className={`text-danger ${this.state.uploadStatus === 'error' ? '' : 'hidden'}`} />
+                  <div className="text">
+                    <div>Drag and Drop your video here to upload to YouTube!</div>
+                    <small>(or click here to select your video, if you're in to that)</small>
+                  </div>
                 </div>
-              </div>
-            </Dropzone>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s12">
-            <label htmlFor="lecture-date">Select date of lecture:</label>
-            <input
-              type="date"
-              name="lecture-date"
-              onChange={this.handleDateChange}
-              ref="date"/>
-          </div>
-        </div>
+              </Dropzone>
+            </FormGroup>
+            : ''}
+          </Col>
+        </Row>
       </div>
     );
   },
 
-  handleDateChange: function(event) {
-    this.setState({date: event.target.value});
+  handleDateChange: function(date) {
+    this.setState({date: date});
   },
 
   renderProgressBar: function() {
@@ -100,8 +100,8 @@ module.exports = React.createBackboneClass({
 
     var metadata = {
       snippet: {
-        title: moment(this.refs.date.value, 'D MMMM, YYYY').format('YYYY-MM-DD'),
-        description: this.props.course.get('term').get('name') + ' - ' + this.props.course.get('name') + ' ' + moment(this.refs.date.value, 'D MMMM, YYYY').format('ddd, MMM Do, YYYY')
+        title: this.state.date.format('YYYY-MM-DD'),
+        description: `${this.props.course.get('term').get('name')} - ${this.props.course.get('name')} ${this.state.date.format('ddd, MMM Do, YYYY')}`
       },
       status: {
         privacyStatus: 'unlisted'

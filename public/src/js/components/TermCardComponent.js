@@ -1,6 +1,4 @@
-var Backbone = require('backbone');
 var React = require('react');
-require('react.backbone');
 
 module.exports = React.createBackboneClass({
   render: function() {

@@ -63,7 +63,8 @@ router.get('/register', function(req, res, next) {
   } else {
     return res.render('register', {
       csrfToken: req.csrfToken(),
-      register: process.env.REGISTRATION_ENABLED
+      register: process.env.REGISTRATION_ENABLED,
+      id: ''
     });
   }
 });
@@ -148,7 +149,11 @@ router.get('/register/:id', function(req, res, next) {
       if (err || !user) {
         return res.redirect('/');
       }
-      return res.render('new', { id: req.params.id, csrfToken: req.csrfToken() });
+      return res.render('register', {
+        id: req.params.id,
+        csrfToken: req.csrfToken(),
+        register: true
+      });
     });
   }
 });
