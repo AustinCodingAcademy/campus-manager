@@ -1,6 +1,6 @@
 {
-  "name": "aca-campus",
-  "version": "1.0.0",
+  "name": "campus-manager",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "preinstall": "npm prune",
@@ -10,7 +10,7 @@
     "test": "gulp build && gulp test"
   },
   "engines": {
-    "node": "6.7.0"
+    "node": "7.2.1"
   },
   "dependencies": {
     "add-to-homescreen": "^3.2.6",
