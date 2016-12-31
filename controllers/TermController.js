@@ -149,7 +149,7 @@ module.exports = {
     }, function(err, term){
       if(err) {
         return res.json(500, {
-          message: 'Error getting term.',
+          message: 'Error deleting term.',
           error: err
         });
       }

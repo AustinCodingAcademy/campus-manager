@@ -115,10 +115,14 @@ module.exports = {
   */
   remove: function (req, res) {
     var id = req.params.id;
-    LocationModel.find({_id: id, client: req.user.client}, function (err, location) {
-      if (err) {
+    LocationModel.remove({
+      _id: id,
+      client: req.user.client
+    }, function(err, location){
+      if(err) {
         return res.json(500, {
-          message: 'Error getting location.'
+          message: 'Error deleting location.',
+          error: err
         });
       }
       return res.json(location);
