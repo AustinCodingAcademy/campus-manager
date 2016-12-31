@@ -70,6 +70,7 @@ app.use('/api/import', middleware.admin, require('./routes/import'));
 app.use('/api/report', middleware.admin, require('./routes/report'));
 app.use('/api/grades', middleware.instructor, require('./routes/grades'));
 app.use('/api/textbooks', middleware.admin, require('./routes/textbooks'));
+app.use('/api/registrations', middleware.auth, require('./routes/registrations'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Backbone from 'backbone';
 import StripeCheckout from 'react-stripe-checkout';
 import { Button } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
@@ -24,13 +25,21 @@ module.exports = React.createBackboneClass({
         this.setState({
           paymentAmount: 0
         });
-        this.state.course.get('registrations').add(this.getModel());
-        const urlRoot = this.state.course.urlRoot;
-        this.state.course.urlRoot += '/register';
-        this.state.course.save(null, {
+        Backbone.$.ajax('/api/registrations', {
+          method: 'POST',
+          data: {
+            courseId: this.state.course.id,
+            userId: this.getModel().id
+          },
           success: () => {
-            this.state.course.urlRoot = urlRoot;
+            this.state.course.get('registrations').add(this.getModel());
             this.getModel().fetch();
+          },
+          error: (model, res) => {
+            this.setState({
+              error: res.responseJSON.message,
+              alertVisible: ''
+            });
           }
         });
       }

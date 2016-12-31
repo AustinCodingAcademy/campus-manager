@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Backbone from 'backbone';
 import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
@@ -33,10 +34,14 @@ module.exports = React.createBackboneClass({
     e.preventDefault();
     const course = this.getCollection().get(this.state.course);
     if (this.state.user.id) {
-      course.get('registrations').push(this.state.user);
-      course.save(null, {
+      Backbone.$.ajax('/api/registrations', {
+        method: 'POST',
+        data: {
+          courseId: course.id,
+          userId: this.state.user.id
+        },
         success: () => {
-          this.getCollection().trigger('add');
+          course.get('registrations').push(this.state.user);
           this.props.onHide();
         },
         error: (model, res) => {
