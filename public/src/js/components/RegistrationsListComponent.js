@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Backbone from 'backbone';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
@@ -16,9 +17,15 @@ module.exports = React.createBackboneClass({
     e.preventDefault();
     if (confirm('Are you sure you want to delete this registration?')) {
       const course = this.getCollection().get(e.currentTarget.getAttribute('data-course-id'));
-      course.get('registrations').remove(e.currentTarget.getAttribute('data-user-id'));
-      course.save(null, {
+      const userId = e.currentTarget.getAttribute('data-user-id');
+      Backbone.$.ajax('/api/registrations', {
+        method: 'DELETE',
+        data: {
+          courseId: course.id,
+          userId
+        },
         success: () => {
+          course.get('registrations').remove(userId);
           this.getCollection().trigger('remove');
         },
         error: (model, res) => {

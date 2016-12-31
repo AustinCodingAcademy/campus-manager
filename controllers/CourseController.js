@@ -150,75 +150,22 @@ module.exports = {
         });
       }
 
-      if (req.body.registrations) {
-        var registrations = _.map(req.body.registrations, '_id');
-        if (registrations.length > course.registrations.length) {
-          var courseRegistrations = _.map(course.registrations, function(id) {
-            return id.toString();
+      course.save(function(err, course){
+        if(err) {
+          return res.json(500, {
+            message: 'Error getting course.',
+            error: err
           });
-          var newRegistrations = _.difference(registrations, courseRegistrations);
-          if (newRegistrations.length) {
-            var userId = newRegistrations[0];
-            UserModel.findOne({
-              _id: userId,
-              client: req.user.client
-            }, (err, user) => {
-              if(err || !user) {
-                return res.json(500, {
-                  message: 'Error finding user.',
-                  error: err
-                });
-              }
-              CourseModel.find({ registrations: mongoose.Types.ObjectId(user._id)}, (err, courses) => {
-                if(err) {
-                  return res.json(500, {
-                    message: 'Error finding courses.',
-                    error: err
-                  });
-                }
-                if (courses.length === 0) {
-                  user.price = course.cost;
-                  user.save(function(err, user) {
-                    if(err) {
-                      return res.json(500, {
-                        message: 'Error saving user.',
-                        error: err
-                      });
-                    }
-                    saveCourse();
-                  });
-                } else {
-                  saveCourse();
-                }
-              });
-            });
-          }
-        } else {
-          saveCourse()
         }
-      } else {
-        saveCourse();
-      }
-
-      function saveCourse() {
-        course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
-        course.save(function(err, course){
-          if(err) {
-            return res.json(500, {
-              message: 'Error getting course.',
-              error: err
-            });
-          }
-          if(!course) {
-            return res.json(404, {
-              message: 'No such course'
-            });
-          }
-          course.populate('registrations location term textbook').populate(function(err, course) {
-            return res.json(course);
+        if(!course) {
+          return res.json(404, {
+            message: 'No such course'
           });
+        }
+        course.populate('registrations location term textbook').populate(function(err, course) {
+          return res.json(course);
         });
-      }
+      });
     });
   },
 
@@ -251,125 +198,5 @@ module.exports = {
         return res.json(course);
       });
     });
-  },
-
-  /**
-  * CourseController.screencasts()
-  */
-  screencasts: function(req, res) {
-    _.each(req.body, function(screencast) {
-      CourseModel.findOne({ _id: screencast.course_id }, function(err, course) {
-        if(err) {
-          return res.json(500, {
-            message: 'Error finding course',
-            error: err
-          });
-        }
-        if (course) {
-          if (!course.videos) {
-            course.videos = [];
-          }
-          course.videos.push({
-            youtubeId: screencast.youtubeId,
-            link: screencast.link,
-            timestamp: screencast.timestamp
-          });
-          course.save();
-        }
-      });
-    });
-  return res.json(req.body);
-},
-
-  /**
-  * CourseController.register()
-  */
-  register: function(req, res) {
-    var id = req.params.id;
-    CourseModel.findOne({
-      _id: id,
-      client: req.user.client
-    }).populate('term').exec(function(err, course){
-      if(err) {
-        return res.json(500, {
-          message: 'Error saving course',
-          error: err
-        });
-      }
-      if(!course) {
-        return res.json(404, {
-          message: 'No such course'
-        });
-      }
-
-      if (req.body.registrations) {
-        var registrations = _.map(req.body.registrations, '_id');
-        if (registrations.length > course.registrations.length) {
-          var courseRegistrations = _.map(course.registrations, function(id) {
-            return id.toString();
-          });
-          var newRegistrations = _.difference(registrations, courseRegistrations);
-          if (newRegistrations.length) {
-            var userId = newRegistrations[0];
-            UserModel.findOne({
-              _id: userId,
-              client: req.user.client
-            }, (err, user) => {
-              if(err) {
-                return res.json(500, {
-                  message: 'Error finding user.',
-                  error: err
-                });
-              }
-              CourseModel.find({ registrations: mongoose.Types.ObjectId(user._id)}, (err, courses) => {
-                if(err) {
-                  return res.json(500, {
-                    message: 'Error finding courses.',
-                    error: err
-                  });
-                }
-                if (courses.length === 0) {
-                  console.log("here");
-                  user.price = course.cost;
-                  user.save(function(err, user) {
-                    if(err) {
-                      return res.json(500, {
-                        message: 'Error saving user.',
-                        error: err
-                      });
-                    }
-                    saveCourse();
-                  });
-                } else {
-                  saveCourse();
-                }
-              });
-            });
-          }
-        } else {
-          saveCourse()
-        }
-      } else {
-        saveCourse();
-      }
-
-      function saveCourse() {
-        course.registrations = req.body.registrations ? _.map(req.body.registrations, '_id') : course.registrations;
-        course.save(function(err, course){
-          if(err) {
-            return res.json(500, {
-              message: 'Error getting course.',
-              error: err
-            });
-          }
-          if(!course) {
-            return res.json(404, {
-              message: 'No such course'
-            });
-          }
-          return res.json(course);
-        });
-      }
-    });
   }
-};
+}
