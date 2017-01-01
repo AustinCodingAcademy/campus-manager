@@ -27,6 +27,9 @@ module.exports = React.createBackboneClass({
         this.props.textbooks.add(this.getModel(), {
           merge: true
         });
+        this.props.listComponent.setState({
+          textbook: new TextbookModel()
+        });
         this.props.onHide();
       },
       error: (model, res) => {
@@ -44,6 +47,9 @@ module.exports = React.createBackboneClass({
       this.getModel().destroy({
         success: () => {
           this.props.textbooks.remove(this.getModel());
+          this.props.listComponent.setState({
+            textbook: new TextbookModel()
+          });
           this.props.onHide();
         },
         error: (model, res) => {

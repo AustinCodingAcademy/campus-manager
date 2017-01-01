@@ -11,6 +11,7 @@ const LocationValueComponent = require('./LocationValueComponent');
 const LocationModel = require('../models/LocationModel');
 const TermModel = require('../models/TermModel');
 const TextbookModel = require('../models/TextbookModel');
+const CourseModel = require('../models/CourseModel');
 
 module.exports = React.createBackboneClass({
   mixins: [
@@ -82,6 +83,9 @@ module.exports = React.createBackboneClass({
         this.props.courses.add(this.getModel(), {
           merge: true
         });
+        this.props.listComponent.setState({
+          course: new CourseModel()
+        });
         this.props.onHide();
       },
       error: (model, res) => {
@@ -99,6 +103,9 @@ module.exports = React.createBackboneClass({
       this.getModel().destroy({
         success: () => {
           this.props.courses.remove(this.getModel());
+          this.props.listComponent.setState({
+            course: new CourseModel()
+          });
           this.props.onHide();
         },
         error: (model, res) => {

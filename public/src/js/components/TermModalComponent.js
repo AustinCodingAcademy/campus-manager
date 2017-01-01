@@ -26,6 +26,9 @@ module.exports = React.createBackboneClass({
         this.props.terms.add(this.getModel(), {
           merge: true
         });
+        this.props.listComponent.setState({
+          term: new TermModel()
+        });
         this.props.onHide();
       },
       error: (model, res) => {
@@ -66,6 +69,9 @@ module.exports = React.createBackboneClass({
       this.getModel().destroy({
         success: () => {
           this.props.terms.remove(this.getModel());
+          this.props.listComponent.setState({
+            term: new TermModel()
+          });
           this.props.onHide();
         },
         error: (model, res) => {
