@@ -118,6 +118,7 @@ module.exports = React.createBackboneClass({
             model={this.state.course}
             locations={this.props.locations}
             title={this.state.modalTitle}
+            listComponent={this}
           />
         </Col>
       </Row>

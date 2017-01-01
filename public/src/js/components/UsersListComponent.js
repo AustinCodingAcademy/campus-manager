@@ -110,6 +110,7 @@ module.exports = React.createBackboneClass({
             model={this.state.user}
             title={this.state.modalTitle}
             currentUser={this.props.currentUser}
+            listComponent={this}
           />
         </Col>
       </Row>
