@@ -12,6 +12,7 @@ const FontAwesome = require('react-fontawesome');
 const TermsCollection = require('../collections/TermsCollection');
 const UserAccountComponent = require('./UserAccountComponent');
 const UserModalComponent = require('./UserModalComponent');
+const UserReviewComponent = require('./UserReviewComponent');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -380,7 +381,7 @@ module.exports = React.createBackboneClass({
             ''
             }
             {this.getModel().get('courses').length ?
-            <Col xs={6} md={3} lg={2}>
+            <Col xs={6} md={4}>
               <Panel header={<h3>Overall Grade Average</h3>}>
                 <h4 className={`score${this.getModel().overallGrade()} text-center`}>
                   {this.getModel().overallGrade()}%
@@ -394,24 +395,24 @@ module.exports = React.createBackboneClass({
               </Panel>
             </Col>
             : ''}
+            {this.getModel().get('courses').length ?
+            <Col xs={6} md={4}>
+              <Panel header={<h3>Overall Attendance</h3>}>
+                <h4 className={`score${this.getModel().overallAttendance()} text-center`}>
+                  {this.getModel().overallAttendance()}%
+                </h4>
+                <p aria-hidden="true" className="center-align">
+                  <Doughnut
+                    data={this.getModel().averageChartData(this.getModel().overallAttendance()).data}
+                    options={this.getModel().averageChartData(this.getModel().overallAttendance()).options}
+                  />
+                </p>
+              </Panel>
+            </Col>
+            : ''}
           </Equalizer>
-          {this.getModel().get('courses').length ?
-          <Col xs={6} md={3} lg={2}>
-            <Panel header={<h3>Overall Attendance</h3>}>
-              <h4 className={`score${this.getModel().overallAttendance()} text-center`}>
-                {this.getModel().overallAttendance()}%
-              </h4>
-              <p aria-hidden="true" className="center-align">
-                <Doughnut
-                  data={this.getModel().averageChartData(this.getModel().overallAttendance()).data}
-                  options={this.getModel().averageChartData(this.getModel().overallAttendance()).options}
-                />
-              </p>
-            </Panel>
-          </Col>
-          : ''}
           {this.getModel().get('is_student') ?
-          <Col xs={12} lg={4}>
+          <Col xs={12} md={6}>
             <UserAccountComponent
               model={this.getModel()}
               terms={this.props.terms}
@@ -420,6 +421,9 @@ module.exports = React.createBackboneClass({
           :
           ''
           }
+          <Col xs={12} md={6}>
+            <UserReviewComponent model={this.getModel()} />
+          </Col>
           <Col xs={12}>
             <PanelGroup activeKey={this.state.activeKey} onSelect={this.handleSelect} accordion>
               {courses}

@@ -70,7 +70,8 @@ var userSchema = new Schema({
   customer_id: String,
   credits: String,
   api_key: String,
-  price: Number
+  price: Number,
+  reviews: Array,
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

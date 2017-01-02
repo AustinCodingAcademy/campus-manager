@@ -160,7 +160,8 @@ module.exports = {
         'website',
         'github',
         'codecademy',
-        'zipcode'
+        'zipcode',
+        'reviews'
       ];
 
       var adminAttrs = [
