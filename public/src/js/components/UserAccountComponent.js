@@ -37,6 +37,7 @@ module.exports = React.createBackboneClass({
 
   render() {
     const courses = new CoursesCollection();
+    courses.comparator = courses.reverse;
     const currentCourse = this.getModel().currentCourse();
     const futureCourse = this.getModel().futureCourse();
     let totalCourseCost = 0;
@@ -123,7 +124,7 @@ module.exports = React.createBackboneClass({
     return (
       <Panel header={<h3>Account</h3>}>
         <Row>
-          <Col xs={12} md={4} lg={12}>
+          <Col xs={12}>
             <Table striped>
               <thead>
                 <tr>
@@ -135,7 +136,7 @@ module.exports = React.createBackboneClass({
               <tfoot></tfoot>
             </Table>
           </Col>
-          <Col xs={12} md={4} lg={12}>
+          <Col xs={12}>
             <Table striped>
               <thead>
                 <tr>
@@ -160,7 +161,7 @@ module.exports = React.createBackboneClass({
               </tfoot>
             </Table>
           </Col>
-          <Col xs={12} md={4} lg={12}>
+          <Col xs={12}>
             <FormGroup controlId="course-payment">
               <ControlLabel>
                 1. What are you paying for?

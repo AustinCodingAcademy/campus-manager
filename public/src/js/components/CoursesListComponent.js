@@ -60,7 +60,7 @@ module.exports = React.createBackboneClass({
           <Td column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>
           <Td column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
           <Td column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
-          <Td column="edit" className={`${hidden}`}>
+          <Td column="edit" className={hidden}>
             <a href="#" onClick={this.open} data-id={course.id}>
               <FontAwesome name='pencil' />
             </a>
@@ -104,7 +104,7 @@ module.exports = React.createBackboneClass({
                 <Th>Days</Th>
                 <Th>Seats</Th>
                 <Th>Cost</Th>
-                <Th className={`${this.state.hidden}`}>edit</Th>
+                <Th className={hidden}>edit</Th>
               </Thead>
               {courseRows}
             </Table>
