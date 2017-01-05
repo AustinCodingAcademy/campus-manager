@@ -111,7 +111,7 @@ module.exports = React.createBackboneClass({
             <Alert className={this.state.alertVisible} bsStyle="danger" onDismiss={this.handleAlertDismiss}>
               <p>{this.state.error}</p>
             </Alert>
-            <FormGroup controlId="first-name">
+            <FormGroup controlId="first_name">
               <ControlLabel>First Name</ControlLabel>
               <FormControl
                 type="text"
@@ -120,7 +120,7 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.first_name}
               />
             </FormGroup>
-            <FormGroup controlId="last-name">
+            <FormGroup controlId="last_name">
               <ControlLabel>Last Name</ControlLabel>
               <FormControl
                 type="text"
