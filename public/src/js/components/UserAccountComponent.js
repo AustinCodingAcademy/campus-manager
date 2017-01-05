@@ -45,7 +45,7 @@ module.exports = React.createBackboneClass({
 
     this.getModel().get('courses').each(course => {
       if (course.get('cost') && course.get('cost') > 0) {
-        totalCourseCost += course.get('cost');
+        totalCourseCost += this.getModel().get('price') || course.get('cost');
         courseCharges.push(
           <tr key={course.id + course.get('cost')}>
             <td>${Number(this.getModel().get('price') || course.get('cost')).toFixed(2)}</td>
