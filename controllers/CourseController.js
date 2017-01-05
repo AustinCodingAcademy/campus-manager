@@ -137,7 +137,9 @@ module.exports = {
       ];
 
       var instructorAttributes = [
-        'videos'
+        'videos',
+        'grades',
+        'holidays'
       ];
 
       if (req.user.is_admin) {
