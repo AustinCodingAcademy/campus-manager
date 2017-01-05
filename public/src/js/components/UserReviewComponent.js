@@ -21,6 +21,10 @@ module.exports = React.createBackboneClass({
         SwitchUp: {
           href: 'https://www.switchup.org/bootcamps/austin-coding-academy',
           key: 'austin-switchup'
+        },
+        Thinkful: {
+          href: 'https://www.thinkful.com/bootcamps/austin-coding-academy/',
+          key: 'austin-thinkful'
         }
       }
     },
@@ -41,6 +45,10 @@ module.exports = React.createBackboneClass({
         SwitchUp: {
           href: 'https://www.switchup.org/bootcamps/austin-coding-academy',
           key: 'sanantonio-switchup'
+        },
+        Thinkful: {
+          href: 'https://www.thinkful.com/bootcamps/austin-coding-academy/',
+          key: 'sanantonio-thinkful'
         }
       }
     }
