@@ -15,5 +15,17 @@ module.exports = Backbone.Collection.extend({
       return x.get('name') > y.get('name') ? 1 : -1;
     }
     return XstartDate > YstartDate ? -1 : 1;
+  },
+
+  reverse: function(x, y) {
+    var XstartDate = x.get('term').get('start_date');
+    var YstartDate = y.get('term').get('start_date');;
+    if (XstartDate === YstartDate) {
+      if (x.get('name') === y.get('name')) {
+        return 0;
+      }
+      return x.get('name') > y.get('name') ? 1 : -1;
+    }
+    return XstartDate > YstartDate ? 1 : -1;
   }
 });

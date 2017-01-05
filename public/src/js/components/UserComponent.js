@@ -280,7 +280,7 @@ module.exports = React.createBackboneClass({
       <div>
         <Row>
           <Equalizer>
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6}>
               <Panel
                 header={
                   <h3>
@@ -381,7 +381,7 @@ module.exports = React.createBackboneClass({
             ''
             }
             {this.getModel().get('courses').length ?
-            <Col xs={6} md={4}>
+            <Col xs={6} md={3}>
               <Panel header={<h3>Overall Grade Average</h3>}>
                 <h4 className={`score${this.getModel().overallGrade()} text-center`}>
                   {this.getModel().overallGrade()}%
@@ -396,7 +396,7 @@ module.exports = React.createBackboneClass({
             </Col>
             : ''}
             {this.getModel().get('courses').length ?
-            <Col xs={6} md={4}>
+            <Col xs={6} md={3}>
               <Panel header={<h3>Overall Attendance</h3>}>
                 <h4 className={`score${this.getModel().overallAttendance()} text-center`}>
                   {this.getModel().overallAttendance()}%
