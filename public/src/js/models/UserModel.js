@@ -21,7 +21,8 @@ module.exports = Backbone.Model.extend({
     paymentAmount: 0.00,
     credits: '',
     api_key: '',
-    reviews:[]
+    reviews:[],
+    price: 0
   },
 
   fullName() {
