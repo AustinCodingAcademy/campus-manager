@@ -102,7 +102,7 @@ module.exports = React.createBackboneClass({
         value: course.id,
         label,
         course,
-        user: this.props.user,
+        user: this.getModel(),
         disabled: course.full() && !course.get('registered')
       });
     });
