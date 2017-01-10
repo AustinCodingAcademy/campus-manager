@@ -46,12 +46,14 @@ module.exports = React.createBackboneClass({
     e.preventDefault();
     this.getModel().save(this.state.user, {
       success: () => {
-        this.props.users.add(this.getModel(), {
-          merge: true
-        });
-        this.props.listComponent.setState({
-          user: new UserModel()
-        });
+        if (this.props.users && this.props.listComponent) {
+          this.props.users.add(this.getModel(), {
+            merge: true
+          });
+          this.props.listComponent.setState({
+            user: new UserModel()
+          });
+        }
         this.props.onHide();
       },
       error: (model, res) => {
