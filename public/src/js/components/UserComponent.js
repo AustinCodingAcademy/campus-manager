@@ -3,7 +3,9 @@ import * as React from 'react';
 import * as Backbone from 'backbone';
 const moment = require('moment');
 import { Doughnut } from 'react-chartjs';
-import { Col, Row, Panel, PanelGroup, Table, Well, ControlLabel } from 'react-bootstrap';
+import {
+  Col, Row, Panel, PanelGroup, Table, Well, ControlLabel, FormControl
+} from 'react-bootstrap';
 const Gravatar = require('react-gravatar');
 import Equalizer from 'react-equalizer';
 const Hashids = require('hashids');
@@ -13,6 +15,7 @@ const TermsCollection = require('../collections/TermsCollection');
 const UserAccountComponent = require('./UserAccountComponent');
 const UserModalComponent = require('./UserModalComponent');
 const UserReviewComponent = require('./UserReviewComponent');
+const GradeModel = require('../models/GradeModel');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -79,6 +82,33 @@ module.exports = React.createBackboneClass({
     this.setState({ activeKey });
   },
 
+  submitUrl(e) {
+    e.persist();
+    const course = this.getModel().get('courses').get(e.target.getAttribute('data-course-id'));
+    const gradeIdx = _.findIndex(this.getModel().get('grades'), grade => {
+      return grade.courseId === course.id && grade.name === e.target.getAttribute('data-grade-name');
+    });
+    const originalUrl = this.getModel().get('grades')[gradeIdx].url;
+
+    const grade = new GradeModel();
+    grade.save({
+      userId: this.getModel().id,
+      name: e.target.getAttribute('data-grade-name'),
+      url: e.target.value,
+      courseId: course.id
+    }, {
+      success: () => {
+        this.getModel().get('grades')[gradeIdx].url = e.target.url;
+        this.getModel().trigger('change');
+      },
+      error: () => {
+        e.target.value = originalUrl;
+        this.getModel().get('grades')[gradeIdx].score = originalUrl;
+        this.getModel().trigger('change');
+      }
+    });
+  },
+
   render() {
     const courses = this.getModel().get('courses').map((course, i) => {
       const dates = course.classDates().map((date, j) => {
@@ -133,10 +163,24 @@ module.exports = React.createBackboneClass({
           return grade.name === b.name;
         }) ? -1 : 1;
       }), (grade, idx) => {
+        const courseGrade = course.get('grades').find(courseGrade => {
+          return courseGrade.name === grade.name;
+        })
+        const checkpoint = courseGrade ? courseGrade.checkpoint : undefined;
         return (
           <tr key={idx}>
-            <td>{grade.name}</td>
+            <td>{grade.name}<sub><small>{checkpoint ? 'CP' : 'D'}</small></sub></td>
             <td className={'score'+ grade.score}>{grade.score}</td>
+            <td>
+              <FormControl
+                type="text"
+                defaultValue={grade.url}
+                placeholder="URL"
+                onBlur={this.submitUrl}
+                data-course-id={course.id}
+                data-grade-name={grade.name}
+              />
+            </td>
           </tr>
         );
       });
@@ -151,10 +195,19 @@ module.exports = React.createBackboneClass({
               </small>
             </h3>
           }
+          footer={this.state.activeKey === course.id ?
+            <small>
+              D: Daily Grades are weighted 30% and are checked for completion;
+              CP: Checkpoints are weighted 70% and are checked for a deeper
+              understanding of the content
+            </small>
+            :
+            ''
+          }
           eventKey={course.id}
         >
           <Row>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={6}>
               <h4 className="text-center">Details</h4>
               <Well bsSize="small">
                 <Row>
@@ -213,33 +266,33 @@ module.exports = React.createBackboneClass({
                   </Col>
                 </Row>
               </Well>
-              <Row>
-                <Col xs={6} md={12}>
-                  <h4 className="text-center">Attendance</h4>
-                  <h4 className={`score${this.getModel().courseAttendance(course)} text-center`}>
-                    {this.getModel().courseAttendance(course)}%
-                  </h4>
-                  <p aria-hidden="true" className="center-align">
-                    <Doughnut
-                      data={this.getModel().averageChartData(this.getModel().courseAttendance(course)).data}
-                      options={this.getModel().averageChartData(this.getModel().courseAttendance(course)).options}
-                    />
-                  </p>
-                </Col>
-                <Col xs={6} md={12}>
-                  <h4 className="text-center">Grade Average</h4>
-                  <h4 className={`score${this.getModel().courseGrade(course)} text-center`}>
-                    {this.getModel().courseGrade(course)}%
-                  </h4>
-                  <p aria-hidden="true" className="center-align">
-                    <Doughnut
-                      data={this.getModel().averageChartData(this.getModel().courseGrade(course)).data}
-                      options={this.getModel().averageChartData(this.getModel().courseGrade(course)).options}
-                    />
-                  </p>
-                </Col>
-              </Row>
             </Col>
+            <Col xs={6} md={3}>
+              <h4 className="text-center">Attendance</h4>
+              <h4 className={`score${this.getModel().courseAttendance(course)} text-center`}>
+                {this.getModel().courseAttendance(course)}%
+              </h4>
+              <p aria-hidden="true" className="center-align">
+                <Doughnut
+                  data={this.getModel().averageChartData(this.getModel().courseAttendance(course)).data}
+                  options={this.getModel().averageChartData(this.getModel().courseAttendance(course)).options}
+                />
+              </p>
+            </Col>
+            <Col xs={6} md={3}>
+              <h4 className="text-center">Grade Average</h4>
+              <h4 className={`score${this.getModel().courseGrade(course)} text-center`}>
+                {this.getModel().courseGrade(course)}%
+              </h4>
+              <p aria-hidden="true" className="center-align">
+                <Doughnut
+                  data={this.getModel().averageChartData(this.getModel().courseGrade(course)).data}
+                  options={this.getModel().averageChartData(this.getModel().courseGrade(course)).options}
+                />
+              </p>
+            </Col>
+          </Row>
+          <Row>
             <Col xs={12} md={4}>
               <h4 className="text-center">Attendance</h4>
               <Table striped>
@@ -255,13 +308,14 @@ module.exports = React.createBackboneClass({
                 </tbody>
               </Table>
             </Col>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={8}>
               <h4 className="text-center">Grades</h4>
               <Table striped>
                 <thead>
                   <tr>
                     <th>Name</th>
                     <th>Score</th>
+                    <th>Submit</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -338,6 +392,13 @@ module.exports = React.createBackboneClass({
                       </a>
                     </p>
                     <p>
+                      <FontAwesome name="rocket" fixedWidth={true} />
+                      &nbsp;
+                      <a title={'Rocket Chat'} href={'https://chat.austincodingacademy.com/direct/' + this.getModel().get('rocketchat')} target="_blank">
+                        {this.getModel().get('rocketchat') ? `@${this.getModel().get('rocketchat')}` : ''}
+                      </a>
+                    </p>
+                    <p>
                       <FontAwesome name="code" fixedWidth={true} />
                       &nbsp;
                       <a title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
@@ -382,21 +443,6 @@ module.exports = React.createBackboneClass({
             }
             {this.getModel().get('courses').length ?
             <Col xs={6} md={3}>
-              <Panel header={<h3>Overall Grade Average</h3>}>
-                <h4 className={`score${this.getModel().overallGrade()} text-center`}>
-                  {this.getModel().overallGrade()}%
-                </h4>
-                <p aria-hidden="true">
-                  <Doughnut
-                    data={this.getModel().averageChartData(this.getModel().overallGrade()).data}
-                    options={this.getModel().averageChartData(this.getModel().overallGrade()).options}
-                  />
-                </p>
-              </Panel>
-            </Col>
-            : ''}
-            {this.getModel().get('courses').length ?
-            <Col xs={6} md={3}>
               <Panel header={<h3>Overall Attendance</h3>}>
                 <h4 className={`score${this.getModel().overallAttendance()} text-center`}>
                   {this.getModel().overallAttendance()}%
@@ -405,6 +451,21 @@ module.exports = React.createBackboneClass({
                   <Doughnut
                     data={this.getModel().averageChartData(this.getModel().overallAttendance()).data}
                     options={this.getModel().averageChartData(this.getModel().overallAttendance()).options}
+                  />
+                </p>
+              </Panel>
+            </Col>
+            : ''}
+            {this.getModel().get('courses').length ?
+            <Col xs={6} md={3}>
+              <Panel header={<h3>Overall Grade Average</h3>}>
+                <h4 className={`score${this.getModel().overallGrade()} text-center`}>
+                  {this.getModel().overallGrade()}%
+                </h4>
+                <p aria-hidden="true">
+                  <Doughnut
+                    data={this.getModel().averageChartData(this.getModel().overallGrade()).data}
+                    options={this.getModel().averageChartData(this.getModel().overallGrade()).options}
                   />
                 </p>
               </Panel>

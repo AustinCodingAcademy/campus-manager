@@ -243,7 +243,7 @@ module.exports = React.createBackboneClass({
               <FormControl
                 type="time"
                 onChange={this.changeTextValue}
-                defaultValue={this.getModel().get('timeEnd')}
+                defaultValue={this.getModel().get('timeStart')}
               />
             </FormGroup>
             <FormGroup controlId="timeEnd">
@@ -251,7 +251,7 @@ module.exports = React.createBackboneClass({
               <FormControl
                 type="time"
                 onChange={this.changeTextValue}
-                defaultValue={this.getModel().get('timeStart')}
+                defaultValue={this.getModel().get('timeEnd')}
               />
             </FormGroup>
             <a href="#" className="link-danger" onClick={this.delete}>Delete Course</a>

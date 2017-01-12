@@ -72,6 +72,7 @@ var userSchema = new Schema({
   api_key: String,
   price: Number,
   reviews: Array,
+  rocketchat: String,
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

@@ -35,10 +35,12 @@ module.exports = {
       if (!grade) {
         gradeIdx = user.grades.length;
       }
+      console.log(user.grades[gradeIdx].score);
       user.grades.set(gradeIdx, {
-        score: req.body.score,
+        score: (req.user.is_instructor || req.user.is_admin) && req.body.hasOwnProperty('score') ? req.body.score : user.grades[gradeIdx].score,
         name: req.body.name,
-        courseId: req.body.courseId
+        courseId: req.body.courseId,
+        url: req.body.hasOwnProperty('url') ? req.body.url : user.grades[gradeIdx].url
       });
       user.save(err => {
         if (err) {

@@ -8,7 +8,7 @@ const CourseAttendanceComponent = require('./CourseAttendanceComponent');
 const utils = require('../utils');
 import {
   Col, Row, Button, ButtonGroup, Table, FormControl, FormGroup,
-  ControlLabel, Panel, Checkbox, ListGroup, ListGroupItem,
+  ControlLabel, Panel, Checkbox, ListGroup, ListGroupItem, InputGroup
 } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
 const DatePicker = require('react-datepicker');
@@ -39,8 +39,8 @@ module.exports = React.createBackboneClass({
   removeGrade(e) {
     e.preventDefault();
     const gradeIdx = e.currentTarget.getAttribute('data-grade-idx');
-    const gradeName = this.getModel().get('grades')[gradeIdx];
-    if (confirm('Are you sure you want to delete ' + gradeName + '?')) {
+    const grade = this.getModel().get('grades')[gradeIdx];
+    if (confirm('Are you sure you want to delete ' + grade.name + '?')) {
       this.getModel().get('grades').splice(gradeIdx, 1);
       this.getModel().save();
     }
@@ -212,7 +212,11 @@ module.exports = React.createBackboneClass({
       return (
         <td key={idx} className='nowrap'>
           {grade.name}
-          <sup><a href="#" onClick={this.removeGrade} data-grade-idx={idx}>x</a></sup>
+          <sup>
+            <a href="#" onClick={this.removeGrade} data-grade-idx={idx} className="link-danger">
+              <FontAwesome name="times" />
+            </a>
+          </sup>
           <br />
           <Checkbox
             checked
@@ -246,13 +250,26 @@ module.exports = React.createBackboneClass({
         return (
           <td key={`${student.id}-${idx}`}>
             <FormGroup controlId="new-grade" className="trim-margin">
-              <FormControl
-                type="text"
-                defaultValue={grade.score}
-                onBlur={this.blurGrade}
-                data-student-id={student.id}
-                data-grade-name={grade.name}
-              />
+              <InputGroup>
+                <FormControl
+                  type="text"
+                  defaultValue={grade.score}
+                  onBlur={this.blurGrade}
+                  data-student-id={student.id}
+                  data-grade-name={grade.name}
+                />
+                <InputGroup.Button>
+                  {grade.url ?
+                    <Button href={grade.url} target="_blank">
+                      <FontAwesome name="external-link"/>
+                    </Button>
+                    :
+                    <Button>
+                      <FontAwesome name="times"/>
+                    </Button>
+                  }
+                </InputGroup.Button>
+              </InputGroup>
             </FormGroup>
           </td>
         );
