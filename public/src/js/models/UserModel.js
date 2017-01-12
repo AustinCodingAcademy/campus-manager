@@ -103,6 +103,7 @@ module.exports = Backbone.Model.extend({
       'username',
       'phone',
       'github',
+      'rocketchat',
       'website',
       'codecademy',
       'zipcode'

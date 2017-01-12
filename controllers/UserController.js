@@ -159,6 +159,7 @@ module.exports = {
         'phone',
         'website',
         'github',
+        'rocketchat',
         'codecademy',
         'zipcode',
         'reviews'

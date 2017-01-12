@@ -25,3 +25,7 @@ a.link-danger {
     @include tab-focus;
   }
 }
+
+.input-group-btn .btn {
+  padding-bottom: 7px;
+}

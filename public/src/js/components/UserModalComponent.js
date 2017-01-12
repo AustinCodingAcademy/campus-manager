@@ -168,6 +168,15 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.github}
               />
             </FormGroup>
+            <FormGroup controlId="rocketchat">
+              <ControlLabel>Rocket.Chat Username</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Rocket.Chat Username"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.rocketchat}
+              />
+            </FormGroup>
             <FormGroup controlId="website">
               <ControlLabel>Website</ControlLabel>
               <FormControl
