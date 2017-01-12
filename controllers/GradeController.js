@@ -39,7 +39,7 @@ module.exports = {
         score: (req.user.is_instructor || req.user.is_admin) && req.body.hasOwnProperty('score') ? req.body.score : (user.grades[gradeIdx] ? user.grades[gradeIdx].score : ''),
         name: req.body.name,
         courseId: req.body.courseId,
-        url: req.body.hasOwnProperty('url') ? req.body.url : user.grades[gradeIdx].url
+        url: req.body.hasOwnProperty('url') ? req.body.url : (user.grades[gradeIdx] ? user.grades[gradeIdx].url : '')
       });
       user.save(err => {
         if (err) {
