@@ -4,7 +4,8 @@ import * as Backbone from 'backbone';
 const moment = require('moment');
 import { Doughnut } from 'react-chartjs';
 import {
-  Col, Row, Panel, PanelGroup, Table, Well, ControlLabel, FormControl
+  Col, Row, Panel, PanelGroup, Table, Well, ControlLabel, FormControl,
+  InputGroup, Button
 } from 'react-bootstrap';
 const Gravatar = require('react-gravatar');
 import Equalizer from 'react-equalizer';
@@ -150,20 +151,36 @@ module.exports = React.createBackboneClass({
         }) || {};
         return (
           <tr key={courseGrade.name}>
-            <td>{courseGrade.name}<sub><small>{courseGrade.checkpoint ? 'CP' : 'D'}</small></sub></td>
+            <td>{courseGrade.name}</td>
+            <td>{courseGrade.checkpoint ? 'CP' : 'D'}</td>
             <td className={'score'+ studentGrade.score}>{_.isNumber(studentGrade.score) ? studentGrade.score : ''}</td>
             <td>
               {courseGrade.dueDate ? moment(courseGrade.dueDate, 'YYYY-MM-DD').format('ddd, MMM D') : ''}
             </td>
             <td>
-              <FormControl
-                type="text"
-                defaultValue={studentGrade.url}
-                placeholder="URL"
-                onBlur={this.submitUrl}
-                data-course-id={course.id}
-                data-grade-name={courseGrade.name}
-              />
+              <small>
+                <InputGroup>
+                  <FormControl
+                    type="text"
+                    defaultValue={studentGrade.url}
+                    placeholder="URL"
+                    onBlur={this.submitUrl}
+                    data-course-id={course.id}
+                    data-grade-name={courseGrade.name}
+                  />
+                  <InputGroup.Button>
+                    {studentGrade.url ?
+                      <Button href={studentGrade.url} target="_blank">
+                        <FontAwesome name="external-link"/>
+                      </Button>
+                      :
+                      <Button disabled={true}>
+                        <FontAwesome name="times"/>
+                      </Button>
+                    }
+                  </InputGroup.Button>
+                </InputGroup>
+              </small>
             </td>
           </tr>
         );
@@ -298,6 +315,7 @@ module.exports = React.createBackboneClass({
                 <thead>
                   <tr>
                     <th>Name</th>
+                    <th>Type</th>
                     <th>Score</th>
                     <th>Due Date</th>
                     <th>Submit</th>

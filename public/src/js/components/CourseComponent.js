@@ -276,28 +276,26 @@ module.exports = React.createBackboneClass({
       const studentCells = _.map(courseGrades, (grade, idx) => {
         return (
           <td key={`${student.id}-${idx}`}>
-            <FormGroup controlId="new-grade" className="trim-margin">
-              <InputGroup>
-                <FormControl
-                  type="text"
-                  defaultValue={grade.score}
-                  onBlur={this.blurGrade}
-                  data-student-id={student.id}
-                  data-grade-name={grade.name}
-                />
-                <InputGroup.Button>
-                  {grade.url ?
-                    <Button href={grade.url} target="_blank">
-                      <FontAwesome name="external-link"/>
-                    </Button>
-                    :
-                    <Button disabled={true}>
-                      <FontAwesome name="times"/>
-                    </Button>
-                  }
-                </InputGroup.Button>
-              </InputGroup>
-            </FormGroup>
+            <InputGroup>
+              <FormControl
+                type="text"
+                defaultValue={grade.score}
+                onBlur={this.blurGrade}
+                data-student-id={student.id}
+                data-grade-name={grade.name}
+              />
+              <InputGroup.Button>
+                {grade.url ?
+                  <Button href={grade.url} target="_blank">
+                    <FontAwesome name="external-link"/>
+                  </Button>
+                  :
+                  <Button disabled={true}>
+                    <FontAwesome name="times"/>
+                  </Button>
+                }
+              </InputGroup.Button>
+            </InputGroup>
           </td>
         );
       }, this);

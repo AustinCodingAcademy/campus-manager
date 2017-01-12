@@ -12,7 +12,7 @@ module.exports = React.createBackboneClass({
             </Button>
             <br />
             <Alert bsStyle="info">
-              You will need to select the <strong>ACA Class Screencast</strong> Account
+              You will need to select the <strong>ACA Class Screencasts</strong> Account
             </Alert>
           </Col>
         </Row>
