@@ -124,7 +124,9 @@ module.exports = Backbone.Model.extend({
   overallGrade() {
     const studentDailyGrades = [];
     const studentCheckpointGrades = [];
-    _.each(this.get('grades'), grade => {
+    this.get('grades').filter(grade => {
+      return _.isNumber(grade.score);
+    }).forEach(grade => {
       const course = this.get('courses').get(grade.courseId);
       if (course) {
         const courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
@@ -137,13 +139,15 @@ module.exports = Backbone.Model.extend({
         }
       }
     });
-    return this.gradeAverage(studentDailyGrades, studentCheckpointGrades)
+    return utils.weightedGradeAverage(studentCheckpointGrades, studentDailyGrades);
   },
 
   courseGrade(course) {
     const studentDailyGrades = [];
     const studentCheckpointGrades = [];
-    _.each(this.get('grades'), grade => {
+    this.get('grades').filter(grade => {
+      return _.isNumber(grade.score);
+    }).forEach(grade => {
       const courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
       if (courseGrade) {
         if (courseGrade.checkpoint) {
@@ -153,33 +157,7 @@ module.exports = Backbone.Model.extend({
         }
       }
     });
-    return this.gradeAverage(studentDailyGrades, studentCheckpointGrades)
-  },
-
-  gradeAverage(studentDailyGrades, studentCheckpointGrades) {
-    let dailyAverage = 0;
-    const dailyLength = studentDailyGrades.length;
-    if (dailyLength) {
-      dailyAverage = _.reduce(studentDailyGrades, (memo, dailyLength) => { return memo + dailyLength; }) / dailyLength;
-    }
-
-    let checkpointAverage = 0;
-    const checkpointLength = studentCheckpointGrades.length;
-    if (checkpointLength) {
-      checkpointAverage = _.reduce(studentCheckpointGrades, (memo, checkpointLength) => { return memo + checkpointLength; }) / checkpointLength;
-    }
-
-    if (!checkpointAverage && !dailyAverage){
-      this.grade_average = 0;
-    } else if (!checkpointAverage) {
-      this.grade_average = Math.round(dailyAverage);
-    } else if (!dailyAverage) {
-      this.grade_average = Math.round(checkpointAverage);
-    } else {
-      this.grade_average = Math.round(dailyAverage * .3 + checkpointAverage * .7);
-    }
-
-    return this.grade_average;
+    return utils.weightedGradeAverage(studentCheckpointGrades, studentDailyGrades);
   },
 
   currentCourse() {
