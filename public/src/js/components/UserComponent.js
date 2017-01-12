@@ -85,11 +85,6 @@ module.exports = React.createBackboneClass({
   submitUrl(e) {
     e.persist();
     const course = this.getModel().get('courses').get(e.target.getAttribute('data-course-id'));
-    const gradeIdx = _.findIndex(this.getModel().get('grades'), grade => {
-      return grade.courseId === course.id && grade.name === e.target.getAttribute('data-grade-name');
-    });
-    const originalUrl = this.getModel().get('grades')[gradeIdx].url;
-
     const grade = new GradeModel();
     grade.save({
       userId: this.getModel().id,
@@ -98,13 +93,10 @@ module.exports = React.createBackboneClass({
       courseId: course.id
     }, {
       success: () => {
-        this.getModel().get('grades')[gradeIdx].url = e.target.url;
-        this.getModel().trigger('change');
+        this.getModel().fetch();
       },
       error: () => {
-        e.target.value = originalUrl;
-        this.getModel().get('grades')[gradeIdx].score = originalUrl;
-        this.getModel().trigger('change');
+        this.getModel().fetch();
       }
     });
   },
@@ -152,33 +144,25 @@ module.exports = React.createBackboneClass({
         );
       });
 
-      const grades = _.map(_.filter(this.getModel().get('grades'), grade => {
-        return grade.courseId === course.id && course.get('grades').some(courseGrade => {
-          return grade.name === courseGrade.name;
-        });
-      }).sort((a, b) => {
-        return course.get('grades').findIndex(grade => {
-          return grade.name === a.name;
-        }) < course.get('grades').findIndex(grade => {
-          return grade.name === b.name;
-        }) ? -1 : 1;
-      }), (grade, idx) => {
-        const courseGrade = course.get('grades').find(courseGrade => {
-          return courseGrade.name === grade.name;
-        })
-        const checkpoint = courseGrade ? courseGrade.checkpoint : undefined;
+      const grades = course.get('grades').map(courseGrade => {
+        const studentGrade = this.getModel().get('grades').find(studentGrade => {
+          return studentGrade.name === courseGrade.name && studentGrade.courseId === course.id;
+        }) || {};
         return (
-          <tr key={idx}>
-            <td>{grade.name}<sub><small>{checkpoint ? 'CP' : 'D'}</small></sub></td>
-            <td className={'score'+ grade.score}>{grade.score}</td>
+          <tr key={courseGrade.name}>
+            <td>{courseGrade.name}<sub><small>{courseGrade.checkpoint ? 'CP' : 'D'}</small></sub></td>
+            <td className={'score'+ studentGrade.score}>{_.isNumber(studentGrade.score) ? studentGrade.score : ''}</td>
+            <td>
+              {courseGrade.dueDate ? moment(courseGrade.dueDate, 'YYYY-MM-DD').format('ddd, MMM D') : ''}
+            </td>
             <td>
               <FormControl
                 type="text"
-                defaultValue={grade.url}
+                defaultValue={studentGrade.url}
                 placeholder="URL"
                 onBlur={this.submitUrl}
                 data-course-id={course.id}
-                data-grade-name={grade.name}
+                data-grade-name={courseGrade.name}
               />
             </td>
           </tr>
@@ -315,6 +299,7 @@ module.exports = React.createBackboneClass({
                   <tr>
                     <th>Name</th>
                     <th>Score</th>
+                    <th>Due Date</th>
                     <th>Submit</th>
                   </tr>
                 </thead>

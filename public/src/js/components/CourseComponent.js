@@ -161,6 +161,13 @@ module.exports = React.createBackboneClass({
     }
   },
 
+  changeDueDate(e) {
+    this.getModel().get('grades').find(grade => {
+      return grade.name === e.currentTarget.getAttribute('data-grade-name');
+    }).dueDate = e.currentTarget.value;
+    this.getModel().save();
+  },
+
   render() {
     var userRows = this.getModel().get('registrations').map((student, i) => {
       const studentCheckpointScores = [];
@@ -208,7 +215,6 @@ module.exports = React.createBackboneClass({
       });
 
       const assignmentAverage = Math.round(_.reduce(assignmentGrades, (memo, num) => { return memo + num; }) / assignmentGrades.length) || 0;
-
       return (
         <td key={idx} className='nowrap'>
           {grade.name}
@@ -218,6 +224,22 @@ module.exports = React.createBackboneClass({
             </a>
           </sup>
           <br />
+          <small>
+            { grade.dueDate ?
+              <FontAwesome name="calendar-check-o" />
+              :
+              <FontAwesome name="calendar-o" />
+            }
+            &nbsp;&nbsp;
+            <FormControl
+              type="date"
+              onChange={this.changeDueDate}
+              data-grade-name={grade.name}
+              style={{ display: 'inline', width: '160px', height: '18px' }}
+              defaultValue={grade.dueDate}
+            />
+          </small>
+          <br />
           <Checkbox
             checked
             data-grade-idx={idx}
@@ -225,10 +247,15 @@ module.exports = React.createBackboneClass({
             onChange={this.toggleCheckpoint}
             style={{display: 'inline'}}
             >
-            <small>CP*</small>
+            <small>CP</small>
           </Checkbox>
           &nbsp;
-          <small>Avg: <span className={'score' + assignmentAverage}>{assignmentAverage}</span></small>
+          <small className="pull-right">
+            Avg:
+            <span className={'score' + assignmentAverage}>
+              {assignmentAverage}
+            </span>
+          </small>
         </td>
       );
     });
@@ -375,7 +402,7 @@ module.exports = React.createBackboneClass({
               header={<h3>Grades</h3>}
               footer={
                 <small>
-                  CP* Signifies the grade is a checkpoint. Checkpoints are
+                  CP: Signifies the grade is a checkpoint. Checkpoints are
                   weighted more and are used as markers in the student&#39;s
                   understanding of the content.
                 </small>
@@ -386,7 +413,7 @@ module.exports = React.createBackboneClass({
                   <Table striped>
                     <thead>
                       <tr>
-                        <th style={{ padding: '2rem 0 2.6rem', borderBottom: 'none' }}>Name</th>
+                        <th style={{ padding: '2rem 0 3.5rem', borderBottom: 'none' }}>Name</th>
                       </tr>
                     </thead>
                     <tbody>
