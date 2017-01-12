@@ -291,7 +291,7 @@ module.exports = React.createBackboneClass({
                       <FontAwesome name="external-link"/>
                     </Button>
                     :
-                    <Button>
+                    <Button disabled={true}>
                       <FontAwesome name="times"/>
                     </Button>
                   }
