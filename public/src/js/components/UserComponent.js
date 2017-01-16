@@ -163,7 +163,7 @@ module.exports = React.createBackboneClass({
                   <FormControl
                     type="text"
                     defaultValue={studentGrade.url}
-                    placeholder="URL"
+                    placeholder="http://example.com"
                     onBlur={this.submitUrl}
                     data-course-id={course.id}
                     data-grade-name={courseGrade.name}
