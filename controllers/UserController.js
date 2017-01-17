@@ -190,7 +190,7 @@ module.exports = {
         }
       }
 
-      if (req.user.is_admin || req.user._id === req.body._id) {
+      if (req.user.is_admin || req.user._id.toString() === id) {
         _.each(attributes, function(attr) {
           user[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
         });
