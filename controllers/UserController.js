@@ -320,8 +320,9 @@ module.exports = {
         user.attendance.push(req.body.date);
       }
 
-      user.save();
-    });
-    return res.json(req.body);
+      user.save(() => {
+        return res.json(req.body);
+      });
+    });  
   }
 };
