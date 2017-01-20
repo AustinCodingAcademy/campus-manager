@@ -199,6 +199,7 @@ module.exports = React.createBackboneClass({
               model={this.getModel()}
               paymentAmount={this.state.paymentAmount}
               course={this.state.course}
+              currentUser={this.props.currentUser}
             />
           </Col>
         </Row>
