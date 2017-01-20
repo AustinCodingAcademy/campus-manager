@@ -122,7 +122,10 @@ module.exports = React.createBackboneClass({
     });
 
     return (
-      <Panel header={<h3>Account</h3>}>
+      <Panel
+        header={<h3>Account</h3>}
+        footer={<small>Contact admissions to make a payment smaller than $490.00</small>}
+      >
         <Row>
           <Col xs={12}>
             <Table striped>
