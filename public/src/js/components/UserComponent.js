@@ -480,6 +480,7 @@ module.exports = React.createBackboneClass({
             <UserAccountComponent
               model={this.getModel()}
               terms={this.props.terms}
+              currentUser={this.props.currentUser}
             />
           </Col>
           :
