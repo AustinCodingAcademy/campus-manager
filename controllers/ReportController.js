@@ -200,6 +200,8 @@ module.exports = {
             } else if (req.query.format === 'html'){
               res.type('html');
               return res.send(200, tableify(rows));
+            } else if (req.query.format === 'webhook') {
+              return res.json(200, rows);
             }
           });
         });
