@@ -14,7 +14,7 @@ html(lang='us-en')
   body
     include top-bar
     // Your content goes here
-    .container
+    .container-fluid
       .row
         .col-xs-12.alerts
           if (messages.info)
@@ -28,6 +28,8 @@ html(lang='us-en')
                 span(aria-hidden='true') ×
               span= messages.error
       block content
+      br
+      br
     include feedback
     include apps
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')

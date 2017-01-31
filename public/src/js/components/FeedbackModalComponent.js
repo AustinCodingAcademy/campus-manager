@@ -10,8 +10,8 @@ module.exports = React.createBackboneClass({
         </Modal.Header>
         <Modal.Body>
           <div className="h-iframe">
-            <img className="ratio" src="http://placehold.it/8x6/ffffff/ffffff" />
-              <iframe src="/feedback" frameborder="0">
+            <img className="ratio" src="https://placehold.it/8x6/ffffff/ffffff" />
+              <iframe src="/feedback" frameBorder="0">
             </iframe>
           </div>
         </Modal.Body>

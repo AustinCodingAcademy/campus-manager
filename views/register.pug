@@ -3,11 +3,29 @@ extends layout
 block content
   .row
     .col-xs-12.col-md-6.col-md-offset-3
-      .panel.panel-default
-        .panel-heading Register
-        .panel-body
-          form(action='/register/' + id, method='post')
-            input(type='hidden', name='_csrf', value=csrfToken)
+      h1.hidden.campus-selected.text-center
+        span.campus-name
+        LLC
+        br
+        small Enrollment Agreement
+      br
+      form(action='/register/' + id, method='post')
+        input(type='hidden', name='_csrf', value=csrfToken)
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Select Campus
+          .panel-body
+            .form-group
+              label(for='campus-select') Campus
+              select#campus-select.form-control
+                option(value="austin") Austin Coding Academy
+                option(value="dallas") Dallas Coding Academy
+                option(value="sanantonio") San Antonio Coding Academy
+                option(value="houston") Houston Coding Academy
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Account Information
+          .panel-body
             .form-group
               label(for='first-name') First name
               input#first-name.form-control(type='text', name='first_name', required, placeholder='First name')
@@ -15,23 +33,86 @@ block content
               label(for='last-name') Last name
               input#last-name.form-control(type='text', name='last_name', required, placeholder='Last name')
             .form-group
-              label(for='phone') Phone
-              input#phone.form-control(type='tel', name='phone', required)
-            .form-group
               label(for='email') Email
               input#email.form-control(type='email', name='username', required, placeholder='Email')
             .form-group
               label(for='password') Password (6 character minimum)
               input#password.form-control(type='password', name='password', pattern='.{6,}', required, placeholder='Password')
-            button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Student Information
+          .panel-body
+            .form-group
+              label(for='phone') Phone
+              input#phone.form-control.phone(type='tel', name='phone', required)
+            .form-group
+              label(for='address') Street Address
+              input#address.form-control(type='text', name='address', required, placeholder='Street Address')
+            .form-group
+              label(for='city') City
+              input#city.form-control(type='text', name='city', required, placeholder='City')
+            .form-group
+              label(for='state') State (ex. TX)
+              input#state.form-control(type='text', name='state', required, placeholder='State', pattern=".{2,2}")
+            .form-group
+              label(for='zipcode') Zipcode (ex. 12345)
+              input#zipcode.form-control(type='number', name='zipcode', required, placeholder='12345', min="5")
+            .form-group
+              label(for='social') Social Security Number (ex. 123-45-6789)
+              input#social.form-control(type='text', name='social', required, placeholder='123-45-6789', pattern='/^\d{3}-\d{2}-\d{4}$/')
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Emergency Information
+          .panel-body
+            .form-group
+              label(for='emergency-contact') Emergency Contact
+              input#emergency-contact.form-control(type='text', name='contact', required, placeholder='Emergency Contact')
+            .form-group
+              label(for='emergency-relationship') Relationship
+              input#emergency-relationship.form-control(type='text', name='emergency-relationship', required, placeholder='Relationship')
+            .form-group
+              label(for='emergency-phone') Phone
+              input#emergency-phone.form-control.phone(type='tel', name='emergency-phone', required)
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Subject Information
+          .panel-body
+            .form-group
+              label(for='admission-date') Date of Admission
+              input#admission-date.form-control(type='text', name='admission-date', required, disabled)
+            .form-group
+              label(for='program') Program Title
+              input#program.form-control(type='text', name='program', required, disabled, value="Full Stack Web Development")
+            .form-group
+              label(for='start-date') Start Date
+              input#start-date.form-control.datepicker(type='text', name='start-date', required, placeholder='Select Date')
+            .form-group
+              label(for='information') Course Information
+              textarea#information.form-control(type='text', name='information', required, disabled) Class meets twice weekly (either Mondays and Wednesdays or Tuesdays and Thursdays)
+            .form-group
+              label(for='times') Class Times
+              input#times.form-control(type='text', name='times', required, disabled, value="6:30p - 9:00p")
+            .form-group
+              label(for='weeks') Total Number of Weeks
+              input#weeks.form-control(type='number', name='weeks', required, disabled, value="30")
+        include costs
+        button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
 
 block bottom_scripts
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js')
   script(type='text/javascript').
-    var $phone = $("#phone")
+    var $phone = $(".phone")
     $phone.intlTelInput({
       onlyCountries: ['us'],
       utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.0.6/js/utils.js'
     });
     $phone.on('change', function() {
       $phone.intlTelInput('setNumber', $phone.val());
+    });
+    $('#admission-date').val(moment().format('ddd, MMM Do, YYYY'));
+    $('.datepicker').datepicker();
+    $('select#campus-select').change(function() {
+      $('.' + $(this).currentTarget.val() + ', .campus-selected').removeClass('hidden');
+      $('.campus-name').text('Austin Coding Academy');
     });
