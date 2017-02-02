@@ -15,7 +15,7 @@ var duration = require('gulp-duration');
 
 gulp.task('bundle', function () {
   return browserify({
-    entries: ['public/src/js/app.js'],
+    entries: ['src/js/app.js'],
     transform: [
       [
         babelify,
@@ -43,7 +43,7 @@ gulp.task('bundle', function () {
 });
 
 gulp.task('sass', function () {
-  return gulp.src('public/src/scss/app.scss')
+  return gulp.src('src/scss/app.scss')
   .pipe(sass())
   .pipe(postcss([pixrem]))
   .pipe(autoprefixer({

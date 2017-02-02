@@ -1,5 +1,8 @@
 extends layout
 
+block styles
+  link(href="https://fonts.googleapis.com/css?family=Yellowtail", rel="stylesheet")
+
 block content
   .row
     .col-xs-12.col-md-6.col-md-offset-3
@@ -69,23 +72,26 @@ block content
               input#emergency-contact.form-control(type='text', name='contact', required, placeholder='Emergency Contact')
             .form-group
               label(for='emergency-relationship') Relationship
-              input#emergency-relationship.form-control(type='text', name='emergency-relationship', required, placeholder='Relationship')
+              input#emergency-relationship.form-control(type='text', name='emergency_relationship', required, placeholder='Relationship')
             .form-group
               label(for='emergency-phone') Phone
-              input#emergency-phone.form-control.phone(type='tel', name='emergency-phone', required)
+              input#emergency-phone.form-control.phone(type='tel', name='emergency_phone', required)
         .panel.panel-default
           .panel-heading
             h3.panel-title Subject Information
           .panel-body
             .form-group
               label(for='admission-date') Date of Admission
-              input#admission-date.form-control(type='text', name='admission-date', required, disabled)
+              input#admission-date.form-control.current-date(type='text', name='admission_date', required, disabled)
             .form-group
               label(for='program') Program Title
               input#program.form-control(type='text', name='program', required, disabled, value="Full Stack Web Development")
             .form-group
               label(for='start-date') Start Date
-              input#start-date.form-control.datepicker(type='text', name='start-date', required, placeholder='Select Date')
+              input#start-date.form-control.current-date(type='text', name='start_date', required, disabled)
+            .form-group
+              label(for='end-date') Approximate End Date
+              input#end-date.form-control(type='text', name='end_date', required, disabled)
             .form-group
               label(for='information') Course Information
               textarea#information.form-control(type='text', name='information', required, disabled) Class meets twice weekly (either Mondays and Wednesdays or Tuesdays and Thursdays)
@@ -96,6 +102,11 @@ block content
               label(for='weeks') Total Number of Weeks
               input#weeks.form-control(type='number', name='weeks', required, disabled, value="30")
         include costs
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Agreement
+          .panel-body
+            include agreements
         button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
 
 block bottom_scripts
@@ -110,8 +121,9 @@ block bottom_scripts
     $phone.on('change', function() {
       $phone.intlTelInput('setNumber', $phone.val());
     });
-    $('#admission-date').val(moment().format('ddd, MMM Do, YYYY'));
-    $('.datepicker').datepicker();
+    $('.date-picker').datepicker();
+    $('.current-date').val(moment().format('ddd, MMM Do, YYYY'));
+    $('#end-date').val(moment().add(280, 'days').format('ddd, MMM Do, YYYY'));
     $('select#campus-select').change(function() {
       $('.' + $(this).currentTarget.val() + ', .campus-selected').removeClass('hidden');
       $('.campus-name').text('Austin Coding Academy');
