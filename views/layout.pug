@@ -18,23 +18,23 @@ html(lang='us-en')
     .container-fluid
       .row
         .col-xs-12.alerts
-          if (messages.info)
-            .alert.alert-info(role='alert')
-              button.close(type='button', data-dismiss='alert', aria-label='Close')
-                span(aria-hidden='true') ×
-              span=  messages.info
-          if (messages.error)
-            .alert.alert-danger(role='alert')
-              button.close(type='button', data-dismiss='alert', aria-label='Close')
-                span(aria-hidden='true') ×
-              span= messages.error
+          if (messages)
+            if (messages.info)
+              .alert.alert-info(role='alert')
+                button.close(type='button', data-dismiss='alert', aria-label='Close')
+                  span(aria-hidden='true') ×
+                span=  messages.info
+            if (messages.error)
+              .alert.alert-danger(role='alert')
+                button.close(type='button', data-dismiss='alert', aria-label='Close')
+                  span(aria-hidden='true') ×
+                span= messages.error
       block content
       br
       br
     include feedback
     include apps
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
-    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/js/intlTelInput.min.js')
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js')
     script(type='text/javascript').
       $(function() {

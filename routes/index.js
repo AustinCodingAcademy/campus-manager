@@ -3,6 +3,7 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 var passport = require('../config/passport');
 var UserModel = require('../models/UserModel');
+var bodyParser = require('body-parser');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -108,6 +109,7 @@ router.post('/register', function(req, res, next) {
           username: req.body.username.toLowerCase(),
           phone: req.body.phone,
           password: hash,
+          zipcode: req.body.zipcode,
           is_client: true,
           is_admin: true,
           idn: users.length ? users[0].idn + 1 : 1
@@ -159,6 +161,7 @@ router.get('/register/:id', function(req, res, next) {
 });
 
 router.post('/register/:id', function(req, res, next) {
+  console.log(req.body);
   UserModel.findOne({ username : req.body.username.toLowerCase() }, function (err, user) {
     var saltRounds = 10;
 
@@ -202,7 +205,8 @@ router.post('/register/:id', function(req, res, next) {
           password: hash,
           is_student: true,
           client: req.params.id,
-          idn: users[0].idn + 1
+          idn: users[0].idn + 1,
+          zipcode: req.body.zipcode
         });
 
         newUser.save(function (err, user) {

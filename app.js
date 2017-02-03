@@ -38,7 +38,7 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json({ limit: '200kb' }));
+app.use(bodyParser.json({limit: "50mb", extended: true, parameterLimit:5000000}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,7 +62,7 @@ app.use('/docs', express.static(path.join(__dirname + '/docs')));
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
 app.use('/api/users', middleware.auth, require('./routes/users'));
-app.use('/api/terms', middleware.auth, require('./routes/terms'));
+app.use('/api/terms', require('./routes/terms'));
 app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
 app.use('/api/locations', middleware.auth, require('./routes/locations'));

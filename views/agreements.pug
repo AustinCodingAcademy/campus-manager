@@ -23,8 +23,7 @@ each initial, idx in initials
     label Student Initials
       input.form-control(type='text', required, style='width:100px;font-family:"Yellowtail",cursive;font-size:30px;')
 
-h3 Method of Payment:&nbsp;
-  small (check one)
+h3 Method of Payment:
 .checkbox
   label
     input(type="checkbox")
@@ -37,7 +36,7 @@ h3 Method of Payment:&nbsp;
   label
     input(type="checkbox")
     span Other
-p
+p.
   Any holder of this consumer credit contract is subject to all claims and
   defenses which the debtor could assert against the seller of goods or services
   obtained pursuant hereto or with the proceeds hereof. Recovery hereunder by
@@ -185,7 +184,7 @@ ol
   li.
     This agreement is a legally binding instrument once the agreement is
     accepted by You and accepted, signed, and dated by the authorized official of
-    Austin Coding Academy LLC or the admissions officer at <span class="campus-name"></span>
+    <span class="campus-name"></span> or the admissions officer at <span class="campus-name"></span>
     principal place of business.
   li You are entitled to an exact copy of this agreement and any disclosure pages you sign.
   li.
@@ -214,15 +213,14 @@ h3 Student Acknowledgments
 -
   var acknowledgements = [
     `I hereby acknowledge receipt of <span class="campus-name"></span>’s catalog dated
-    <input class="form-control current-date" type="text", name='current_date' required disabled style="display: inline; width: 150px;"/>
-    which contains information describing programs offered, and
+    <span class="current-date"></span> which contains information describing programs offered, and
     equipment/supplies provides. <span class="campus-name"></span> catalog is
     included as part of this enrollment agreement and I acknowledge that I have
     received a copy of this catalog.`,
 
     `I have carefully read and received an exact copy of this enrollment agreement.`,
 
-    `I understand that Austin Coding Academy LLC may terminate my enrollment if
+    `I understand that <span class="campus-name"></span> may terminate my enrollment if
     I fail to comply with attendance, academic, and financial requirements or if
     I fail to abide by established standards of conduct, as outlined in
     <span class="campus-name"></span> catalog.`,
@@ -240,7 +238,7 @@ ol
 
 h4.text-center.
   APPROVED AND REGULATED BY THE TEXAS WORKFORCE COMMISSION, CAREER SCHOOLS AND
-  COLLEGES, AUSTIN, TEXAS.
+  COLLEGES, <span class="city"></span>, TEXAS.
 
 h2 Agreed
 h3 Contract Acceptance
@@ -258,10 +256,7 @@ p.
   contract.
 
 p.
-  Signed this
-  <input class="form-control current-day" type="text", name='current_day' required disabled style="display: inline; width: 50px;"/>
-  day of <input class="form-control current-month" type="text", name='current_month' required disabled style="display: inline; width: 100px;"/>,
-  <input class="form-control current-year" type="text", name='current_year' required disabled style="display: inline; width: 75px;"/>
+  Signed this <span class="current-day"></span> day of <span class="current-month"></span>, <span class="current-year"></span>
 
 .row
   .col-xs-7
