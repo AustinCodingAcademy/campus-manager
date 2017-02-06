@@ -163,11 +163,6 @@ block bottom_scripts
         $('.' + campus).hide();
       }
       $('.' + code + ', #enrollment-agreement').show();
-      $.ajax('/css/app.css', {
-        success: function(css) {
-          $('#enrollment-agreement').prepend('<style>' + css + '</style>');
-        }
-      });
 
       $.ajax('/api/terms/dates/' + window.location.pathname.split('/')[window.location.pathname.split('/').length - 1], {
         success: function(dates) {
@@ -182,31 +177,27 @@ block bottom_scripts
 
       });
 
-      $('form').submit(function(e) {
-        $('input:not([type="hidden"]):not([type="password"]):not([type="checkbox"])').each(function() {
+      $('#enrollment-agreement form').submit(function(e) {
+        var $enrollmentAgreement = $('#enrollment-agreement').clone();
+        $enrollmentAgreement.find('input:not([type="hidden"]):not([type="password"]):not([type="checkbox"])').each(function() {
           var $span = $('<span>');
           $span.html('<br />' + $(this).val());
           $span.attr('style', $(this).attr('style'));
           $(this).replaceWith($span);
         });
-        $('input[type="checkbox"]').each(function() {
+        $enrollmentAgreement.find('input[type="checkbox"]').each(function() {
           if (this.checked) {
             $(this).parent().replaceWith($(this).parent().text());
           } else {
             $(this).parent().remove();
           }
         });
-        $('textarea').each(function() {
+        $enrollmentAgreement.find('textarea').each(function() {
           $(this).replaceWith($('<span>').html('<br />' + $(this).text()));
         });
-        $('.flag-container, [type="submit"]').remove();
-        $('#password').parent().remove();
-        $html = $('<input>')
-        $html
-          .attr('type', 'hidden')
-          .attr('name', 'html')
-          .val(btoa(JSON.stringify($('#enrollment-agreement').html())));
-        $(this).prepend($html);
+        $enrollmentAgreement.find('.flag-container, [type="submit"]').remove();
+        $enrollmentAgreement.find('#password').parent().remove();
+        $(e.currentTarget).prepend('<input type="hidden" name="ea_html" value="' + btoa(unescape(encodeURIComponent($enrollmentAgreement.html()))) + '" />');
         return true;
       });
     });

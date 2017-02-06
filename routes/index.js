@@ -1,9 +1,24 @@
-var express = require('express');
-var bcrypt = require('bcrypt');
-var router = express.Router();
-var passport = require('../config/passport');
-var UserModel = require('../models/UserModel');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bcrypt = require('bcrypt');
+const router = express.Router();
+const passport = require('../config/passport');
+const UserModel = require('../models/UserModel');
+const bodyParser = require('body-parser');
+const pdf = require('html-pdf');
+const atob = require('atob');
+const fs = require('fs');
+const fetch = require('node-fetch');
+const btoa = require('btoa');
+const FormData = require('form-data');
+var nodemailer = require('nodemailer');
+var host = process.env.DOMAIN;
+var transport = nodemailer.createTransport({
+  service: 'Mandrill',
+  auth: {
+    user: process.env.MANDRILL_API_USER,
+    pass: process.env.MANDRILL_API_KEY
+  }
+});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -161,7 +176,7 @@ router.get('/register/:id', function(req, res, next) {
 });
 
 router.post('/register/:id', function(req, res, next) {
-  console.log(req.body);
+
   UserModel.findOne({ username : req.body.username.toLowerCase() }, function (err, user) {
     var saltRounds = 10;
 
@@ -182,11 +197,6 @@ router.post('/register/:id', function(req, res, next) {
 
     if (!req.body.last_name) {
       req.flash('error', 'Please enter your last name.')
-      return res.redirect('/register/' + req.params.id);
-    }
-
-    if (req.body.phone.length < 10) {
-      req.flash('error', 'Please enter your phone number.')
       return res.redirect('/register/' + req.params.id);
     }
 
@@ -216,7 +226,70 @@ router.post('/register/:id', function(req, res, next) {
             return res.redirect('/register/' + req.params.id);
           }
 
-          // If the users has been created successfully, log them in with
+          var html = `
+            <style>
+            ${fs.readFileSync('public/css/app.css', 'utf8')}
+            </style>
+            ${decodeURIComponent(escape(atob(req.body.ea_html)))}
+          `;
+          const filename = `${user.idn}${user.first_name}${user.last_name}.pdf`
+          pdf.create(html, {}).toFile(`tmp/${filename}`, function(err, res) {
+            if (err) return console.log(err);
+            const path = res.filename;
+            const url = 'https://api.insight.ly/v2.2/Leads/';
+            const headers = {
+              Authorization: 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
+              'Accept-Encoding': 'gzip'
+            };
+
+            fetch(`${url}Search?email=${user.username}`, {
+              method: 'GET',
+              headers
+            }).then(res => {
+              return res.json().then(json => {
+                console.log(json);
+                const lead = json[0];
+                if (lead) {
+                  var form = new FormData();
+                  form.append('file', fs.createReadStream(path));
+                  form.append('filename', filename);
+                  form.append('content_type', 'application/pdf');
+                  fetch(`${url}${lead['LEAD_ID']}/FileAttachments`, {
+                    method: 'POST',
+                    headers,
+                    body: form
+                  }).then(res => {
+                    console.log(res);
+                    return res;
+                  }).catch(function(e) {
+                    console.log(e);
+                  });
+                } else {
+                  transport.sendMail({
+                    from: 'info@austincodingacademy.com',
+                    to: 'info@austincodingacademy.com',
+                    subject: 'Orphaned Enrollment Agreement',
+                    attachments: [ { path } ]
+                  }, (err, response) => {
+                    if (err) return console.log(err);
+                  });
+                }
+                transport.sendMail({
+                  from: 'info@austincodingacademy.com',
+                  to: user.username,
+                  subject: 'Enrollment Agreement',
+                  html: 'Welcome to Campus Manager! Attached is a copy of your signed Enrollment Agreement.',
+                  attachments: [ { path } ]
+                }, (err, response) => {
+                  if (err) return console.log(err);
+                });
+              });
+            }).catch(function(e) {
+              console.log(e);
+            });
+          });
+
+          // If the user has been created successfully, log them in with
           // passport to start their session and redirect to the home route
           req.login(user, function(err) {
             if (err) { return res.redirect('/register/' + req.params.id); }

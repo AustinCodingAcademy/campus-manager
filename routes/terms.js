@@ -4,15 +4,13 @@ var TermController = require('../controllers/TermController.js');
 var middleware = require('./middleware');
 
 router.get('/dates/:id', function(req, res) {
-  console.log('dates');
   TermController.dates(req, res);
 });
 
 /*
 * GET
 */
-router.get('/', middleware.admin, function(req, res) {
-  console.log('/')
+router.get('/', middleware.auth, function(req, res) {
   TermController.list(req, res);
 });
 

@@ -159,7 +159,6 @@ module.exports = {
   },
 
   dates: function(req, res) {
-    console.log("here");
     TermModel.find({
       client: req.params.id
     }, null, {
