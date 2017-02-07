@@ -14,14 +14,27 @@
     clearly described in the course catalog and that experience has shown
     that the best opportunity of employment comes from completing the entire
     Full Stack Development Program. Only upon completion of the entire program
-    will I earn the title "Full Stack Web Developer".`
+    will I earn the title "Full Stack Web Developer".`,
+
+    `I grant to <span class="campus-name"></span> absolute and irrevocable right
+    and unrestricted permission concerning any photographs that may be taken of
+    me or in which I may be included with others, to use, reuse, publish, and
+    republish the photographs in whole or in part, individually or in connection
+    with other material, in any and all media now or hereafter known, including
+    the internet, and for any purpose whatsoever, specifically including
+    illustration, promotion, art, editorial, advertising, and trade, without
+    restriction as to alteration; and to use my name in connection with any use
+    if chosen to do so. I release and discharge <span class="campus-name"></span>
+    from any and all claims and demands that may arise out of or in connection
+    with the use of the photographs, including without limitation any and all
+    claims for libel or violation of any right of publicity or privacy.`
   ];
 
 each initial, idx in initials
   p !{initial}
   .form-group
     label Student Initials
-      input.form-control(type='text', required, style='width:100px;font-family:"Yellowtail",cursive;font-size:30px;')
+      input.form-control(type='text', required, style='width:100px;font-family:cursive;font-size:30px;')
 
 h3 Method of Payment:
 .checkbox
@@ -234,7 +247,7 @@ ol
       div !{acknowledgement}
       .form-group
         label Student Initials
-          input.form-control(type='text', required, style='width:100px;font-family:"Yellowtail",cursive;font-size:30px;')
+          input.form-control(type='text', required, style='width:100px;font-family:cursive;font-size:30px;')
 
 h4.text-center.
   APPROVED AND REGULATED BY THE TEXAS WORKFORCE COMMISSION, CAREER SCHOOLS AND
@@ -262,14 +275,14 @@ p.
   .col-xs-7
     .form-group
       label Signature of Student
-        input.form-control(type='text', required, style='font-family:"Yellowtail",cursive;font-size:30px;')
+        input.form-control(type='text', required, style='font-family:cursive;font-size:30px;')
     .form-group
       label Signature of School Official
-        input.form-control#official-signature(type='text', required, disabled, style='font-family:"Yellowtail",cursive;font-size:30px;')
+        input.form-control#official-signature(type='text', required, disabled, style='font-family:cursive;font-size:30px;')
   .col-xs-5
     .form-group
       label Date
-        input.form-control.date-picker(type='text', required, style='font-family:"Yellowtail",cursive;font-size:20px;')
+        input.form-control.date-picker(type='text', required, style='font-family:cursive;font-size:20px;')
     .form-group
       label Date
-        input.form-control.current-date(type='text', required, disabled, style='font-family:"Yellowtail",cursive;font-size:20px;')
+        input.form-control.current-date(type='text', required, disabled, style='font-family:cursive;font-size:20px;')
