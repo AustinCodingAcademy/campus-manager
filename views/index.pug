@@ -13,7 +13,7 @@ html(lang='us-en')
       link(rel='stylesheet', href='css/app.css')
   body
     div(data-bootstrap=user)
-    .container#container
+    .container-fluid#container
     script(type='text/javascript', src='https://apis.google.com/js/client.js')
     if env == 'production'
       script(type='text/javascript', src='{{cache-break:js/bundle.js}}')

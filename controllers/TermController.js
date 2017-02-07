@@ -3,6 +3,7 @@ var CourseModel = require('../models/CourseModel.js');
 var UserModel = require('../models/UserModel.js');
 var _ = require('underscore');
 var reversePopulate = require('mongoose-reverse-populate');
+const moment = require('moment');
 
 /**
 * TermController.js
@@ -154,6 +155,41 @@ module.exports = {
         });
       }
       return res.json(term);
+    });
+  },
+
+  dates: function(req, res) {
+    TermModel.find({
+      client: req.params.id
+    }, null, {
+      sort: 'start_date'
+    }, function(err, terms){
+      if(err) {
+        return res.json(500, {
+          message: 'Error getting term.',
+          error: err
+        });
+      }
+    	reversePopulate({
+        modelArray: terms,
+        storeWhere: "courses",
+        arrayPop: true,
+        mongooseModel: CourseModel,
+        idField: "term",
+        populate: [{ path: 'location' }]
+      }, function(err, terms) {
+        var dates = {};
+        terms.forEach(term => {
+          term.courses.forEach(course => {
+            if (!dates[course.location.city] && moment(term.start_date).isAfter(moment())) {
+              dates[course.location.city] = term.start_date;
+            } else if (moment(term.start_date).isAfter(moment()) && moment(term.start_date).isBefore(dates[course.location.city])) {
+              dates[course.location.city] = term.start_date;
+            }
+          })
+        });
+    		return res.json(dates);
+    	});
     });
   }
 };

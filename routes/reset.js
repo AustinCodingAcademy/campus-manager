@@ -43,7 +43,7 @@ router.post('/', function(req, res, next) {
         from: 'info@austincodingacademy.com',
         to: user.username,
         subject: 'ACA Campus Manager Password Reset',
-        html: 'Visit ' + host + '/reset/' + user.reset_password + ' to reset your password.</p>'
+        html: 'Visit ' + host + '/reset/' + user.reset_password + ' to reset your password.'
       }, function(err, info) {
         if (err) {
           return res.json(500, {

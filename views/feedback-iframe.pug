@@ -19,7 +19,7 @@ html(lang='us-en')
             label(for='email') Email
             input#emal.form-control(type='email', name='entry.1147586333', value=user.username, dir='auto', aria-label='Email', title='email', placeholder='Email', required)
           .form-group.col-xs-12
-            label(for='phone') Phone (555-555-5555)
+            label(for='phone') Phone
             input#phone.form-control(type='text', name='entry.677431156', value=user.phone, dir='auto', aria-label='Phone', title='phone', placeholder='Phone')
           .form-group.col-xs-12
             label(for='course') Current Course / Location / Class Days
@@ -32,3 +32,14 @@ html(lang='us-en')
             input(type='hidden', name='fbzx', value='5995000998175107185')
             br
             button.btn.btn-primary.btn-block(type='submit') Submit
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/js/intlTelInput.min.js')
+    script(type='text/javascript').
+      var $phone = $("#phone")
+      $phone.intlTelInput({
+        onlyCountries: ['us'],
+        utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.0.6/js/utils.js'
+      });
+      $phone.on('change', function() {
+        $phone.intlTelInput('setNumber', $phone.val());
+      });

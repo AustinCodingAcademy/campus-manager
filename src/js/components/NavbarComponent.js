@@ -46,7 +46,7 @@ module.exports = React.createBackboneClass({
   render () {
     return(
       <div>
-        <Navbar collapseOnSelect>
+        <Navbar collapseOnSelect fluid>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">

@@ -3,6 +3,10 @@ var router = express.Router();
 var TermController = require('../controllers/TermController.js');
 var middleware = require('./middleware');
 
+router.get('/dates/:id', function(req, res) {
+  TermController.dates(req, res);
+});
+
 /*
 * GET
 */

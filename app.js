@@ -62,7 +62,7 @@ app.use('/docs', express.static(path.join(__dirname + '/docs')));
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
 app.use('/api/users', middleware.auth, require('./routes/users'));
-app.use('/api/terms', middleware.auth, require('./routes/terms'));
+app.use('/api/terms', require('./routes/terms'));
 app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
 app.use('/api/locations', middleware.auth, require('./routes/locations'));

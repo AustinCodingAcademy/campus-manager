@@ -19,7 +19,7 @@ var duration = require('gulp-duration');
 
 gulp.task('bundle-dev', function() {
   var args = merge(watchify.args, {
-    entries: ['public/src/js/app.js'],
+    entries: ['src/js/app.js'],
     debug: true,
     transform: [
       [
@@ -63,7 +63,7 @@ gulp.task('bundle-dev', function() {
 });
 
 gulp.task('sass-dev', function () {
-  return gulp.src('public/src/scss/app.scss')
+  return gulp.src('src/scss/app.scss')
   .pipe(sourcemaps.init())
   .pipe(sass().on('error', sass.logError))
   .pipe(postcss([pixrem]))
@@ -75,7 +75,7 @@ gulp.task('sass-dev', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('public/src/scss/**', ['sass-dev']);
+  gulp.watch('src/scss/**', ['sass-dev']);
   gulp.watch(['../[!node_modules]**/*.js', '../*.md'], ['docs']);
 });
 

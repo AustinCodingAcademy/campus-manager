@@ -5,6 +5,7 @@ html(lang='us-en')
     meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1')
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='mobile-web-app-capable' content='yes')
+    block styles
     include favicon
     if env == 'production'
       link(rel='stylesheet', href='{{cache-break:css/app.css}}')
@@ -14,24 +15,26 @@ html(lang='us-en')
   body
     include top-bar
     // Your content goes here
-    .container
+    .container-fluid
       .row
         .col-xs-12.alerts
-          if (messages.info)
-            .alert.alert-info(role='alert')
-              button.close(type='button', data-dismiss='alert', aria-label='Close')
-                span(aria-hidden='true') ×
-              span=  messages.info
-          if (messages.error)
-            .alert.alert-danger(role='alert')
-              button.close(type='button', data-dismiss='alert', aria-label='Close')
-                span(aria-hidden='true') ×
-              span= messages.error
+          if (messages)
+            if (messages.info)
+              .alert.alert-info(role='alert')
+                button.close(type='button', data-dismiss='alert', aria-label='Close')
+                  span(aria-hidden='true') ×
+                span=  messages.info
+            if (messages.error)
+              .alert.alert-danger(role='alert')
+                button.close(type='button', data-dismiss='alert', aria-label='Close')
+                  span(aria-hidden='true') ×
+                span= messages.error
       block content
+      br
+      br
     include feedback
     include apps
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
-    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/js/intlTelInput.min.js')
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js')
     script(type='text/javascript').
       $(function() {
