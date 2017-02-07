@@ -247,7 +247,6 @@ router.post('/register/:id', function(req, res, next) {
               headers
             }).then(res => {
               return res.json().then(json => {
-                console.log(json);
                 const lead = json[0];
                 if (lead) {
                   var form = new FormData();
