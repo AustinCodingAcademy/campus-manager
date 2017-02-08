@@ -31,6 +31,7 @@ block content
         br
         form(action='/register/' + id, method='post')
           input(type='hidden', name='_csrf', value=csrfToken)
+          input(type='hidden', name='campus')
           .panel.panel-default
             .panel-heading
               h3.panel-title Account Information
@@ -178,7 +179,7 @@ block bottom_scripts
           official: 'Cooper Dukette'
         }
       }
-
+      $('[name="campus"]').val(campuses[code].city);
       $('.date-picker').datepicker();
       $('input.current-date').val(moment().format('ddd, MMM Do, YYYY'));
       $('span.current-date').text(moment().format('ddd, MMM Do, YYYY'));

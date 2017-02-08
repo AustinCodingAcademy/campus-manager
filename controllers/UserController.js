@@ -105,8 +105,10 @@ module.exports = {
       'is_instructor',
       'is_student',
       'codecademy',
+      'rocketchat',
       'zipcode',
-      'credits'
+      'credits',
+      'campus'
     ];
 
     _.each(attributes, function(attr) {
@@ -170,7 +172,8 @@ module.exports = {
         'is_instructor',
         'is_student',
         'price',
-        'credits'
+        'credits',
+        'campus'
       ];
 
       if (req.user.is_admin) {
@@ -323,6 +326,6 @@ module.exports = {
       user.save(() => {
         return res.json(req.body);
       });
-    });  
+    });
   }
 };

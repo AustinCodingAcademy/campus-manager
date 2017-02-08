@@ -195,6 +195,15 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.codecademy}
               />
             </FormGroup>
+            <FormGroup controlId="campus" className={`${hidden}`}>
+              <ControlLabel>Campus</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="Campus"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.campus}
+              />
+            </FormGroup>
             <FormGroup controlId="zipcode">
               <ControlLabel>Zipcode</ControlLabel>
               <FormControl
