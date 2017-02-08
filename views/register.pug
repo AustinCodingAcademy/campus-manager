@@ -179,7 +179,6 @@ block bottom_scripts
           official: 'Cooper Dukette'
         }
       }
-      $('[name="campus"]').val(campuses[code].city);
       $('.date-picker').datepicker();
       $('input.current-date').val(moment().format('ddd, MMM Do, YYYY'));
       $('span.current-date').text(moment().format('ddd, MMM Do, YYYY'));
@@ -188,6 +187,7 @@ block bottom_scripts
       $('.current-year').text(moment().format('YYYY'));
       $('select#campus-select').change(function() {
         var code = $(this).find('option:selected').val();
+        $('[name="campus"]').val(campuses[code].city);
         $('.campus-name').text(campuses[code].city + ' Coding Academy');
         $('.city').text(campuses[code].city);
         $('#official-signature').val(campuses[code].official);
