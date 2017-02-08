@@ -216,7 +216,8 @@ router.post('/register/:id', function(req, res, next) {
           is_student: true,
           client: req.params.id,
           idn: users[0].idn + 1,
-          zipcode: req.body.zipcode
+          zipcode: req.body.zipcode,
+          campus: req.body.campus
         });
 
         newUser.save(function (err, user) {

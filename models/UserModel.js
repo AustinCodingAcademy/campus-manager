@@ -73,6 +73,7 @@ var userSchema = new Schema({
   price: Number,
   reviews: Array,
   rocketchat: String,
+  campus: String
 }, { timestamps: true });
 
 userSchema.set('toJSON', {
