@@ -1,7 +1,5 @@
 'use strict';
 
-require('add-to-homescreen');
-addToHomescreen();
 import 'es6-shim';
 import 'whatwg-fetch';
 const Backbone = require('backbone');
