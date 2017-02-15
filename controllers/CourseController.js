@@ -196,7 +196,13 @@ module.exports = {
           message: "Can't delete a course with registrations"
         });
       }
-      return course.remove().exec(() => {
+      return course.remove((err) => {
+        if(err) {
+          return res.json(500, {
+            message: 'Error deleting course.',
+            error: err
+          });
+        }
         return res.json(course);
       });
     });
