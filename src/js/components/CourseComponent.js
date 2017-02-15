@@ -94,14 +94,15 @@ module.exports = React.createBackboneClass({
     const originalScore = student.get('grades')[gradeIdx].score;
 
     const grade = new GradeModel();
+    const score = e.target.value === '' ? '' : Number(e.target.value);
     grade.save({
       userId: student.id,
       name: e.target.getAttribute('data-grade-name'),
-      score: Number(e.target.value),
+      score,
       courseId: this.getModel().id
     }, {
       success: () => {
-        student.get('grades')[gradeIdx].score = Number(e.target.value);
+        student.get('grades')[gradeIdx].score = score;
         this.getModel().trigger('change');
       },
       error: () => {
