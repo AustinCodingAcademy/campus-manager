@@ -49,8 +49,8 @@ module.exports = React.createBackboneClass({
         totalCourseCost += this.getModel().get('price') || course.get('cost');
         courseCharges.push(
           <tr key={course.id + course.get('cost')}>
-            <td>${Number(this.getModel().get('price') || course.get('cost')).toFixed(2)}</td>
-            <td>{course.get('name')}</td>
+            <td>$-{Number(this.getModel().get('price') || course.get('cost')).toFixed(2)}</td>
+            <td>{course.get('name')} ({course.get('term').get('name')})</td>
           </tr>
         );
       }
@@ -67,7 +67,7 @@ module.exports = React.createBackboneClass({
       totalCourseCost -= Number(credit[1]);
       courseCharges.push(
         <tr key={idx}>
-          <td>(- ${Number(credit[1]).toFixed(2)})</td>
+          <td>${Number(credit[1]).toFixed(2)}</td>
           <td>{credit[0]}</td>
         </tr>
       );
@@ -116,7 +116,7 @@ module.exports = React.createBackboneClass({
           <td>{('$' + ((charge.amount - charge.amount_refunded) / 100).toFixed(2))}</td>
           <td>*{charge.source.last4}</td>
           <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
-          <td>{charge.metadata && charge.metadata.course_name ? charge.metadata.course_name : ''}</td>
+          <td>{charge.metadata && charge.metadata.course_name ? `${charge.metadata.course_name} (${charge.metadata.term_name})` : ''}</td>
         </tr>
       )
     });
