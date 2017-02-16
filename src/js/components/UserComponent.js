@@ -23,7 +23,8 @@ module.exports = React.createBackboneClass({
     return {
       showModal: false,
       user: this.getModel(),
-      activeKey: this.getModel().currentCourse().id
+      activeKey: this.getModel().currentCourse().id,
+      keyOpacity: 0
     }
   },
 
@@ -63,6 +64,11 @@ module.exports = React.createBackboneClass({
         this.checkIn(date);
       }
     }
+  },
+
+  showKey(e) {
+    e.preventDefault();
+    this.setState({ keyOpacity: 1 });
   },
 
   generateApiKey(e) {
@@ -437,8 +443,18 @@ module.exports = React.createBackboneClass({
                 <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small>
                 <p>Users can reset their password at</p>
                 <small><pre>{process.env.DOMAIN + '/reset'}</pre></small>
+                <p>Users can register on Rocket.Chat at</p>
+                <small><pre>{process.env.ROCKET_CHAT}</pre></small>
                 <p>Your API Key is</p>
-                <small><pre>{this.getModel().get('api_key')}</pre> <a href="#" onClick={this.generateApiKey}>generate</a></small>
+                <small>
+                  <pre>
+                    <span style={{opacity: this.state.keyOpacity}}>
+                      {this.getModel().get('api_key') || 'Click regenerate to generate a key'}
+                    </span>
+                  </pre>
+                  <a href="#" className={this.state.keyOpacity ? 'hidden' : ''} onClick={this.showKey}>show</a>
+                  <a href="#" className={this.state.keyOpacity ? '' : 'hidden'} onClick={this.generateApiKey}>regenerate</a>
+                </small>
               </Panel>
             </Col>
             :
