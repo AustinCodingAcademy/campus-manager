@@ -1,59 +1,10 @@
 import * as React from 'react';
 import { Row, Col, Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
+const reviews = require('../data/reviews');
+const socials = require('../data/social');
 
 module.exports = React.createBackboneClass({
-  reviews: [
-    {
-      'Austin Coding Academy': {
-        Google: {
-          href: 'https://www.google.com/?gws_rd=ssl#tbm=lcl&q=Austin+Coding+Academy&lrd=0x8644b4e31ad087bd:0xd6644ce54fe2531c,3,&rlfi=hd:;si:15448557169559098140;mv:!1m3!1d234.15636136085305!2d-97.7405641!3d30.268875500000007!2m3!1f0!2f0!3f0!3m2!1i1500!2i835!4f13.1',
-          key: 'austin-google'
-        },
-        Yelp: {
-          href: 'https://www.yelp.com/writeareview/biz/lc6l_b5X8qDFFdyLFt7ySg?return_url=%2Fbiz%2Flc6l_b5X8qDFFdyLFt7ySg',
-          key: 'austin-yelp'
-        },
-        'Course Report': {
-          href: 'https://www.coursereport.com/schools/austin-coding-academy#/reviews/write-a-review',
-          key: 'austin-coursereport'
-        },
-        SwitchUp: {
-          href: 'https://www.switchup.org/bootcamps/austin-coding-academy',
-          key: 'austin-switchup'
-        },
-        Thinkful: {
-          href: 'https://www.thinkful.com/bootcamps/austin-coding-academy/',
-          key: 'austin-thinkful'
-        }
-      }
-    },
-    {
-      'San Antonio Coding Academy': {
-        Google: {
-          href: 'https://www.google.com/?gws_rd=ssl#q=San%20Antonio%20Coding%20Academy&tbs=lf_od:-1,lf_oh:-1,lf:1,lf_ui:2,lf_pqs:EAE&rflfq=1&rlha=0&rllag=29435051,-98485887,1138&tbm=lcl&rldimm=9940786448329656884&lrd=0x865c5f51a21d2429:0x89f4c49b30b4ca34,3,',
-          key: 'sanantonio-google'
-        },
-        Yelp: {
-          href: 'https://www.yelp.com/writeareview/biz/lc6l_b5X8qDFFdyLFt7ySg?return_url=%2Fbiz%2Flc6l_b5X8qDFFdyLFt7ySg',
-          key: 'sanantonio-yelp'
-        },
-        'Course Report': {
-          href: 'https://www.coursereport.com/schools/austin-coding-academy#/reviews/write-a-review',
-          key: 'sanantonio-coursereport'
-        },
-        SwitchUp: {
-          href: 'https://www.switchup.org/bootcamps/austin-coding-academy',
-          key: 'sanantonio-switchup'
-        },
-        Thinkful: {
-          href: 'https://www.thinkful.com/bootcamps/austin-coding-academy/',
-          key: 'sanantonio-thinkful'
-        }
-      }
-    }
-  ],
-
   handleReviewClick(e) {
     const review = e.currentTarget.getAttribute('data-review');
     const idx = this.getModel().get('reviews').indexOf(review);
@@ -64,32 +15,54 @@ module.exports = React.createBackboneClass({
   },
 
   render() {
-    const reviewsLists = this.reviews.map(review => {
-      const listItems = [];
-      Object.keys(review[Object.keys(review)[0]]).forEach(reviewItem => {
-        listItems.push(
-          <ListGroupItem
-            href={review[Object.keys(review)[0]][reviewItem].href}
-            target="_blank"
-            data-review={review[Object.keys(review)[0]][reviewItem].key}
-            key={review[Object.keys(review)[0]][reviewItem].key}
-            onClick={this.handleReviewClick}
-          >
-           {reviewItem}
-           <FontAwesome
-             name={this.getModel().get('reviews').includes(review[Object.keys(review)[0]][reviewItem].key) ? 'star' : 'star-o'}
-             className="pull-right"
-           />
-          </ListGroupItem>
-        );
-      });
-      return (
-        <Col xs={12 / this.reviews.length} key={Object.keys(review)[0]}>
-          <h5>{Object.keys(review)[0]}</h5>
-          <ListGroup>
-            {listItems}
-          </ListGroup>
-        </Col>
+    const reviewItems = [];
+    Object.keys(reviews[this.getModel().get('campus')]).filter(reviewItem => {
+      return reviews[this.getModel().get('campus')][reviewItem].href;
+    }).forEach(reviewItem => {
+      reviewItems.push(
+        <ListGroupItem
+          href={reviews[this.getModel().get('campus')][reviewItem].href}
+          target="_blank"
+          data-review={reviews[this.getModel().get('campus')][reviewItem].key}
+          key={reviews[this.getModel().get('campus')][reviewItem].key}
+          onClick={this.handleReviewClick}
+          className='justify-content-space-between align-items-center'
+        >
+         {reviewItem}
+         <FontAwesome
+           name={this.getModel().get('reviews').includes(reviews[this.getModel().get('campus')][reviewItem].key) ? 'star' : 'star-o'}
+           className="pull-right"
+           size='2x'
+         />
+        </ListGroupItem>
+      );
+    });
+    const socialItems = [];
+    Object.keys(socials[this.getModel().get('campus')]).filter(socialItem => {
+      return socials[this.getModel().get('campus')][socialItem].href;
+    }).forEach(socialItem => {
+      socialItems.push(
+        <ListGroupItem
+          href={socials[this.getModel().get('campus')][socialItem].href}
+          target="_blank"
+          data-review={socials[this.getModel().get('campus')][socialItem].key}
+          key={socials[this.getModel().get('campus')][socialItem].key}
+          onClick={this.handleReviewClick}
+          className='justify-content-space-between align-items-center'
+        >
+          {socialItem}
+          <span className="fa-stack pull-right">
+            <FontAwesome
+              name={this.getModel().get('reviews').includes(socials[this.getModel().get('campus')][socialItem].key) ? 'circle' : 'circle-thin'}
+              stack='2x'
+            />
+            <FontAwesome
+              name={socials[this.getModel().get('campus')][socialItem].icon}
+              stack='1x'
+              inverse={this.getModel().get('reviews').includes(socials[this.getModel().get('campus')][socialItem].key)}
+            />
+          </span>
+        </ListGroupItem>
       );
     });
 
@@ -98,13 +71,18 @@ module.exports = React.createBackboneClass({
         header={
           <h3>
             <FontAwesome name="star" />
-            &nbsp; Reviews
+            &nbsp; {this.getModel().get('campus')} Coding Academy
           </h3>
         }
       >
-        <h4>Let us and other potential classmates know how we are doing!</h4>
+        <h4>Let the world know how we are doing!</h4>
         <Row>
-          {reviewsLists}
+          <Col xs={12} md={6}>
+            <ListGroup>{reviewItems}</ListGroup>
+          </Col>
+          <Col xs={12} md={6}>
+            <ListGroup>{socialItems}</ListGroup>
+          </Col>
         </Row>
       </Panel>
     );
