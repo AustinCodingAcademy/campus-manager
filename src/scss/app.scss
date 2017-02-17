@@ -119,3 +119,13 @@ html, body {
 .intl-tel-input {
   display: block;
 }
+
+.justify-content-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.align-items-center {
+  display: flex;
+  align-items: center;
+}

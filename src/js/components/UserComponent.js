@@ -17,6 +17,8 @@ const UserAccountComponent = require('./UserAccountComponent');
 const UserModalComponent = require('./UserModalComponent');
 const UserReviewComponent = require('./UserReviewComponent');
 const GradeModel = require('../models/GradeModel');
+const reviews = require('../data/reviews');
+const socials = require('../data/social');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -339,6 +341,12 @@ module.exports = React.createBackboneClass({
 
     const hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
 
+    const reviewCount = Object.keys(reviews[this.getModel().get('campus')]).filter(review => {
+      return reviews[this.getModel().get('campus')][review].href;
+    }).length + Object.keys(socials[this.getModel().get('campus')]).filter(social => {
+      return socials[this.getModel().get('campus')][social].href;
+    }).length;
+
     return (
       <div>
         <Row>
@@ -437,7 +445,7 @@ module.exports = React.createBackboneClass({
               </Panel>
             </Col>
             {this.getModel().get('is_admin') ?
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6}>
               <Panel header={<h3>Admin Tips</h3>}>
                 <p>New User Registration can be found at</p>
                 <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small>
@@ -502,9 +510,13 @@ module.exports = React.createBackboneClass({
           :
           ''
           }
+          {this.getModel().get('campus')  && reviewCount ?
           <Col xs={12} md={6}>
             <UserReviewComponent model={this.getModel()} />
           </Col>
+          :
+          ''
+          }
           <Col xs={12}>
             <PanelGroup activeKey={this.state.activeKey} onSelect={this.handleSelect} accordion>
               {courses}
