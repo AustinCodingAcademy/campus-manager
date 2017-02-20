@@ -2,19 +2,29 @@ var _ = require('underscore');
 
 module.exports = {
   scoreColor: function(score) {
-    if (score >= 70 && score < 80) {
-      return 'orangered';
+    if (score >= 70 && score < 85) {
+      return '#f0ad4e';
     }
-    if (score >= 80 && score < 90) {
-      return '#E8A812';
-    }
-    if (score >= 90 && score < 100) {
-      return 'green';
+    if (score >= 85 && score < 100) {
+      return '#5cb85c';
     }
     if (score === 100) {
-      return 'blue';
+      return '#337ab7';
     }
-    return 'red';
+    return '#d9534f';
+  },
+
+  bsStyle(score) {
+    if (score >= 70 && score < 85) {
+      return 'warning';
+    }
+    if (score >= 85 && score < 100) {
+      return 'success';
+    }
+    if (score === 100) {
+      return 'primary';
+    }
+    return 'danger';
   },
 
   weightedGradeAverage: function(checkpointGrades, dailyGrades) {

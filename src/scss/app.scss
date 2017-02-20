@@ -44,26 +44,21 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 
 @for $i from 0 through 69 {
   .score#{$i} {
-    color: #a20000;
+    color: $brand-danger;
   }
 }
-@for $i from 70 through 79 {
+@for $i from 70 through 84 {
   .score#{$i} {
-    color: #a22b00;
+    color: $brand-warning;
   }
 }
-@for $i from 80 through 89 {
+@for $i from 85 through 99 {
   .score#{$i} {
-    color: #594007;
-  }
-}
-@for $i from 90 through 99 {
-  .score#{$i} {
-    color: green;
+    color: $brand-success;
   }
 }
 .score100 {
-  color: blue;
+  color: $brand-primary;
 }
 
 html, body {
