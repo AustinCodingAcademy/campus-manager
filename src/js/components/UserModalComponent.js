@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { uniq } from 'underscore';
 import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
@@ -6,6 +7,7 @@ import {
 const Select = require('react-select');
 import ReactPhoneInput from 'react-phone-input';
 const UserModel = require('../models/UserModel');
+const LocationsCollection = require('../collections/LocationsCollection');
 
 module.exports = React.createBackboneClass({
   roleOptions: [
@@ -15,12 +17,21 @@ module.exports = React.createBackboneClass({
   ],
 
   getInitialState() {
+  const locations = new LocationsCollection();
+  locations.fetch({
+      success: () => {
+        this.setState({
+          campuses: uniq(locations.pluck('city'))
+        });
+      }
+    });
     return {
       user: this.getModel().attributes,
       roles: [],
       alertVisible: 'hidden',
       error: '',
-      title: this.props.title
+      title: this.props.title,
+      campuses: []
     }
   },
 
@@ -102,6 +113,10 @@ module.exports = React.createBackboneClass({
 
   render() {
     const hidden = this.props.currentUser.roles().includes('admin') ? '' : 'hidden';
+
+    const campuses = this.state.campuses.map(campus => {
+      return (<option value={campus}>{campus} Coding Academy</option>)
+    });
 
     return (
       <Modal show={this.props.show} onHide={this.props.onHide}>
@@ -198,11 +213,14 @@ module.exports = React.createBackboneClass({
             <FormGroup controlId="campus" className={`${hidden}`}>
               <ControlLabel>Campus</ControlLabel>
               <FormControl
-                type="text"
-                placeholder="Campus"
+                componentClass="select"
+                placeholder=""
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.campus}
-              />
+              >
+                <option value="">Select a campus...</option>
+                {campuses}
+              </FormControl>
             </FormGroup>
             <FormGroup controlId="zipcode">
               <ControlLabel>Zipcode</ControlLabel>

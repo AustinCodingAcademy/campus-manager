@@ -341,8 +341,10 @@ module.exports = React.createBackboneClass({
 
     const hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
 
-    if (this.getModel().get('campus')) {
-      const reviewCount = Object.keys(reviews[this.getModel().get('campus')]).filter(review => {
+    let reviewCount = false;
+
+    if (this.getModel().get('campus') && reviews[this.getModel().get('campus')]) {
+      reviewCount = Object.keys(reviews[this.getModel().get('campus')]).filter(review => {
         return reviews[this.getModel().get('campus')][review].href;
       }).length + Object.keys(socials[this.getModel().get('campus')]).filter(social => {
         return socials[this.getModel().get('campus')][social].href;
@@ -512,7 +514,7 @@ module.exports = React.createBackboneClass({
           :
           ''
           }
-          {this.getModel().get('campus')  && reviewCount ?
+          {this.getModel().get('campus') && reviewCount ?
           <Col xs={12} md={6}>
             <UserReviewComponent model={this.getModel()} />
           </Col>
