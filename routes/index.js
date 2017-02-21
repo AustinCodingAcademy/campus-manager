@@ -309,6 +309,11 @@ router.get(
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
-  });
+  }
+);
+
+router.get('/.well-known/acme-challenge/:content', function(req, res) {
+  res.send(process.env.LETS_ENCRYPT_KEY)
+});
 
 module.exports = router;
