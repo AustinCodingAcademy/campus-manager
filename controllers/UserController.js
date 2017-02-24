@@ -221,6 +221,7 @@ module.exports = {
             });
           }
           user.courses = courses;
+          user.charges = req.body.charges;
           return res.json(user);
         });
       });
