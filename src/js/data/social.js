@@ -82,7 +82,7 @@ module.exports = {
   },
   Houston: {
     Facebook: {
-      href: '',
+      href: 'https://www.facebook.com/HoustonCodingAcademy/',
       key: 'houston-facebook',
       icon: 'facebook'
     },

@@ -45,7 +45,7 @@ module.exports = {
   },
   Dallas: {
     Google: {
-      href: '',
+      href: 'https://www.google.com/maps/place/Dallas+Coding+Academy/@32.9470487,-96.79002,13z/data=!4m8!1m2!2m1!1sdallas+coding+academy!3m4!1s0x864c23d82a355e97:0x648717743f3c2312!8m2!3d32.986288!4d-96.803112',
       key: 'dallas-google'
     },
     Yelp: {
@@ -67,7 +67,7 @@ module.exports = {
   },
   Houston: {
     Google: {
-      href: '',
+      href: 'https://www.google.com/maps/place/Houston+Coding+Academy/@29.7443292,-95.4679941,13z/data=!4m8!1m2!2m1!1shouston+coding+academy!3m4!1s0x8640bf4316cf7b6d:0xbc64b525dd13a055!8m2!3d29.7535357!4d-95.3657714',
       key: 'houston-google'
     },
     Yelp: {
