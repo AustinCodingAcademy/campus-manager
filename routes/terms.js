@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var TermController = require('../controllers/TermController.js');
 var middleware = require('./middleware');
+const cors = require('cors');
 
-router.get('/dates/:id', function(req, res) {
+router.get('/dates/:id', cors(), function(req, res) {
   TermController.dates(req, res);
 });
 
