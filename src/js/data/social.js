@@ -60,7 +60,7 @@ module.exports = {
       icon: 'facebook'
     },
     Twitter: {
-      href: '',
+      href: 'https://twitter.com/DallasCoding',
       key: 'dallas-twitter',
       icon: 'twitter'
     },
@@ -87,7 +87,7 @@ module.exports = {
       icon: 'facebook'
     },
     Twitter: {
-      href: '',
+      href: 'https://twitter.com/HoustonCoding',
       key: 'houston-twitter',
       icon: 'twitter'
     },
@@ -97,7 +97,7 @@ module.exports = {
       icon: 'instagram'
     },
     'Google+': {
-      href: '',
+      href: 'https://plus.google.com/113074611848232627735',
       key: 'houston-google+',
       icon: 'google-plus'
     },
