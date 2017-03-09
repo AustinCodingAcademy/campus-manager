@@ -133,25 +133,23 @@ module.exports = {
             error: err
           });
         }
-        if (user) {
-          return transport.sendMail({
-            from: 'info@austincodingacademy.com',
-            to: user.username,
-            subject: 'ACA Welcome and Prework',
-            html: "Welcome to Austin Coding Academy! Please register for your desired session, then check your email for additional course materials."
-          }, function (err, info) {
-            if (err) {
-              return res.json(500, {
-                message: 'Error sending confirmation email. Please contact ACA support for additional assistance.'
-              })
-            }
-            else {
-              return res.json(200, {
-                message: 'Check your email for important info and course materials!'
-              })
-            }
-          })
-        }
+        transport.sendMail({
+          from: 'info@austincodingacademy.com',
+          to: user.username,
+          subject: 'ACA Welcome and Prework',
+          html: "Welcome to Austin Coding Academy! Please register for your intended session, then check your email for additional course materials."
+        }, function (err, info) {
+          if (err) {
+            return res.json(500, {
+              message: 'Error sending confirmation email. Please contact ACA support for additional assistance.'
+            })
+          }
+          else {
+            return res.json(200, {
+              message: 'Check your email for important info and course materials!'
+            })
+          }
+        })
         return res.json(user);
       });
     });
