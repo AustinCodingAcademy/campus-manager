@@ -26,7 +26,9 @@ module.exports = React.createBackboneClass({
   addGrade(e) {
     e.preventDefault();
     var gradeName = e.currentTarget.value;
-    if (gradeName && this.getModel().get('grades').indexOf(gradeName) === -1) {
+    if (gradeName && !this.getModel().get('grades').find((grade) => {
+      return grade.name === gradeName;
+    })) {
       this.getModel().get('grades').push({
         name: gradeName,
         checkpoint: false
