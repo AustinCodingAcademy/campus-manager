@@ -40,6 +40,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+  let key = 'austin'
+  switch (req.headers.host.split('.')[1]) {
+    case 'sanantoniocodingacademy':
+      key = 'sanantonio';
+      break;
+    case 'dallascodingacademy':
+      key = 'dallas';
+      break;
+    case 'houstontxcodingacademy':
+      key = 'houstontx';
+      break;
+  }
+  res.locals = {
+    campusKey: key
+  };
+  next();
+});
+
 mongoose.Promise = global.Promise;
 app.use(session({
   secret: process.env.SESSION_KEY,

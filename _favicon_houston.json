@@ -10,7 +10,7 @@
 				"precomposedIcons": false,
 				"declareOnlyDefaultIcon": true
 			},
-			"appName": "Houston Coding Academy"
+			"appName": "Campus Manager"
 		},
 		"desktopBrowser": {},
 		"windows": {
@@ -26,13 +26,13 @@
 					"rectangle": false
 				}
 			},
-			"appName": "Houston Coding Academy"
+			"appName": "Campus Manager"
 		},
 		"androidChrome": {
 			"pictureAspect": "noChange",
 			"themeColor": "#ffffff",
 			"manifest": {
-				"name": "Houston Coding Academy",
+				"name": "Campus Manager",
 				"display": "standalone",
 				"orientation": "notSet",
 				"onConflict": "override",

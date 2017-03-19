@@ -12,3 +12,4 @@ reports
 .vscode
 tmp
 faviconData.json
+views/favicon-*
