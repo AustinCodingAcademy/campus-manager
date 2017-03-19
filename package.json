@@ -4,10 +4,19 @@
   "private": true,
   "scripts": {
     "preinstall": "npm prune",
-    "postinstall": "npm rebuild && npm run gulp build",
+    "postinstall": "npm rebuild && npm run favicon && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
-    "test": "gulp build && gulp test"
+    "test": "gulp build && gulp test",
+    "favicon-inject-austin": "echo '' > views/favicon-austin.pug && real-favicon inject faviconData.json public/favicons/austin views/favicon-austin.pug && mv public/favicons/austin/favicon-austin.pug views/favicon-austin.pug",
+    "favicon-inject-sanantonio": "echo '' > views/favicon-sanantonio.pug && real-favicon inject faviconData.json public/favicons/sanantonio views/favicon-sanantonio.pug && mv public/favicons/sanantonio/favicon-sanantonio.pug views/favicon-sanantonio.pug",
+    "favicon-inject-dallas": "echo '' > views/favicon-dallas.pug && real-favicon inject faviconData.json public/favicons/dallas views/favicon-dallas.pug && mv public/favicons/dallas/favicon-dallas.pug views/favicon-dallas.pug",
+    "favicon-inject-houston": "echo '' > views/favicon-houston.pug && real-favicon inject faviconData.json public/favicons/houston views/favicon-houston.pug && mv public/favicons/houston/favicon-houston.pug views/favicon-houston.pug",
+    "favicon-austin": "real-favicon generate _favicon_austin.json faviconData.json public/favicons/austin && npm run favicon-inject-austin",
+    "favicon-sanantonio": "real-favicon generate _favicon_sanantonio.json faviconData.json public/favicons/sanantonio && npm run favicon-inject-sanantonio",
+    "favicon-dallas": "real-favicon generate _favicon_dallas.json faviconData.json public/favicons/dallas && npm run favicon-inject-dallas",
+    "favicon-houston": "real-favicon generate _favicon_houston.json faviconData.json public/favicons/houston && npm run favicon-inject-houston",
+    "favicon": "npm run favicon-austin && npm run favicon-sanantonio && npm run favicon-dallas && npm run favicon-houston"
   },
   "engines": {
     "node": "7.2.1"
@@ -28,6 +37,7 @@
     "btoa": "^1.1.2",
     "chart.heatmap.js": "0.0.1-alpha",
     "chart.js": "2.3.0",
+    "cli-real-favicon": "0.0.6",
     "clipboard": "^1.5.15",
     "codemirror": "^5.20.2",
     "compression": "1.6.2",

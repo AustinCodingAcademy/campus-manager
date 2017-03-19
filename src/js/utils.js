@@ -55,5 +55,22 @@ module.exports = {
     var parser = document.createElement('a');
     parser.href = url;
     return parser;
+  },
+
+  campusKey: function(user) {
+    const campus = user.campus ? user.campus : user.get('campus');
+    let key = 'austin'
+    switch (campus) {
+      case 'San Antonio':
+        key = 'sanantonio';
+        break;
+      case 'Dallas':
+        key = 'dallas';
+        break;
+      case 'Houston':
+        key = 'houstontx';
+        break;
+    }
+    return key;
   }
 }

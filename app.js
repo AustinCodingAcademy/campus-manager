@@ -10,7 +10,6 @@ if (['test', 'production'].indexOf(process.env.NODE_ENV) === -1) {
 }
 
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -35,13 +34,30 @@ mongoose.connect(process.env.MONGOLAB_URI);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '200kb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function (req, res, next) {
+  let key = 'austin'
+  switch (req.headers.host.split('.')[1]) {
+    case 'sanantoniocodingacademy':
+      key = 'sanantonio';
+      break;
+    case 'dallascodingacademy':
+      key = 'dallas';
+      break;
+    case 'houstontxcodingacademy':
+      key = 'houstontx';
+      break;
+  }
+  res.locals = {
+    campusKey: key
+  };
+  next();
+});
 
 mongoose.Promise = global.Promise;
 app.use(session({

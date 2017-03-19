@@ -124,3 +124,12 @@ html, body {
   display: flex;
   align-items: center;
 }
+
+.navbar .navbar-brand {
+  padding: 8px 13px;
+  img {
+    max-height: 35px;
+    display: inline;
+    margin-right: 10px;
+  }
+}
