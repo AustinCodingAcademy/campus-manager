@@ -5,8 +5,10 @@ config/env.js
 public/css
 public/js
 public/docs
+public/favicons
 .env
 reports
 *.log
 .vscode
 tmp
+faviconData.json

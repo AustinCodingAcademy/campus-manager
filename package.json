@@ -7,7 +7,13 @@
     "postinstall": "npm rebuild && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
-    "test": "gulp build && gulp test"
+    "test": "gulp build && gulp test",
+    "favicon-inject": "echo '' > views/favicon.pug && real-favicon inject faviconData.json public/favicons/austin views/favicon.pug && mv public/favicons/austin/favicon.pug views/favicon.pug",
+    "favicon-austin": "real-favicon generate _favicon_austin.json faviconData.json public/favicons/austin",
+    "favicon-sanantonio": "real-favicon generate _favicon_sanantonio.json faviconData.json public/favicons/sanantonio",
+    "favicon-dallas": "real-favicon generate _favicon_dallas.json faviconData.json public/favicons/dallas",
+    "favicon-houston": "real-favicon generate _favicon_houston.json faviconData.json public/favicons/houston",
+    "favicon": "npm run favicon-austin && npm run favicon-sanantonio && npm run favicon-dallas && npm run favicon-houston && npm run favicon-inject"
   },
   "engines": {
     "node": "7.2.1"
@@ -28,6 +34,7 @@
     "btoa": "^1.1.2",
     "chart.heatmap.js": "0.0.1-alpha",
     "chart.js": "2.3.0",
+    "cli-real-favicon": "0.0.6",
     "clipboard": "^1.5.15",
     "codemirror": "^5.20.2",
     "compression": "1.6.2",
