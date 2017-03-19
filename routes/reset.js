@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 var UserModel = require('../models/UserModel');
 var nodemailer = require('nodemailer');
-var host = process.env.DOMAIN;
+const utils = require('../src/js/utils');
 var mandrillTransport = require('nodemailer-mandrill-transport');
 var transport = nodemailer.createTransport(mandrillTransport({
   auth: {
@@ -39,11 +39,12 @@ router.post('/', function(req, res, next) {
 
     user.reset_password = Math.random().toString(36).substring(7);
     user.save(function(err, user) {
+      const key = utils.campusKey(user);
       transport.sendMail({
-        from: 'info@austincodingacademy.com',
+        from: `info@${key}codingacademy.com`,
         to: user.username,
-        subject: 'ACA Campus Manager Password Reset',
-        html: 'Visit ' + host + '/reset/' + user.reset_password + ' to reset your password.'
+        subject: 'Campus Manager Password Reset',
+        html: `Visit ${key}codingacademy.com/reset/${user.reset_password} to reset your password.`
       }, function(err, info) {
         if (err) {
           return res.json(500, {

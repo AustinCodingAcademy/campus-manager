@@ -19,6 +19,7 @@ const UserReviewComponent = require('./UserReviewComponent');
 const GradeModel = require('../models/GradeModel');
 const reviews = require('../data/reviews');
 const socials = require('../data/social');
+const utils = require('../utils');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -111,6 +112,7 @@ module.exports = React.createBackboneClass({
   },
 
   render() {
+    const key = utils.campusKey(this.getModel());
     const courses = this.getModel().get('courses').map((course, i) => {
       const dates = course.classDates().map((date, j) => {
         let attended = <FontAwesome name="calendar-o" />;
@@ -452,9 +454,9 @@ module.exports = React.createBackboneClass({
             <Col xs={12} md={6}>
               <Panel header={<h3>Admin Tips</h3>}>
                 <p>New User Registration can be found at</p>
-                <small><pre>{process.env.DOMAIN + '/register/' + this.getModel().get('client')}</pre></small>
+                <small><pre>{`https://campus.${key}codingacademy.com/register/${this.getModel().get('client')}`}</pre></small>
                 <p>Users can reset their password at</p>
-                <small><pre>{process.env.DOMAIN + '/reset'}</pre></small>
+                <small><pre>{`https://campus.${key}codingacademy.com/reset`}</pre></small>
                 <p>Users can register on Rocket.Chat at</p>
                 <small><pre>{process.env.ROCKET_CHAT}</pre></small>
                 <p>Your API Key is</p>

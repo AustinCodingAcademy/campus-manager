@@ -44,16 +44,27 @@ module.exports = React.createBackboneClass({
   },
 
   render () {
+    let key = 'austin';
+    const parser = document.createElement('a');
+    parser.href = window.location.href;
+    switch (parser.hostname.split('.')[parser.hostname.split('.').length - 2]) {
+      case 'sanantoniocodingacademy':
+        key = 'sanantonio';
+        break;
+      case 'dallascodingacademy':
+        key = 'dallas';
+        break;
+      case 'houstontxcodingacademy':
+        key = 'houston';
+        break;
+    }
     return(
       <div>
         <Navbar collapseOnSelect fluid>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">
-                <img
-                  src="/img/ACA_standard_mark_small.png"
-                  style={{ maxHeight: '25px', display: 'inline', marginRight: '10px' }}
-                />
+                <img src={`/img/${key}-logo.svg`} />
                 Campus Manager
               </a>
             </Navbar.Brand>

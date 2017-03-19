@@ -10,8 +10,8 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const btoa = require('btoa');
 const FormData = require('form-data');
+const utils = require('../src/js/utils');
 var nodemailer = require('nodemailer');
-var host = process.env.DOMAIN;
 var transport = nodemailer.createTransport({
   service: 'Mandrill',
   auth: {
@@ -248,6 +248,7 @@ router.post('/register/:id', function(req, res, next) {
               headers
             }).then(res => {
               return res.json().then(json => {
+                const key = utils.campusKey(user);
                 const lead = json[0];
                 if (lead) {
                   var form = new FormData();
@@ -266,16 +267,17 @@ router.post('/register/:id', function(req, res, next) {
                   });
                 } else {
                   transport.sendMail({
-                    from: 'info@austincodingacademy.com',
-                    to: 'info@austincodingacademy.com',
+                    from: `info@${key}codingacademy.com`,
+                    to: `info@${key}codingacademy.com`,
                     subject: 'Orphaned Enrollment Agreement',
                     attachments: [ { path } ]
                   }, (err, response) => {
                     if (err) return console.log(err);
                   });
                 }
+
                 transport.sendMail({
-                  from: 'info@austincodingacademy.com',
+                  from: `info@${key}codingacademy.com`,
                   to: user.username,
                   subject: 'Enrollment Agreement',
                   html: 'Welcome to Campus Manager! Attached is a copy of your signed Enrollment Agreement.',

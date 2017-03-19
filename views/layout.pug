@@ -1,7 +1,8 @@
 doctype html
 html(lang='us-en')
   head
-    title Campus Manager: Course Management Tool for ACA
+    title Campus Manager
+    meta(name="description", content="Learning Management System and Course Management Tool")
     meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1')
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='mobile-web-app-capable' content='yes')
@@ -11,10 +12,8 @@ html(lang='us-en')
       link(rel='stylesheet', href='{{cache-break:css/app.css}}')
     else
       link(rel='stylesheet', href='/css/app.css')
-    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
   body
     include top-bar
-    // Your content goes here
     .container-fluid
       .row
         .col-xs-12.alerts
@@ -53,5 +52,20 @@ html(lang='us-en')
             $('.alert').alert();
           }
         });
+        var key = 'austin';
+        var parser = document.createElement('a');
+        parser.href = window.location.href;
+        switch (parser.hostname.split('.')[parser.hostname.split('.').length - 2]) {
+          case 'sanantoniocodingacademy':
+            key = 'sanantonio';
+            break;
+          case 'dallascodingacademy':
+            key = 'dallas';
+            break;
+          case 'houstontxcodingacademy':
+            key = 'houston';
+            break;
+        }
+        $('.navbar-brand img').attr('src', '/img/' + key + '-logo.svg')    
       });
     block bottom_scripts
