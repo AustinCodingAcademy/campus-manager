@@ -1,4 +1,4 @@
-<img src="../img/aca-logo-header.png" width="400" />
+![](http://en.gravatar.com/userimage/107370100/a08594145564536138dfaaf072c7b241.png?size=200)
 
 # Campus Manager
 
