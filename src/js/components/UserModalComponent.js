@@ -17,14 +17,16 @@ module.exports = React.createBackboneClass({
   ],
 
   getInitialState() {
-  const locations = new LocationsCollection();
-  locations.fetch({
-      success: () => {
-        this.setState({
-          campuses: uniq(locations.pluck('city'))
-        });
-      }
-    });
+    const locations = new LocationsCollection();
+    if (this.props.currentUser.roles().includes('admin') || this.props.currentUser.roles().includes('instructor')) {
+      locations.fetch({
+        success: () => {
+          this.setState({
+            campuses: uniq(locations.pluck('city'))
+          });
+        }
+      });
+    }
     return {
       user: this.getModel().attributes,
       roles: [],

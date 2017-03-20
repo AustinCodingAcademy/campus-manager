@@ -251,19 +251,21 @@ router.post('/register/:id', function(req, res, next) {
                 const key = utils.campusKey(user);
                 const lead = json[0];
                 if (lead) {
-                  var form = new FormData();
-                  form.append('file', fs.createReadStream(path));
-                  form.append('filename', filename);
-                  form.append('content_type', 'application/pdf');
-                  fetch(`${url}${lead['LEAD_ID']}/FileAttachments`, {
-                    method: 'POST',
-                    headers,
-                    body: form
-                  }).then(res => {
-                    console.log(res);
-                    return res;
-                  }).catch(function(e) {
-                    console.log(e);
+                  user.insightly = lead['LEAD_ID'];
+                  user.save((err, user) => {
+                    var form = new FormData();
+                    form.append('file', fs.createReadStream(path));
+                    form.append('filename', filename);
+                    form.append('content_type', 'application/pdf');
+                    fetch(`${url}${lead['LEAD_ID']}/FileAttachments`, {
+                      method: 'POST',
+                      headers,
+                      body: form
+                    }).then(res => {
+                      return res;
+                    }).catch(function(e) {
+                      console.log(e);
+                    });
                   });
                 } else {
                   transport.sendMail({

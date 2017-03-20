@@ -73,7 +73,8 @@ var userSchema = new Schema({
   price: Number,
   reviews: Array,
   rocketchat: String,
-  campus: String
+  campus: String,
+  insightly: String
 }, { timestamps: true });
 
 userSchema.set('toJSON', {
@@ -90,7 +91,7 @@ userSchema.set('toJSON', {
 userSchema.plugin(uniqueValidator);
 
 userSchema.plugin(mongooseToCsv, {
-  headers: 'id idn first_name last_name email phone zipcode github website customer_id is_admin is_client is_instructor is_student credits price',
+  headers: 'id idn first_name last_name email phone zipcode github website customer_id is_admin is_client is_instructor is_student credits price insightly',
   constraints: {
     email: 'username'
   },
