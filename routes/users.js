@@ -43,6 +43,7 @@ router.get('/insightly', middleware.admin, (req, res) => {
 
   UserModel.find({}, (err, users) => {
     findLead(users, 0);
+    return res.json(users);
   });
 });
 
