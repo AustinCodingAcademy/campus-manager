@@ -58,21 +58,6 @@ html(lang='us-en')
             `);
             $('.alert').alert();
           }
-        });
-        var key = 'austin';
-        var parser = document.createElement('a');
-        parser.href = window.location.href;
-        switch (parser.hostname.split('.')[parser.hostname.split('.').length - 2]) {
-          case 'sanantoniocodingacademy':
-            key = 'sanantonio';
-            break;
-          case 'dallascodingacademy':
-            key = 'dallas';
-            break;
-          case 'houstontxcodingacademy':
-            key = 'houston';
-            break;
-        }
-        $('.navbar-brand img').attr('src', '/img/' + key + '-logo.svg')    
+        });    
       });
     block bottom_scripts
