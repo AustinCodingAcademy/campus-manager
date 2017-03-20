@@ -55,7 +55,7 @@ module.exports = React.createBackboneClass({
         key = 'dallas';
         break;
       case 'houstontxcodingacademy':
-        key = 'houston';
+        key = 'houstontx';
         break;
     }
     return(
