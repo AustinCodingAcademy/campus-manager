@@ -91,7 +91,7 @@ userSchema.set('toJSON', {
 userSchema.plugin(uniqueValidator);
 
 userSchema.plugin(mongooseToCsv, {
-  headers: 'id idn first_name last_name email phone zipcode github website customer_id is_admin is_client is_instructor is_student credits price insightly',
+  headers: 'id idn first_name last_name email phone zipcode github website customer_id is_admin is_client is_instructor is_student price insightly',
   constraints: {
     email: 'username'
   },
