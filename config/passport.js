@@ -27,11 +27,10 @@ passport.use(new OAuth2Strategy(
   {
     clientID: process.env.OAUTH_CLIENT_ID,
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    callbackURL: process.env.DOMAIN + '/auth/google/callback'
+    callbackURL: `/auth/google/callback`
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOne({ username: profile.emails[0].value }, function (err, user) {
-      console.log(user);
       return cb(err, user);
     });
   })
