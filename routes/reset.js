@@ -44,7 +44,7 @@ router.post('/', function(req, res, next) {
         from: `info@${key}codingacademy.com`,
         to: user.username,
         subject: 'Campus Manager Password Reset',
-        html: `Visit ${key}codingacademy.com/reset/${user.reset_password} to reset your password.`
+        html: `Visit https://campus.${key}codingacademy.com/reset/${user.reset_password} to reset your password.`
       }, function(err, info) {
         if (err) {
           return res.json(500, {
