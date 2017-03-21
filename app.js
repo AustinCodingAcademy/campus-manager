@@ -39,7 +39,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '200kb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 if (process.env.NODE_ENV === 'production') {
-  app.use(forceSSL, { enable301Redirects: false });
+  app.use(forceSSL);
+  app.set('forceSSLOptions', {
+    enable301Redirects: false
+  });
 }
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
