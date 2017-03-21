@@ -18,7 +18,6 @@ var flash = require('express-flash');
 var cookieParser = require('cookie-parser');
 var csrf = require('csurf');
 var compression = require('compression');
-var forceSSL = require('express-force-ssl');
 
 var passport = require('./config/passport');
 
@@ -38,12 +37,6 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '200kb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
-if (process.env.NODE_ENV === 'production') {
-  app.use(forceSSL);
-  app.set('forceSSLOptions', {
-    enable301Redirects: false
-  });
-}
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
