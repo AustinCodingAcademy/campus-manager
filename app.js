@@ -73,10 +73,6 @@ app.use(cookieParser());
 app.use(csrf({cookie: true}));
 // compress all responses
 app.use(compression({ threshold: 0 }))
-
-if (process.env.NODE_ENV === 'production') {
-  app.all('*', middleware.ensureSecure);
-}
 app.use('/docs', express.static(path.join(__dirname + '/docs')));
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
