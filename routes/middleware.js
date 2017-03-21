@@ -70,5 +70,14 @@ module.exports = {
         return next();
     }
     res.status(403).send({ error: "Not authorized." });
+  },
+
+  ensureSecure: (req, res, next) => {
+    if(req.secure){
+      // OK, continue
+      return next();
+    };
+    // handle port numbers if you need non defaults
+    res.redirect('https://' + req.hostname + req.url); // express 4.x
   }
 };
