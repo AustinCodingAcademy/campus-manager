@@ -180,7 +180,9 @@ module.exports = {
       }, function(err, terms) {
         var dates = {};
         terms.forEach(term => {
-          term.courses.forEach(course => {
+          term.courses.filter(course => {
+            return course.name.toLowerCase().includes('intro');
+          }).forEach(course => {
             if (!dates[course.location.city] && moment(term.start_date).isAfter(moment())) {
               dates[course.location.city] = term.start_date;
             } else if (moment(term.start_date).isAfter(moment()) && moment(term.start_date).isBefore(dates[course.location.city])) {
