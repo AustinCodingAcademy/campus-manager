@@ -34,6 +34,7 @@ html(lang='us-en')
             button.btn.btn-primary.btn-block(type='submit') Submit
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/js/intlTelInput.min.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/javascript-detect-element-resize/0.5.3/jquery.resize.min.js')
     script(type='text/javascript').
       var $phone = $("#phone")
       $phone.intlTelInput({
@@ -42,4 +43,11 @@ html(lang='us-en')
       });
       $phone.on('change', function() {
         $phone.intlTelInput('setNumber', $phone.val());
+      });
+      parent.postMessage('resized-' + $('.container').height(), '*');
+      $('.container').resize(function() {
+        parent.postMessage('resized-' + $(this).height(), '*');
+      });
+      $('form').submit(function() {
+        parent.postMessage('feedback-iframe', '*');
       });
