@@ -84,7 +84,9 @@ module.exports = React.createBackboneClass({
     } else {
       this.props.terms.each(term => {
         term.get('courses').each(course => {
-          courses.add(course);
+          if (course.get('location').get('city') === this.getModel().get('campus')) {
+            courses.add(course);
+          }
         });
       });
     }
