@@ -104,7 +104,6 @@ module.exports = {
       'is_admin',
       'is_instructor',
       'is_student',
-      'codecademy',
       'rocketchat',
       'zipcode',
       'credits',
@@ -162,7 +161,6 @@ module.exports = {
         'website',
         'github',
         'rocketchat',
-        'codecademy',
         'zipcode',
         'reviews'
       ];
@@ -265,7 +263,6 @@ module.exports = {
               'phone',
               'website',
               'github',
-              'codecademy',
               'zipcode'
             ];
 

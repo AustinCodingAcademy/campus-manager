@@ -422,13 +422,6 @@ module.exports = React.createBackboneClass({
                       </a>
                     </p>
                     <p>
-                      <FontAwesome name="code" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
-                        {this.getModel().get('codecademy')}
-                      </a>
-                    </p>
-                    <p>
                       <FontAwesome name="map-marker" fixedWidth={true} />
                       &nbsp;
                       <a href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
