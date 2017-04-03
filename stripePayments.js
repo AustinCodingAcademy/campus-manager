@@ -15,11 +15,11 @@ function fetchAllStripeCharges(startingAfter) {
     if (charges.has_more) {
       fetchAllStripeCharges(_.last(charges.data).id);
     } else {
-      s3.putObject({Bucket: process.env.S3_BUCKET_NAME, Key: 'stripe_payments.csv', Body: json2csv({ data: collection })}, function(err, data) {
+      s3.putObject({Bucket: process.env.S3_BUCKET_NAME, Key: 'stripe_payments.json', Body: JSON.stringify(collection) }, function(err, data) {
         if (err) {
           console.log(err)
         }  else  {
-          console.log("Successfully uploaded data to " + process.env.S3_BUCKET_NAME + "/stripe_payments.csv");
+          console.log("Successfully uploaded data to " + process.env.S3_BUCKET_NAME + "/stripe_payments.json");
         }
       });
     }
