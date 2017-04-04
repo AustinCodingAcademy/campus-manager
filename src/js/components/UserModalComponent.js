@@ -195,6 +195,15 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.rocketchat}
               />
             </FormGroup>
+            <FormGroup controlId="linkedIn">
+              <ControlLabel>LinkedIn</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="LinkedIn username"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.linkedIn}
+              />
+            </FormGroup>
             <FormGroup controlId="website">
               <ControlLabel>Website</ControlLabel>
               <FormControl
