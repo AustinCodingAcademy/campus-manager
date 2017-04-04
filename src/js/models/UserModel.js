@@ -106,7 +106,6 @@ module.exports = Backbone.Model.extend({
       'github',
       'rocketchat',
       'website',
-      'codecademy',
       'zipcode'
     ]
     return Math.round(_.filter(attrs, attr => {

@@ -46,6 +46,10 @@ var userSchema = new Schema({
     type: String,
     default: ""
   },
+  linkedIn: {
+    type: String,
+    default: ""
+  },
   website: {
     type: String,
     default: ""
@@ -60,21 +64,21 @@ var userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  attendance: Array,
-  codecademy: String,
-  zipcode: String,
-  grades: Array,
-  courses: Array,
-  reset_password: String,
-  charges: Array,
-  customer_id: String,
-  credits: String,
   api_key: String,
+  attendance: Array,
+  campus: String,
+  charges: Array,
+  courses: Array,
+  credits: String,
+  customer_id: String,
+  grades: Array,
+  insightly: String,
+  linkedIn: String,
   price: Number,
+  reset_password: String,
   reviews: Array,
   rocketchat: String,
-  campus: String,
-  insightly: String
+  zipcode: String,
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

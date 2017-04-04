@@ -415,17 +415,17 @@ module.exports = React.createBackboneClass({
                       </a>
                     </p>
                     <p>
+                      <FontAwesome name="linkedin-square" fixedWidth={true} />
+                      &nbsp;
+                      <a title={'LinkedIn Profile'} href={'https://linkedin.com/in/' + this.getModel().get('linkedIn')} target="_blank">
+                        {this.getModel().get('linkedIn')}
+                      </a>
+                    </p>
+                    <p>
                       <FontAwesome name="rocket" fixedWidth={true} />
                       &nbsp;
                       <a title={'Rocket Chat'} href={'https://chat.austincodingacademy.com/direct/' + this.getModel().get('rocketchat')} target="_blank">
                         {this.getModel().get('rocketchat') ? `@${this.getModel().get('rocketchat')}` : ''}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="code" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
-                        {this.getModel().get('codecademy')}
                       </a>
                     </p>
                     <p>

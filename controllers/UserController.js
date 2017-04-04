@@ -102,20 +102,20 @@ module.exports = {
     var user = new UserModel();
 
     var attributes = [
-      'first_name',
-      'last_name',
+      'campus',
+      'credits',
       'email',
-      'phone',
-      'website',
+      'first_name',
       'github',
       'is_admin',
       'is_instructor',
       'is_student',
-      'codecademy',
+      'last_name',
+      'linkedIn',
+      'phone',
       'rocketchat',
+      'website',
       'zipcode',
-      'credits',
-      'campus'
     ];
 
     _.each(attributes, function(attr) {
@@ -180,24 +180,24 @@ module.exports = {
 
       var attributes = [
         'first_name',
-        'last_name',
-        'username',
-        'phone',
-        'website',
         'github',
+        'last_name',
+        'linkedIn',
+        'phone',
+        'reviews',
         'rocketchat',
-        'codecademy',
+        'username',
+        'website',
         'zipcode',
-        'reviews'
       ];
 
       var adminAttrs = [
+        'campus',
+        'credits',
         'is_admin',
         'is_instructor',
         'is_student',
         'price',
-        'credits',
-        'campus'
       ];
 
       if (req.user.is_admin) {
@@ -285,11 +285,11 @@ module.exports = {
             idn++;
             var attributes = [
               'first_name',
+              'github',
               'last_name',
+              'linkedIn',
               'phone',
               'website',
-              'github',
-              'codecademy',
               'zipcode'
             ];
 

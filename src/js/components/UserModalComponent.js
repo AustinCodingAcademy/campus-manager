@@ -117,7 +117,8 @@ module.exports = React.createBackboneClass({
     const hidden = this.props.currentUser.roles().includes('admin') ? '' : 'hidden';
 
     const campuses = this.state.campuses.map(campus => {
-      return (<option value={campus}>{campus} Coding Academy</option>)
+      let _key = this.state.campuses.indexOf(campus)
+      return (<option key={_key} value={campus}>{campus} Coding Academy</option>)
     });
 
     return (
@@ -194,6 +195,15 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.user.rocketchat}
               />
             </FormGroup>
+            <FormGroup controlId="linkedIn">
+              <ControlLabel>LinkedIn</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="LinkedIn username"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.linkedIn}
+              />
+            </FormGroup>
             <FormGroup controlId="website">
               <ControlLabel>Website</ControlLabel>
               <FormControl
@@ -201,15 +211,6 @@ module.exports = React.createBackboneClass({
                 placeholder="http://example.com"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.website}
-              />
-            </FormGroup>
-            <FormGroup controlId="codecademy">
-              <ControlLabel>Codecademy Username</ControlLabel>
-              <FormControl
-                type="text"
-                placeholder="Codecademy Username"
-                onChange={this.changeTextValue}
-                defaultValue={this.state.user.codecademy}
               />
             </FormGroup>
             <FormGroup controlId="campus" className={`${hidden}`}>
