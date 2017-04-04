@@ -54,6 +54,7 @@
     "express": "4.14.0",
     "express-flash": "0.0.2",
     "express-session": "1.14.2",
+    "express-validator": "^3.1.2",
     "font-awesome": "^4.7.0",
     "form-data": "^2.1.2",
     "fs-extra": "^1.0.0",
@@ -143,6 +144,7 @@
   "devDependencies": {
     "chromedriver": "^2.25.1",
     "dotenv": "^2.0.0",
+    "lodash": "^4.11.1",
     "selenium-server-standalone-jar": "3.0.1"
   }
 }

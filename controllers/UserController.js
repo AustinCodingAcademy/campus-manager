@@ -8,7 +8,14 @@ var _ = require('underscore');
 var moment = require('moment');
 var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
+var nodemailer = require('nodemailer');
+var mandrillTransport = require('nodemailer-mandrill-transport');
 var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+var transport = nodemailer.createTransport(mandrillTransport({
+  auth: {
+    apiKey: process.env.MANDRILL_API_KEY
+  }
+}));
 
 module.exports = {
 
@@ -112,7 +119,7 @@ module.exports = {
     ];
 
     _.each(attributes, function(attr) {
-      user[attr] =  req.body[attr];
+      user[attr] = req.body[attr];
     });
     user.username = req.body.username.toLowerCase();
 
@@ -126,6 +133,23 @@ module.exports = {
             error: err
           });
         }
+        transport.sendMail({
+          from: 'info@austincodingacademy.com',
+          to: user.username,
+          subject: 'ACA Welcome and Prework',
+          html: "Welcome to Austin Coding Academy! Please register for your intended session, then check your email for additional course materials."
+        }, function (err, info) {
+          if (err) {
+            return res.json(500, {
+              message: 'Error sending confirmation email. Please contact ACA support for additional assistance.'
+            })
+          }
+          else {
+            return res.json(200, {
+              message: 'Check your email for important info and course materials!'
+            })
+          }
+        })
         return res.json(user);
       });
     });
