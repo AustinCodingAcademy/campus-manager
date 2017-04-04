@@ -117,7 +117,8 @@ module.exports = React.createBackboneClass({
     const hidden = this.props.currentUser.roles().includes('admin') ? '' : 'hidden';
 
     const campuses = this.state.campuses.map(campus => {
-      return (<option value={campus}>{campus} Coding Academy</option>)
+      let _key = this.state.campuses.indexOf(campus)
+      return (<option key={_key} value={campus}>{campus} Coding Academy</option>)
     });
 
     return (
