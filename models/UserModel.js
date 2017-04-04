@@ -61,7 +61,6 @@ var userSchema = new Schema({
     ref: 'user'
   },
   attendance: Array,
-  codecademy: String,
   zipcode: String,
   grades: Array,
   courses: Array,
