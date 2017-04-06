@@ -17,7 +17,8 @@ module.exports = {
     const fileName = 'report.sqlite3';
     if (
       !fs.existsSync(fileName) ||
-      moment.utc(fs.statSync(fileName).ctime).isSameOrBefore(moment().subtract(10, 'minutes'))
+      moment.utc(fs.statSync(fileName).ctime).isSameOrBefore(moment().subtract(10, 'minutes')) ||
+      req.query.refresh
     ) {
       const s3 = new AWS.S3();
       s3.getObject({

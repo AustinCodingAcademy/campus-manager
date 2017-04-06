@@ -48,7 +48,12 @@ module.exports = React.createBackboneClass({
     window.location = this.getModel().link(this.url, 'csv');
   },
 
-  executeCode: function() {
+  refresh: function() {
+    this.executeCode(null, null, null, true)
+  },
+
+  executeCode: function(a, b, c, refresh) {
+    console.log(arguments);
     this.setState({
       consoleClass: '',
       consoleText: `Executing query...`
@@ -56,6 +61,9 @@ module.exports = React.createBackboneClass({
     this.getModel().url = this.getModel().link(this.url, 'json');
     this.getModel().fetch({
       global: false,
+      data: {
+        refresh: refresh
+      },
       success: () => {
         this.setState({
           consoleClass: '',
@@ -163,6 +171,9 @@ module.exports = React.createBackboneClass({
               <Button onClick={this.exportCSV}>
                 <FontAwesome name="download" />
                 &nbsp; CSV
+              </Button>
+              <Button onClick={this.refresh}>
+                <FontAwesome name="refresh" />
               </Button>
             </ButtonGroup>
             <br />
