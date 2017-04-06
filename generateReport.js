@@ -28,6 +28,7 @@ function generateReport() {
     'users': require('./models/UserModel'),
     'locations': require('./models/LocationModel'),
     'terms': require('./models/TermModel'),
+    'courses': require('./models/CourseModel'),
     'textbooks': require('./models/TextbookModel')
   };
 
