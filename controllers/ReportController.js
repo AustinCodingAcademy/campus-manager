@@ -43,7 +43,10 @@ module.exports = {
             if (req.query.format === 'json' || !req.query.format)  {
               return res.json(200, {results: rows, columnHeaders: rows[0] ? Object.keys(rows[0]) : [] });
             } else if (req.query.format === 'csv') {
-              res.type('text/csv');
+              res.type('text/csv');res.set({
+                'Content-Disposition': `attachment; filename=${Date.now()}.csv`,
+                'Content-Type': 'text/csv'
+              });
               return res.send(200, json2csv({ data: rows}));
             } else if (req.query.format === 'html'){
               res.type('html');
