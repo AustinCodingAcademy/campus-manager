@@ -55,7 +55,6 @@ module.exports = React.createBackboneClass({
     });
     this.getModel().url = this.getModel().link(this.url, 'json');
     this.getModel().fetch({
-      data: { timestamp: this.getModel().get('timestamp') },
       global: false,
       success: () => {
         this.setState({
@@ -184,6 +183,7 @@ module.exports = React.createBackboneClass({
                 data={this.getModel().get('results')}
                 filterable={this.getModel().get('results').length ? Object.keys(this.getModel().get('results')[0]) : []}
                 filterBy={this.state.filterBy}
+                sortable={this.getModel().get('columnHeaders')}
               />
             </div>
           </Col>
