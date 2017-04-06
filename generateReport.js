@@ -75,21 +75,23 @@ function courseDates() {
     });
     console.log(`generating course_dates table`);
     yosql.createTable(db, 'course_dates', dates, {}, () => {
+      console.log('fetching stripe charges');
       fetchAllStripeCharges();
     });
   });
 }
 
 function fetchAllStripeCharges(startingAfter) {
-  console.log('fetching stripe charges');
   stripe.charges.list({ limit: 100, starting_after: startingAfter }, (err, charges) => {
     if (err) { console.log(err); }
-    Array.prototype.push.apply(charges.data, stripePayments);
+    Array.prototype.push.apply(stripePayments, charges.data);
+    console.log(`fetched ${charges.data.length} payments`);
     if (charges.has_more) {
       fetchAllStripeCharges(charges.data[charges.data.length - 1].id);
     } else {
       console.log('generating stripe_payments table');
       yosql.createTable(db, 'stripe_payments', stripePayments, {}, () => {
+        console.log('fetching insightly leads');
         fetchInsightlyLeads(0);
       });
     }
@@ -97,7 +99,6 @@ function fetchAllStripeCharges(startingAfter) {
 }
 
 function fetchInsightlyLeads(skip) {
-  console.log('fetching insightly leads');
   fetch(`https://api.insight.ly/v2.2/Leads/?converted=true&top=500&skip=${skip}`, {
     method: 'GET',
     headers: {
@@ -107,6 +108,7 @@ function fetchInsightlyLeads(skip) {
   }).then(res => {
     res.json().then(leads => {
       Array.prototype.push.apply(insightlyLeads, leads);
+      console.log(`fetched ${leads.length} leads`);
       if (leads.length === 500) {
         fetchInsightlyLeads(skip + 500);
       } else {
