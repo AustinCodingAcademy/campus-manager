@@ -16,7 +16,7 @@ module.exports = {
   index: function(req, res) {
     const fileName = 'report.sqlite3';
     if (
-      !fs.existsSync() ||
+      !fs.existsSync(fileName) ||
       moment.utc(fs.statSync(fileName).ctime).isSameOrBefore(moment().subtract(10, 'minutes'))
     ) {
       const s3 = new AWS.S3();
