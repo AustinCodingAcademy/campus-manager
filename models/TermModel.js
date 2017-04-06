@@ -1,10 +1,9 @@
-var mongoose = require('mongoose');
-var Schema   = mongoose.Schema;
-var mongooseToCsv = require('mongoose-to-csv');
-var moment = require('moment');
-var version = require('mongoose-version');
+const mongoose = require('mongoose');
+const Schema   = mongoose.Schema;
+const moment = require('moment');
+const version = require('mongoose-version');
 
-var termSchema = new Schema({
+const termSchema = new Schema({
 	start_date: Date,
 	end_date: Date,
 	name: String,
@@ -14,22 +13,6 @@ var termSchema = new Schema({
 	},
   courses: []
 }, { timestamps: true });
-
-termSchema.plugin(mongooseToCsv, {
-  headers: 'id name date_start date_end',
-  constraints: {},
-  virtuals: {
-    id: function(doc) {
-      return doc._id.toString();
-    },
-    date_start: function(doc) {
-      return moment.utc(doc.start_date).format('YYYY-MM-DD');
-    },
-    date_end: function(doc) {
-      return moment.utc(doc.end_date).format('YYYY-MM-DD');
-    }
-  }
-});
 
 termSchema.plugin(version, { collection: 'terms__versions' });
 

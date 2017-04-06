@@ -1,6 +1,5 @@
 node_modules
 npm-debug.log
-*.sqlite
 config/env.js
 public/css
 public/js
@@ -10,6 +9,6 @@ public/favicons
 reports
 *.log
 .vscode
-tmp
 faviconData.json
 views/favicon-*
+*.sqlite3
