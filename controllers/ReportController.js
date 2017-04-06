@@ -20,10 +20,13 @@ module.exports = {
       moment.utc(fs.statSync(fileName).ctime).isSameOrBefore(moment().subtract(10, 'minutes'))
     ) {
       const s3 = new AWS.S3();
-      s3.getObject({Bucket: process.env.S3_BUCKET_NAME, Key: fileName}, function(err, data) {
+      s3.getObject({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: fileName
+      }, function(err, data) {
         if (err) {
           console.log(err);
-        }  else  {
+        } else {
           fs.writeFileSync(fileName, data.Body);
           queryDatabase();
         }
@@ -31,7 +34,7 @@ module.exports = {
     } else {
       queryDatabase();
     }
-    console.log(fs.statSync(fileName));
+
     function queryDatabase() {
       if (req.params.query) {
         const db = new sqlite3.Database(fileName);
@@ -41,9 +44,12 @@ module.exports = {
               return res.json(500, { message: err.message, error: err });
             }
             if (req.query.format === 'json' || !req.query.format)  {
-              return res.json(200, {results: rows, columnHeaders: rows[0] ? Object.keys(rows[0]) : [] });
+              return res.json(200, {
+                results: rows,
+                columnHeaders: rows[0] ? Object.keys(rows[0]) : []
+              });
             } else if (req.query.format === 'csv') {
-              res.type('text/csv');res.set({
+              res.set({
                 'Content-Disposition': `attachment; filename=${Date.now()}.csv`,
                 'Content-Type': 'text/csv'
               });
