@@ -84,7 +84,6 @@ userSchema.set('toJSON', {
     delete ret.password;
     delete ret.__v;
     delete ret.reset_password;
-    delete ret.customer_id;
     return ret;
   }
 });
