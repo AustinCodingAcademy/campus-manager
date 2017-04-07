@@ -401,14 +401,14 @@ module.exports = React.createBackboneClass({
                       <FontAwesome name="github" fixedWidth={true} />
                       &nbsp;
                       <a title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
-                        https://github.com/{this.getModel().get('github')}
+                        {this.getModel().get('github')}
                       </a>
                     </p>
                     <p>
                       <FontAwesome name="linkedin-square" fixedWidth={true} />
                       &nbsp;
                       <a title={'LinkedIn Profile'} href={'https://linkedin.com/in/' + this.getModel().get('linkedIn')} target="_blank">
-                        https://linkedin/in/{this.getModel().get('linkedIn')}
+                        {this.getModel().get('linkedIn')}
                       </a>
                     </p>
                     <p>
