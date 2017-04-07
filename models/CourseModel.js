@@ -1,9 +1,8 @@
-var mongoose = require('mongoose');
-var Schema   = mongoose.Schema;
-var mongooseToCsv = require('mongoose-to-csv');
-var version = require('mongoose-version');
+const mongoose = require('mongoose');
+const Schema   = mongoose.Schema;
+const version = require('mongoose-version');
 
-var courseSchema = new Schema({
+const courseSchema = new Schema({
 	name: String,
 	term: {
 	 	type: Schema.Types.ObjectId,
@@ -45,22 +44,6 @@ var courseSchema = new Schema({
     required: true
   }
 }, { timestamps: true });
-
-courseSchema.plugin(mongooseToCsv, {
-  headers: 'id name seats term_id location_id cost',
-  constraints: {},
-  virtuals: {
-    id: function(doc) {
-      return doc._id.toString();
-    },
-    term_id: function(doc) {
-      return doc.term.toString();
-    },
-    location_id: function(doc) {
-      return doc.location.toString();
-    }
-  }
-});
 
 courseSchema.plugin(version, { collection: 'courses__versions' });
 

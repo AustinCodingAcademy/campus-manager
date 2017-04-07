@@ -8,7 +8,15 @@ var _ = require('underscore');
 var moment = require('moment');
 var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
+var nodemailer = require('nodemailer');
+var mandrillTransport = require('nodemailer-mandrill-transport');
 var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const utils = require('../src/js/utils');
+var transport = nodemailer.createTransport(mandrillTransport({
+  auth: {
+    apiKey: process.env.MANDRILL_API_KEY
+  }
+}));
 
 module.exports = {
 
@@ -95,24 +103,24 @@ module.exports = {
     var user = new UserModel();
 
     var attributes = [
-      'first_name',
-      'last_name',
+      'campus',
+      'credits',
       'email',
-      'phone',
-      'website',
+      'first_name',
       'github',
       'is_admin',
       'is_instructor',
       'is_student',
-      'codecademy',
+      'last_name',
+      'linkedIn',
+      'phone',
       'rocketchat',
+      'website',
       'zipcode',
-      'credits',
-      'campus'
     ];
 
     _.each(attributes, function(attr) {
-      user[attr] =  req.body[attr];
+      user[attr] = req.body[attr];
     });
     user.username = req.body.username.toLowerCase();
 
@@ -126,6 +134,24 @@ module.exports = {
             error: err
           });
         }
+        const key = utils.campusKey(user);
+        transport.sendMail({
+          from: `info@${key}codingacademy.com`,
+          to: user.username,
+          subject: 'Welcome to Campus Manager!',
+          html: `Welcome to Campus Manager! To set your password, please visit https://campus.${key}codingacademy.com/reset to set your password.`
+        }, function (err, info) {
+          if (err) {
+            return res.json(500, {
+              message: 'Error sending confirmation email. Please contact support for additional assistance.'
+            })
+          }
+          else {
+            return res.json(200, {
+              message: 'Check your email for important info and course materials!'
+            })
+          }
+        })
         return res.json(user);
       });
     });
@@ -156,24 +182,24 @@ module.exports = {
 
       var attributes = [
         'first_name',
-        'last_name',
-        'username',
-        'phone',
-        'website',
         'github',
+        'last_name',
+        'linkedIn',
+        'phone',
+        'reviews',
         'rocketchat',
-        'codecademy',
+        'username',
+        'website',
         'zipcode',
-        'reviews'
       ];
 
       var adminAttrs = [
+        'campus',
+        'credits',
         'is_admin',
         'is_instructor',
         'is_student',
         'price',
-        'credits',
-        'campus'
       ];
 
       if (req.user.is_admin) {
@@ -261,11 +287,11 @@ module.exports = {
             idn++;
             var attributes = [
               'first_name',
+              'github',
               'last_name',
+              'linkedIn',
               'phone',
               'website',
-              'github',
-              'codecademy',
               'zipcode'
             ];
 

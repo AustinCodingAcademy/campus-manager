@@ -49,7 +49,8 @@ module.exports = React.createBackboneClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       paymentAmount: nextProps.paymentAmount,
-      course: nextProps.course
+      course: nextProps.course,
+      balance: nextProps.balance
     });
   },
 
@@ -65,7 +66,7 @@ module.exports = React.createBackboneClass({
         amount={this.state.paymentAmount}
         email={this.getModel().get('username')}
       >
-        <Button block bsStyle="primary" disabled={!(this.state.course.id && (Number(this.state.paymentAmount) / 100 >= 490 || this.props.currentUser.get('is_admin')))} data-test="make-payment">
+        <Button block bsStyle="primary" disabled={!(this.state.course.id && Number(this.state.paymentAmount) > 0 && (Number(this.state.paymentAmount) / 100 >= 490 || this.props.currentUser.get('is_admin') || this.state.balance < 0))} data-test="make-payment">
           <FontAwesome name="credit-card" /> 3. Pay With Card
         </Button>
       </StripeCheckout>

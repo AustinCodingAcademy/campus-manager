@@ -6,7 +6,7 @@ module.exports = Backbone.Model.extend({
 
   defaults: {
     results: [],
-    timestamp: ''
+    columnHeaders: []
   },
 
   link: function(url, format, key) {

@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var UserController = require('../controllers/UserController.js');
 var middleware = require('./middleware');
+var nodemailer = require('nodemailer');
+var mandrillTransport = require('nodemailer-mandrill-transport');
+var transport = nodemailer.createTransport(mandrillTransport({
+  auth: {
+    apiKey: process.env.MANDRILL_API_KEY
+  }
+}));
 
 /*
 * GET

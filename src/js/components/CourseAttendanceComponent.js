@@ -7,7 +7,11 @@ module.exports = React.createBackboneClass({
   componentDidUpdate() {
     if (this.getModel().get('student').data.datasets.length > 0) {
       const ctx = this.refs.heatmap.getContext('2d');
-      const newChart = new Chart(ctx).HeatMap(this.getModel().get('student').data, this.getModel().get('student').options);
+      const newChart = new Chart(ctx, { options: {
+        layout: {
+          padding: 0
+        }
+      } }).HeatMap(this.getModel().get('student').data, this.getModel().get('student').options);
     }
   },
 

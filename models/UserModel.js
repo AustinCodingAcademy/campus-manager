@@ -1,11 +1,9 @@
-var mongoose = require('mongoose');
-var Schema   = mongoose.Schema;
-var uniqueValidator = require('mongoose-unique-validator');
-var _ = require('underscore');
-var mongooseToCsv = require('mongoose-to-csv');
-var version = require('mongoose-version');
+const mongoose = require('mongoose');
+const Schema   = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
+const version = require('mongoose-version');
 
-var userSchema = new Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -46,6 +44,10 @@ var userSchema = new Schema({
     type: String,
     default: ""
   },
+  linkedIn: {
+    type: String,
+    default: ""
+  },
   website: {
     type: String,
     default: ""
@@ -60,21 +62,21 @@ var userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  attendance: Array,
-  codecademy: String,
-  zipcode: String,
-  grades: Array,
-  courses: Array,
-  reset_password: String,
-  charges: Array,
-  customer_id: String,
-  credits: String,
   api_key: String,
+  attendance: Array,
+  campus: String,
+  charges: Array,
+  courses: Array,
+  credits: String,
+  customer_id: String,
+  grades: Array,
+  insightly: String,
+  linkedIn: String,
   price: Number,
+  reset_password: String,
   reviews: Array,
   rocketchat: String,
-  campus: String,
-  insightly: String
+  zipcode: String,
 }, { timestamps: true });
 
 userSchema.set('toJSON', {
@@ -82,25 +84,11 @@ userSchema.set('toJSON', {
     delete ret.password;
     delete ret.__v;
     delete ret.reset_password;
-    delete ret.customer_id;
     return ret;
-  },
-  virtuals: true
+  }
 });
 
 userSchema.plugin(uniqueValidator);
-
-userSchema.plugin(mongooseToCsv, {
-  headers: 'id idn first_name last_name email phone zipcode github website customer_id is_admin is_client is_instructor is_student price insightly',
-  constraints: {
-    email: 'username'
-  },
-  virtuals: {
-    id: function(doc) {
-      return doc._id.toString();
-    }
-  }
-});
 
 userSchema.plugin(version, { collection: 'users__versions' });
 

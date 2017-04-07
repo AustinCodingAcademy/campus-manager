@@ -13,6 +13,7 @@ module.exports = Backbone.Model.extend({
     is_admin: false,
     is_instructor: false,
     github: '',
+    insightly: '',
     website: '',
     phone: '',
     username: '',
@@ -23,7 +24,8 @@ module.exports = Backbone.Model.extend({
     api_key: '',
     reviews:[],
     price: 0,
-    charges:[]
+    charges:[],
+    linkedIn: ''
   },
 
   fullName() {
@@ -106,8 +108,8 @@ module.exports = Backbone.Model.extend({
       'github',
       'rocketchat',
       'website',
-      'codecademy',
-      'zipcode'
+      'zipcode',
+      'linkedIn'
     ]
     return Math.round(_.filter(attrs, attr => {
       return this.get(attr);

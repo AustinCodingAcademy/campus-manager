@@ -48,15 +48,21 @@ module.exports = React.createBackboneClass({
     window.location = this.getModel().link(this.url, 'csv');
   },
 
-  executeCode: function() {
+  refresh: function() {
+    this.executeCode(null, null, null, true)
+  },
+
+  executeCode: function(a, b, c, refresh) {
     this.setState({
       consoleClass: '',
       consoleText: `Executing query...`
     });
     this.getModel().url = this.getModel().link(this.url, 'json');
     this.getModel().fetch({
-      data: { timestamp: this.getModel().get('timestamp') },
       global: false,
+      data: {
+        refresh: refresh
+      },
       success: () => {
         this.setState({
           consoleClass: '',
@@ -165,6 +171,9 @@ module.exports = React.createBackboneClass({
                 <FontAwesome name="download" />
                 &nbsp; CSV
               </Button>
+              <Button onClick={this.refresh}>
+                <FontAwesome name="refresh" />
+              </Button>
             </ButtonGroup>
             <br />
             <br />
@@ -184,6 +193,7 @@ module.exports = React.createBackboneClass({
                 data={this.getModel().get('results')}
                 filterable={this.getModel().get('results').length ? Object.keys(this.getModel().get('results')[0]) : []}
                 filterBy={this.state.filterBy}
+                sortable={this.getModel().get('columnHeaders')}
               />
             </div>
           </Col>

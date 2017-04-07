@@ -238,16 +238,6 @@ module.exports = React.createBackboneClass({
                         <FontAwesome name="video-camera" fixedWidth={true} />
                         &nbsp; Enter Room
                       </a>
-                      <br />
-                      <small>
-                        <a
-                          href="https://chrome.google.com/webstore/detail/aca-desktop-streamer/imnhhcdlfbbhajjgbagfagnjgkmfppcg"
-                          target="_blank"
-                        >
-                          <FontAwesome name="info-circle" fixedWidth={true} />
-                          &nbsp; Screenshare
-                        </a>
-                      </small>
                     </p>
                     <p>
                       <ControlLabel>Class Times</ControlLabel>
@@ -411,7 +401,14 @@ module.exports = React.createBackboneClass({
                       <FontAwesome name="github" fixedWidth={true} />
                       &nbsp;
                       <a title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
-                        {this.getModel().get('github')}
+                        https://github.com/{this.getModel().get('github')}
+                      </a>
+                    </p>
+                    <p>
+                      <FontAwesome name="linkedin-square" fixedWidth={true} />
+                      &nbsp;
+                      <a title={'LinkedIn Profile'} href={'https://linkedin.com/in/' + this.getModel().get('linkedIn')} target="_blank">
+                        https://linkedin/in/{this.getModel().get('linkedIn')}
                       </a>
                     </p>
                     <p>
@@ -419,13 +416,6 @@ module.exports = React.createBackboneClass({
                       &nbsp;
                       <a title={'Rocket Chat'} href={'https://chat.austincodingacademy.com/direct/' + this.getModel().get('rocketchat')} target="_blank">
                         {this.getModel().get('rocketchat') ? `@${this.getModel().get('rocketchat')}` : ''}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="code" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'CodeAcademy Account'} href={'https://codecademy.com/' + this.getModel().get('codecademy')} target="_blank">
-                        {this.getModel().get('codecademy')}
                       </a>
                     </p>
                     <p>
