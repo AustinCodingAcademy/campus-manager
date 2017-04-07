@@ -11,6 +11,7 @@ var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
 var mandrillTransport = require('nodemailer-mandrill-transport');
 var stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const utils = require('../src/js/utils');
 var transport = nodemailer.createTransport(mandrillTransport({
   auth: {
     apiKey: process.env.MANDRILL_API_KEY
@@ -133,15 +134,16 @@ module.exports = {
             error: err
           });
         }
+        const key = utils.campusKey(user);
         transport.sendMail({
-          from: 'info@austincodingacademy.com',
+          from: `info@${key}codingacademy.com`,
           to: user.username,
-          subject: 'ACA Welcome and Prework',
-          html: "Welcome to Austin Coding Academy! Please register for your intended session, then check your email for additional course materials."
+          subject: 'Welcome to Campus Manager!',
+          html: `Welcome to Campus Manager! To set your password, please visit https://campus.${key}codingacademy.com/reset to set your password.`
         }, function (err, info) {
           if (err) {
             return res.json(500, {
-              message: 'Error sending confirmation email. Please contact ACA support for additional assistance.'
+              message: 'Error sending confirmation email. Please contact support for additional assistance.'
             })
           }
           else {
