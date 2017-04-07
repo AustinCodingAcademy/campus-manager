@@ -179,10 +179,10 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="github">
-              <ControlLabel>Github Username</ControlLabel>
+              <ControlLabel>Github Username <small>(github.com/<em>username</em>)</small></ControlLabel>
               <FormControl
                 type="text"
-                placeholder="Github Username"
+                placeholder="username"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.github}
               />
@@ -238,10 +238,10 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="insightly" className={`${hidden}`}>
-              <ControlLabel>Insightly ID</ControlLabel>
+              <ControlLabel>Insightly Lead ID <small>(insight.ly/Leads/Details/<em>ID</em>)</small></ControlLabel>
               <FormControl
                 type="text"
-                placeholder="12345678"
+                placeholder="ID"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.insightly}
               />
