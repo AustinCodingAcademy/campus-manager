@@ -68,6 +68,7 @@ module.exports = React.createBackboneClass({
           });
         }
         this.props.onHide();
+        this.getModel().fetch();
       },
       error: (model, res) => {
         this.setState({
@@ -196,10 +197,12 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="linkedIn">
-              <ControlLabel>LinkedIn</ControlLabel>
+              <ControlLabel>
+                LinkedIn <small>(linkedin.com/in/<em>username</em>)</small>
+              </ControlLabel>
               <FormControl
                 type="text"
-                placeholder="LinkedIn username"
+                placeholder="username"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.linkedIn}
               />
@@ -232,6 +235,15 @@ module.exports = React.createBackboneClass({
                 placeholder="Zipcode"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.zipcode}
+              />
+            </FormGroup>
+            <FormGroup controlId="insightly" className={`${hidden}`}>
+              <ControlLabel>Insightly ID</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder="12345678"
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.insightly}
               />
             </FormGroup>
             <FormGroup controlId="price" className={`${hidden}`}>
