@@ -53,7 +53,6 @@ module.exports = React.createBackboneClass({
   },
 
   executeCode: function(a, b, c, refresh) {
-    console.log(arguments);
     this.setState({
       consoleClass: '',
       consoleText: `Executing query...`
