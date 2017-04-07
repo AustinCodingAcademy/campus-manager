@@ -10,6 +10,7 @@ const CourseOptionComponent = require('./CourseOptionComponent');
 const CourseValueComponent = require('./CourseValueComponent');
 const CourseModel = require('../models/CourseModel');
 const CoursesCollection = require('../collections/CoursesCollection');
+const utils = require('../utils');
 
 module.exports = React.createBackboneClass({
   mixins: [
@@ -126,10 +127,19 @@ module.exports = React.createBackboneClass({
       )
     });
 
+    const balance = (totalPaid - totalCourseCost).toFixed(2);
+
     return (
       <Panel
         header={<h3>Account</h3>}
-        footer={<small>Contact admissions to make a payment smaller than $490.00</small>}
+        footer={
+          <small>
+            Initial deposit must be $490.00 for any course. Contact admissions at&nbsp;
+            <a href={`mailto: info@${utils.campusKey(this.getModel())}codingacademy.com`}>
+              {`info@${utils.campusKey(this.getModel())}codingacademy.com`}
+            </a> for support.
+          </small>
+        }
       >
         <Row>
           <Col xs={12}>
@@ -159,7 +169,7 @@ module.exports = React.createBackboneClass({
                 <tr>
                   <th>
                     <span className={ totalPaid < totalCourseCost ? 'score60' : '' }>
-                      ${(totalPaid - totalCourseCost).toFixed(2)}
+                      ${balance}
                     </span>
                   </th>
                   <th>Balance</th>
@@ -189,7 +199,7 @@ module.exports = React.createBackboneClass({
             <FormGroup controlId="payment-amount">
               <ControlLabel>
                 2. Enter Payment Amount
-                <small>&nbsp; (Minimum payment is $490.00)</small>
+                <small>&nbsp; (Initial deposit must be $490.00 for any course.)</small>
               </ControlLabel>
               <InputGroup>
                 <InputGroup.Addon>$</InputGroup.Addon>
@@ -205,6 +215,7 @@ module.exports = React.createBackboneClass({
               paymentAmount={this.state.paymentAmount}
               course={this.state.course}
               currentUser={this.props.currentUser}
+              balance={balance}
             />
           </Col>
         </Row>
