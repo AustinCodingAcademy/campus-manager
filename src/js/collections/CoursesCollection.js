@@ -6,6 +6,9 @@ module.exports = Backbone.Collection.extend({
   model: CourseModel,
 
   comparator: function(x, y) {
+    if (!x.get('term') || !y.get('term')) {
+      return 0;
+    }
     var XstartDate = x.get('term').get('start_date');
     var YstartDate = y.get('term').get('start_date');;
     if (XstartDate === YstartDate) {

@@ -24,6 +24,9 @@ module.exports = {
         });
       }
       var sorted = courses.sort(function(x, y) {
+        if (!x.term || !y.term) {
+          return 0;
+        }
         var XstartDate = x.term.start_date;
         var YstartDate = y.term.start_date;;
         if (XstartDate === YstartDate) {
