@@ -55,6 +55,17 @@ module.exports = React.createBackboneClass({
     this.getModel().save();
   },
 
+  getTextbook(event, props) {
+    event.preventDefault();
+    const { is_admin, is_instructor, is_student } = props.currentUser.attributes
+    if (is_admin || is_instructor) {
+      location.assign(`${this.getModel().get('textbook').get('instructor_url')}`)
+    }
+    if (is_student) {
+      location.assign(`${this.getModel().get('textbook').get('student_url')}`)
+    }
+  },
+
   addHoliday(e) {
     e.preventDefault();
     const holidays = this.getModel().get('holidays').splice(0);
@@ -379,7 +390,7 @@ module.exports = React.createBackboneClass({
               </a>
               <a
                 className="btn btn-default"
-                href={this.getModel().get('textbook').get('instructor_url')}
+                onClick={e => this.getTextbook(e, this.props)}
                 target="_blank"
               >
                 <FontAwesome name="book" />
