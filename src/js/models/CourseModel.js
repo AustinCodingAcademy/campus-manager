@@ -168,6 +168,8 @@ module.exports = Model.extend({
   parse: function(obj) {
     if (obj.term) {
       obj.term = new TermModel(obj.term, { parse: true });
+    } else {
+      obj.term = new TermModel();
     }
     if (obj.registrations) {
       obj.registrations = new UsersCollection(obj.registrations, { parse: true });
