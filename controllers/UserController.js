@@ -146,12 +146,7 @@ module.exports = {
               message: 'Error sending confirmation email. Please contact support for additional assistance.'
             })
           }
-          else {
-            return res.json(200, {
-              message: 'Check your email for important info and course materials!'
-            })
-          }
-        })
+        });
         return res.json(user);
       });
     });
