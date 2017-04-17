@@ -146,8 +146,8 @@ module.exports = {
               message: 'Error sending confirmation email. Please contact support for additional assistance.'
             })
           }
+          return res.json(user);
         });
-        return res.json(user);
       });
     });
   },
