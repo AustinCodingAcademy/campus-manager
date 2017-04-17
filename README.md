@@ -35,7 +35,7 @@ After forking, cloning, and navigating into repository:
 1. Install dependencies `npm install`
 1. Duplicate `.env.example` and name it `.env`
 1. Leave `npm run gulp` running in one terminal session
-1. navigate to `http://localhost:3000/register` to create a user
+1. Navigate to `http://localhost:3000/register` to create a user
 
 ## Testing
 
