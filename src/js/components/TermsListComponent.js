@@ -47,6 +47,9 @@ module.exports = React.createBackboneClass({
           >
             {`${moment.utc(term.get('start_date')).format('ddd, MMM D, YYYY')} - ${moment.utc(term.get('end_date')).format('ddd, MMM D, YYYY')}`}
           </Td>
+          <Td column="Courses" value={term.get('courses').length}>
+            {term.get('courses').length}
+          </Td>
           <Td column="edit">
             <a href="#" onClick={this.open} data-id={term.id}>
               <FontAwesome name='pencil' />
@@ -79,13 +82,14 @@ module.exports = React.createBackboneClass({
             <Table
               className="table table-condensed table-striped"
               itemsPerPage={20}
-              filterable={['Name', 'Dates']}
-              sortable={['Name', 'Dates']}
+              filterable={['Name', 'Dates', 'Courses']}
+              sortable={['Name', 'Dates', 'Courses']}
               filterBy={this.state.filterBy}
             >
               <Thead>
                 <Th>Name</Th>
                 <Th>Dates</Th>
+                <Th>Courses</Th>
                 <Th>edit</Th>
               </Thead>
               {termRows}

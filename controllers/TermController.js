@@ -134,7 +134,10 @@ module.exports = {
             message: 'No such term'
           });
         }
-        return res.json(term);
+        CourseModel.find({ client: req.user.client, term: term._id }, (err, courses) => {
+          term.courses = courses;
+          return res.json(term);
+        });
       });
     });
   },
@@ -144,7 +147,7 @@ module.exports = {
   */
   remove: function(req, res) {
     var id = req.params.id;
-    TermModel.remove({
+    TermModel.findOne({
       _id: id,
       client: req.user.client
     }, function(err, term){
@@ -154,7 +157,22 @@ module.exports = {
           error: err
         });
       }
-      return res.json(term);
+      CourseModel.find({ client: req.user.client, term: term._id }, (err, courses) => {
+        if (courses.length > 0) {
+          return res.json(500, {
+            message: "Can't delete a term with courses."
+          });
+        }
+        return term.remove((err) => {
+          if(err) {
+            return res.json(500, {
+              message: 'Error deleting term.',
+              error: err
+            });
+          }
+          return res.json(term);
+        });
+      });
     });
   },
 
