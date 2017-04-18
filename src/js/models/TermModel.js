@@ -8,7 +8,7 @@ module.exports = Backbone.Model.extend({
   defaults: {
     name: '',
     full: 0,
-    courses: new Backbone.Collection();
+    courses: new Backbone.Collection()
   },
 
   initialize: function() {
