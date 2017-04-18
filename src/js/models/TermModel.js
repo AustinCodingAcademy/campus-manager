@@ -7,7 +7,8 @@ module.exports = Backbone.Model.extend({
 
   defaults: {
     name: '',
-    full: 0
+    full: 0,
+    courses: new Backbone.Collection()
   },
 
   initialize: function() {
@@ -22,8 +23,6 @@ module.exports = Backbone.Model.extend({
         return course.term = _.omit(obj, 'courses');
       });
       obj.courses = new CoursesCollection(obj.courses, { parse: true });
-    } else {
-      obj.courses = new CoursesCollection();
     }
 
     return obj;
