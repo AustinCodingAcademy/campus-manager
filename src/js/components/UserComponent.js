@@ -9,8 +9,6 @@ import {
 } from 'react-bootstrap';
 const Gravatar = require('react-gravatar');
 import Equalizer from 'react-equalizer';
-const Hashids = require('hashids');
-const hashids = new Hashids();
 const FontAwesome = require('react-fontawesome');
 const TermsCollection = require('../collections/TermsCollection');
 const UserAccountComponent = require('./UserAccountComponent');
@@ -62,8 +60,7 @@ module.exports = React.createBackboneClass({
       this.checkIn(date);
     } else if (moment(date, 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
       const code = prompt('Enter Daily Attendance Code');
-      const hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
-      if (code && code.toUpperCase() === hash) {
+      if (code && code.toUpperCase() === utils.attendanceCode()) {
         this.checkIn(date);
       }
     }
@@ -234,7 +231,7 @@ module.exports = React.createBackboneClass({
                     <p>
                       <ControlLabel>Virtual Classroom</ControlLabel>
                       <br />
-                      <a href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')])} target="_blank">
+                      <a href={utils.jitsiUrl(course)} target="_blank">
                         <FontAwesome name="video-camera" fixedWidth={true} />
                         &nbsp; Enter Room
                       </a>
@@ -459,6 +456,18 @@ module.exports = React.createBackboneClass({
                   <a href="#" className={this.state.keyOpacity ? 'hidden' : ''} onClick={this.showKey}>show</a>
                   <a href="#" className={this.state.keyOpacity ? '' : 'hidden'} onClick={this.generateApiKey}>regenerate</a>
                 </small>
+              </Panel>
+            </Col>
+            :
+            ''
+            }
+            {this.getModel().get('is_instructor') ?
+            <Col xs={12} md={6}>
+              <Panel header={<h3>Instructor Checklist</h3>}>
+                <h4>1. Today's Attendance Code is <strong>{utils.attendanceCode()}</strong></h4>
+                <h4>2. Start Screen Recording and Verify Audio Recording</h4>
+                <h4>3. Optionally start a Jitsi session</h4>
+                <h4>4. Upload Screencast to YouTube</h4>
               </Panel>
             </Col>
             :
