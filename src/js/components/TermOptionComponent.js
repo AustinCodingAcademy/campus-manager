@@ -23,7 +23,7 @@ module.exports = React.createClass({
 			onMouseMove={this.handleMouseMove}
 			title={this.props.option.title}>
 				<h4><strong>{this.props.option.term.get('name')}</strong></h4>
-				{`${moment.utc(this.props.option.term.get('start_date')).format('ddd, MMM Do, YYYY')} - ${moment(this.props.option.term.get('start_date')).format('ddd, MMM Do, YYYY')}`}
+				{`${moment.utc(this.props.option.term.get('start_date')).format('ddd, MMM Do, YYYY')} - ${moment(this.props.option.term.get('end_date')).format('ddd, MMM Do, YYYY')}`}
 			</div>
 		);
 	}

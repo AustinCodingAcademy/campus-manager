@@ -1,4 +1,7 @@
-var _ = require('underscore');
+const _ = require('underscore');
+const Hashids = require('hashids');
+const hashids = new Hashids();
+const moment = require('moment');
 
 module.exports = {
   scoreColor: function(score) {
@@ -72,5 +75,13 @@ module.exports = {
         break;
     }
     return key;
+  },
+
+  attendanceCode() {
+    return hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
+  },
+
+  jitsiUrl(course) {
+    return 'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')]);
   }
 }

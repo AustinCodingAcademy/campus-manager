@@ -1,6 +1,5 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-const Hashids = require('hashids');
 const moment = require('moment');
 var BaseModal = require('./BaseModal');
 var CourseVideoUpload = require('./CourseVideoUpload');
@@ -334,9 +333,6 @@ module.exports = React.createBackboneClass({
       );
     }, this);
 
-    const hashids = new Hashids();
-    const hash = hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
-
     const holidays = this.getModel().get('holidays').map(holiday => {
       return (
         <ListGroupItem key={holiday}>
@@ -367,7 +363,7 @@ module.exports = React.createBackboneClass({
             <h2 style={{marginTop: '10px'}}>{this.getModel().get('name')}</h2>
           </Col>
           <Col xs={12} md={8} className="text-right">
-            <h5>Daily Attendance Code: <strong>{hash}</strong></h5>
+            <h5>Daily Attendance Code: <strong>{utils.attendanceCode()}</strong></h5>
             <ButtonGroup>
               <a
                 className="btn btn-default"
@@ -385,11 +381,7 @@ module.exports = React.createBackboneClass({
                 <FontAwesome name="book" />
                 &nbsp; View Textbook
               </a>
-              <a
-                href={'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(this.getModel().get('createdAt')).unix(), moment().format('MMDDYYYY')])}
-                target="_blank"
-                className="btn btn-default"
-              >
+              <a href={utils.jitsiUrl(this.getModel())} target="_blank" className="btn btn-default">
                 <FontAwesome name="video-camera" />
                 &nbsp; Virtual Classroom
               </a>
