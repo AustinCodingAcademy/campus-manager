@@ -141,26 +141,21 @@ module.exports = React.createBackboneClass({
 
   saveVideo(e) {
     e.preventDefault();
-    const timestamp = this.state.videoDate.format('YYYY-MM-DD')
-    const match = this.getModel().get('videos').find(video => {
-      return video.timestamp === timestamp;
+    const timestamp = this.state.videoDate.format('YYYY-MM-DD');
+    const link = document.getElementById('video-link');
+    this.getModel().get('videos').push({
+      link: link.value,
+      youtubeId: link.value.replace('https://www.youtube.com/watch?v=','').replace('https://youtu.be/',''),
+      timestamp
     });
-    if (!match) {
-      const link = document.getElementById('video-link');
-      this.getModel().get('videos').push({
-        link: link.value,
-        youtubeId: link.value.replace('https://www.youtube.com/watch?v=','').replace('https://youtu.be/',''),
-        timestamp
-      });
-      this.getModel().save(null, {
-        success: () => {
-          this.setState({
-            videoDate: moment()
-          });
-          link.value = '';
-        }
-      });
-    }
+    this.getModel().save(null, {
+      success: () => {
+        this.setState({
+          videoDate: moment()
+        });
+        link.value = '';
+      }
+    });
   },
 
   changeDueDate(e) {
@@ -313,11 +308,16 @@ module.exports = React.createBackboneClass({
       return student.get('username');
     });
 
-    const videos = _.map(this.getModel().get('videos'), (video, idx) => {
+    const videoParts = {};
+    const videos = this.getModel().get('videos').map((video, idx) => {
+      videoParts[video.timestamp] = isNaN(videoParts[video.timestamp]) ? 1 : videoParts[video.timestamp] + 1;
       return (
         <tr key={idx}>
           <td>
             {moment(video.timestamp, 'YYYY-MM-DD').format('ddd, MMM Do')}
+          </td>
+          <td>
+            {videoParts[video.timestamp]}
           </td>
           <td>
             <small>
@@ -331,7 +331,8 @@ module.exports = React.createBackboneClass({
           </td>
         </tr>
       );
-    }, this);
+    });
+    console.log(videoParts);
 
     const holidays = this.getModel().get('holidays').map(holiday => {
       return (
@@ -446,15 +447,15 @@ module.exports = React.createBackboneClass({
               header={<h3>Screencasts</h3>}
               footer={
                 <small>
-                  One video per date. Link to additional videos in the YouTube
-                  comments. Date must be on class day for students to see it.
+                  Date must be on class day for students to see it.
                   Be sure to upload to &nbsp;
                   <a
                     href="https://www.youtube.com/channel/UCzNpMM1lxoyj8paRCZoq5mA"
                     target="_blank">
                       ACA Class Screencasts
                   </a>
-                  &nbsp; channel and set the video to "unlisted".
+                  &nbsp; channel and set the video to "unlisted". Using the
+                  "Upload" feature will do this automatically.
                 </small>
               }
             >
@@ -463,6 +464,7 @@ module.exports = React.createBackboneClass({
                   <thead>
                     <tr>
                       <th>Date</th>
+                      <th>Part</th>
                       <th>YouTube Link</th>
                       <th style={{minWidth: '140px'}}></th>
                     </tr>
@@ -478,6 +480,7 @@ module.exports = React.createBackboneClass({
                           onChange={this.handleVideoDateChange}
                         />
                       </td>
+                      <td></td>
                       <td>
                         <FormControl
                           type="text"
