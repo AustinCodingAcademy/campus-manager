@@ -21,12 +21,10 @@ module.exports = {
       return next();
     } else if (req.query.key) {
       var UserModel = require('../models/UserModel');
-      console.log(req.query.key);
       UserModel.findOne({ api_key: req.query.key }, function(err, user) {
         if (err) {
           return res.status(500).send({ error: err });
         }
-        console.log(user);
         if (user && (user.is_admin || user.is_client)) {
           req.user = user;
           return next();
