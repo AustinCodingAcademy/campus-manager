@@ -20,7 +20,8 @@ module.exports = Model.extend({
     holidays: [],
     cost: '',
     location: new LocationModel(),
-    textbook: new TextbookModel()
+    textbook: new TextbookModel(),
+    videos: []
   },
 
   initialize: function() {

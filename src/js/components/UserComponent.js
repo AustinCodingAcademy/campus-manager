@@ -115,7 +115,24 @@ module.exports = React.createBackboneClass({
         let attended = <FontAwesome name="calendar-o" />;
         let matched;
         let checkin;
-        const video = _.findWhere(course.get('videos'), { timestamp: date.format('YYYY-MM-DD') });
+        let videos = course.get('videos').filter(video => {
+          return video.timestamp === date.format('YYYY-MM-DD');
+        });
+        videos = videos.map((video, idx) => {
+          return (
+            <span>
+              <a href={video.link} target="_blank">
+                <FontAwesome name="youtube-play" />
+                &nbsp; Pt. {idx + 1}
+              </a>
+              {idx < videos.length - 1 ?
+              <span>&nbsp;|&nbsp;</span>
+              :
+              ''
+              }
+            </span>
+          );
+        });
         if (date.isSameOrBefore(moment(), 'day')) {
           attended = <FontAwesome name="calendar-times-o" className="text-danger" />
           matched = _.find(this.getModel().get('attendance'), (attendedDate) => {
@@ -141,12 +158,7 @@ module.exports = React.createBackboneClass({
             <td>{date.format("ddd, MMM D")}</td>
             <td>{attended} {checkin}</td>
             <td>
-              { video ?
-                <a href={video.link} target="_blank">
-                  <FontAwesome name="youtube-play" />
-                  &nbsp; Watch
-                </a>
-                : '' }
+              {videos}
             </td>
           </tr>
         );
