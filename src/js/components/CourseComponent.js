@@ -332,7 +332,6 @@ module.exports = React.createBackboneClass({
         </tr>
       );
     });
-    console.log(videoParts);
 
     const holidays = this.getModel().get('holidays').map(holiday => {
       return (
