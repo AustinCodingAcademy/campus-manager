@@ -1,7 +1,6 @@
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
-  urlRoot: 'api/locations',
   idAttribute: '_id',
 
   defaults: {
@@ -10,6 +9,6 @@ module.exports = Backbone.Model.extend({
   },
 
   link: function(url, format, key) {
-    return `${url.protocol}//${url.host}/api/${url.hash.slice(1, -1)}?format=${format}&key=${key || ''}`
+    return `${url.protocol}//${url.host}/api/${this.get('hash') ? `report/${this.get('hash')}` : url.hash.slice(1, -1)}?format=${format}&key=${key || ''}`
   }
 });
