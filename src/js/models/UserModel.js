@@ -132,7 +132,9 @@ module.exports = Backbone.Model.extend({
     }).forEach(grade => {
       const course = this.get('courses').get(grade.courseId);
       if (course) {
-        const courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
+        const courseGrade = course.get('grades').find((courseGrade) => {
+          return courseGrade.name === grade.name && course.id === grade.courseId;
+        });
         if (courseGrade) {
           if (courseGrade.checkpoint) {
             studentCheckpointGrades.push(Number(grade.score));
@@ -151,7 +153,9 @@ module.exports = Backbone.Model.extend({
     this.get('grades').filter(grade => {
       return _.isNumber(grade.score);
     }).forEach(grade => {
-      const courseGrade = _.findWhere(course.get('grades'), { name: grade.name });
+      const courseGrade = course.get('grades').find((courseGrade) => {
+        return courseGrade.name === grade.name && course.id === grade.courseId;
+      });
       if (courseGrade) {
         if (courseGrade.checkpoint) {
           studentCheckpointGrades.push(Number(grade.score));

@@ -120,7 +120,7 @@ module.exports = React.createBackboneClass({
         });
         videos = videos.map((video, idx) => {
           return (
-            <span>
+            <span key={`${video.link}-{idx}`}>
               <a href={video.link} target="_blank">
                 <FontAwesome name="youtube-play" />
                 &nbsp; Pt. {idx + 1}
