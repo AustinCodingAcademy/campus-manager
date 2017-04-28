@@ -82,6 +82,6 @@ module.exports = {
   },
 
   jitsiUrl(course) {
-    return 'https://jitsi.austincodingacademy.com/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')]);
+    return 'https://meet.jit.si/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')]);
   }
 }
