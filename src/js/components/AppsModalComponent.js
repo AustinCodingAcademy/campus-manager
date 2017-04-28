@@ -54,7 +54,7 @@ module.exports = React.createBackboneClass({
               </a>
             </Col>
             <Col xs={4} className="text-center">
-              <a className="btn btn-white" href="https://jitsi.austincodingacademy.com" target="blank">
+              <a className="btn btn-white" href="https://meet.jit.si" target="blank">
                 <FontAwesome name="video-camera" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Jitsi
