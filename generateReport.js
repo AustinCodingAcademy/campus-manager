@@ -91,11 +91,29 @@ function fetchAllStripeCharges(startingAfter) {
     } else {
       console.log('generating stripe_payments table');
       yosql.createTable(db, 'stripe_payments', stripePayments, {}, () => {
-        console.log('fetching insightly leads');
-        fetchInsightlyLeads(0);
+        console.log('fetching insightly lead statuses');
+        fetchInsightlyLeadStatuses();
       });
     }
   });
+}
+
+function fetchInsightlyLeadStatuses() {
+  fetch('https://api.insight.ly/v2.2/LeadStatuses?converted=true', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
+      'Accept-Encoding': 'gzip'
+    }
+  }).then(res => {
+    return res.json().then(leadStatuses => {
+      console.log('generating insightly_lead_statuses table');
+      yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
+        console.log('fetching insightly leads');
+        fetchInsightlyLeads(0);
+      });
+    });
+  })
 }
 
 function fetchInsightlyLeads(skip) {
