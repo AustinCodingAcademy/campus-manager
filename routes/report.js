@@ -4,7 +4,6 @@ var ReportController = require('../controllers/ReportController.js');
 var middleware = require('./middleware');
 const cors = require('cors');
 
-var whitelist = ['https://zapier.com', 'https://localhost:8080'];
 const corsOptionsDelegate = function (req, callback) {
   let corsOptions;
   if (process.env.REPORT_WHITELIST.indexOf(req.header('Origin')) !== -1) {
