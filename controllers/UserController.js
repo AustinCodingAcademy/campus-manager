@@ -359,21 +359,22 @@ module.exports = {
       _id: req.params.id
     }, function(err, user){
       const fileName = `resumes/${user.idn}${user.first_name}${user.last_name}.html`;
+      const dateToday = new moment();
       const userJSON = {
         "basics": {
-          "name": `${user.first_name} ${user.last_name}`,
-          "label": "Web Developer",
-          "picture": user.resume.pictureURL || gravatar.url(user.username, {s: '100', r: 'x', d: 'retro'}, true),
+          "name": user.resume.formattedName,
+          "label": user.resume.headline,
+          "picture": user.resume.pictureUrl || gravatar.url(user.username, {s: '100', r: 'x', d: 'retro'}, true),
           "email": user.username,
           "phone": user.phone,
           "website": user.website,
-          "summary": "Summary",
+          "summary": user.resume.summary,
           "location": {
             "address": "",
-            "postalCode": "",
+            "postalCode": user.zipcode,
             "city": "",
             "countryCode": "",
-            "region": ""
+            "region": user.resume.location.name
           },
           "profiles": [
             {
@@ -383,19 +384,19 @@ module.exports = {
             },
             {
               "network": "LinkedIn",
-              "username": user.linkedIn,
+              "username": user.resume.publicProfileUrl,
               "url": `https://linkedin.com/in/${user.linkedIn}`
             }
           ]
         },
         "work": [
           {
-            "company": "Pied Piper",
-            "position": "CEO/President",
-            "website": "http://piedpiper.com",
-            "startDate": "2013-12-01",
-            "endDate": "2014-12-01",
-            "summary": "Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
+            "company": user.resume.positions.values[0].company.name,
+            "position": user.resume.positions.values[0].title,
+            "website": "",
+            "startDate": `${user.resume.positions.values[0].startDate.year}-${user.resume.positions.values[0].startDate.month}`,
+            "endDate": (user.resume.positions.values[0].isCurrent ? dateToday.format('YYYY-MM-DD') : '2066'),
+            "summary": "NOT FROM LINKEDINPied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
             "highlights": [
               "Build an algorithm for artist to detect if their music was violating copy right infringement laws",
               "Successfully won Techcrunch Disrupt",
