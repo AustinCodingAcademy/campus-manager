@@ -1,3 +1,5 @@
+'use strict';
+
 const _ = require('underscore');
 const Hashids = require('hashids');
 const hashids = new Hashids();
