@@ -364,7 +364,7 @@ module.exports = {
         "basics": {
           "name": user.resume.formattedName,
           "label": user.resume.headline,
-          "picture": user.resume.pictureUrl || gravatar.url(user.username, {s: '100', r: 'x', d: 'retro'}, true),
+          "picture": user.resume.pictureUrls.values[0] || gravatar.url(user.username, {s: '100', r: 'x', d: 'retro'}, true),
           "email": user.username,
           "phone": user.phone,
           "website": user.website,
@@ -384,8 +384,8 @@ module.exports = {
             },
             {
               "network": "LinkedIn",
-              "username": user.resume.publicProfileUrl,
-              "url": `https://linkedin.com/in/${user.linkedIn}`
+              "username": user.linkedIn,
+              "url": user.resume.publicProfileUrl
             }
           ]
         },
@@ -395,101 +395,87 @@ module.exports = {
             "position": user.resume.positions.values[0].title,
             "website": "",
             "startDate": `${user.resume.positions.values[0].startDate.year}-${user.resume.positions.values[0].startDate.month}`,
-            "endDate": (user.resume.positions.values[0].isCurrent ? dateToday.format('YYYY-MM-DD') : '2066'),
-            "summary": "NOT FROM LINKEDINPied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
+            "endDate": (user.resume.positions.values[0].isCurrent ? '' : dateToday.format('YYYY-MM-DD')),
+            "summary": "",
             "highlights": [
-              "Build an algorithm for artist to detect if their music was violating copy right infringement laws",
-              "Successfully won Techcrunch Disrupt",
-              "Optimized an algorithm that holds the current world record for Weisman Scores"
+              ""
             ]
           }
         ],
         "volunteer": [
           {
-            "organization": "CoderDojo",
-            "position": "Teacher",
-            "website": "http://coderdojo.com/",
-            "startDate": "2012-01-01",
-            "endDate": "2013-01-01",
-            "summary": "Global movement of free coding clubs for young people.",
+            "organization": "",
+            "position": "",
+            "website": "",
+            "startDate": "",
+            "endDate": "",
+            "summary": "",
             "highlights": [
-              "Awarded 'Teacher of the Month'"
+              ""
             ]
           }
         ],
         "education": [
           {
-            "institution": "Austin Coding Academy",
-            "area": "Information Technology",
-            "studyType": "Bachelor",
-            "startDate": "2011-06-01",
-            "endDate": "2014-01-01",
-            "gpa": "4.0",
+            "institution": "",
+            "area": "",
+            "studyType": "",
+            "startDate": "",
+            "endDate": "",
+            "gpa": "",
             "courses": [
-              "DB1101 - Basic SQL",
-              "CS2011 - Java Introduction"
+              ""
             ]
           }
         ],
         "awards": [
           {
-            "title": "Digital Compression Pioneer Award",
-            "date": "2014-11-01",
-            "awarder": "Techcrunch",
-            "summary": "There is no spoon."
+            "title": "",
+            "date": "",
+            "awarder": "",
+            "summary": "T"
           }
         ],
         "publications": [
           {
-            "name": "Video compression for 3d media",
-            "publisher": "Hooli",
-            "releaseDate": "2014-10-01",
-            "website": "http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
-            "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+            "name": "",
+            "publisher": "",
+            "releaseDate": "",
+            "website": "",
+            "summary": ""
           }
         ],
         "skills": [
           {
-            "name": "Web Development",
-            "level": "Master",
+            "name": "",
+            "level": "",
             "keywords": [
-              "HTML",
-              "CSS",
-              "Javascript"
-            ]
-          },
-          {
-            "name": "Compression",
-            "level": "Master",
-            "keywords": [
-              "Mpeg",
-              "MP4",
-              "GIF"
+              ""
             ]
           }
         ],
         "languages": [
           {
-            "language": "English",
-            "fluency": "Native speaker"
+            "language": "",
+            "fluency": ""
           }
         ],
         "interests": [
           {
-            "name": "Wildlife",
+            "name": "",
             "keywords": [
-              "Ferrets",
-              "Unicorns"
+              ""
             ]
           }
         ],
         "references": [
           {
-            "name": "Erlich Bachman",
-            "reference": "It is my pleasure to recommend Richard, his performance working as a consultant for Main St. Company proved that he will be a valuable addition to any company."
+            "name": "",
+            "reference": ""
           }
         ]
       }
+
       exportResume(userJSON, fileName, { theme: 'modern', format: 'html' }, () => {
         return res.send(fs.readFileSync(fileName, 'utf8'));
       });
