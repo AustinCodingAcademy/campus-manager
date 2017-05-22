@@ -1,10 +1,12 @@
 /**
- * @module controllers/UserController
- * @description Server-side logic for managing users.
- */
+* @module controllers/UserController
+* @description Server-side logic for managing users.
+*/
 
 var UserModel = require('../models/UserModel');
 var _ = require('underscore');
+const gravatar = require('gravatar');
+const fs = require('fs');
 var moment = require('moment');
 var CourseModel = require('../models/CourseModel')
 var mongoose = require('mongoose');
@@ -17,6 +19,7 @@ var transport = nodemailer.createTransport(mandrillTransport({
     apiKey: process.env.MANDRILL_API_KEY
   }
 }));
+const exportResume = require('../node_modules/resume-cli/lib/export-resume/index.js');
 
 module.exports = {
 
@@ -347,6 +350,147 @@ module.exports = {
 
       user.save(() => {
         return res.json(req.body);
+      });
+    });
+  },
+
+  resume: (req, res) => {
+    UserModel.findOne({
+      _id: req.params.id
+    }, function(err, user){
+      const fileName = `resumes/${user.idn}${user.first_name}${user.last_name}.html`;
+      const userJSON = {
+        "basics": {
+          "name": `${user.first_name} ${user.last_name}`,
+          "label": "Web Developer",
+          "picture": user.resume.pictureURL || gravatar.url(user.username, {s: '100', r: 'x', d: 'retro'}, true),
+          "email": user.username,
+          "phone": user.phone,
+          "website": user.website,
+          "summary": "Summary",
+          "location": {
+            "address": "",
+            "postalCode": "",
+            "city": "",
+            "countryCode": "",
+            "region": ""
+          },
+          "profiles": [
+            {
+              "network": "GitHub",
+              "username": user.github,
+              "url": `https://github.com/${user.github}`
+            },
+            {
+              "network": "LinkedIn",
+              "username": user.linkedIn,
+              "url": `https://linkedin.com/in/${user.linkedIn}`
+            }
+          ]
+        },
+        "work": [
+          {
+            "company": "Pied Piper",
+            "position": "CEO/President",
+            "website": "http://piedpiper.com",
+            "startDate": "2013-12-01",
+            "endDate": "2014-12-01",
+            "summary": "Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
+            "highlights": [
+              "Build an algorithm for artist to detect if their music was violating copy right infringement laws",
+              "Successfully won Techcrunch Disrupt",
+              "Optimized an algorithm that holds the current world record for Weisman Scores"
+            ]
+          }
+        ],
+        "volunteer": [
+          {
+            "organization": "CoderDojo",
+            "position": "Teacher",
+            "website": "http://coderdojo.com/",
+            "startDate": "2012-01-01",
+            "endDate": "2013-01-01",
+            "summary": "Global movement of free coding clubs for young people.",
+            "highlights": [
+              "Awarded 'Teacher of the Month'"
+            ]
+          }
+        ],
+        "education": [
+          {
+            "institution": "Austin Coding Academy",
+            "area": "Information Technology",
+            "studyType": "Bachelor",
+            "startDate": "2011-06-01",
+            "endDate": "2014-01-01",
+            "gpa": "4.0",
+            "courses": [
+              "DB1101 - Basic SQL",
+              "CS2011 - Java Introduction"
+            ]
+          }
+        ],
+        "awards": [
+          {
+            "title": "Digital Compression Pioneer Award",
+            "date": "2014-11-01",
+            "awarder": "Techcrunch",
+            "summary": "There is no spoon."
+          }
+        ],
+        "publications": [
+          {
+            "name": "Video compression for 3d media",
+            "publisher": "Hooli",
+            "releaseDate": "2014-10-01",
+            "website": "http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
+            "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+          }
+        ],
+        "skills": [
+          {
+            "name": "Web Development",
+            "level": "Master",
+            "keywords": [
+              "HTML",
+              "CSS",
+              "Javascript"
+            ]
+          },
+          {
+            "name": "Compression",
+            "level": "Master",
+            "keywords": [
+              "Mpeg",
+              "MP4",
+              "GIF"
+            ]
+          }
+        ],
+        "languages": [
+          {
+            "language": "English",
+            "fluency": "Native speaker"
+          }
+        ],
+        "interests": [
+          {
+            "name": "Wildlife",
+            "keywords": [
+              "Ferrets",
+              "Unicorns"
+            ]
+          }
+        ],
+        "references": [
+          {
+            "name": "Erlich Bachman",
+            "reference": "It is my pleasure to recommend Richard, his performance working as a consultant for Main St. Company proved that he will be a valuable addition to any company."
+          }
+        ]
+      }
+      exportResume(userJSON, fileName, { theme: 'modern', format: 'html' }, () => {
+        return res.send(fs.readFileSync(fileName, 'utf8'));
       });
     });
   }
