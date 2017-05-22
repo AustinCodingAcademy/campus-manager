@@ -14,6 +14,11 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+const Linkedin = require('node-linkedin')(
+  process.env.LINKEDIN_APP_ID,
+  process.env.LINKEDIN_SECRET,
+  process.env.LINKEDIN_CALLBACK
+);
 var flash = require('express-flash');
 var cookieParser = require('cookie-parser');
 var csrf = require('csurf');
@@ -24,6 +29,8 @@ var passport = require('./config/passport');
 var methodOverride = require('method-override')
 
 var middleware = require('./routes/middleware');
+
+const utils = require('./src/js/utils');
 
 app.use(methodOverride('_method'));
 
@@ -76,7 +83,7 @@ app.use(compression({ threshold: 0 }))
 app.use('/docs', express.static(path.join(__dirname + '/docs')));
 app.use('/', require('./routes/index'));
 app.use('/reset', require('./routes/reset'));
-app.use('/api/users', middleware.auth, require('./routes/users'));
+app.use('/api/users', require('./routes/users'));
 app.use('/api/terms', require('./routes/terms'));
 app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
@@ -86,6 +93,26 @@ app.use('/api/report', middleware.admin, require('./routes/report'));
 app.use('/api/grades', middleware.auth, require('./routes/grades'));
 app.use('/api/textbooks', middleware.admin, require('./routes/textbooks'));
 app.use('/api/registrations', middleware.auth, require('./routes/registrations'));
+app.get('/oauth/linkedin', middleware.auth, function(req, res) {
+  // This will ask for permisssions etc and redirect to callback url.
+  // const Linkedin = require('node-linkedin')('781cbpkqt534os', 'wOAkfq4UjlVVp0vt', `https://campus.${utils.campusKey(req.user)}codingacademy.com`);
+  Linkedin.auth.authorize(res, ['r_basicprofile']);
+});
+app.get('/oauth/linkedin/callback', function(req, res) {
+  Linkedin.auth.getAccessToken(res, req.query.code, req.query.state, function(err, results) {
+    if ( err )
+      return console.error(err);
+
+    var linkedin = Linkedin.init(results.access_token);
+    linkedin.people.me(function(err, $in) {
+      req.user.resume = $in;
+      req.user.save((err, user) => {
+        if (err) { console.log(err); };
+        return res.redirect('/');
+      })
+    });
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

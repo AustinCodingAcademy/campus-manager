@@ -434,6 +434,17 @@ module.exports = React.createBackboneClass({
                         {this.getModel().get('zipcode')}
                       </a>
                     </p>
+                    <p>
+                      <FontAwesome name="file-text" fixedWidth={true} />
+                      &nbsp;
+                      <a href={`/api/users/${this.getModel().id}/resume`} target="_blank">
+                        Resume
+                      </a>
+                      &nbsp;
+                      <a href={`/oauth/linkedin`}>
+                        <FontAwesome name="refresh" fixedWidth={true} />
+                      </a>
+                    </p>
                   </Col>
                   <Col xs={3} className="text-center">
                     <div aria-hidden="true">

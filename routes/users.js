@@ -25,6 +25,13 @@ router.get('/:id', middleware.instructorOrMe, function(req, res) {
 });
 
 /*
+* GET
+*/
+router.get('/:id/resume', function(req, res) {
+  UserController.resume(req, res);
+});
+
+/*
 * POST
 */
 router.post('/', middleware.admin, function(req, res) {

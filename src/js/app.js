@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     routes: {
       '': 'index',
       '/': 'index',
+      '!': 'index',
       'terms': 'terms',
       'users': 'users',
       'users/:id': 'user',
