@@ -259,10 +259,10 @@ module.exports = React.createBackboneClass({
               </InputGroup>
             </FormGroup>
             <FormGroup controlId="credits"  className={`${hidden}`}>
-              <ControlLabel>Credits</ControlLabel>
+              <ControlLabel>Credits<small> (separate credits with a comma. eg: <em>Materials Fee: -100.00, 10% Scholarship: 249.00</em>)</small></ControlLabel>
               <FormControl
                 type="text"
-                placeholder="description:100.00, some scholarship:30.00"
+                placeholder="Materials Fee: -100.00, 10% Scholarship: 249.00"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.credits}
               />
