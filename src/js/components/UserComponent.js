@@ -423,8 +423,15 @@ module.exports = React.createBackboneClass({
                     <p>
                       <FontAwesome name="rocket" fixedWidth={true} />
                       &nbsp;
-                      <a title={'Rocket Chat'} href={'https://chat.austincodingacademy.com/direct/' + this.getModel().get('rocketchat')} target="_blank">
+                      <a title={'Rocket Chat'} href={`${process.env.ROCKETCHAT_URL}/direct/` + this.getModel().get('rocketchat')} target="_blank">
                         {this.getModel().get('rocketchat') ? `@${this.getModel().get('rocketchat')}` : ''}
+                      </a>
+                    </p>
+                    <p>
+                      <FontAwesome name="users" fixedWidth={true} />
+                      &nbsp;
+                      <a title={'Discourse'} href={`${process.env.DISCOURSE_URL}/u/` + this.getModel().get('discourse')} target="_blank">
+                        {this.getModel().get('discourse') ? `@${this.getModel().get('discourse')}` : ''}
                       </a>
                     </p>
                     <p>
@@ -457,7 +464,7 @@ module.exports = React.createBackboneClass({
                 <p>Users can reset their password at</p>
                 <small><pre>{`https://campus.${key}codingacademy.com/reset`}</pre></small>
                 <p>Users can register on Rocket.Chat at</p>
-                <small><pre>{process.env.ROCKET_CHAT}</pre></small>
+                <small><pre>{process.env.ROCKETCHAT_URL}</pre></small>
                 <p>Your API Key is</p>
                 <small>
                   <pre>

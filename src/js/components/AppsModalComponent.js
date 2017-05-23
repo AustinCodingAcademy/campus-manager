@@ -15,7 +15,7 @@ module.exports = React.createBackboneClass({
         <Modal.Body>
           <Row>
             <Col xs={4} className="text-center">
-              <a className="btn btn-white" href="https://chat.austincodingacademy.com" target="blank">
+              <a className="btn btn-white" href={process.env.ROCKETCHAT_URL} target="blank">
                 <FontAwesome name="rocket" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Chat
@@ -40,7 +40,7 @@ module.exports = React.createBackboneClass({
           <br />
           <Row>
             <Col xs={4} className="text-center">
-              <a className="btn btn-white" href="https://discourse.austincodingacademy.com" target="blank">
+              <a className="btn btn-white" href={process.env.DISCOURSE_URL} target="blank">
                 <FontAwesome name="group" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Discourse
