@@ -17,7 +17,10 @@ var transport = nodemailer.createTransport(mandrillTransport({
     apiKey: process.env.MANDRILL_API_KEY
   }
 }));
-
+const fetch = require('node-fetch');
+const FormData = require('form-data');
+const Hashids = require('hashids');
+const hashids = new Hashids(Date.now());
 module.exports = {
 
   /**
@@ -117,6 +120,7 @@ module.exports = {
       'rocketchat',
       'website',
       'zipcode',
+      'discourse'
     ];
 
     _.each(attributes, function(attr) {
@@ -146,15 +150,21 @@ module.exports = {
               message: 'Error sending confirmation email. Please contact support for additional assistance.'
             })
           }
-          fetch(`${ROCKETCHAT_URL}/api/v1/login`, {
+          console.log('authenticating with rocketchat');
+          fetch(`${process.env.ROCKETCHAT_URL}/api/v1/login`, {
             method: 'POST',
             body: JSON.stringify({
               username: process.env.ROCKETCHAT_BOT_USERNAME,
               password: process.env.ROCKETCHAT_BOT_PASSWORD
             })
-          }).then(res => {
-            res.json().then(login => {
-              fetch('process.env.ROCKETCHAT_URL/api/v1/users.create', {
+          }).then(response => {
+            console.log('authenticating with rocketchat successful');
+            response.json().then(login => {
+              const password = hashids.encode(Date.now()) + hashids.encode(Date.now());
+              const username = `${user.first_name.toLowerCase()}${user.last_name.toLowerCase()}-${user.idn}`;
+              const name = `${user.first_name} ${user.last_name}`;
+              console.log('creating user on rocketchat');
+              fetch(`${process.env.ROCKETCHAT_URL}/api/v1/users.create`, {
                 method: 'POST',
                 headers: {
                   "X-Auth-Token": login.data.authToken,
@@ -163,17 +173,50 @@ module.exports = {
                 },
                 body: JSON.stringify({
                   email: user.username,
-                  name: `${user.first_name} ${user.last_name}`,
-                  password: 'pass@w0rd',
-                  username: `${user.first_name.toLowerCase()}${user.last_name.toLowerCase()}-${user.idn}`,
+                  name,
+                  password,
+                  username,
                   requirePasswordChange: true,
                   sendWelcomeEmail: true
                 })
-              }).then(res => {
-                res.json().then(json => {
+              }).then(response => {
+                console.log('successfully created user on rocketchat');
+                response.json().then(json => {
                   user.rocketchat = json.user.username;
-                  user.save(user => {
-                    return res.json(user);
+                  const discourseData = {
+                    api_key: process.env.DISCOURSE_API_KEY,
+                    api_username: process.env.DISCOURSE_API_USERNAME,
+                    name,
+                    email: user.username,
+                    password,
+                    username
+                  };
+                  const formData = new FormData();
+                  for (let datum in discourseData) {
+                    formData.append(datum, discourseData[datum]);
+                  }
+                  console.log('creating user on discourse');
+                  fetch(`${process.env.DISCOURSE_URL}/users.json`, {
+                    method: 'POST',
+                    body: formData
+                  }).then(response => {
+                    console.log('successfully created user on discourse');
+                    response.json().then(json => {
+                      user.discourse = username;
+                      user.save(err, user => {
+                        if(err) {
+                          return res.json(500, {
+                            message: 'Error saving user',
+                            error: err
+                          });
+                        }
+                        return res.json(user);
+                      });
+                    }).catch(err => {
+                      console.log(err);
+                    });
+                  }).catch(err => {
+                    console.log(err);
                   });
                 }).catch(err => {
                   console.log(err);
@@ -226,6 +269,7 @@ module.exports = {
         'username',
         'website',
         'zipcode',
+        'discourse'
       ];
 
       var adminAttrs = [
