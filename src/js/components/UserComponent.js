@@ -423,7 +423,7 @@ module.exports = React.createBackboneClass({
                     <p>
                       <FontAwesome name="rocket" fixedWidth={true} />
                       &nbsp;
-                      <a title={'Rocket Chat'} href={'https://chat.austincodingacademy.com/direct/' + this.getModel().get('rocketchat')} target="_blank">
+                      <a title={'Rocket Chat'} href={'process.env.ROCKETCHAT_URL/direct/' + this.getModel().get('rocketchat')} target="_blank">
                         {this.getModel().get('rocketchat') ? `@${this.getModel().get('rocketchat')}` : ''}
                       </a>
                     </p>

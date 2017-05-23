@@ -293,11 +293,51 @@ router.post('/register/:id', function(req, res, next) {
             });
           });
 
-          // If the user has been created successfully, log them in with
-          // passport to start their session and redirect to the home route
-          req.login(user, function(err) {
-            if (err) { return res.redirect('/register/' + req.params.id); }
-            return res.redirect('/');
+          fetch(`${ROCKETCHAT_URL}/api/v1/login`, {
+            method: 'POST',
+            body: JSON.stringify({
+              username: process.env.ROCKETCHAT_BOT_USERNAME,
+              password: process.env.ROCKETCHAT_BOT_PASSWORD
+            })
+          }).then(res => {
+            res.json().then(login => {
+              fetch('process.env.ROCKETCHAT_URL/api/v1/users.create', {
+                method: 'POST',
+                headers: {
+                  "X-Auth-Token": login.data.authToken,
+                  "X-User-Id": login.data.userId,
+                  "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                  email: user.username,
+                  name: `${user.first_name} ${user.last_name}`,
+                  password: 'pass@w0rd',
+                  username: `${user.first_name.toLowerCase()}${user.last_name.toLowerCase()}-${user.idn}`,
+                  requirePasswordChange: true,
+                  sendWelcomeEmail: true
+                })
+              }).then(res => {
+                res.json().then(json => {
+                  user.rocketchat = json.user.username;
+                  user.save(user => {
+                    // If the user has been created successfully, log them in with
+                    // passport to start their session and redirect to the home route
+                    req.login(user, function(err) {
+                      if (err) { return res.redirect('/register/' + req.params.id); }
+                      return res.redirect('/');
+                    });
+                  });
+                }).catch(err => {
+                  console.log(err);
+                })
+              }).catch(err => {
+                console.log(err);
+              });
+            }).catch(err => {
+              console.log(err);
+            });
+          }).catch(err => {
+            console.log(err);
           });
         });
       });
