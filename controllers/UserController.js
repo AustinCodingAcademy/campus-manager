@@ -157,7 +157,8 @@ module.exports = {
               username: process.env.ROCKETCHAT_BOT_USERNAME,
               password: process.env.ROCKETCHAT_BOT_PASSWORD
             })
-          }).then(response => {
+          })
+          .then(response => {
             console.log('authenticating with rocketchat successful');
             response.json().then(login => {
               const password = hashids.encode(Date.now()) + hashids.encode(Date.now());
@@ -179,10 +180,12 @@ module.exports = {
                   requirePasswordChange: true,
                   sendWelcomeEmail: true
                 })
-              }).then(response => {
+              })
+              .then(() => {
                 console.log('successfully created user on rocketchat');
-                response.json().then(json => {
-                  user.rocketchat = json.user.username;
+                user.rocketchat = username;
+                user.save()
+                .then(user => {
                   const discourseData = {
                     api_key: process.env.DISCOURSE_API_KEY,
                     api_username: process.env.DISCOURSE_API_USERNAME,
@@ -199,36 +202,42 @@ module.exports = {
                   fetch(`${process.env.DISCOURSE_URL}/users.json`, {
                     method: 'POST',
                     body: formData
-                  }).then(response => {
+                  })
+                  .then(() => {
                     console.log('successfully created user on discourse');
-                    response.json().then(json => {
-                      user.discourse = username;
-                      user.save(err, user => {
-                        if(err) {
-                          return res.json(500, {
-                            message: 'Error saving user',
-                            error: err
-                          });
-                        }
-                        return res.json(user);
+                    user.discourse = username;
+                    user.save()
+                    .then(user => {
+                      return res.json(user);
+                    })
+                    .catch(err => {
+                      return res.json(500, {
+                        message: 'Error saving user',
+                        error: err
                       });
-                    }).catch(err => {
-                      console.log(err);
                     });
-                  }).catch(err => {
+                  })
+                  .catch(err => {
                     console.log(err);
-                  });
-                }).catch(err => {
-                  console.log(err);
+                    return res.json(user);
+                  })
                 })
-              }).catch(err => {
+                .catch(err => {
+                  return res.json(500, {
+                    message: 'Error saving user',
+                    error: err
+                  });
+                });
+              })
+              .catch(err => {
                 console.log(err);
+                return res.json(user);
               });
-            }).catch(err => {
-              console.log(err);
             });
-          }).catch(err => {
+          })
+          .catch(err => {
             console.log(err);
+            return res.json(user);
           });
         });
       });
