@@ -294,7 +294,6 @@ router.post('/register/:id', function(req, res, next) {
               console.log(e);
             });
           });
-
           console.log('authenticating with rocketchat');
           fetch(`${process.env.ROCKETCHAT_URL}/api/v1/login`, {
             method: 'POST',
@@ -353,7 +352,12 @@ router.post('/register/:id', function(req, res, next) {
                     user.discourse = username;
                     user.save()
                     .then(user => {
-                      return res.json(user);
+                      // If the user has been created successfully, log them in with
+                      // passport to start their session and redirect to the home route
+                      req.login(user, function(err) {
+                        if (err) { return res.redirect('/register/' + req.params.id); }
+                        return res.redirect('/');
+                      });
                     })
                     .catch(err => {
                       return res.json(500, {
@@ -364,7 +368,12 @@ router.post('/register/:id', function(req, res, next) {
                   })
                   .catch(err => {
                     console.log(err);
-                    return res.json(user);
+                    // If the user has been created successfully, log them in with
+                    // passport to start their session and redirect to the home route
+                    req.login(user, function(err) {
+                      if (err) { return res.redirect('/register/' + req.params.id); }
+                      return res.redirect('/');
+                    });
                   })
                 })
                 .catch(err => {
@@ -376,13 +385,23 @@ router.post('/register/:id', function(req, res, next) {
               })
               .catch(err => {
                 console.log(err);
-                return res.json(user);
+                // If the user has been created successfully, log them in with
+                // passport to start their session and redirect to the home route
+                req.login(user, function(err) {
+                  if (err) { return res.redirect('/register/' + req.params.id); }
+                  return res.redirect('/');
+                });
               });
             });
           })
           .catch(err => {
             console.log(err);
-            return res.json(user);
+            // If the user has been created successfully, log them in with
+            // passport to start their session and redirect to the home route
+            req.login(user, function(err) {
+              if (err) { return res.redirect('/register/' + req.params.id); }
+              return res.redirect('/');
+            });
           });
         });
       });
