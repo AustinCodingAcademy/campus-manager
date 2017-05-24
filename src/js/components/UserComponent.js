@@ -463,8 +463,6 @@ module.exports = React.createBackboneClass({
                 <small><pre>{`https://campus.${key}codingacademy.com/register/${this.getModel().get('client')}`}</pre></small>
                 <p>Users can reset their password at</p>
                 <small><pre>{`https://campus.${key}codingacademy.com/reset`}</pre></small>
-                <p>Users can register on Rocket.Chat at</p>
-                <small><pre>{process.env.ROCKETCHAT_URL}</pre></small>
                 <p>Your API Key is</p>
                 <small>
                   <pre>
