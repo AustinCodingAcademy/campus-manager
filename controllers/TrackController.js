@@ -1,4 +1,4 @@
-var TrackModel = require('../models/TrackModel.js');
+const TrackModel = require('../models/TrackModel.js');
 
 /**
 * TrackController.js
@@ -11,13 +11,26 @@ module.exports = {
   * TrackController.list()
   */
   list: function (req, res) {
-    TrackModel.find({client: req.user.client}, function (err, tracks) {
-      if (err) {
-        return res.json(500, {
-          message: 'Error getting track.'
-        });
+    TrackModel.find({client: req.user.client})
+    .populate({
+      path: 'courses', populate: {
+        path: 'location', model: 'location'
       }
+    })
+    .populate({
+      path: 'courses', populate: {
+        path: 'term', model: 'term'
+      }
+    })
+    .exec()
+    .then(tracks => {
       return res.json(tracks);
+    })
+    .catch(error => {
+      return res.json(500, {
+        message: 'Error getting track.',
+        error
+      });
     });
   },
 
@@ -45,18 +58,32 @@ module.exports = {
   * TrackController.create()
   */
   create: function (req, res) {
+
     var track = new TrackModel({			name : req.body.name,      client: req.user.client,
       courses: req.body.courses
     });
-
-    track.save(function (err, track) {
-      if (err) {
-        return res.json(500, {
-          message: 'Error saving track',
-          error: err
-        });
-      }
-      return res.json(track);
+    console.log(track);
+    track.save()
+    .then(track => {
+      track.populate(
+        { path: 'courses', populate: [{ path: 'location' }, { path: 'term' }] },
+        (error, track) => {
+          if (error) {
+            return res.json(500, {
+              message: 'Error populating track.',
+              error
+            });
+          }
+          return res.json(track);
+        }
+      )
+    })
+    .catch(error => {
+      console.log(error);
+      return res.json(500, {
+        message: 'Error saving track',
+        error
+      });
     });
   },
 
@@ -87,18 +114,26 @@ module.exports = {
         track[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : track[attr];
       });
 
-      track.save(function (err, track) {
-        if (err) {
-          return res.json(500, {
-            message: 'Error getting track.'
-          });
-        }
-        if (!track) {
-          return res.json(404, {
-            message: 'No such track'
-          });
-        }
-        return res.json(track);
+      track.save()
+      .then(track => {
+        track.populate(
+          { path: 'courses', populate: [{ path: 'location' }, { path: 'term' }] },
+          (error, track) => {
+            if (error) {
+              return res.json(500, {
+                message: 'Error populating track.',
+                error
+              });
+            }
+            return res.json(track);
+          }
+        )
+      })
+      .catch(error => {
+        return res.json(500, {
+          message: 'Error saving track',
+          error
+        });
       });
     });
   },

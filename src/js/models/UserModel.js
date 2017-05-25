@@ -174,9 +174,9 @@ module.exports = Backbone.Model.extend({
   },
 
   futureCourse() {
-    return this.get('courses').find(course => {
+    return _.last(this.get('courses').filter(course => {
       return moment().isBefore(course.get('term').get('start_date'));
-    });
+    }));
   },
 
   lastCourse() {

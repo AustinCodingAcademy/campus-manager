@@ -6,7 +6,7 @@ const trackSchema = new Schema({
   name: String,
   courses: [{
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'course'
   }],
   client: {
     type: Schema.Types.ObjectId,

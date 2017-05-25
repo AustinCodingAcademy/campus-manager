@@ -110,6 +110,8 @@ module.exports = React.createBackboneClass({
 
   render() {
     const key = utils.campusKey(this.getModel());
+    this.getModel().get('courses').comparator = this.getModel().get('courses').reverse;
+    this.getModel().get('courses').sort();
     const courses = this.getModel().get('courses').map((course, i) => {
       const dates = course.classDates().map((date, j) => {
         let attended = <FontAwesome name="calendar-o" />;

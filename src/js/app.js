@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'textbooks': 'textbooks',
       'tracks': 'tracks',
       'courses/:id': 'course',
-      'registration': 'registration',
-      'report': 'report',
+      'registrations': 'registrations',
+      'reports': 'reports',
       'report/:query': 'report'
     },
 
@@ -129,9 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     tracks: () => {
+      const courses = new CoursesCollection();
+      courses.fetch();
       const tracks = new TracksCollection();
       tracks.fetch();
-      ReactDOM.render(TracksListComponent({ collection: tracks }), document.getElementById('container'));
+      ReactDOM.render(TracksListComponent({
+        collection: tracks,
+        courses: courses
+      }), document.getElementById('container'));
     },
 
     textbooks: function() {
@@ -167,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }), document.getElementById('container'));
     },
 
-    registration: function() {
+    registrations: function() {
       var that = this;
       var courses = new CoursesCollection();
       courses.fetch({
@@ -186,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     },
 
-    report: function(query) {
+    reports: function(query) {
       ReactDOM.render(ReportComponent({
         model: new ReportModel({
           sql: query ? atob(query) :
