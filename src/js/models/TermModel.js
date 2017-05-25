@@ -20,7 +20,7 @@ module.exports = Backbone.Model.extend({
     if (obj.courses) {
       var CoursesCollection = require('../collections/CoursesCollection');
       _.each(obj.courses, course => {
-        return course.term = _.omit(obj, 'courses');
+        course.term = _.omit(obj, 'courses');
       });
       obj.courses = new CoursesCollection(obj.courses, { parse: true });
     }
