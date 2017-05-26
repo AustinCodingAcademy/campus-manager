@@ -206,12 +206,15 @@ module.exports = React.createBackboneClass({
           </tr>
         );
       });
+      const withdrawal = course.get('withdrawals').find(wd => {
+        return wd.userId === this.getModel().id;
+      });
       return (
         <Panel
           key={course.id}
           header={
             <h3>
-              {course.get('name')}
+              {course.get('name')} {withdrawal ? ` (Withdrawn ${moment(withdrawal.timestamp).format('MMM D, YYYY')})` : ''}
               <small className="pull-right">
                 {course.get('term').get('name')}
               </small>

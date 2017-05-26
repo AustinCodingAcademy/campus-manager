@@ -12,6 +12,7 @@ import {
 const FontAwesome = require('react-fontawesome');
 const DatePicker = require('react-datepicker');
 const GradeModel = require('../models/GradeModel');
+const CourseUserComponent = require('./CourseUserComponent');
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -166,32 +167,8 @@ module.exports = React.createBackboneClass({
   },
 
   render() {
-    var userRows = this.getModel().get('registrations').map((student, i) => {
-      const studentCheckpointScores = [];
-      const studentDailyScores = [];
-      const courseGrades = _.each(_.filter(_.where(student.get('grades'), { courseId: this.getModel().id }), grade => {
-        return _.isNumber(grade.score);
-      }), grade => {
-        const courseGrade = _.findWhere(this.getModel().get('grades'), { name: grade.name });
-        if (courseGrade) {
-          if (courseGrade.checkpoint) {
-            studentCheckpointScores.push(Number(grade.score));
-          } else {
-            studentDailyScores.push(Number(grade.score));
-          }
-        }
-      });
-      const courseAverage = utils.weightedGradeAverage(studentCheckpointScores, studentDailyScores);
-
-      return (
-        <tr key={i}>
-          <td className="right-align nowrap" style={{height: '51px', padding: '0 5px'}}>
-            <a href={'#users/' + student.id}>{student.fullName()}</a>
-            <br />
-            <small>Avg: <span className={'score' + courseAverage}>{courseAverage}</span></small>
-          </td>
-        </tr>
-      );
+    var userRows = this.getModel().get('registrations').map((student) => {
+      return (<CourseUserComponent  key={student.id} model={student} course={this.getModel()} />);
     });
 
     const gradeNames = _.map(this.getModel().get('grades'), (grade, idx) => {
@@ -248,7 +225,7 @@ module.exports = React.createBackboneClass({
           </Checkbox>
           &nbsp;
           <small className="pull-right">
-            Avg:
+            Avg:&nbsp;
             <span className={'score' + assignmentAverage}>
               {assignmentAverage}
             </span>
@@ -280,6 +257,7 @@ module.exports = React.createBackboneClass({
                 onBlur={this.blurGrade}
                 data-student-id={student.id}
                 data-grade-name={grade.name}
+                disabled={this.getModel().get('withdrawals').find(wd => {return wd.userId === student.id})}
               />
               <InputGroup.Button>
                 {grade.url ?
@@ -397,7 +375,8 @@ module.exports = React.createBackboneClass({
                 <small>
                   CP: Signifies the grade is a checkpoint. Checkpoints are
                   weighted more and are used as markers in the student&#39;s
-                  understanding of the content.
+                  understanding of the content. WD: Signifies student has
+                  withdrawn from the course and the date of withdrawal.
                 </small>
               }
             >

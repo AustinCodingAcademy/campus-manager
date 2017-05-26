@@ -87,6 +87,7 @@ app.use('/api/report', middleware.admin, require('./routes/report'));
 app.use('/api/grades', middleware.auth, require('./routes/grades'));
 app.use('/api/textbooks', middleware.admin, require('./routes/textbooks'));
 app.use('/api/registrations', middleware.auth, require('./routes/registrations'));
+app.use('/api/withdrawals', middleware.admin, require('./routes/withdrawals'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

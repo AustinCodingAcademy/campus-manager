@@ -42,7 +42,8 @@ const courseSchema = new Schema({
   timeEnd: {
     type: String,
     required: true
-  }
+  },
+  withdrawals: []
 }, { timestamps: true });
 
 courseSchema.plugin(version, { collection: 'courses__versions' });

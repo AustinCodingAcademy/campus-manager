@@ -21,7 +21,8 @@ module.exports = Model.extend({
     cost: '',
     location: new LocationModel(),
     textbook: new TextbookModel(),
-    videos: []
+    videos: [],
+    withdrawals: []
   },
 
   initialize: function() {
