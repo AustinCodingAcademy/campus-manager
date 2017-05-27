@@ -3,11 +3,19 @@ import * as _ from 'underscore';
 const utils = require('../utils');
 import { Checkbox } from 'react-bootstrap';
 const moment = require('moment');
+const DatePicker = require('react-datepicker');
 
 module.exports = React.createBackboneClass({
+  mixins: [
+    React.BackboneMixin('course', 'change:withdrawals')
+  ],
+
   getInitialState() {
+    const withdrawal = this.props.course.get('withdrawals').find(wd => { return wd.userId === this.getModel().id; });
     return {
-      withdrawn: this.props.course.get('withdrawals').find(wd => { return wd.userId === this.getModel().id; })
+      withdrawal: withdrawal,
+      withdrawalDate: withdrawal ? moment(Number(withdrawal.timestamp)) : moment(),
+      changeWithdrawalDate: false
     };
   },
 
@@ -29,16 +37,49 @@ module.exports = React.createBackboneClass({
         courseId: this.props.course.id
       },
       success: () => {
-        const withdrawal = this.props.course.get('withdrawals').find(wd => {
-          return wd.userId === this.getModel().id;
+        this.props.course.fetch({
+          success: () => {
+            const withdrawal = this.props.course.get('withdrawals').find(wd => {
+              return wd.userId === this.getModel().id;
+            });
+            if (withdrawal) {
+              this.setState({
+                withdrawal,
+                withdrawalDate: moment(withdrawal.timestamp)
+              })
+            } else {
+              this.setState({ withdrawal: false });
+            }
+
+          }
         });
-        if (withdrawal) {
-          this.setState({ withdrawn: withdrawal });
-        } else {
-          this.setState({ withdrawn: true });
-        }
-        this.props.course.fetch();
       }
+    });
+  },
+
+  handleWithdrawalDateChange(date) {
+    console.log(date);
+    $.ajax('/api/withdrawals', {
+      method: 'PUT',
+      data: {
+        userId: this.getModel().id,
+        courseId: this.props.course.id,
+        timestamp: date.valueOf()
+      },
+      success: () => {
+        this.props.course.fetch();
+        this.setState({
+          changeWithdrawalDate: false,
+          withdrawalDate: date
+        });
+      }
+    });
+  },
+
+  toggleChangeWithdrawalDate(e) {
+    e.preventDefault();
+    this.setState({
+      changeWithdrawalDate: true
     });
   },
 
@@ -66,15 +107,26 @@ module.exports = React.createBackboneClass({
           <small>Avg: <span className={'score' + courseAverage}>{courseAverage}</span></small>
           <small className="pull-right text-right">
             <Checkbox
-              checked
               data-student-id={this.getModel().id}
-              checked={this.state.withdrawn}
+              checked={this.state.withdrawal}
               onChange={this.toggleWithdrawal}
               style={{display: 'inline'}}
             >
               WD
-            </Checkbox>
-            <div>{this.state.withdrawn ? moment(this.state.withdrawn.timestamp).format('MMM D, YYYY'): ''}</div>
+            </Checkbox>&nbsp;
+            { this.state.withdrawal && this.state.changeWithdrawalDate ?
+              <DatePicker
+                dateFormat="MMM D, YYYY"
+                selected={this.state.withdrawalDate}
+                className="form-control"
+                onChange={this.handleWithdrawalDateChange}
+              />
+            : ''
+            }
+            { this.state.withdrawal && !this.state.changeWithdrawalDate ?
+            <a href='#' onClick={this.toggleChangeWithdrawalDate}>{this.state.withdrawalDate.format('MM-DD-YY')}</a>
+            : ''
+            }
           </small>
         </td>
       </tr>
