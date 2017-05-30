@@ -58,7 +58,6 @@ module.exports = React.createBackboneClass({
   },
 
   handleWithdrawalDateChange(date) {
-    console.log(date);
     $.ajax('/api/withdrawals', {
       method: 'PUT',
       data: {
@@ -118,7 +117,7 @@ module.exports = React.createBackboneClass({
               <DatePicker
                 dateFormat="MMM D, YYYY"
                 selected={this.state.withdrawalDate}
-                className="form-control"
+                className="form-control small"
                 onChange={this.handleWithdrawalDateChange}
               />
             : ''

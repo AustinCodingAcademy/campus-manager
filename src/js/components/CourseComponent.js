@@ -209,8 +209,9 @@ module.exports = React.createBackboneClass({
               type="date"
               onChange={this.changeDueDate}
               data-grade-name={grade.name}
-              style={{ display: 'inline', width: '160px', height: '18px' }}
+              style={{ display: 'inline', width: '160px' }}
               defaultValue={grade.dueDate}
+              className='small'
             />
           </small>
           <br />

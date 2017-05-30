@@ -29,7 +29,7 @@ module.exports = React.createBackboneClass({
               </a>
             </Col>
             <Col xs={4} className="text-center">
-              <a className="btn btn-white" href="https://jobs.austincodingacademy.com" target="blank">
+              <a className="btn btn-white" href={process.env.JOBS_URL} target="blank">
                 <FontAwesome name="usd" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Jobs
