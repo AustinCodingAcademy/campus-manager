@@ -29,7 +29,8 @@ module.exports = React.createBackboneClass({
           method: 'POST',
           data: {
             courseId: this.state.course.id,
-            userId: this.getModel().id
+            userId: this.getModel().id,
+            track: true
           },
           success: () => {
             this.state.course.get('registrations').add(this.getModel());

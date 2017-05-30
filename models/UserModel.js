@@ -77,6 +77,7 @@ const userSchema = new Schema({
   reviews: Array,
   rocketchat: String,
   zipcode: String,
+  discourse: String,
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

@@ -81,11 +81,13 @@ app.use('/api/terms', require('./routes/terms'));
 app.use('/api/courses', middleware.auth, require('./routes/courses'));
 app.use('/api/charges', middleware.auth, require('./routes/charges'));
 app.use('/api/locations', middleware.auth, require('./routes/locations'));
+app.use('/api/tracks', middleware.auth, require('./routes/tracks'));
 app.use('/api/import', middleware.admin, require('./routes/import'));
 app.use('/api/report', middleware.admin, require('./routes/report'));
 app.use('/api/grades', middleware.auth, require('./routes/grades'));
 app.use('/api/textbooks', middleware.admin, require('./routes/textbooks'));
 app.use('/api/registrations', middleware.auth, require('./routes/registrations'));
+app.use('/api/withdrawals', middleware.admin, require('./routes/withdrawals'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

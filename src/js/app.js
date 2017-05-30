@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'react.backbone';
 const moment = require('moment');
-var $ = window.$ = window.jQuery = require('jquery');
+const $ = window.$ = window.jQuery = require('jquery');
 
 const UserModel = require('./models/UserModel');
 const TermModel = require('./models/TermModel');
@@ -19,6 +19,7 @@ const TermsCollection = require('./collections/TermsCollection');
 const CoursesCollection = require('./collections/CoursesCollection');
 const UsersCollection = require('./collections/UsersCollection');
 const LocationsCollection = require('./collections/LocationsCollection');
+const TracksCollection = require('./collections/TracksCollection');
 const TextbooksCollection = require('./collections/TextbooksCollection');
 
 const TermsListComponent = React.createFactory(require('./components/TermsListComponent'));
@@ -28,6 +29,7 @@ const HomeLayoutComponent = React.createFactory(require('./components/HomeLayout
 const NavbarComponent = React.createFactory(require('./components/NavbarComponent'));
 const UsersListComponent = React.createFactory(require('./components/UsersListComponent'));
 const LocationsListComponent = React.createFactory(require('./components/LocationsListComponent'));
+const TracksListComponent = React.createFactory(require('./components/TracksListComponent'));
 const TextbooksListComponent = React.createFactory(require('./components/TextbooksListComponent'));
 const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 const UserComponent = React.createFactory(require('./components/UserComponent'));
@@ -58,9 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'courses': 'courses',
       'locations': 'locations',
       'textbooks': 'textbooks',
+      'tracks': 'tracks',
       'courses/:id': 'course',
-      'registration': 'registration',
-      'report': 'report',
+      'registrations': 'registrations',
+      'reports': 'reports',
       'report/:query': 'report'
     },
 
@@ -125,6 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
       ReactDOM.render(LocationsListComponent({ collection: locations }), document.getElementById('container'));
     },
 
+    tracks: () => {
+      const courses = new CoursesCollection();
+      courses.fetch();
+      const tracks = new TracksCollection();
+      tracks.fetch();
+      ReactDOM.render(TracksListComponent({
+        collection: tracks,
+        courses: courses
+      }), document.getElementById('container'));
+    },
+
     textbooks: function() {
       const textbooks = new TextbooksCollection();
       textbooks.fetch();
@@ -158,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }), document.getElementById('container'));
     },
 
-    registration: function() {
+    registrations: function() {
       var that = this;
       var courses = new CoursesCollection();
       courses.fetch({
@@ -177,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     },
 
-    report: function(query) {
+    reports: function(query) {
       ReactDOM.render(ReportComponent({
         model: new ReportModel({
           sql: query ? atob(query) :

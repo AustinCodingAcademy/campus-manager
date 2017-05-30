@@ -8,7 +8,7 @@
       .modal-body
         .row
           .col-xs-4.text-center
-            a.btn.btn-white(href='https://chat.austincodingacademy.com', target='blank')
+            a.btn.btn-white(href=process.env.ROCKETCHAT_URL, target='blank')
               i.fa.fa-rocket.fa-3x.fa-fw
               br
               span &nbsp;Chat
@@ -18,7 +18,7 @@
               br
               span &nbsp;Calendar
           .col-xs-4.text-center
-            a.btn.btn-white(href='https://jobs.austincodingacademy.com', target='blank')
+            a.btn.btn-white(href=process.env.JOBS_URL, target='blank')
               i.fa.fa-usd.fa-3x.fa-fw
               br
               span &nbsp;Jobs
@@ -26,7 +26,7 @@
         br
         .row
           .col-xs-4.text-center
-            a.btn.btn-white(href='https://discourse.austincodingacademy.com', target='blank')
+            a.btn.btn-white(href=process.env.DISCOURSE_URL, target='blank')
               i.fa.fa-group.fa-3x.fa-fw
               br
               span &nbsp;Discourse
