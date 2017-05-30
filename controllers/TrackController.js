@@ -59,9 +59,7 @@ module.exports = {
   */
   create: function (req, res) {
 
-    var track = new TrackModel({			name : req.body.name,      client: req.user.client,
-      courses: req.body.courses
-    });
+    var track = new TrackModel({      name : req.body.name,      client: req.user.client,      courses: req.body.courses    });
     console.log(track);
     track.save()
     .then(track => {
