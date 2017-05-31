@@ -87,7 +87,6 @@
     "morgan": "1.7.0",
     "nightwatch": "^0.9.8",
     "node-fetch": "^1.6.3",
-    "node-linkedin": "^0.5.4",
     "node-sass": "3.11.1",
     "nodemailer": "2.6.4",
     "nodemailer-mandrill-transport": "github:kevincolten/nodemailer-mandrill-transport",
