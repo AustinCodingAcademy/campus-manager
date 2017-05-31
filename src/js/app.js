@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'courses/:id': 'course',
       'registrations': 'registrations',
       'reports': 'reports',
-      'report/:query': 'report'
+      'reports/:query': 'reports'
     },
 
     currentUser: new UserModel(JSON.parse(document.querySelector('[data-bootstrap]').getAttribute('data-bootstrap'))),
