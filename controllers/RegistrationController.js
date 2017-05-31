@@ -1,5 +1,6 @@
 const CourseModel = require('../models/CourseModel');
 const TrackModel = require('../models/TrackModel.js');
+const moment = require('moment');
 
 /**
 * RegistrationController.js
@@ -56,9 +57,16 @@ module.exports = {
     }
 
     if (req.body.track) {
-      TrackModel.findOne({ courses: req.body.courseId }).populate('courses').exec()
+      TrackModel.findOne({
+        courses: req.body.courseId
+      }).populate({
+        path: 'courses', populate: [{ path: 'term' }]
+      }).exec()
       .then(track => {
-        registerUser(track.courses);
+        const courses = track.courses.filter(course => {
+          return moment(course.term.start_date).isSameOrAfter(moment(), 'day');
+        });
+        registerUser(courses);
       })
       .catch(error => {
         console.log({
