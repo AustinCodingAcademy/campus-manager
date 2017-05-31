@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'tracks': 'tracks',
       'courses/:id': 'course',
       'registrations': 'registrations',
-      'reports': 'reports',
-      'reports/:query': 'reports'
+      'report': 'report',
+      'report/:query': 'report'
     },
 
     currentUser: new UserModel(JSON.parse(document.querySelector('[data-bootstrap]').getAttribute('data-bootstrap'))),
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     },
 
-    reports: function(query) {
+    report: function(query) {
       ReactDOM.render(ReportComponent({
         model: new ReportModel({
           sql: query ? atob(query) :
