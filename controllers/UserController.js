@@ -370,7 +370,7 @@ module.exports = {
           "website": user.website,
           "summary": user.resume.summary,
           "location": {
-            "address": "",
+            "address": "TEST",
             "postalCode": user.zipcode,
             "city": "",
             "countryCode": "",
@@ -389,19 +389,20 @@ module.exports = {
             }
           ]
         },
-        "work": [
-          {
-            "company": user.resume.positions.values[0].company.name,
-            "position": user.resume.positions.values[0].title,
+        "work": user.resume.positions.values.map(value => {
+          console.log(value);
+          return {
+            "company": value.company.name,
+            "position": value.title,
             "website": "",
-            "startDate": `${user.resume.positions.values[0].startDate.year}-${user.resume.positions.values[0].startDate.month}`,
-            "endDate": (user.resume.positions.values[0].isCurrent ? '' : dateToday.format('YYYY-MM-DD')),
+            "startDate": `${value.startDate.year}-${value.startDate.month}`,
+            "endDate": "",
             "summary": "",
             "highlights": [
               ""
             ]
           }
-        ],
+        }),
         "volunteer": [
           {
             "organization": "",
