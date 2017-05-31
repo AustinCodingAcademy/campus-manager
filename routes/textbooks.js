@@ -6,6 +6,13 @@ const middleware = require('./middleware');
 /*
 * GET
 */
+router.post('/redirect/:id', middleware.auth, (req, res) => {
+  TextbookController.redirect(req, res);
+});
+
+/*
+* GET
+*/
 router.get('/', middleware.instructor, (req, res) => {
   TextbookController.list(req, res);
 });

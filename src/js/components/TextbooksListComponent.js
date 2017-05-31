@@ -35,6 +35,10 @@ module.exports = React.createBackboneClass({
     });
   },
 
+  openTextbook(e) {
+    
+  },
+
   render() {
     const textbookRows = this.getCollection().map(textbook => {
       return (
@@ -42,8 +46,8 @@ module.exports = React.createBackboneClass({
           <Td column="Name">{textbook.get('name')}</Td>
           <Td column="Instructor URL" value={textbook.get('instructor_url')}>
             <a
-              href={textbook.get('instructor_url')}
-              target="_blank"
+              href={`/api/textbooks/redirect/${textbook.id}`}
+              onClick={this.openTextbook}
             >
               {textbook.get('instructor_url')}
             </a>

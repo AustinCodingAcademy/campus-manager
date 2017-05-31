@@ -1,4 +1,5 @@
 const TextbookModel = require('../models/TextbookModel');
+const CourseModel = require('../models/CourseModel');
 
 /**
 * TextbookController.js
@@ -115,6 +116,26 @@ module.exports = {
         });
       }
       return res.json(textbook);
+    });
+  },
+
+  redirect: (req, res) => {
+    console.log("hello");
+    let foundTextbook;
+    TextbookModel.findOne({ _id: req.params.id, client: req.user.client })
+    .then(textbook => {
+      foundTextbook = textbook;
+      return CourseModel.find({ registrations: req.user });
+    })
+    .then(courses => {
+      const authorized = courses.find(course => {
+        return course.textbook.toString() === req.params.id;
+      });
+      if (req.user.is_instructor || req.user.admin || authorized) {
+        const auth = "Basic " + new Buffer('aca-staff' + ":" + 'AustinCoding14').toString("base64");
+        res.header('Authorization', auth);
+        res.redirect(foundTextbook.instructor_url);
+      }
     });
   }
 };
