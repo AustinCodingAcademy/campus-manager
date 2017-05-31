@@ -133,8 +133,13 @@ module.exports = {
       });
       if (req.user.is_instructor || req.user.admin || authorized) {
         const auth = "Basic " + new Buffer('aca-staff' + ":" + 'AustinCoding14').toString("base64");
-        res.header('Authorization', auth);
-        res.redirect(foundTextbook.instructor_url);
+        res.set({
+          'Authorization': auth,
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        });
+        res.redirect(301, foundTextbook.instructor_url);
       }
     });
   }

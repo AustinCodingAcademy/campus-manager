@@ -35,22 +35,16 @@ module.exports = React.createBackboneClass({
     });
   },
 
-  openTextbook(e) {
-    
-  },
-
   render() {
     const textbookRows = this.getCollection().map(textbook => {
       return (
         <Tr key={textbook.id}>
           <Td column="Name">{textbook.get('name')}</Td>
           <Td column="Instructor URL" value={textbook.get('instructor_url')}>
-            <a
-              href={`/api/textbooks/redirect/${textbook.id}`}
-              onClick={this.openTextbook}
-            >
-              {textbook.get('instructor_url')}
-            </a>
+            <form method="POST" action={`/api/textbooks/redirect/${textbook.id}`}>
+              <input type="hidden" name="_csrf" value="12AZxu8z-K1ZRsDRa7XYihuf4hq4u1WNXbl0" />
+              <button type="submit">go</button>
+            </form>
           </Td>
           <Td column="Student URL" value={textbook.get('student_url')}>
             <a

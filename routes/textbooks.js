@@ -7,6 +7,7 @@ const middleware = require('./middleware');
 * GET
 */
 router.post('/redirect/:id', middleware.auth, (req, res) => {
+  console.log("hello");
   TextbookController.redirect(req, res);
 });
 
