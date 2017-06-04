@@ -57,19 +57,12 @@ module.exports = React.createBackboneClass({
       }
     });
 
-    _.each(
-        _.filter(this.getModel().get('credits').trim().split(',').map(credit => {
-          return _.map(credit.trim().split(':'), item => {
-            return item.trim();
-          });
-        }), credit => {
-      return credit.length === 2 && Number(credit[1]);
-    }), (credit, idx) => {
-      totalCourseCost -= Number(credit[1]);
+    this.getModel().get('credits').forEach((credit, idx) => {
+      totalCourseCost -= Number(credit.amount);
       courseCharges.push(
         <tr key={idx}>
-          <td>${Number(credit[1]).toFixed(2)}</td>
-          <td>{credit[0]}</td>
+          <td>${Number(credit.amount).toFixed(2)}</td>
+          <td>{credit.name}</td>
         </tr>
       );
     });
