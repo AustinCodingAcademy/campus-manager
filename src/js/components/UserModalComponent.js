@@ -34,7 +34,7 @@ module.exports = React.createBackboneClass({
       error: '',
       title: this.props.title,
       campuses: [],
-      credits: this.props.currentUser.get('credits').map(credit => { return `${credit.name}: ${credit.amount}`}).join('\n')
+      credits: this.props.currentUser.get('credits')
     }
   },
 
@@ -59,7 +59,7 @@ module.exports = React.createBackboneClass({
         return splitCredit.length === 2 && splitCredit[0] && splitCredit[1] && !isNaN(splitCredit[1]);
       }).map(credit => {
         const splitCredit = credit.split(':').map(x => x.trim());
-        return {name: splitCredit[0], amount: Number(splitCredit[1])};
+        return { name: splitCredit[0], amount: Number(splitCredit[1]) };
       })
     });
   },
@@ -136,6 +136,10 @@ module.exports = React.createBackboneClass({
       let _key = this.state.campuses.indexOf(campus)
       return (<option key={_key} value={campus}>{campus} Coding Academy</option>)
     });
+
+    const credits = this.state.credits.map(credit => {
+      return `${credit.name}: ${Number(credit.amount).toFixed(2)}`;
+    }).join('\n');
 
     return (
       <Modal show={this.props.show} onHide={this.props.onHide}>
@@ -289,7 +293,7 @@ module.exports = React.createBackboneClass({
                 placeholder={`Materials Fee: -100.00
 10% Scholarship: 249.00`}
                 onChange={this.changeCreditsValue}
-                defaultValue={this.state.credits}
+                defaultValue={credits}
                 rows={4}
               />
             </FormGroup>
