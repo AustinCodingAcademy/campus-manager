@@ -33,7 +33,8 @@ module.exports = React.createBackboneClass({
       alertVisible: 'hidden',
       error: '',
       title: this.props.title,
-      campuses: []
+      campuses: [],
+      credits: this.props.currentUser.get('credits')
     }
   },
 
@@ -51,13 +52,27 @@ module.exports = React.createBackboneClass({
     this.state.user[attr] = e.currentTarget.value;
   },
 
+  changeCreditsValue(e) {
+    this.setState({
+      credits: e.target.value.split('\n').filter(credit => {
+        const splitCredit = credit.split(':').map(x => x.trim());
+        return splitCredit.length === 2 && splitCredit[0] && splitCredit[1] && !isNaN(splitCredit[1]);
+      }).map(credit => {
+        const splitCredit = credit.split(':').map(x => x.trim());
+        return { name: splitCredit[0], amount: Number(splitCredit[1]) };
+      })
+    });
+  },
+
   changePhone(phone) {
     this.state.user.phone = phone;
   },
 
   save(e) {
     e.preventDefault();
-    this.getModel().save(this.state.user, {
+    const user = Object.assign({}, this.state.user);
+    user.credits = this.state.credits;
+    this.getModel().save(user, {
       success: () => {
         if (this.props.users && this.props.listComponent) {
           this.props.users.add(this.getModel(), {
@@ -121,6 +136,10 @@ module.exports = React.createBackboneClass({
       let _key = this.state.campuses.indexOf(campus)
       return (<option key={_key} value={campus}>{campus} Coding Academy</option>)
     });
+
+    const credits = this.state.credits.map(credit => {
+      return `${credit.name}: ${Number(credit.amount).toFixed(2)}`;
+    }).join('\n');
 
     return (
       <Modal show={this.props.show} onHide={this.props.onHide}>
@@ -268,12 +287,14 @@ module.exports = React.createBackboneClass({
               </InputGroup>
             </FormGroup>
             <FormGroup controlId="credits"  className={`${hidden}`}>
-              <ControlLabel>Credits<small> (separate credits with a comma. eg: <em>Materials Fee: -100.00, 10% Scholarship: 249.00</em>)</small></ControlLabel>
+              <ControlLabel>Credits<small> One credit per line. eg: <br /><em>Materials Fee: -100.00<br />10% Scholarship: 249.00</em></small></ControlLabel>
               <FormControl
-                type="text"
-                placeholder="Materials Fee: -100.00, 10% Scholarship: 249.00"
-                onChange={this.changeTextValue}
-                defaultValue={this.state.user.credits}
+                componentClass="textarea"
+                placeholder={`Materials Fee: -100.00
+10% Scholarship: 249.00`}
+                onChange={this.changeCreditsValue}
+                defaultValue={credits}
+                rows={4}
               />
             </FormGroup>
             <a href="#" className={`link-danger ${hidden}`} onClick={this.delete}>Delete User</a>

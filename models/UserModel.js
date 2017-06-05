@@ -67,7 +67,7 @@ const userSchema = new Schema({
   campus: String,
   charges: Array,
   courses: Array,
-  credits: String,
+  credits: Array,
   customer_id: String,
   grades: Array,
   insightly: String,
