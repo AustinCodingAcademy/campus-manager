@@ -72,7 +72,10 @@ const userSchema = new Schema({
   grades: Array,
   insightly: String,
   linkedIn: String,
-  price: Number,
+  price: {
+    type: Number,
+    default: 0
+  },
   reset_password: String,
   reviews: Array,
   rocketchat: String,
