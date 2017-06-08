@@ -34,7 +34,7 @@ module.exports = React.createBackboneClass({
       error: '',
       title: this.props.title,
       campuses: [],
-      credits: this.props.currentUser.get('credits')
+      credits: this.getModel().get('credits')
     }
   },
 
