@@ -287,11 +287,11 @@ module.exports = React.createBackboneClass({
               </InputGroup>
             </FormGroup>
             <FormGroup controlId="credits"  className={`${hidden}`}>
-              <ControlLabel>Credits<small> One credit per line. eg: <br /><em>Materials Fee: -100.00<br />10% Scholarship: 249.00</em></small></ControlLabel>
+              <ControlLabel>Credits<small> One credit per line. <em>Add initials and date</em> eg: <br /><em>KC Materials Fee 5/15/17: -100.00<br />DC 10% Scholarship 6/15/17: 249.00</em></small></ControlLabel>
               <FormControl
                 componentClass="textarea"
-                placeholder={`Materials Fee: -100.00
-10% Scholarship: 249.00`}
+                placeholder={`KC Materials Fee 5/15/17: -100.00
+DC 10% Scholarship 6/15/17: 249.00`}
                 onChange={this.changeCreditsValue}
                 defaultValue={credits}
                 rows={4}
