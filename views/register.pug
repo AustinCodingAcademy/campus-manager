@@ -27,7 +27,7 @@ block content
         h1.text-center
           span.campus-name
           br
-          small Enrollment Agreement
+          small Important Info
         br
         form(action='/register/' + id, method='post')
           input(type='hidden', name='_csrf', value=csrfToken)
@@ -111,7 +111,6 @@ block content
           include costs
           .panel.panel-default
             .panel-heading
-              h3.panel-title Agreement
             .panel-body
           button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
   else
