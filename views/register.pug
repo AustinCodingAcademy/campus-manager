@@ -1,146 +1,38 @@
 extends layout
 
-block styles
-  style.
-    #enrollment-agreement {
-      display: none;
-    }
-
 block content
-  if id
+  form(action='/register/' + id, method='post')
     .row
       .col-xs-12.col-md-6.col-md-offset-3
+        input(type='hidden', name='_csrf', value=csrfToken)
         .panel.panel-default
           .panel-heading
-            h3.panel-title Select Campus
+            h3.panel-title Account Information
           .panel-body
             .form-group
               label(for='campus-select') Campus
-              select#campus-select.form-control
+              select#campus-select.form-control(name='campus', required)
                 option(value="", disabled, selected) Select your campus...
-                option(value="austin") Austin Coding Academy
-                option(value="dallas") Dallas Coding Academy
-                option(value="sanantonio") San Antonio Coding Academy
-                option(value="houston") Houston Coding Academy
-    .row#enrollment-agreement
-      .col-xs-12.col-md-6.col-md-offset-3
-        h1.text-center
-          span.campus-name
-          br
-          small Important Info
-        br
-        form(action='/register/' + id, method='post')
-          input(type='hidden', name='_csrf', value=csrfToken)
-          input(type='hidden', name='campus')
-          .panel.panel-default
-            .panel-heading
-              h3.panel-title Account Information
-            .panel-body
-              .form-group
-                label(for='first-name') First name
-                input#first-name.form-control(type='text', name='first_name', required, placeholder='First name')
-              .form-group
-                label(for='last-name') Last name
-                input#last-name.form-control(type='text', name='last_name', required, placeholder='Last name')
-              .form-group
-                label(for='email') Email
-                input#email.form-control(type='email', name='username', required, placeholder='Email')
-              .form-group
-                label(for='password') Password (6 character minimum)
-                input#password.form-control(type='password', name='password', pattern='.{6,}', required, placeholder='Password')
-          .panel.panel-default
-            .panel-heading
-              h3.panel-title Student Information
-            .panel-body
-              .form-group
-                label(for='phone') Phone
-                input#phone.form-control.phone(type='tel', name='phone', required, pattern='\\(?\\d{3}\\)? ?\\d{3}[\\-]\\d{4}')
-              .form-group
-                label(for='address') Street Address
-                input#address.form-control(type='text', name='address', required, placeholder='Street Address')
-              .form-group
-                label(for='city') City
-                input#city.form-control(type='text', name='city', required, placeholder='City')
-              .form-group
-                label(for='state') State (ex. TX)
-                input#state.form-control(type='text', name='state', required, placeholder='State', pattern=".{2,2}")
-              .form-group
-                label(for='zipcode') Zipcode (ex. 12345)
-                input#zipcode.form-control(type='number', name='zipcode', required, placeholder='12345', min="5")
-              .form-group
-                label(for='social') Social Security Number (ex. 123-45-6789)
-                input#social.form-control(type='text', name='social', required, placeholder='123-45-6789', pattern='\\d{3}-\\d{2}-\\d{4}')
-          .panel.panel-default
-            .panel-heading
-              h3.panel-title Emergency Information
-            .panel-body
-              .form-group
-                label(for='emergency-contact') Emergency Contact
-                input#emergency-contact.form-control(type='text', name='contact', required, placeholder='Emergency Contact')
-              .form-group
-                label(for='emergency-relationship') Relationship
-                input#emergency-relationship.form-control(type='text', name='emergency_relationship', required, placeholder='Relationship')
-              .form-group
-                label(for='emergency-phone') Phone
-                input#emergency-phone.form-control.phone(type='tel', name='emergency_phone', required, pattern='\\(?\\d{3}\\)? ?\\d{3}[\\-]\\d{4}')
-          .panel.panel-default
-            .panel-heading
-              h3.panel-title Subject Information
-            .panel-body
-              .form-group
-                label(for='admission-date') Date of Admission
-                input#admission-date.form-control.current-date(type='text', name='admission_date', required, disabled)
-              .form-group
-                label(for='program') Program Title
-                input#program.form-control(type='text', name='program', required, disabled, value="Full Stack Web Development")
-              .form-group
-                label(for='start-date') Assumed Start Date
-                input#start-date.form-control(type='text', name='start_date', required, disabled)
-              .form-group
-                label(for='end-date') Approximate End Date
-                input#end-date.form-control(type='text', name='end_date', required, disabled)
-              .form-group
-                label(for='information') Course Information
-                textarea#information.form-control(type='text', name='information', required, disabled) Class meets twice weekly (either Mondays and Wednesdays or Tuesdays and Thursdays)
-              .form-group
-                label(for='times') Class Times
-                input#times.form-control(type='text', name='times', required, disabled, value="6:30p - 9:00p")
-              .form-group
-                label(for='weeks') Estimated Total Number of Weeks
-                input#weeks.form-control(type='number', name='weeks', required, disabled, value="30")
-          include costs
-          .panel.panel-default
-            .panel-heading
-            .panel-body
-          button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
-  else
-    .row
-      .col-xs-12.col-md-6.col-md-offset-3
-        form(action='/register/', method='post')
-          input(type='hidden', name='_csrf', value=csrfToken)
-          .panel.panel-default
-            .panel-heading
-              h3.panel-title Account Information
-            .panel-body
-              .form-group
-                label(for='first-name') First name
-                input#first-name.form-control(type='text', name='first_name', required, placeholder='First name')
-              .form-group
-                label(for='last-name') Last name
-                input#last-name.form-control(type='text', name='last_name', required, placeholder='Last name')
-              .form-group
-                label(for='email') Email
-                input#email.form-control(type='email', name='username', required, placeholder='Email')
-              .form-group
-                label(for='password') Password (6 character minimum)
-                input#password.form-control(type='password', name='password', pattern='.{6,}', required, placeholder='Password')
-              .form-group
-                label(for='zipcode') Zipcode (ex. 12345)
-                input#zipcode.form-control(type='number', name='zipcode', required, placeholder='12345', min="5")
-              .form-group
-                label(for='phone') Phone
-                input#phone.form-control.phone(type='tel', name='phone', required, pattern='\\(?\\d{3}\\)? ?\\d{3}[\\-]\\d{4}')
-          button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
+                option(value="Austin") Austin Coding Academy
+                option(value="Dallas") Dallas Coding Academy
+                option(value="San Antonio") San Antonio Coding Academy
+                option(value="Houston") Houston Coding Academy
+            .form-group
+              label(for='first-name') First name
+              input#first-name.form-control(type='text', name='first_name', required, placeholder='First name')
+            .form-group
+              label(for='last-name') Last name
+              input#last-name.form-control(type='text', name='last_name', required, placeholder='Last name')
+            .form-group
+              label(for='email') Email
+              input#email.form-control(type='email', name='username', required, placeholder='Email')
+            .form-group
+              label(for='phone') Phone
+              input#phone.form-control.phone(type='tel', name='phone', required, pattern='\\(?\\d{3}\\)? ?\\d{3}[\\-]\\d{4}')
+            .form-group
+              label(for='password') Password (6 character minimum)
+              input#password.form-control(type='password', name='password', pattern='.{6,}', required, placeholder='Password')
+        button.btn.btn-primary.btn-lg.btn-block(type='submit', name='action') Register
 
 block bottom_scripts
   script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.2/js/intlTelInput.min.js')
@@ -155,79 +47,3 @@ block bottom_scripts
         $that.intlTelInput('setNumber', $that.val());
       });
     });
-  if id
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js')
-    script(type='text/javascript').
-      var campuses = {
-        austin: {
-          city: 'Austin',
-          official: 'Kevin Colten'
-        },
-        sanantonio: {
-          city: 'San Antonio',
-          official: 'Dan Cumming'
-        },
-        houston: {
-          city: 'Houston',
-          official: 'Chris Lofton'
-        },
-        dallas: {
-          city: 'Dallas',
-          official: 'Cooper Dukette'
-        }
-      }
-      $('.date-picker').datepicker();
-      $('input.current-date').val(moment().format('ddd, MMM Do, YYYY'));
-      $('span.current-date').text(moment().format('ddd, MMM Do, YYYY'));
-      $('.current-day').text(moment().format('Do'));
-      $('.current-month').text(moment().format('MMMM'));
-      $('.current-year').text(moment().format('YYYY'));
-      $('select#campus-select').change(function() {
-        var code = $(this).find('option:selected').val();
-        $('[name="campus"]').val(campuses[code].city);
-        $('.campus-name').text(campuses[code].city + ' Coding Academy');
-        $('.city').text(campuses[code].city);
-        $('#official-signature').val(campuses[code].official);
-        for (campus in campuses) {
-          $('.' + campus).hide();
-        }
-        $('.' + code + ', #enrollment-agreement').show();
-
-        $.ajax('/api/terms/dates/' + window.location.pathname.split('/')[window.location.pathname.split('/').length - 1], {
-          success: function(dates) {
-            for (city in dates) {
-              campuses[city.toLowerCase().split(' ').join('')].start = dates[city];
-            }
-
-            $('#start-date').val(moment.utc(campuses[code].start).format('ddd, MMM Do, YYYY'));
-            $('#end-date').val(moment.utc(campuses[code].start).add(280, 'days').format('ddd, MMM Do, YYYY'));
-          }
-
-
-        });
-
-        $('#enrollment-agreement form').submit(function(e) {
-          var $enrollmentAgreement = $('#enrollment-agreement').clone();
-          $enrollmentAgreement.find('input:not([type="hidden"]):not([type="password"]):not([type="checkbox"])').each(function() {
-            var $span = $('<span>');
-            $span.html('<br />' + $(this).val());
-            $span.attr('style', $(this).attr('style'));
-            $(this).replaceWith($span);
-          });
-          $enrollmentAgreement.find('input[type="checkbox"]').each(function() {
-            if (this.checked) {
-              $(this).parent().replaceWith($(this).parent().text());
-            } else {
-              $(this).parent().remove();
-            }
-          });
-          $enrollmentAgreement.find('textarea').each(function() {
-            $(this).replaceWith($('<span>').html('<br />' + $(this).text()));
-          });
-          $enrollmentAgreement.find('.flag-container, [type="submit"]').remove();
-          $enrollmentAgreement.find('#password').parent().remove();
-          $(e.currentTarget).prepend('<input type="hidden" name="ea_html" value="' + btoa(unescape(encodeURIComponent($enrollmentAgreement.html()))) + '" />');
-          return true;
-        });
-      });
