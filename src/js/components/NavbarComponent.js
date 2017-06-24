@@ -84,7 +84,7 @@ module.exports = React.createBackboneClass({
               <NavDropdown eventKey={3} title="Admin" id="admin-dropdown" style={{ display: this.display('admin') }}>
                 <MenuItem eventKey={3.1} href="#users">Users</MenuItem>
                 <MenuItem eventKey={3.2} href="#terms">Terms</MenuItem>
-                <MenuItem eventKey={3.3} href="#tracks">Tracks <Label bsStyle="primary">New</Label></MenuItem>
+                <MenuItem eventKey={3.3} href="#tracks">Tracks</MenuItem>
                 <MenuItem eventKey={3.4} href="#locations">Locations</MenuItem>
                 <MenuItem eventKey={3.5} href="#textbooks">Textbooks</MenuItem>
                 <MenuItem divider />

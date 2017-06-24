@@ -4,11 +4,7 @@ const router = express.Router();
 const passport = require('../config/passport');
 const UserModel = require('../models/UserModel');
 const bodyParser = require('body-parser');
-const pdf = require('html-pdf');
-const atob = require('atob');
-const fs = require('fs');
 const fetch = require('node-fetch');
-const btoa = require('btoa');
 const FormData = require('form-data');
 const utils = require('../src/js/utils');
 var nodemailer = require('nodemailer');
@@ -126,9 +122,9 @@ router.post('/register', function(req, res, next) {
           username: req.body.username.toLowerCase(),
           phone: req.body.phone,
           password: hash,
-          zipcode: req.body.zipcode,
           is_client: true,
           is_admin: true,
+          campus: req.body.campus,
           idn: users.length ? users[0].idn + 1 : 1
         });
 
@@ -209,6 +205,8 @@ router.post('/register/:id', function(req, res, next) {
           return res.redirect('/register/' + req.params.id);
         }
 
+        console.log(req.body);
+
         var newUser = new UserModel({
           first_name: req.body.first_name,
           last_name: req.body.last_name,
@@ -218,7 +216,6 @@ router.post('/register/:id', function(req, res, next) {
           is_student: true,
           client: req.params.id,
           idn: users[0].idn + 1,
-          zipcode: req.body.zipcode,
           campus: req.body.campus
         });
 
@@ -228,72 +225,6 @@ router.post('/register/:id', function(req, res, next) {
             req.flash('error', err.message);
             return res.redirect('/register/' + req.params.id);
           }
-
-          var html = `
-            <style>
-            ${fs.readFileSync('public/css/app.css', 'utf8')}
-            </style>
-            ${decodeURIComponent(escape(atob(req.body.ea_html)))}
-          `;
-          const filename = `${user.idn}${user.first_name}${user.last_name}.pdf`
-          pdf.create(html, {}).toFile(`tmp/${filename}`, function(err, res) {
-            if (err) return console.log(err);
-            const path = res.filename;
-            const url = 'https://api.insight.ly/v2.2/Leads/';
-            const headers = {
-              Authorization: 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
-              'Accept-Encoding': 'gzip'
-            };
-
-            fetch(`${url}Search?email=${user.username}`, {
-              method: 'GET',
-              headers
-            }).then(res => {
-              return res.json().then(json => {
-                const key = utils.campusKey(user);
-                const lead = json[0];
-                if (lead) {
-                  user.insightly = lead['LEAD_ID'];
-                  user.save((err, user) => {
-                    var form = new FormData();
-                    form.append('file', fs.createReadStream(path));
-                    form.append('filename', filename);
-                    form.append('content_type', 'application/pdf');
-                    fetch(`${url}${lead['LEAD_ID']}/FileAttachments`, {
-                      method: 'POST',
-                      headers,
-                      body: form
-                    }).then(res => {
-                      return res;
-                    }).catch(function(e) {
-                      console.log(e);
-                    });
-                  });
-                } else {
-                  transport.sendMail({
-                    from: `info@${key}codingacademy.com`,
-                    to: `info@${key}codingacademy.com`,
-                    subject: 'Orphaned Enrollment Agreement',
-                    attachments: [ { path } ]
-                  }, (err, response) => {
-                    if (err) return console.log(err);
-                  });
-                }
-
-                transport.sendMail({
-                  from: `info@${key}codingacademy.com`,
-                  to: user.username,
-                  subject: 'Enrollment Agreement',
-                  html: 'Welcome to Campus Manager! Attached is a copy of your signed Enrollment Agreement.',
-                  attachments: [ { path } ]
-                }, (err, response) => {
-                  if (err) return console.log(err);
-                });
-              });
-            }).catch(function(e) {
-              console.log(e);
-            });
-          });
           console.log('authenticating with rocketchat');
           fetch(`${process.env.ROCKETCHAT_URL}/api/v1/login`, {
             method: 'POST',
