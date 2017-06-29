@@ -254,6 +254,15 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.getModel().get('timeEnd')}
               />
             </FormGroup>
+            <FormGroup controlId="note">
+              <ControlLabel>Note</ControlLabel>
+              <FormControl
+                componentClass="textarea"
+                placeholder="Note..."
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('note')}
+              />
+            </FormGroup>
             <a href="#" className="link-danger" onClick={this.delete}>Delete Course</a>
           </Modal.Body>
           <Modal.Footer>

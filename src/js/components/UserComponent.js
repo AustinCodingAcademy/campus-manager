@@ -275,8 +275,8 @@ module.exports = React.createBackboneClass({
                     </p>
                     <p>
                       <ControlLabel>Special Note</ControlLabel>
-                      <br />
-                      {course.get('location').get('note')}
+                      <div>{course.get('location').get('note')}</div>
+                      <div>{course.get('note')}</div>
                     </p>
                   </Col>
                 </Row>

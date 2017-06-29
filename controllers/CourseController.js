@@ -84,7 +84,8 @@ module.exports = {
         location : req.body.location,
         timeStart : req.body.timeStart,
         timeEnd: req.body.timeEnd,
-        client: currentUser.client
+        client: currentUser.client,
+        note: req.body.note
       });
 
       course.save(function(err, course) {
@@ -136,7 +137,8 @@ module.exports = {
         'term',
         'location',
         'timeStart',
-        'timeEnd'
+        'timeEnd',
+        'note'
       ];
 
       var instructorAttributes = [
