@@ -45,6 +45,9 @@ module.exports = {
               return res.json(500, { message: err.message, error: err });
             }
             if (req.query.format === 'json' || !req.query.format)  {
+              if (req.query.resultsOnly === 'true') {
+                return res.json(rows);
+              }
               return res.json(200, {
                 results: rows,
                 columnHeaders: rows[0] ? Object.keys(rows[0]) : []
