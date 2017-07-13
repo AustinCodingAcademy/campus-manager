@@ -9,6 +9,7 @@ const moment = require('moment');
 require('moment-range');
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGOLAB_URI);
 
 const fileName = 'report.sqlite3';
@@ -114,6 +115,9 @@ function fetchInsightlyLeadStatuses() {
       });
     });
   })
+  .catch(error => {
+    console.log(error);
+  });
 }
 
 function fetchInsightlyLeads(skip) {
@@ -130,23 +134,55 @@ function fetchInsightlyLeads(skip) {
       if (leads.length === 500) {
         fetchInsightlyLeads(skip + 500);
       } else {
-        console.log('generating insightly_leads table');
-        yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
-          db.close();
-          s3.putObject({
-            Bucket: process.env.S3_BUCKET_NAME,
-            Key: `${fileName}`,
-            Body: new Buffer(fs.readFileSync(fileName))
-          }, (err, data) => {
-            if (err) {
-              console.log(err)
-            }  else  {
-              console.log(`Successfully uploaded data to Amazon S3/${process.env.S3_BUCKET_NAME}/${fileName}`);
-            }
-            process.exit();
-          });
-        });
+        console.log('fetching insightly lead notes');
+        fetchInsightlyLeadNotes(0);
       }
     });
+  }).catch(error => {
+    console.log(error);
+  });
+}
+
+function fetchInsightlyLeadNotes(idx) {
+  const lead = insightlyLeads[idx];
+  if (idx % 100 === 0) console.log(idx);
+  fetch(`https://api.insight.ly/v2.2/Leads/${lead.LEAD_ID}/Notes`, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
+      'Accept-Encoding': 'gzip'
+    }
+  }).then(res => {
+    return res.json();
+  })
+  .then(notes => {
+    lead.notes = notes;
+    if (idx < insightlyLeads.length - 1) {
+      fetchInsightlyLeadNotes(++idx);
+    } else {
+      console.log('generating insightly_leads table');
+      yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
+        db.close();
+        uploadDatabase();
+      });
+    }
+  })
+  .catch(error => {
+    console.log(error);
+  })
+}
+
+function uploadDatabase() {
+  s3.putObject({
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `${fileName}`,
+    Body: new Buffer(fs.readFileSync(fileName))
+  }, (err, data) => {
+    if (err) {
+      console.log(err)
+    }  else  {
+      console.log(`Successfully uploaded data to Amazon S3/${process.env.S3_BUCKET_NAME}/${fileName}`);
+    }
+    process.exit();
   });
 }
