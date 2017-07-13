@@ -156,8 +156,9 @@ function fetchInsightlyLeads(skip) {
         fetchInsightlyLeads(skip + 500);
       }, 200);
     } else {
-      console.log('fetching insightly lead notes');
-      fetchInsightlyLeadNotes(0);
+      // console.log('fetching insightly lead notes');
+      // fetchInsightlyLeadNotes(0);
+      createLeadsTable();
     }
   }).catch(error => {
     console.log(error);
