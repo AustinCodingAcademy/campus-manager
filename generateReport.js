@@ -217,6 +217,16 @@ function uploadDatabase() {
     } else {
       console.log(`Successfully uploaded data to Amazon S3/${process.env.S3_BUCKET_NAME}/${fileName}`);
     }
-    process.exit();
+    fetch(process.env.SNITCH_URL, {
+      headers: {
+        'Content-Type': 'application/x-www-url-formencoded'
+      }
+    })
+    .then(() => {
+      process.exit();
+    })
+    .catch(error => {
+      console.log(error);
+    });
   });
 }
