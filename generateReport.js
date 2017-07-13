@@ -182,7 +182,7 @@ function fetchInsightlyLeadNotes(idx) {
       };
       return fetchInsightlyLeadNotes(idx);
     }
-    if ((idx + 1) % 500 === 0) console.log(`fetched notes for ${idx + 1} leads`);
+    if ((idx + 1) % 5 === 0) console.log(`fetched notes for ${idx + 1} leads`);
     lead.NOTES = notes;
     if (idx < insightlyLeads.length - 1) {
       setTimeout(() => {
