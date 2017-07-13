@@ -30,7 +30,8 @@ function generateReport() {
     'locations': require('./models/LocationModel'),
     'terms': require('./models/TermModel'),
     'courses': require('./models/CourseModel'),
-    'textbooks': require('./models/TextbookModel')
+    'textbooks': require('./models/TextbookModel'),
+    'tracks': require('./models/TrackModel')
   };
 
   const tableNames = Object.keys(tables);
