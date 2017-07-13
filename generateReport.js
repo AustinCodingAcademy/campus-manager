@@ -7,6 +7,10 @@ const fetch = require('node-fetch');
 const btoa = require('btoa');
 const moment = require('moment');
 require('moment-range');
+let headers = {
+  'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
+  'Accept-Encoding': 'gzip'
+};
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -103,17 +107,24 @@ function fetchAllStripeCharges(startingAfter) {
 function fetchInsightlyLeadStatuses() {
   fetch('https://api.insight.ly/v2.2/LeadStatuses?converted=true', {
     method: 'GET',
-    headers: {
-      'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
-      'Accept-Encoding': 'gzip'
+    headers
+  })
+  .then(res => {
+    return res.json();
+  })
+  .then(leadStatuses => {
+    if (typeof leadStatuses === 'string') {
+      console.log(leadStatuses);
+      headers = {
+        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+        'Accept-Encoding': 'gzip'
+      };
+      createLeadsTable();
     }
-  }).then(res => {
-    return res.json().then(leadStatuses => {
-      console.log('generating insightly_lead_statuses table');
-      yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
-        console.log('fetching insightly leads');
-        fetchInsightlyLeads(0);
-      });
+    console.log('generating insightly_lead_statuses table');
+    yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
+      console.log('fetching insightly leads');
+      fetchInsightlyLeads(0);
     });
   })
   .catch(error => {
@@ -124,21 +135,30 @@ function fetchInsightlyLeadStatuses() {
 function fetchInsightlyLeads(skip) {
   fetch(`https://api.insight.ly/v2.2/Leads/?converted=true&top=500&skip=${skip}`, {
     method: 'GET',
-    headers: {
-      Authorization: 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
-      'Accept-Encoding': 'gzip'
+    headers
+  })
+  .then(res => {
+    return res.json();
+  })
+  .then(leads => {
+    if (typeof leads === 'string') {
+      console.log(leads);
+      headers = {
+        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+        'Accept-Encoding': 'gzip'
+      };
+      fetchInsightlyLeads(skip);
     }
-  }).then(res => {
-    res.json().then(leads => {
-      Array.prototype.push.apply(insightlyLeads, leads);
-      console.log(`fetched ${leads.length} leads`);
-      if (leads.length === 500) {
+    Array.prototype.push.apply(insightlyLeads, leads);
+    console.log(`fetched ${leads.length} leads`);
+    if (leads.length === 500) {
+      setTimeout(() => {
         fetchInsightlyLeads(skip + 500);
-      } else {
-        console.log('fetching insightly lead notes');
-        fetchInsightlyLeadNotes(0);
-      }
-    });
+      }, 200);
+    } else {
+      console.log('fetching insightly lead notes');
+      fetchInsightlyLeadNotes(0);
+    }
   }).catch(error => {
     console.log(error);
   });
@@ -146,31 +166,43 @@ function fetchInsightlyLeads(skip) {
 
 function fetchInsightlyLeadNotes(idx) {
   const lead = insightlyLeads[idx];
-  if (idx % 100 === 0) console.log(idx);
+  if (idx % 500 === 0) console.log(`fetched notes for ${idx} leads`);
   fetch(`https://api.insight.ly/v2.2/Leads/${lead.LEAD_ID}/Notes`, {
     method: 'GET',
-    headers: {
-      Authorization: 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
-      'Accept-Encoding': 'gzip'
-    }
-  }).then(res => {
+    headers
+  })
+  .then(res => {
     return res.json();
   })
   .then(notes => {
-    lead.notes = notes;
+    if (typeof notes === 'string') {
+      console.log(notes);
+      headers = {
+        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+        'Accept-Encoding': 'gzip'
+      };
+      createLeadsTable();
+    }
+    lead.NOTES = notes;
     if (idx < insightlyLeads.length - 1) {
-      fetchInsightlyLeadNotes(++idx);
+      setTimeout(() => {
+        fetchInsightlyLeadNotes(++idx);
+      }, 200);
     } else {
       console.log('generating insightly_leads table');
-      yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
-        db.close();
-        uploadDatabase();
-      });
+      createLeadsTable();
     }
   })
   .catch(error => {
     console.log(error);
-  })
+  });
+}
+
+function createLeadsTable() {
+  yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
+    db.close();
+    uploadDatabase();
+  });
 }
 
 function uploadDatabase() {
@@ -181,7 +213,7 @@ function uploadDatabase() {
   }, (err, data) => {
     if (err) {
       console.log(err)
-    }  else  {
+    } else {
       console.log(`Successfully uploaded data to Amazon S3/${process.env.S3_BUCKET_NAME}/${fileName}`);
     }
     process.exit();
