@@ -119,7 +119,7 @@ function fetchInsightlyLeadStatuses() {
         'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
         'Accept-Encoding': 'gzip'
       };
-      createLeadsTable();
+      return createLeadsTable();
     }
     console.log('generating insightly_lead_statuses table');
     yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
@@ -147,7 +147,7 @@ function fetchInsightlyLeads(skip) {
         'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
         'Accept-Encoding': 'gzip'
       };
-      fetchInsightlyLeads(skip);
+      return fetchInsightlyLeads(skip);
     }
     Array.prototype.push.apply(insightlyLeads, leads);
     console.log(`fetched ${leads.length} leads`);
@@ -166,7 +166,6 @@ function fetchInsightlyLeads(skip) {
 
 function fetchInsightlyLeadNotes(idx) {
   const lead = insightlyLeads[idx];
-  if (idx % 50 === 0) console.log(`fetched notes for ${idx} leads`);
   fetch(`https://api.insight.ly/v2.2/Leads/${lead.LEAD_ID}/Notes`, {
     method: 'GET',
     headers
@@ -181,8 +180,9 @@ function fetchInsightlyLeadNotes(idx) {
         'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
         'Accept-Encoding': 'gzip'
       };
-      createLeadsTable();
+      return fetchInsightlyLeadNotes(idx);
     }
+    if ((idx + 1) % 500 === 0) console.log(`fetched notes for ${idx + 1} leads`);
     lead.NOTES = notes;
     if (idx < insightlyLeads.length - 1) {
       setTimeout(() => {
