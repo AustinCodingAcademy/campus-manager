@@ -166,7 +166,7 @@ function fetchInsightlyLeads(skip) {
 
 function fetchInsightlyLeadNotes(idx) {
   const lead = insightlyLeads[idx];
-  if (idx % 500 === 0) console.log(`fetched notes for ${idx} leads`);
+  if (idx % 50 === 0) console.log(`fetched notes for ${idx} leads`);
   fetch(`https://api.insight.ly/v2.2/Leads/${lead.LEAD_ID}/Notes`, {
     method: 'GET',
     headers
