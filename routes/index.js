@@ -237,7 +237,7 @@ router.post('/register/:id', function(req, res, next) {
             console.log('authenticating with rocketchat successful');
             response.json().then(login => {
               const password = hashids.encode(Date.now()) + hashids.encode(Date.now());
-              const username = `${user.first_name.toLowerCase()}${user.last_name.toLowerCase()}-${user.idn}`;
+              const username = `${user.first_name.toLowerCase()}${user.last_name.toLowerCase()}-${user.idn}`.split(' ').join('');
               const name = `${user.first_name} ${user.last_name}`;
               console.log('creating user on rocketchat');
               fetch(`${process.env.ROCKETCHAT_URL}/api/v1/users.create`, {
