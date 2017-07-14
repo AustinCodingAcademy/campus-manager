@@ -12,3 +12,4 @@ reports
 faviconData.json
 views/favicon-*
 *.sqlite3
+leadNotes.json
