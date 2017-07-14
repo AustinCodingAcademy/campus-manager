@@ -275,8 +275,8 @@ module.exports = React.createBackboneClass({
                     </p>
                     <p>
                       <ControlLabel>Special Note</ControlLabel>
-                      <div>{course.get('location').get('note')}</div>
-                      <div>{course.get('note')}</div>
+                      <div dangerouslySetInnerHTML={{ __html: course.get('location').get('note') }}></div>
+                      <div dangerouslySetInnerHTML={{ __html: course.get('note') }}></div>
                     </p>
                   </Col>
                 </Row>
