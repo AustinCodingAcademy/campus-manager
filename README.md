@@ -10,8 +10,7 @@
 You first need to setup your environment.
 
 ### Machine Dependencies
-1. Download and install [Node.js](https://nodejs.org/en/) (at least version 8.1.4)
-1. Install [Yarn](https://yarnpkg.com/en/): `sudo npm install yarn --global`
+1. Download and install [Node.js](https://nodejs.org/en/) (at least version 7.2.1)
 
 2.
   * Mac OSX
@@ -33,7 +32,7 @@ You first need to setup your environment.
 ### App Dependencies
 After forking, cloning, and navigating into repository:
 
-1. Install dependencies `yarn install`
+1. Install dependencies `npm install`
 1. Duplicate `.env.example` and name it `.env`
 1. Leave `npm run gulp` running in one terminal session
 1. Navigate to `http://localhost:3000/register` to create a user
