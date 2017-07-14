@@ -19,7 +19,7 @@
     "favicon": "npm run favicon-austin && npm run favicon-sanantonio && npm run favicon-dallas && npm run favicon-houston"
   },
   "engines": {
-    "node": "8.1.4"
+    "node": "7.2.1"
   },
   "dependencies": {
     "atob": "^2.0.3",
