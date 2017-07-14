@@ -156,46 +156,27 @@ function fetchInsightlyLeads(skip) {
         fetchInsightlyLeads(skip + 500);
       }, 200);
     } else {
-      // console.log('fetching insightly lead notes');
-      // fetchInsightlyLeadNotes(0);
-      createLeadsTable();
+      console.log('fetching insightly lead notes');
+      fetchInsightlyLeadNotes();
     }
   }).catch(error => {
     console.log(error);
   });
 }
 
-function fetchInsightlyLeadNotes(idx) {
-  const lead = insightlyLeads[idx];
-  fetch(`https://api.insight.ly/v2.2/Leads/${lead.LEAD_ID}/Notes`, {
-    method: 'GET',
-    headers
-  })
-  .then(res => {
-    return res.json();
-  })
-  .then(notes => {
-    if (typeof notes === 'string') {
-      console.log(notes);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeadNotes(idx);
+function fetchInsightlyLeadNotes() {
+  s3.getObject({
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `leadNotes.json`
+  }, function(err, data) {
+    if (err) console.log(err, err.stack); // an error occurred
+    else {
+      const leadNotes = JSON.parse(data.Body.toString());
+      insightlyLeads.forEach(lead => {
+        lead.NOTES = leadNotes[lead.LEAD_ID];
+      });
     }
-    if ((idx + 1) % 5 === 0) console.log(`fetched notes for ${idx + 1} leads`);
-    lead.NOTES = notes;
-    if (idx < insightlyLeads.length - 1) {
-      setTimeout(() => {
-        fetchInsightlyLeadNotes(++idx);
-      }, 200);
-    } else {
-      console.log('generating insightly_leads table');
-      createLeadsTable();
-    }
-  })
-  .catch(error => {
-    console.log(error);
+    createLeadsTable();
   });
 }
 
