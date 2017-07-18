@@ -28,13 +28,6 @@ module.exports = React.createBackboneClass({
                 &nbsp;Calendar
               </a>
             </Col>
-            <Col xs={4} className="text-center">
-              <a className="btn btn-white" href={process.env.JOBS_URL} target="blank">
-                <FontAwesome name="usd" fixedWidth={true} size="3x" />
-                <br />
-                &nbsp;Jobs
-              </a>
-            </Col>
           </Row>
           <br />
           <br />
