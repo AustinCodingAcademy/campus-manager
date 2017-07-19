@@ -27,6 +27,8 @@ db.serialize(() => {
 
 const stripePayments = [];
 const insightlyLeads = [];
+const schema = {};
+const startTime = Date.now();
 
 function generateReport() {
   const tables = {
@@ -44,9 +46,10 @@ function generateReport() {
     tables[tableName].find({ client: mongoose.Types.ObjectId(process.env.CLIENT) }, (err, documents) => {
       if (err) { console.log(err); }
       console.log(`generating ${tableName} tables`);
-      yosql.createTable(db, tableName, JSON.parse(JSON.stringify(documents)), {}, () => {
+      yosql.createTable(tableName, JSON.parse(JSON.stringify(documents)), schema, () => {
         if (idx < tableNames.length - 1) {
           createTable(++idx);
+          console.log(Date.now() - startTime);
         } else {
           courseDates();
         }
@@ -80,7 +83,7 @@ function courseDates() {
       });
     });
     console.log(`generating course_dates table`);
-    yosql.createTable(db, 'course_dates', dates, {}, () => {
+    yosql.createTable('course_dates', dates, schema, () => {
       console.log('fetching stripe charges');
       fetchAllStripeCharges();
     });
@@ -96,7 +99,7 @@ function fetchAllStripeCharges(startingAfter) {
       fetchAllStripeCharges(charges.data[charges.data.length - 1].id);
     } else {
       console.log('generating stripe_payments table');
-      yosql.createTable(db, 'stripe_payments', stripePayments, {}, () => {
+      yosql.createTable('stripe_payments', stripePayments, schema, () => {
         console.log('fetching insightly lead statuses');
         fetchInsightlyLeadStatuses();
       });
@@ -122,7 +125,7 @@ function fetchInsightlyLeadStatuses() {
       return createLeadsTable();
     }
     console.log('generating insightly_lead_statuses table');
-    yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
+    yosql.createTable('insightly_lead_statuses', leadStatuses, schema, () => {
       console.log('fetching insightly leads');
       fetchInsightlyLeads(0);
     });
@@ -181,9 +184,14 @@ function fetchInsightlyLeadNotes() {
 }
 
 function createLeadsTable() {
-  yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
-    db.close();
-    uploadDatabase();
+  yosql.createTable('insightly_leads', insightlyLeads, schema, () => {
+    Object.keys(schema).forEach(table => {
+      db.exec(schema[table].query.join('; '), error => {
+        if (error) console.error(error);
+        db.close();
+        uploadDatabase();
+      });
+    });
   });
 }
 
