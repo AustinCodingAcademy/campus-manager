@@ -3,7 +3,8 @@ import * as _ from 'underscore';
 const moment = require('moment');
 const StripeCheckoutComponent = require('./StripeCheckoutComponent');
 import {
-  Row, Col, Panel, Table, FormGroup, InputGroup, FormControl, ControlLabel
+  Row, Col, Panel, Table, FormGroup, InputGroup, FormControl, ControlLabel,
+  Tabs, Tab
 } from 'react-bootstrap';
 const Select = require('react-select');
 const CourseOptionComponent = require('./CourseOptionComponent');
@@ -20,7 +21,8 @@ module.exports = React.createBackboneClass({
   getInitialState() {
     return {
       paymentAmount: 0,
-      course: new CourseModel()
+      course: new CourseModel(),
+      tabKey: this.getModel().get('courses').length ? 'tuition' : 'register'
     };
   },
 
@@ -122,6 +124,38 @@ module.exports = React.createBackboneClass({
     });
 
     const balance = (totalPaid - totalCourseCost).toFixed(2);
+    let runningBalance = totalPaid;
+
+    const tuitionSchedule = [];
+    this.getModel().get('courses').forEach((course, idx) => {
+      tuitionSchedule.push(
+        <tr>
+          <td>
+            $490.00
+          </td>
+          <td>
+            {idx > 0 ? moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM Do, YYYY') : moment(course.get('term').get('start_date')).format('ddd, MMM Do, YYYY')}
+          </td>
+          <td>
+            {(runningBalance -= 490) >= 0 ? '$0.00' : (<span className="score60">{`$${(runningBalance - 490 <= -490 ? -490 : runningBalance - 490).toFixed(2)}`}</span>)}
+          </td>
+        </tr>
+      );
+      const courseCost = this.getModel().get('price') - 490;
+      tuitionSchedule.push(
+        <tr>
+          <td>
+            {`$${(courseCost).toFixed(2)}`}
+          </td>
+          <td>
+            {moment(course.get('term').get('start_date')).subtract(1, 'week').format('ddd, MMM Do, YYYY')}
+          </td>
+          <td>
+            {(runningBalance -= courseCost) >= 0 ? '$0.00' : (<span className="score60">{`$${(runningBalance < -courseCost ? -courseCost : runningBalance).toFixed(2)}`}</span>)}
+          </td>
+        </tr>
+      );
+    });
 
     return (
       <Panel
@@ -137,81 +171,91 @@ module.exports = React.createBackboneClass({
       >
         <Row>
           <Col xs={12}>
-            <Table striped>
-              <thead>
-                <tr>
-                  <th>Cost</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>{courseCharges}</tbody>
-              <tfoot></tfoot>
-            </Table>
-          </Col>
-          <Col xs={12}>
-            <Table striped>
-              <thead>
-                <tr>
-                  <th>Paid</th>
-                  <th>Card</th>
-                  <th>Date</th>
-                  <th>Course</th>
-                  <th>ID</th>
-                </tr>
-              </thead>
-              <tbody>{charges}</tbody>
-              <tfoot>
-                <tr>
-                  <th>
-                    <span className={ totalPaid < totalCourseCost ? 'score60' : '' }>
-                      ${balance}
-                    </span>
-                  </th>
-                  <th>Balance</th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tfoot>
-            </Table>
-          </Col>
-          <Col xs={12}>
-            <FormGroup controlId="course-payment">
-              <ControlLabel>
-                1. What are you paying for?
-              </ControlLabel>
-              <Select
-                name="courses"
-                options={options}
-                optionComponent={CourseOptionComponent}
-                placeholder="Select a course"
-                valueComponent={CourseValueComponent}
-                value={this.state.course.id}
-                onChange={this.setValue}
-                id="course-payment"
-                data-test="course-payment"
-              />
-            </FormGroup>
-            <FormGroup controlId="payment-amount">
-              <ControlLabel>
-                2. Enter Payment Amount
-                <small>&nbsp; (Initial deposit must be $490.00 for any course.)</small>
-              </ControlLabel>
-              <InputGroup>
-                <InputGroup.Addon>$</InputGroup.Addon>
-                <FormControl
-                  type="text"
-                  placeholder="0.00"
-                  onChange={this.changeAmount}
+            <Tabs defaultActiveKey={this.state.tabKey} id="account-tabs">
+              <Tab eventKey={'register'} title={this.getModel().get('courses').length ? 'Make A Payment' : 'Register'}>
+                <br />
+                <FormGroup controlId="course-payment">
+                  <ControlLabel>
+                    1. {this.getModel().get('courses').length ? 'What are you paying for?' : 'What course would you like to take?'}
+                  </ControlLabel>
+                  <Select
+                    name="courses"
+                    options={options}
+                    optionComponent={CourseOptionComponent}
+                    placeholder="Select a course"
+                    valueComponent={CourseValueComponent}
+                    value={this.state.course.id}
+                    onChange={this.setValue}
+                    id="course-payment"
+                    data-test="course-payment"
+                  />
+                </FormGroup>
+                <FormGroup controlId="payment-amount">
+                  <ControlLabel>
+                    2. Enter Payment Amount
+                    {
+                      !this.getModel().get('courses').length ?
+                      <small>&nbsp; (Initial deposit must be $490.00 for any course.)</small>
+                      :
+                      ''
+                    }
+                  </ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon>$</InputGroup.Addon>
+                    <FormControl
+                      type="text"
+                      placeholder="0.00"
+                      onChange={this.changeAmount}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <StripeCheckoutComponent
+                  model={this.getModel()}
+                  paymentAmount={this.state.paymentAmount}
+                  course={this.state.course}
+                  currentUser={this.props.currentUser}
+                  balance={balance}
                 />
-              </InputGroup>
-            </FormGroup>
-            <StripeCheckoutComponent
-              model={this.getModel()}
-              paymentAmount={this.state.paymentAmount}
-              course={this.state.course}
-              currentUser={this.props.currentUser}
-              balance={balance}
-            />
+              </Tab>
+              <Tab eventKey={'tuition'} title="Tuition Schedule">
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th>Tuition</th>
+                      <th>Due Date</th>
+                      <th>Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>{tuitionSchedule}</tbody>
+                </Table>
+              </Tab>
+              <Tab eventKey={'invoice'} title="Invoice">
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th>Invoice</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>{courseCharges}</tbody>
+                  <tfoot></tfoot>
+                </Table>
+              </Tab>
+              <Tab eventKey={'payments'} title="Payments">
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th>Paid</th>
+                      <th>Card</th>
+                      <th>Date</th>
+                      <th>Course</th>
+                      <th>ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>{charges}</tbody>
+                </Table>
+              </Tab>
+            </Tabs>
           </Col>
         </Row>
       </Panel>
