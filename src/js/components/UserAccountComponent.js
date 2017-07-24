@@ -59,7 +59,9 @@ module.exports = React.createBackboneClass({
       }
     });
 
+    let credits = 0;
     this.getModel().get('credits').forEach((credit, idx) => {
+      credits += credit.amount;
       totalCourseCost -= Number(credit.amount);
       courseCharges.push(
         <tr key={idx}>
@@ -124,12 +126,18 @@ module.exports = React.createBackboneClass({
     });
 
     const balance = (totalPaid - totalCourseCost).toFixed(2);
-    let runningBalance = totalPaid;
+    let runningBalance = totalPaid + credits;
 
     const tuitionSchedule = [];
     this.getModel().get('courses').forEach((course, idx) => {
       tuitionSchedule.push(
         <tr>
+          <td>
+            {course.get('term').get('name')}
+          </td>
+          <td>
+            {course.get('name')}
+          </td>
           <td>
             $490.00
           </td>
@@ -144,6 +152,8 @@ module.exports = React.createBackboneClass({
       const courseCost = this.getModel().get('price') - 490;
       tuitionSchedule.push(
         <tr>
+          <td></td>
+          <td></td>
           <td>
             {`$${(courseCost).toFixed(2)}`}
           </td>
@@ -221,6 +231,8 @@ module.exports = React.createBackboneClass({
                 <Table striped>
                   <thead>
                     <tr>
+                      <th>Term</th>
+                      <th>Course</th>
                       <th>Tuition</th>
                       <th>Due Date</th>
                       <th>Balance</th>
