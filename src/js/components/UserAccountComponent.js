@@ -61,7 +61,7 @@ module.exports = React.createBackboneClass({
 
     let credits = 0;
     this.getModel().get('credits').forEach((credit, idx) => {
-      credits += credit.amount;
+      credits += Number(credit.amount);
       totalCourseCost -= Number(credit.amount);
       courseCharges.push(
         <tr key={idx}>
