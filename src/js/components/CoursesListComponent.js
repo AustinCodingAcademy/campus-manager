@@ -54,6 +54,7 @@ module.exports = React.createBackboneClass({
               <a href="#" onClick={this.show} data-id={course.id}>{course.get('name')}</a>
             </div>
           </Td>
+          <Td column="Section">{course.get('section')}</Td>
           <Td column="Textbook">{course.get('textbook').get('name')}</Td>
           <Td column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
           <Td column="Term">{course.get('term').get('name')}</Td>
@@ -98,6 +99,7 @@ module.exports = React.createBackboneClass({
             >
               <Thead>
                 <Th>Name</Th>
+                <Th>Section</Th>
                 <Th>Textbook</Th>
                 <Th>Location</Th>
                 <Th>Term</Th>

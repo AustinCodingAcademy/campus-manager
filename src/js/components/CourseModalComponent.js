@@ -175,6 +175,14 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.getModel().get('name')}
               />
             </FormGroup>
+            <FormGroup controlId="section">
+              <ControlLabel>Section</ControlLabel>
+              <FormControl
+                type="number"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('section')}
+              />
+            </FormGroup>
             <FormGroup controlId="textbook">
               <ControlLabel>Textbook</ControlLabel>
               <Select

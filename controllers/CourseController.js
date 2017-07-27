@@ -75,6 +75,7 @@ module.exports = {
     }).populate('client').exec(function(err, currentUser) {
       var course = new CourseModel({
         name : req.body.name,
+        section: req.body.section,
         term : req.body.term,
         days : req.body.days,
         seats : req.body.seats,
@@ -138,7 +139,8 @@ module.exports = {
         'location',
         'timeStart',
         'timeEnd',
-        'note'
+        'note',
+        'section'
       ];
 
       var instructorAttributes = [
