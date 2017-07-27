@@ -43,7 +43,7 @@ module.exports = React.createBackboneClass({
       track.get('courses').sort();
       const courses = track.get('courses').map((course, idx) => {
         enrollments.push(course.get('registrations').length);
-        return (<div key={`${track.id}-${course.id}`}>{idx + 1}. {course.get('term').get('name')} - {course.get('name')}</div>);
+        return (<div key={`${track.id}-${course.id}`}>{idx + 1}. {course.get('term').get('name')} - {course.get('name')} - Section {course.get('section')} - {course.properDays()}</div>);
       });
       return (
         <Tr key={track.id}>
