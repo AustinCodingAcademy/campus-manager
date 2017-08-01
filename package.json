@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npm prune",
-    "postinstall": "if [ $(echo $NODE_ENV) == 'production' ]; then npm install git+ssh://git@gitlab.com:kevincolten/yosql.git#cf1e0e41; fi && npm rebuild && npm run favicon && npm run gulp build",
+    "postinstall": "if [ $(echo $NODE_ENV) = 'production' ]; then npm install git+ssh://git@gitlab.com:kevincolten/yosql.git#cf1e0e41; fi && npm rebuild && npm run favicon && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
     "test": "gulp build && gulp test",
