@@ -36,7 +36,7 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '200kb' }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -70,6 +70,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
+app.use('/api/queries', require('./routes/queries'));
 app.use(csrf({cookie: true}));
 // compress all responses
 app.use(compression({ threshold: 0 }))
