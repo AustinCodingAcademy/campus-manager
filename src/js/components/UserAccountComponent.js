@@ -142,7 +142,7 @@ module.exports = React.createBackboneClass({
             $490.00
           </td>
           <td>
-            {idx > 0 ? moment(course.get('term').get('start_date')).format('ddd, MMM Do, YYYY') : moment(course.get('term').get('start_date')).format('ddd, MMM Do, YYYY')}
+            {idx > 0 ? moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM Do, YYYY') : moment(course.get('term').get('start_date')).format('ddd, MMM Do, YYYY')}
           </td>
           <td>
             {(runningBalance -= 490) >= 0 ? '$0.00' : (<span className="score60">{`$${(runningBalance - 490 <= -490 ? -490 : runningBalance - 490).toFixed(2)}`}</span>)}
@@ -158,7 +158,7 @@ module.exports = React.createBackboneClass({
             {`$${(courseCost).toFixed(2)}`}
           </td>
           <td>
-            {moment(course.get('term').get('start_date')).subtract(1, 'week').format('ddd, MMM Do, YYYY')}
+            {moment(course.get('term').get('start_date')).subtract('week').format('ddd, MMM Do, YYYY')}
           </td>
           <td>
             {(runningBalance -= courseCost) >= 0 ? '$0.00' : (<span className="score60">{`$${(runningBalance < -courseCost ? -courseCost : runningBalance).toFixed(2)}`}</span>)}
