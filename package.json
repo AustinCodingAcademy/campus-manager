@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npm prune",
-    "postinstall": "npm rebuild && npm run favicon && npm run gulp build",
+    "postinstall": "if [ $(echo $NODE_ENV) = 'production' ]; then npm install git+ssh://git@gitlab.com:kevincolten/yosql.git#cf1e0e41; fi && npm rebuild && npm run favicon && npm run gulp build",
     "start": "node ./bin/www",
     "gulp": "gulp",
     "test": "gulp build && gulp test",
@@ -125,8 +125,7 @@
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
     "watchify": "^3.7.0",
-    "whatwg-fetch": "^2.0.1",
-    "yosql": "github:kevincolten/yosql#cf1e0e4171153d50e0f0eae43a3c2baa30691287"
+    "whatwg-fetch": "^2.0.1"
   },
   "browser": {
     "jquery": "jquery",
