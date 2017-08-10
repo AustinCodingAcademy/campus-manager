@@ -119,10 +119,38 @@ function fetchInsightlyLeadStatuses() {
         'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
         'Accept-Encoding': 'gzip'
       };
-      return createLeadsTable();
+      return fetchInsightlyLeadStatuses();
     }
     console.log('generating insightly_lead_statuses table');
     yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
+      console.log('fetching insightly custom fields');
+      fetchInsightlyCustomFields();
+    });
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+
+function fetchInsightlyCustomFields() {
+  fetch('https://api.insight.ly/v2.2/CustomFields', {
+    method: 'GET',
+    headers
+  })
+  .then(res => {
+    return res.json();
+  })
+  .then(customFields => {
+    if (typeof customFields === 'string') {
+      console.log(customFields);
+      headers = {
+        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+        'Accept-Encoding': 'gzip'
+      };
+      return fetchInsightlyCustomFields();
+    }
+    console.log('generating insightly_custom_fields table');
+    yosql.createTable(db, 'insightly_custom_fields', customFields, {}, () => {
       console.log('fetching insightly leads');
       fetchInsightlyLeads(0);
     });
