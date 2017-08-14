@@ -197,11 +197,31 @@ function fetchInsightlyLeadNotes() {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: `leadNotes.json`
   }, function(err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
-    else {
+    if (err) {
+      console.log(err, err.stack); // an error occurred
+      return fetchInsightlyLeadAttachments();
+    } else {
       const leadNotes = JSON.parse(data.Body.toString());
       insightlyLeads.forEach(lead => {
         lead.NOTES = leadNotes[lead.LEAD_ID];
+      });
+    }
+    fetchInsightlyLeadAttachments();
+  });
+}
+
+function fetchInsightlyLeadAttachments() {
+  s3.getObject({
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `leadAttachments.json`
+  }, function(err, data) {
+    if (err) {
+      console.log(err, err.stack); // an error occurred
+      return createLeadsTable();
+    } else {
+      const leadAttachments = JSON.parse(data.Body.toString());
+      insightlyLeads.forEach(lead => {
+        lead.FILE_ATTACHMENTS = leadAttachments[lead.LEAD_ID];
       });
     }
     createLeadsTable();
