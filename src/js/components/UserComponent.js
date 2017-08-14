@@ -209,6 +209,17 @@ module.exports = React.createBackboneClass({
       const withdrawal = course.get('withdrawals').find(wd => {
         return wd.userId === this.getModel().id;
       });
+      let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM D')}</span>;
+      if (withdrawal) {
+        textbook = <span>Withdrawn</span>;
+      } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(2, 'week'))) {
+        textbook = (
+          <a href={course.get('textbook').get('student_url')} target="_blank">
+            <FontAwesome name="book" fixedWidth={true} />
+            &nbsp; {course.get('textbook').get('name')}
+          </a>
+        );
+      }
       return (
         <Panel
           key={course.id}
@@ -240,10 +251,7 @@ module.exports = React.createBackboneClass({
                     <p>
                       <ControlLabel>Textbook</ControlLabel>
                       <br />
-                      <a href={course.get('textbook').get('student_url')} target="_blank">
-                        <FontAwesome name="book" fixedWidth={true} />
-                        &nbsp; {course.get('textbook').get('name')}
-                      </a>
+                      {textbook}
                     </p>
                     <p>
                       <ControlLabel>Virtual Classroom</ControlLabel>
