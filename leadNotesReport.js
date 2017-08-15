@@ -27,13 +27,17 @@ function fetchInsightlyLeads(skip) {
     return res.json();
   })
   .then(leads => {
-    if (typeof leads === 'string') {
-      console.log(leads);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeads(skip);
+    if (typeof leadStatuses === 'string') {
+      console.log(leadStatuses);
+      if (leadStatuses.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyLeads();
+      } else {
+        return process.exit();
+      }
     }
     Array.prototype.push.apply(insightlyLeads, leads);
     console.log(`fetched ${leads.length} leads`);
@@ -62,11 +66,15 @@ function fetchInsightlyLeadNotes(idx) {
   .then(notes => {
     if (typeof notes === 'string') {
       console.log(notes);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeadNotes(idx);
+      if (notes.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyLeadNotes();
+      } else {
+        return process.exit();
+      }
     }
     if ((idx + 1) % 500 === 0) console.log(`fetched notes for ${idx + 1} leads`);
     insightlyLeadNotes[lead.LEAD_ID] = notes;

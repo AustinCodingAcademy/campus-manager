@@ -29,11 +29,15 @@ function fetchInsightlyLeads(skip) {
   .then(leads => {
     if (typeof leads === 'string') {
       console.log(leads);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeads(skip);
+      if (leads.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyLeads();
+      } else {
+        return process.exit();
+      }
     }
     Array.prototype.push.apply(insightlyLeads, leads);
     console.log(`fetched ${leads.length} leads`);
@@ -66,11 +70,15 @@ function fetchInsightlyLeadAttachments(idx) {
   .then(attachments => {
     if (typeof attachments === 'string') {
       console.log(attachments);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeadAttachments(idx);
+      if (attachments.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyLeadAttachments();
+      } else {
+        return process.exit();
+      }
     }
     if ((idx + 1) % 500 === 0) console.log(`fetched attachments for ${idx + 1} leads`);
     insightlyLeadAttachments[lead.LEAD_ID] = attachments;

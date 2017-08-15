@@ -115,11 +115,16 @@ function fetchInsightlyLeadStatuses() {
   .then(leadStatuses => {
     if (typeof leadStatuses === 'string') {
       console.log(leadStatuses);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeadStatuses();
+      if (leadStatuses.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyLeadStatuses();
+      } else {
+        db.close();
+        return uploadDatabase();
+      }
     }
     console.log('generating insightly_lead_statuses table');
     yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
@@ -143,11 +148,16 @@ function fetchInsightlyCustomFields() {
   .then(customFields => {
     if (typeof customFields === 'string') {
       console.log(customFields);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyCustomFields();
+      if (customFields.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyCustomFields();
+      } else {
+        db.close();
+        return uploadDatabase();
+      }
     }
     console.log('generating insightly_custom_fields table');
     yosql.createTable(db, 'insightly_custom_fields', customFields, {}, () => {
@@ -171,11 +181,16 @@ function fetchInsightlyLeads(skip) {
   .then(leads => {
     if (typeof leads === 'string') {
       console.log(leads);
-      headers = {
-        'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-        'Accept-Encoding': 'gzip'
-      };
-      return fetchInsightlyLeads(skip);
+      if (leads.contains('Second')) {
+        headers = {
+          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+          'Accept-Encoding': 'gzip'
+        };
+        return fetchInsightlyLeads(skip);
+      } else {
+        db.close();
+        return uploadDatabase();
+      }
     }
     Array.prototype.push.apply(insightlyLeads, leads);
     console.log(`fetched ${leads.length} leads`);
