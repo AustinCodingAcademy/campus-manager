@@ -22,7 +22,10 @@ module.exports = React.createBackboneClass({
     return {
       paymentAmount: 0,
       course: new CourseModel(),
-      tabKey: this.getModel().get('courses').length ? 'tuition' : 'register'
+      tabKey: this.getModel().get('courses').length ? 'tuition' : 'register',
+      dayFilter: null,
+      nameFilter: null,
+      locationFilter: null
     };
   },
 
@@ -39,7 +42,7 @@ module.exports = React.createBackboneClass({
   },
 
   render() {
-    const courses = new CoursesCollection();
+    let courses = new CoursesCollection();
     courses.comparator = courses.reverse;
     const currentCourse = this.getModel().currentCourse();
     const futureCourse = this.getModel().futureCourse();
@@ -120,6 +123,12 @@ module.exports = React.createBackboneClass({
     });
 
     const options = [];
+
+    courses = new CoursesCollection(courses.filter(course => {
+      return course.get('name').includes('panda');
+    }));
+
+    console.log(courses)
 
     courses.each(course => {
       const label = `${course.get('name')}
