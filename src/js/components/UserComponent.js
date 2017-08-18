@@ -212,7 +212,7 @@ module.exports = React.createBackboneClass({
       let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM D')}</span>;
       if (withdrawal) {
         textbook = <span>Withdrawn</span>;
-      } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(2, 'week'))) {
+      } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(2, 'week')) || course.get('name').toLowerCase().includes('intro')) {
         textbook = (
           <a href={course.get('textbook').get('student_url')} target="_blank">
             <FontAwesome name="book" fixedWidth={true} />
