@@ -115,17 +115,18 @@ module.exports = React.createBackboneClass({
       filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
       filters[filter] = filters[filter].map(option => {
         return (
-          <Radio name={filter} inline>
+          <Radio name={filter} onChange={e => console.log(option)} inline>
             {option}
           </Radio>
         )
       })
     });
-
+//filters.Courses[x].props.children is the location of the coursename
     const options = [];
-
+    
+      console.log
     courses = new CoursesCollection(courses.filter(course => {
-      return course.get('name').includes('panda');
+      return course.get('name').includes(filters.Courses;
     }));
 
     console.log(courses)
