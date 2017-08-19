@@ -41,6 +41,16 @@ module.exports = React.createBackboneClass({
     });
   },
 
+
+ setNameFilter(e) {
+   let name = e.currentTarget.nextSibling.nextSibling.data;
+   let filt = e.currentTarget.name;
+   console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
+   this.setState({
+     nameFilter: name
+  });
+  }, 
+
   render() {
     let courses = new CoursesCollection();
     courses.comparator = courses.reverse;
@@ -115,7 +125,7 @@ module.exports = React.createBackboneClass({
       filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
       filters[filter] = filters[filter].map(option => {
         return (
-          <Radio name={filter} onChange={console.log(option)}
+          <Radio name={filter} onClick={this.setNameFilter} 
               inline>
             {option}
           </Radio>
@@ -126,9 +136,9 @@ module.exports = React.createBackboneClass({
        
 const options = [];
     
-      console.log(filters.Courses[0].value)
+      
     courses = new CoursesCollection(courses.filter(course => {
-      return course.get('name').includes(this.state.dayFilter);
+      return course.get('name').includes(this.state.nameFilter);
     }));
 
     console.log(courses)
