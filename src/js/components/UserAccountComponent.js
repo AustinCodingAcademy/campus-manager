@@ -41,23 +41,6 @@ module.exports = React.createBackboneClass({
     });
   },
 
-//for date time look at days property of course and start/end time
- setFilter(e) {
-   let nameOrTime = e.currentTarget.nextSibling.nextSibling.data;
-   let filt = e.currentTarget.name;
-   if(filt === 'Courses'){
-     this.setState({
-       nameFilter: name
-     })
-    }
-   else if(filt === 'Days/Times')
-    console.log(nameOrTime)
-   console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
-  //  this.setState({
-  //    nameFilter: name
-  // });
-  }, 
-
   render() {
     let courses = new CoursesCollection();
     courses.comparator = courses.reverse;
@@ -132,20 +115,17 @@ module.exports = React.createBackboneClass({
       filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
       filters[filter] = filters[filter].map(option => {
         return (
-          <Radio name={filter} onClick={this.setFilter} 
-              inline>
+          <Radio name={filter} inline>
             {option}
           </Radio>
         )
       })
     });
 
-       
-const options = [];
-    
-      
+    const options = [];
+      filters.Courses.map(x => )
     courses = new CoursesCollection(courses.filter(course => {
-      return course.get('name').includes(this.state.nameFilter);
+      return course.get('name').includes('panda');
     }));
 
     console.log(courses)
