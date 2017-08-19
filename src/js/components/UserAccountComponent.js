@@ -40,7 +40,22 @@ module.exports = React.createBackboneClass({
       paymentAmount: Number(e.currentTarget.value) * 100
     });
   },
-
+  setFilter(e) {
+    let nameOrTime = e.currentTarget.nextSibling.nextSibling.data;
+    let filt = e.currentTarget.name;
+    if(filt === 'Courses'){
+      this.setState({
+        nameFilter: name
+      })
+     }
+    else if(filt === 'Days/Times')
+     console.log(nameOrTime)
+    console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
+   //  this.setState({
+   //    nameFilter: name
+   // });
+   }, 
+   
   render() {
     let courses = new CoursesCollection();
     courses.comparator = courses.reverse;
@@ -123,10 +138,10 @@ module.exports = React.createBackboneClass({
     });
 
     const options = [];
-      filters.Courses.map(x => )
     courses = new CoursesCollection(courses.filter(course => {
-      return course.get('name').includes('panda');
+      return course.get('name').includes(this.state.nameFilter);
     }));
+
 
     console.log(courses)
 
