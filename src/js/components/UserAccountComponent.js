@@ -45,15 +45,18 @@ module.exports = React.createBackboneClass({
     let filt = e.currentTarget.name;
     if(filt === 'Courses'){
       this.setState({
-        nameFilter: name
+        nameFilter: nameOrTime
       })
+      console.log(this.state.nameFilter);
      }
     else if(filt === 'Days/Times')
      console.log(nameOrTime)
     console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
-   //  this.setState({
-   //    nameFilter: name
-   // });
+      this.setState({
+        dayFilter: nameOrTime
+      });
+    console.log(this.state.dayFilter);
+  
    }, 
    
   render() {
@@ -130,7 +133,7 @@ module.exports = React.createBackboneClass({
       filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
       filters[filter] = filters[filter].map(option => {
         return (
-          <Radio name={filter} inline>
+          <Radio name={filter} onClick={this.setFilter} inline>
             {option}
           </Radio>
         )
