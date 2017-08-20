@@ -52,12 +52,14 @@ module.exports = React.createBackboneClass({
     else if(filt === 'Days/Times')
      console.log(nameOrTime)
     console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
-      this.setState({
+     nameOrTime = nameOrTime.split(",");
+     console.log(nameOrTime+"split"); 
+    this.setState({
         dayFilter: nameOrTime
       });
     console.log(this.state.dayFilter);
   
-   }, 
+    }, 
    
   render() {
     let courses = new CoursesCollection();
@@ -131,20 +133,41 @@ module.exports = React.createBackboneClass({
 
     Object.keys(filters).forEach(filter => {
       filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
-      filters[filter] = filters[filter].map(option => {
+      filters[filter] = filters[filter].map((option,i) => {
         return (
-          <Radio name={filter} onClick={this.setFilter} inline>
+          <Radio key={i} name={filter} onClick={this.setFilter} inline>
             {option}
           </Radio>
         )
       })
     });
+    // let filtCourse = courses; 
+    //   if(this.state.nameFilter){    
+    //   filtCourse = courses.get('name').filter(course => {
+    //     return course.name === this.state.nameFilter; 
+    //   })
+    //  console.log(filtCourse);
+    // }   // if(this.state.dayFilter){
+      //   filtCourse = courses.get('day').filter(course => {
+      //     return course.days === this.state.dayFilter;
+      //   });
+   
 
     const options = [];
     courses = new CoursesCollection(courses.filter(course => {
-      return course.get('name').includes(this.state.nameFilter);
+      
+      //  if(this.state.nameFilter) 
+      //    return course.get('name') === (this.state.nameFilter)
+      
+      // }));
+       if(this.state.dayFilter){
+        //  let dayfilter = this.state.dayFilter.split(' ');
+        return course.get('days').includes(this.state.dayFilter[0]);
+       }
     }));
-
+     
+      
+      
 
     console.log(courses)
 
