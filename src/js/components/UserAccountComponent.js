@@ -51,11 +51,12 @@ module.exports = React.createBackboneClass({
      }
     else if(filt === 'Days/Times')
      console.log(nameOrTime)
-    console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
-     nameOrTime = nameOrTime.split(",");
-     console.log(nameOrTime+"split"); 
-    this.setState({
-        dayFilter: nameOrTime
+     console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
+     let days = nameOrTime.split(",");
+     days[1] = days[1].slice(0,5).trim();
+     console.log(days); 
+      this.setState({
+        dayFilter: days
       });
     console.log(this.state.dayFilter);
   
