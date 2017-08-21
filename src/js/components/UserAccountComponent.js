@@ -156,16 +156,19 @@ module.exports = React.createBackboneClass({
     const options = [];
     courses = new CoursesCollection(courses.filter(course => {
       
-      //  if(this.state.nameFilter) 
-      //    return course.get('name') === (this.state.nameFilter)
-   
+       if(this.state.nameFilter) {
+         return course.get('name') === (this.state.nameFilter)
+       }
        if(this.state.dayFilter){
         //  let dayfilter = this.state.dayFilter.split(' ');
-        return course.get('days').includes(this.state.dayFilter[0]);
-       } else {
-         return true;
-       }
-    }));
+         if(course.get('days').includes(this.state.dayFilter[0] || this.state.dayFilter[1])){
+          return course.get('days').includes(this.state.dayFilter[0])
+       }else{
+         return true
+        }
+
+    }
+  }));
      
       
       
