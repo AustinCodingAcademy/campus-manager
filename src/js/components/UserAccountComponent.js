@@ -48,19 +48,18 @@ module.exports = React.createBackboneClass({
         nameFilter: nameOrTime
       })
       console.log(this.state.nameFilter);
-     }
-    else if(filt === 'Days/Times')
-     console.log(nameOrTime)
-     console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
-     let days = nameOrTime.split(",");
-     days[1] = days[1].slice(0,5).trim();
-     console.log(days); 
+    } else if(filt === 'Days/Times') {
+      console.log(nameOrTime)
+      console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
+      let days = nameOrTime.split(",");
+      days[1] = days[1].slice(0,5).trim();
+      console.log(days); 
       this.setState({
         dayFilter: days
       });
     console.log(this.state.dayFilter);
-  
-    }, 
+    }
+  }, 
    
   render() {
     let courses = new CoursesCollection();
@@ -159,12 +158,12 @@ module.exports = React.createBackboneClass({
       
       //  if(this.state.nameFilter) 
       //    return course.get('name') === (this.state.nameFilter)
-      
-      
-
+   
        if(this.state.dayFilter){
         //  let dayfilter = this.state.dayFilter.split(' ');
         return course.get('days').includes(this.state.dayFilter[0]);
+       } else {
+         return true;
        }
     }));
      
