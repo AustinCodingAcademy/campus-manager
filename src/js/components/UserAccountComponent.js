@@ -164,7 +164,8 @@ module.exports = React.createBackboneClass({
 
        if(this.state.dayFilter){
         //  let dayfilter = this.state.dayFilter.split(' ');
-        return course.get('days').includes(this.state.dayFilter[0]);
+         if(course.get('days').includes(this.state.dayFilter[0]));
+          console.log(course.get('days').includes(this.state.dayFilter[0]))
        }
     }));
      
