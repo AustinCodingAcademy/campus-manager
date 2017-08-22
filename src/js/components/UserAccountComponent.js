@@ -141,34 +141,28 @@ module.exports = React.createBackboneClass({
         )
       })
     });
-    // let filtCourse = courses; 
-    //   if(this.state.nameFilter){    
-    //   filtCourse = courses.get('name').filter(course => {
-    //     return course.name === this.state.nameFilter; 
-    //   })
-    //  console.log(filtCourse);
-    // }   // if(this.state.dayFilter){
-      //   filtCourse = courses.get('day').filter(course => {
-      //     return course.days === this.state.dayFilter;
-      //   });
-   
+    
 
     const options = [];
-    courses = new CoursesCollection(courses.filter(course => {
-      
-       if(this.state.nameFilter) {
-         return course.get('name') === (this.state.nameFilter)
-       }
-       if(this.state.dayFilter){
-        //  let dayfilter = this.state.dayFilter.split(' ');
-         if(course.get('days').includes(this.state.dayFilter[0] || this.state.dayFilter[1])){
-          return course.get('days').includes(this.state.dayFilter[0])
-       }else{
-         return true
+    if(this.state.nameFilter){
+      courses = new CoursesCollection(courses.filter(course => {
+        {
+          return course.get('name') === (this.state.nameFilter);
         }
-
+      }));
     }
-  }));
+
+     if(this.state.dayFilter){
+      courses = new CoursesCollection(courses.filter(course => {
+        let days = course.shortDays().split(',');
+        let day = this.state.dayFilter;
+       if(days.includes((day[0]) && (day[1]))){
+          return course;
+       }
+        
+      }))
+  
+    };
      
       
       
@@ -363,4 +357,4 @@ module.exports = React.createBackboneClass({
       </Panel>
     );
   }
-});
+})
