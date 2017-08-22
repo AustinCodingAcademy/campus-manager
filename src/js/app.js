@@ -12,7 +12,6 @@ const $ = window.$ = window.jQuery = require('jquery');
 
 const UserModel = require('./models/UserModel');
 const TermModel = require('./models/TermModel');
-const ReportModel = require('./models/ReportModel');
 const CourseModel = require('./models/CourseModel');
 
 const TermsCollection = require('./collections/TermsCollection');
