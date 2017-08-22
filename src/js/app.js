@@ -32,7 +32,6 @@ const TracksListComponent = React.createFactory(require('./components/TracksList
 const TextbooksListComponent = React.createFactory(require('./components/TextbooksListComponent'));
 const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 const UserComponent = React.createFactory(require('./components/UserComponent'));
-const ReportComponent = React.createFactory(require('./components/ReportComponent'));
 const SettingsComponent = React.createFactory(require('./components/SettingsComponent'));
 
 document.addEventListener('DOMContentLoaded', () => {
