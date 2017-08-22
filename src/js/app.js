@@ -34,11 +34,9 @@ const TextbooksListComponent = React.createFactory(require('./components/Textboo
 const RegistrationsListComponent = React.createFactory(require('./components/RegistrationsListComponent'));
 const UserComponent = React.createFactory(require('./components/UserComponent'));
 const ReportComponent = React.createFactory(require('./components/ReportComponent'));
+const SettingsComponent = React.createFactory(require('./components/SettingsComponent'));
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.addEventListener('error', function (e) {
-    console.log(e.error);
-  });
   $(document).ajaxError(function(e, xhr) {
     if (xhr.status === 401) {
       window.location.replace('/login');
@@ -64,7 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'courses/:id': 'course',
       'registrations': 'registrations',
       'report': 'report',
-      'report/:query': 'report'
+      'report/:query': 'report',
+      'settings': 'settings'
     },
 
     currentUser: new UserModel(JSON.parse(document.querySelector('[data-bootstrap]').getAttribute('data-bootstrap'))),
@@ -111,6 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
       var terms = new TermsCollection();
       terms.fetch();
       ReactDOM.render(TermsListComponent({ collection: terms }), document.getElementById('container'));
+    },
+
+    settings: function() {
+      ReactDOM.render(SettingsComponent({ model: this.currentUser }), document.getElementById('container'));
     },
 
     users: function() {

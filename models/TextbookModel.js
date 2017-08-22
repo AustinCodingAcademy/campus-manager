@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const version = require('mongoose-version');
+const mongooseDelete = require('mongoose-delete');
 
 const textbookSchema = new Schema({
   name: String,
@@ -13,5 +14,11 @@ const textbookSchema = new Schema({
 }, { timestamps: true });
 
 textbookSchema.plugin(version, { collection: 'textbooks__versions' });
+
+textbookSchema.plugin(mongooseDelete, {
+  deletedAt : true,
+  overrideMethods: true,
+  indexFields: true
+});
 
 module.exports = mongoose.model('textbook', textbookSchema);

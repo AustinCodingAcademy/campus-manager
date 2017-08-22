@@ -4,8 +4,6 @@ import {
   Navbar, Nav, NavItem, NavDropdown, MenuItem, Button, Label
 } from 'react-bootstrap';
 const FontAwesome = require('react-fontawesome');
-const AppsModalComponent = require('./AppsModalComponent');
-const FeedbackModalComponent = require('./FeedbackModalComponent');
 
 module.exports = React.createBackboneClass({
   links: {
@@ -46,27 +44,13 @@ module.exports = React.createBackboneClass({
   },
 
   render () {
-    let key = 'austin';
-    const parser = document.createElement('a');
-    parser.href = window.location.href;
-    switch (parser.hostname.split('.')[parser.hostname.split('.').length - 2]) {
-      case 'sanantoniocodingacademy':
-        key = 'sanantonio';
-        break;
-      case 'dallascodingacademy':
-        key = 'dallas';
-        break;
-      case 'houstontxcodingacademy':
-        key = 'houstontx';
-        break;
-    }
     return(
       <div>
         <Navbar collapseOnSelect fluid>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">
-                <img src={`/img/${key}-logo.svg`} />
+                <img src={''} />
                 Campus Manager
               </a>
             </Navbar.Brand>
@@ -74,11 +58,6 @@ module.exports = React.createBackboneClass({
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <li role="presentation">
-                <a href='#' onClick={this.openAppsModal}>
-                  <FontAwesome name="th" />
-                </a>
-              </li>
               <li role="presentation"><a href='#'>Dashboard</a></li>
               <li role="presentation" style={{ display: this.display('courses') }}><a href='#courses'>Courses</a></li>
               <NavDropdown eventKey={3} title="Admin" id="admin-dropdown" style={{ display: this.display('admin') }}>
@@ -89,12 +68,7 @@ module.exports = React.createBackboneClass({
                 <MenuItem eventKey={3.5} href="#textbooks">Textbooks</MenuItem>
                 <MenuItem divider />
                 <MenuItem eventKey={3.6} href="#registrations">Registrations</MenuItem>
-                {
-                process.env.REPORTING ?
-                <MenuItem eventKey={3.7} href="#report">Reports</MenuItem>
-                :
-                ''
-                }
+                <MenuItem eventKey={3.7} href="#settings">Settings</MenuItem>
               </NavDropdown>
               <NavDropdown eventKey={4} title={`${this.getModel().get('first_name')} ${this.getModel().get('last_name')}`} id="user-dropdown">
                 <MenuItem eventKey={4.1} href="logout">Logout</MenuItem>
@@ -105,14 +79,6 @@ module.exports = React.createBackboneClass({
         <Button className="btn-feedback" bsStyle="warning" onClick={this.openFeedbackModal}>
           <FontAwesome name="comments-o" />
         </Button>
-        <AppsModalComponent
-          show={this.state.showAppsModal}
-          onHide={this.closeAppsModal}
-        />
-        <FeedbackModalComponent
-          show={this.state.showFeedbackModal}
-          onHide={this.closeFeedbackModal}
-        />
       </div>
     )
   }

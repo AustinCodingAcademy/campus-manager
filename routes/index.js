@@ -124,7 +124,6 @@ router.post('/register', function(req, res, next) {
           password: hash,
           is_client: true,
           is_admin: true,
-          campus: req.body.campus,
           idn: users.length ? users[0].idn + 1 : 1
         });
 
@@ -215,8 +214,7 @@ router.post('/register/:id', function(req, res, next) {
           password: hash,
           is_student: true,
           client: req.params.id,
-          idn: users[0].idn + 1,
-          campus: req.body.campus
+          idn: users[0].idn + 1
         });
 
         newUser.save(function (err, user) {

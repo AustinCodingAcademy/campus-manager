@@ -13,10 +13,7 @@ const FontAwesome = require('react-fontawesome');
 const TermsCollection = require('../collections/TermsCollection');
 const UserAccountComponent = require('./UserAccountComponent');
 const UserModalComponent = require('./UserModalComponent');
-const UserReviewComponent = require('./UserReviewComponent');
 const GradeModel = require('../models/GradeModel');
-const reviews = require('../data/reviews');
-const socials = require('../data/social');
 const utils = require('../utils');
 
 module.exports = React.createBackboneClass({
@@ -355,16 +352,6 @@ module.exports = React.createBackboneClass({
 
     const hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
 
-    let reviewCount = false;
-
-    if (this.getModel().get('campus') && reviews[this.getModel().get('campus')]) {
-      reviewCount = Object.keys(reviews[this.getModel().get('campus')]).filter(review => {
-        return reviews[this.getModel().get('campus')][review].href;
-      }).length + Object.keys(socials[this.getModel().get('campus')]).filter(social => {
-        return socials[this.getModel().get('campus')][social].href;
-      }).length;
-    }
-
     return (
       <div>
         <Row>
@@ -491,18 +478,6 @@ module.exports = React.createBackboneClass({
             :
             ''
             }
-            {this.getModel().get('is_instructor') ?
-            <Col xs={12} md={6}>
-              <Panel header={<h3>Instructor Checklist</h3>}>
-                <h4>1. Today's Attendance Code is <strong>{utils.attendanceCode()}</strong></h4>
-                <h4>2. Start Screen Recording and Verify Audio Recording</h4>
-                <h4>3. Optionally start a Jitsi session</h4>
-                <h4>4. Upload Screencast to YouTube</h4>
-              </Panel>
-            </Col>
-            :
-            ''
-            }
             {this.getModel().get('courses').length ?
             <Col xs={6} md={3}>
               <Panel header={<h3>Overall Attendance</h3>}>
@@ -541,13 +516,6 @@ module.exports = React.createBackboneClass({
               terms={this.props.terms}
               currentUser={this.props.currentUser}
             />
-          </Col>
-          :
-          ''
-          }
-          {this.getModel().get('campus') && reviewCount ?
-          <Col xs={12} md={6}>
-            <UserReviewComponent model={this.getModel()} />
           </Col>
           :
           ''

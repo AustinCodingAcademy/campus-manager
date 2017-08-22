@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 const version = require('mongoose-version');
+const mongooseDelete = require('mongoose-delete');
 
 const userSchema = new Schema({
   username: {
@@ -36,22 +37,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  phone: {
-    type: String,
-    default: ""
-  },
-  github: {
-    type: String,
-    default: ""
-  },
-  linkedIn: {
-    type: String,
-    default: ""
-  },
-  website: {
-    type: String,
-    default: ""
-  },
+  phone: String,
+  github: String,
+  linkedIn: String,
+  website: String,
   idn: {
     type: Number,
     required: true,
@@ -64,7 +53,6 @@ const userSchema = new Schema({
   },
   api_key: String,
   attendance: Array,
-  campus: String,
   charges: Array,
   courses: Array,
   credits: Array,
@@ -81,6 +69,8 @@ const userSchema = new Schema({
   rocketchat: String,
   zipcode: String,
   discourse: String,
+  stripe_secret_key: String,
+  stripe_publishable_key: String,
 }, { timestamps: true });
 
 userSchema.set('toJSON', {
@@ -93,6 +83,11 @@ userSchema.set('toJSON', {
 });
 
 userSchema.plugin(uniqueValidator);
+userSchema.plugin(mongooseDelete, {
+  deletedAt : true,
+  overrideMethods: true,
+  indexFields: true
+});
 
 userSchema.plugin(version, { collection: 'users__versions' });
 

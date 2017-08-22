@@ -106,7 +106,6 @@ module.exports = {
     var user = new UserModel();
 
     var attributes = [
-      'campus',
       'credits',
       'email',
       'first_name',
@@ -282,12 +281,13 @@ module.exports = {
       ];
 
       var adminAttrs = [
-        'campus',
         'credits',
         'is_admin',
         'is_instructor',
         'is_student',
         'price',
+        'stripe_secret_key',
+        'stripe_publishable_key'
       ];
 
       if (req.user.is_admin) {

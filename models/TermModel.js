@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const moment = require('moment');
 const version = require('mongoose-version');
+const mongooseDelete = require('mongoose-delete');
 
 const termSchema = new Schema({
 	start_date: Date,
@@ -15,5 +16,11 @@ const termSchema = new Schema({
 }, { timestamps: true });
 
 termSchema.plugin(version, { collection: 'terms__versions' });
+
+termSchema.plugin(mongooseDelete, {
+  deletedAt : true,
+  overrideMethods: true,
+  indexFields: true
+});
 
 module.exports = mongoose.model('term', termSchema);

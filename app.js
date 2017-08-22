@@ -70,7 +70,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
-app.use('/api/queries', require('./routes/queries'));
 app.use(csrf({cookie: true}));
 // compress all responses
 app.use(compression({ threshold: 0 }))
@@ -84,7 +83,6 @@ app.use('/api/charges', middleware.auth, require('./routes/charges'));
 app.use('/api/locations', middleware.auth, require('./routes/locations'));
 app.use('/api/tracks', middleware.auth, require('./routes/tracks'));
 app.use('/api/import', middleware.admin, require('./routes/import'));
-app.use('/api/report', middleware.admin, require('./routes/report'));
 app.use('/api/grades', middleware.auth, require('./routes/grades'));
 app.use('/api/textbooks', middleware.admin, require('./routes/textbooks'));
 app.use('/api/registrations', middleware.auth, require('./routes/registrations'));

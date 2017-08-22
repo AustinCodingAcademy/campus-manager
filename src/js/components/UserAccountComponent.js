@@ -82,10 +82,7 @@ module.exports = React.createBackboneClass({
     } else {
       this.props.terms.each(term => {
         term.get('courses').each(course => {
-          if (
-            course.get('location').get('city') === this.getModel().get('campus') &&
-            course.get('seats') > 0
-          ) {
+          if (course.get('seats') > 0) {
             courses.add(course);
           }
         });

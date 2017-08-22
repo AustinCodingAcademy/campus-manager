@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const version = require('mongoose-version');
+const mongooseDelete = require('mongoose-delete');
 
 const locationSchema = new Schema({
   address: String,
@@ -18,5 +19,11 @@ const locationSchema = new Schema({
 }, { timestamps: true });
 
 locationSchema.plugin(version, { collection: 'locations__versions' });
+
+locationSchema.plugin(mongooseDelete, {
+  deletedAt : true,
+  overrideMethods: true,
+  indexFields: true
+});
 
 module.exports = mongoose.model('location', locationSchema);
