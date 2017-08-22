@@ -191,26 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
       });
-    },
-
-    report: function(query) {
-      ReactDOM.render(ReportComponent({
-        model: new ReportModel({
-          sql: query ? atob(query) :
-`SELECT *
-FROM users
-JOIN courses_registrations ON courses_registrations.registrations = users._id
-JOIN courses ON courses.yosql_id = courses_registrations.courses_yosql_id
-JOIN terms ON terms._id = courses.term
-JOIN locations on locations._id = courses.location;`
-        }),
-        browse: new ReportModel({
-          sql: "SELECT name, sql FROM sqlite_master WHERE type='table';",
-          hash: btoa("SELECT name, sql FROM sqlite_master WHERE type='table';"),
-          browse: true
-        }),
-        currentUser: this.currentUser
-      }), document.getElementById('container'));
     }
   });
 
