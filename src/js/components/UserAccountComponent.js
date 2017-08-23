@@ -148,32 +148,33 @@ module.exports = React.createBackboneClass({
     if(this.state.nameFilter){
      courses =  new CoursesCollection(courses.filter(course => {
        if(course.get('name') === this.state.nameFilter){
-        return course;
-       }
+            return course;
+        }
        if(this.state.dayFilter){
+         let filtDay = this.state.dayFilter.join();
+         console.log(filtDay);
          courses = courses.filter(course => {
-           if(course.shortDays()[0]===this.state.dayFilter[0] && course.shortDays()[1]===this.state.dayFilter[1])
+           if(course.shortDays() === filtDay)
             {
             return course;
             }
+          
           })
         }
       }))
-    
-    }else if(this.state.dayFilter){
-      courses = new CoursesCollection(courses.filter(course => {
-        let day = course.shortDays().split(',');
-        if(day[0]===this.state.dayFilter[0]) 
-          {
-            if(day[1]===this.state.dayFilter[1])
+    }
+    else if(this.state.dayFilter){
+        courses = new CoursesCollection(courses.filter(course => {
+          let day = course.shortDays();
+          if(day === this.state.dayFilter.join()) 
             {
-              return course.get('days');
+                return course.get('days');
+              
             }
-          }
 
-        }))
+          }))
       }else{
-    courses = new CoursesCollection(courses.map(x => x));
+          courses = new CoursesCollection(courses.map(x => x));
       };
 
     //  if(this.state.dayFilter){
@@ -381,4 +382,4 @@ module.exports = React.createBackboneClass({
       </Panel>
     );
   }
-});
+})
