@@ -49,14 +49,14 @@ module.exports = React.createBackboneClass({
       })
       console.log(this.state.nameFilter);
     } else if(filt === 'Days/Times') {
-      console.log(nameOrTime)
-      console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
-      let days = nameOrTime.split(",");
-      days[1] = days[1].slice(0,5).trim();
-      console.log(days); 
-      this.setState({
-        dayFilter: days
-      });
+        console.log(nameOrTime)
+        console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
+        let days = nameOrTime.split(",");
+        days[1] = days[1].slice(0,5).trim();
+        console.log(days); 
+        this.setState({
+          dayFilter: days
+        });
     console.log(this.state.dayFilter);
     }
   }, 
@@ -142,33 +142,57 @@ module.exports = React.createBackboneClass({
       })
     });
     
-
+   
     const options = [];
+    
     if(this.state.nameFilter){
-      courses = new CoursesCollection(courses.filter(course => {
-        {
-          return course.get('name') === (this.state.nameFilter);
-        }
-      }));
-    }
-
-     if(this.state.dayFilter){
-      courses = new CoursesCollection(courses.filter(course => {
-        let days = course.shortDays().split(',');
-        let day = this.state.dayFilter;
-       if(days.includes((day[0]) && (day[1]))){
-          return course;
+     courses =  new CoursesCollection(courses.filter(course => {
+       if(course.get('name') === this.state.nameFilter){
+        return course;
        }
-        
+       if(this.state.dayFilter){
+         courses = courses.filter(course => {
+           if(course.shortDays()[0]===this.state.dayFilter[0] && course.shortDays()[1]===this.state.dayFilter[1])
+            {
+            return course;
+            }
+          })
+        }
       }))
-  
-    };
-     
-      
-      
+    
+    }else if(this.state.dayFilter){
+      courses = new CoursesCollection(courses.filter(course => {
+        let day = course.shortDays().split(',');
+        if(day[0]===this.state.dayFilter[0]) 
+          {
+            if(day[1]===this.state.dayFilter[1])
+            {
+              return course.get('days');
+            }
+          }
 
+        }))
+      }else{
+    courses = new CoursesCollection(courses.map(x => x));
+      };
+
+    //  if(this.state.dayFilter){
+      
+    //   return courses = courses.filter(course => {
+    //     let days = course.shortDays().split(',');
+    //     let day = this.state.dayFilter;
+    
+    //    if(days[0]===day[0] && (days[1]===day[1])){
+    //       return course;
+    //    }
+        
+    //   })
+  
+    // };
+     
     console.log(courses)
 
+   
     courses.each(course => {
       const label = `${course.get('name')}
       ${course.get('location').get('name')}
@@ -357,4 +381,4 @@ module.exports = React.createBackboneClass({
       </Panel>
     );
   }
-})
+});
