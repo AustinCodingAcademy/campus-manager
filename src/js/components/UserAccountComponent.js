@@ -145,52 +145,30 @@ module.exports = React.createBackboneClass({
    
     const options = [];
     
+    
+    if(this.state.dayFilter){
+      let filtDay = this.state.dayFilter.join(", ");
+      console.log(filtDay);
+      courses = courses.filter(course => {
+        if(course.shortDays() === filtDay)
+        {
+        return course;
+        }
+      // The course seems to be in the dropdown without explicitly passing it to a CoursesCollection
+      })
+    }
     if(this.state.nameFilter){
-     courses =  new CoursesCollection(courses.filter(course => {
-       if(course.get('name') === this.state.nameFilter){
-            return course;
-        }
-       if(this.state.dayFilter){
-         let filtDay = this.state.dayFilter.join();
-         console.log(filtDay);
-         courses = courses.filter(course => {
-           if(course.shortDays() === filtDay)
-            {
-            return course;
-            }
-          
-          })
-        }
+      courses = new CoursesCollection(courses.filter(course => {
+        if(course.get('name') === this.state.nameFilter){
+              return course;
+          }
       }))
     }
-    else if(this.state.dayFilter){
-        courses = new CoursesCollection(courses.filter(course => {
-          let day = course.shortDays();
-          if(day === this.state.dayFilter.join()) 
-            {
-                return course.get('days');
-              
-            }
-
-          }))
-      }else{
+  
+      else{
           courses = new CoursesCollection(courses.map(x => x));
       };
 
-    //  if(this.state.dayFilter){
-      
-    //   return courses = courses.filter(course => {
-    //     let days = course.shortDays().split(',');
-    //     let day = this.state.dayFilter;
-    
-    //    if(days[0]===day[0] && (days[1]===day[1])){
-    //       return course;
-    //    }
-        
-    //   })
-  
-    // };
-     
     console.log(courses)
 
    
