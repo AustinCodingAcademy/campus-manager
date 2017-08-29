@@ -13,7 +13,10 @@ const FontAwesome = require('react-fontawesome');
 const TermsCollection = require('../collections/TermsCollection');
 const UserAccountComponent = require('./UserAccountComponent');
 const UserModalComponent = require('./UserModalComponent');
+const UserReviewComponent = require('./UserReviewComponent');
 const GradeModel = require('../models/GradeModel');
+const reviews = require('../data/reviews');
+const socials = require('../data/social');
 const utils = require('../utils');
 
 module.exports = React.createBackboneClass({
@@ -206,17 +209,6 @@ module.exports = React.createBackboneClass({
       const withdrawal = course.get('withdrawals').find(wd => {
         return wd.userId === this.getModel().id;
       });
-      let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM D')}</span>;
-      if (withdrawal) {
-        textbook = <span>Withdrawn</span>;
-      } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(2, 'week')) || course.get('name').toLowerCase().includes('intro')) {
-        textbook = (
-          <a href={course.get('textbook').get('student_url')} target="_blank">
-            <FontAwesome name="book" fixedWidth={true} />
-            &nbsp; {course.get('textbook').get('name')}
-          </a>
-        );
-      }
       return (
         <Panel
           key={course.id}
@@ -248,7 +240,10 @@ module.exports = React.createBackboneClass({
                     <p>
                       <ControlLabel>Textbook</ControlLabel>
                       <br />
-                      {textbook}
+                      <a href={course.get('textbook').get('student_url')} target="_blank">
+                        <FontAwesome name="book" fixedWidth={true} />
+                        &nbsp; {course.get('textbook').get('name')}
+                      </a>
                     </p>
                     <p>
                       <ControlLabel>Virtual Classroom</ControlLabel>
@@ -351,6 +346,16 @@ module.exports = React.createBackboneClass({
     });
 
     const hidden = this.props.currentUser.get('is_admin') || this.props.currentUser.id === this.getModel().id ? '' : ' hidden';
+
+    let reviewCount = false;
+
+    if (this.getModel().get('campus') && reviews[this.getModel().get('campus')]) {
+      reviewCount = Object.keys(reviews[this.getModel().get('campus')]).filter(review => {
+        return reviews[this.getModel().get('campus')][review].href;
+      }).length + Object.keys(socials[this.getModel().get('campus')]).filter(social => {
+        return socials[this.getModel().get('campus')][social].href;
+      }).length;
+    }
 
     return (
       <div>
@@ -460,9 +465,9 @@ module.exports = React.createBackboneClass({
             <Col xs={12} md={6}>
               <Panel header={<h3>Admin Tips</h3>}>
                 <p>New User Registration can be found at</p>
-                <small><pre>{`https://campus.${key}codingacademy.com/register/${this.getModel().get('client')}`}</pre></small>
+                <small><pre>{`${process.env.DOMAIN}/register/${this.getModel().get('client')}`}</pre></small>
                 <p>Users can reset their password at</p>
-                <small><pre>{`https://campus.${key}codingacademy.com/reset`}</pre></small>
+                <small><pre>{`${process.env.DOMAIN}/reset`}</pre></small>
                 <p>Your API Key is</p>
                 <small>
                   <pre>
@@ -473,6 +478,18 @@ module.exports = React.createBackboneClass({
                   <a href="#" className={this.state.keyOpacity ? 'hidden' : ''} onClick={this.showKey}>show</a>
                   <a href="#" className={this.state.keyOpacity ? '' : 'hidden'} onClick={this.generateApiKey}>regenerate</a>
                 </small>
+              </Panel>
+            </Col>
+            :
+            ''
+            }
+            {this.getModel().get('is_instructor') ?
+            <Col xs={12} md={6}>
+              <Panel header={<h3>Instructor Checklist</h3>}>
+                <h4>1. Today's Attendance Code is <strong>{utils.attendanceCode()}</strong></h4>
+                <h4>2. Start Screen Recording and Verify Audio Recording</h4>
+                <h4>3. Optionally start a Jitsi session</h4>
+                <h4>4. Upload Screencast to YouTube</h4>
               </Panel>
             </Col>
             :
@@ -516,6 +533,13 @@ module.exports = React.createBackboneClass({
               terms={this.props.terms}
               currentUser={this.props.currentUser}
             />
+          </Col>
+          :
+          ''
+          }
+          {this.getModel().get('campus') && reviewCount ?
+          <Col xs={12} md={6}>
+            <UserReviewComponent model={this.getModel()} />
           </Col>
           :
           ''

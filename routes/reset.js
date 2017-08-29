@@ -39,12 +39,11 @@ router.post('/', function(req, res, next) {
 
     user.reset_password = Math.random().toString(36).substring(7);
     user.save(function(err, user) {
-      const key = utils.campusKey(user);
       transport.sendMail({
-        from: `info@${key}codingacademy.com`,
+        from: process.env.SMTP_USERNAME,
         to: user.username,
         subject: 'Campus Manager Password Reset',
-        html: `Visit https://campus.${key}codingacademy.com/reset/${user.reset_password} to reset your password.`
+        html: `Visit ${process.env.DOMAIN}/reset/${user.reset_password} to reset your password.`
       }, function(err, info) {
         if (err) {
           return res.json(500, {

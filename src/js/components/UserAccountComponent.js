@@ -4,7 +4,7 @@ const moment = require('moment');
 const StripeCheckoutComponent = require('./StripeCheckoutComponent');
 import {
   Row, Col, Panel, Table, FormGroup, InputGroup, FormControl, ControlLabel,
-  Tabs, Tab
+  Tabs, Tab, Radio, Well
 } from 'react-bootstrap';
 const Select = require('react-select');
 const CourseOptionComponent = require('./CourseOptionComponent');
@@ -82,12 +82,42 @@ module.exports = React.createBackboneClass({
     } else {
       this.props.terms.each(term => {
         term.get('courses').each(course => {
-          if (course.get('seats') > 0) {
+          if (
+            course.get('location').get('city') === this.getModel().get('campus') &&
+            course.get('seats') > 0
+          ) {
             courses.add(course);
           }
         });
       });
     }
+
+    const locationFilter = [];
+    const dayTimeFilter = [];
+    const courseFilter = [];
+
+    const filters = {
+      'Courses': [],
+      'Locations': [],
+      'Days/Times': []
+    };
+
+    courses.each(course => {
+      filters['Courses'].push(course.get('name'))
+      filters['Locations'].push(`${course.get('location').get('name')}, ${course.get('location').get('address')}`)
+      filters['Days/Times'].push(`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`);
+    });
+
+    Object.keys(filters).forEach(filter => {
+      filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
+      filters[filter] = filters[filter].map(option => {
+        return (
+          <Radio name={filter} inline>
+            {option}
+          </Radio>
+        )
+      })
+    });
 
     const options = [];
 
@@ -139,7 +169,7 @@ module.exports = React.createBackboneClass({
             $490.00
           </td>
           <td>
-            {moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM Do, YYYY')}
+            {idx > 0 ? moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM Do, YYYY') : moment(course.get('term').get('start_date')).format('ddd, MMM Do, YYYY')}
           </td>
           <td>
             {(runningBalance -= 490) >= 0 ? '$0.00' : (<span className="score60">{`$${(runningBalance - 490 <= -490 ? -490 : runningBalance - 490).toFixed(2)}`}</span>)}
@@ -170,8 +200,8 @@ module.exports = React.createBackboneClass({
         footer={
           <small>
             Initial deposit must be $490.00 for any course. Contact admissions at&nbsp;
-            <a href={`mailto: info@${utils.campusKey(this.getModel())}codingacademy.com`}>
-              {`info@${utils.campusKey(this.getModel())}codingacademy.com`}
+            <a href={`mailto: ${process.env.SMTP_USERNAME}`}>
+              {process.env.SMTP_USERNAME}
             </a> for support.
           </small>
         }
@@ -185,6 +215,15 @@ module.exports = React.createBackboneClass({
                   <ControlLabel>
                     1. {this.getModel().get('courses').length ? 'What are you paying for?' : 'What course would you like to take?'}
                   </ControlLabel>
+                  <Well>
+                    {filters['Courses']}
+                  </Well>
+                  <Well>
+                    {filters['Locations']}
+                  </Well>
+                  <Well>
+                    {filters['Days/Times']}
+                  </Well>
                   <Select
                     name="courses"
                     options={options}
