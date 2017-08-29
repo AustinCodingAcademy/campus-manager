@@ -28,6 +28,15 @@ You first need to setup your environment.
     1. Start MongoDB `mongod.exe`
       * Leave this running or just close the terminal window while running
       * You'll have to do this step every time you restart your computer
+  * Linux
+    1. Run $sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80  --recv 7F0CEB10
+    1. Run $echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | 
+              sudo tee /etc/apt/sources.list.d/mongodb.list
+    1. Run $sudo apt-get update
+    1. Get $sudo apt-get install mongodb-org mongodb-org-server
+    1. Create MongoDB data directory `mkdir /data/db`
+    1. Run sudo mongod     
+    1. Run npm run gulp
 
 ### App Dependencies
 After forking, cloning, and navigating into repository:

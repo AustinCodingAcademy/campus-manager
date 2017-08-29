@@ -22,7 +22,10 @@ module.exports = React.createBackboneClass({
     return {
       paymentAmount: 0,
       course: new CourseModel(),
-      tabKey: this.getModel().get('courses').length ? 'tuition' : 'register'
+      tabKey: this.getModel().get('courses').length ? 'tuition' : 'register',
+      dayFilter: null,
+      nameFilter: null,
+      locationFilter: null
     };
   },
 
@@ -37,9 +40,29 @@ module.exports = React.createBackboneClass({
       paymentAmount: Number(e.currentTarget.value) * 100
     });
   },
-
+  setFilter(e) {
+    let nameOrTime = e.currentTarget.nextSibling.nextSibling.data;
+    let filt = e.currentTarget.name;
+    if(filt === 'Courses'){
+      this.setState({
+        nameFilter: nameOrTime
+      })
+      console.log(this.state.nameFilter);
+    } else if(filt === 'Days/Times') {
+        console.log(nameOrTime)
+        console.log(e.currentTarget.nextSibling.nextSibling.data, e.currentTarget.name);
+        let days = nameOrTime.split(",");
+        days[1] = days[1].slice(0,5).trim();
+        console.log(days); 
+        this.setState({
+          dayFilter: days
+        });
+    console.log(this.state.dayFilter);
+    }
+  }, 
+   
   render() {
-    const courses = new CoursesCollection();
+    let courses = new CoursesCollection();
     courses.comparator = courses.reverse;
     const currentCourse = this.getModel().currentCourse();
     const futureCourse = this.getModel().futureCourse();
@@ -110,17 +133,45 @@ module.exports = React.createBackboneClass({
 
     Object.keys(filters).forEach(filter => {
       filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
-      filters[filter] = filters[filter].map(option => {
+      filters[filter] = filters[filter].map((option,i) => {
         return (
-          <Radio name={filter} inline>
+          <Radio key={i} name={filter} onClick={this.setFilter} inline>
             {option}
           </Radio>
         )
       })
     });
-
+    
+   
     const options = [];
+    
+    
+    if(this.state.dayFilter){
+      let filtDay = this.state.dayFilter.join(", ");
+      console.log(filtDay);
+      courses = courses.filter(course => {
+        if(course.shortDays() === filtDay)
+        {
+        return course;
+        }
+      // The course seems to be in the dropdown without explicitly passing it to a CoursesCollection
+      })
+    }
+    if(this.state.nameFilter){
+      courses = new CoursesCollection(courses.filter(course => {
+        if(course.get('name') === this.state.nameFilter){
+              return course;
+          }
+      }))
+    }
+  
+      else{
+          courses = new CoursesCollection(courses.map(x => x));
+      };
 
+    console.log(courses)
+
+   
     courses.each(course => {
       const label = `${course.get('name')}
       ${course.get('location').get('name')}
@@ -169,7 +220,7 @@ module.exports = React.createBackboneClass({
             $490.00
           </td>
           <td>
-            {idx > 0 ? moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM Do, YYYY') : moment(course.get('term').get('start_date')).format('ddd, MMM Do, YYYY')}
+            {moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM Do, YYYY')}
           </td>
           <td>
             {(runningBalance -= 490) >= 0 ? '$0.00' : (<span className="score60">{`$${(runningBalance - 490 <= -490 ? -490 : runningBalance - 490).toFixed(2)}`}</span>)}
@@ -309,4 +360,4 @@ module.exports = React.createBackboneClass({
       </Panel>
     );
   }
-});
+})
