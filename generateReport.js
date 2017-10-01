@@ -8,7 +8,7 @@ const btoa = require('btoa');
 const moment = require('moment');
 require('moment-range');
 let headers = {
-  'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
+  // 'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY),
   'Accept-Encoding': 'gzip'
 };
 
@@ -22,11 +22,21 @@ if (fs.existsSync(fileName)) {
 }
 const db = yosql.createDatabase(fileName);
 db.serialize(() => {
-  return generateReport();
+  // return generateReport();
+  return courseDates();
 });
 
 const stripePayments = [];
 const insightlyLeads = [];
+
+const tables = {
+  'users': require('./models/UserModel'),
+  'locations': require('./models/LocationModel'),
+  'terms': require('./models/TermModel'),
+  'courses': require('./models/CourseModel'),
+  'textbooks': require('./models/TextbookModel'),
+  'tracks': require('./models/TrackModel')
+};
 
 function generateReport() {
   const tables = {
@@ -72,6 +82,7 @@ function courseDates() {
           course.get('days').includes(date.format('dddd').toLowerCase()) &&
           !course.get('holidays').includes(date.format('YYYY-MM-DD'))
         ) {
+          if (course._id.toString() === '58f7c15aa69d700011d44dde') console.log(date.format('YYYY-MM-DD'))
           dates.push({
             course_id: course._id.toString(),
             date: date.format('YYYY-MM-DD')
@@ -82,7 +93,7 @@ function courseDates() {
     console.log(`generating course_dates table`);
     yosql.createTable(db, 'course_dates', dates, {}, () => {
       console.log('fetching stripe charges');
-      fetchAllStripeCharges();
+      // fetchAllStripeCharges();
     });
   });
 }
