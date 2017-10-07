@@ -13,10 +13,7 @@ const FontAwesome = require('react-fontawesome');
 const TermsCollection = require('../collections/TermsCollection');
 const UserAccountComponent = require('./UserAccountComponent');
 const UserModalComponent = require('./UserModalComponent');
-const UserReviewComponent = require('./UserReviewComponent');
 const GradeModel = require('../models/GradeModel');
-const reviews = require('../data/reviews');
-const socials = require('../data/social');
 const utils = require('../utils');
 
 module.exports = React.createBackboneClass({

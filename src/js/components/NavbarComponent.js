@@ -50,7 +50,7 @@ module.exports = React.createBackboneClass({
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">
-                <img src={''} />
+                <img src={'/img/extellent.png'} />
                 Campus Manager
               </a>
             </Navbar.Brand>
