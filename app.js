@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 if (process.env.NODE_ENV === 'test') {
-  process.env.MONGOLAB_URI = process.env.TEST_DB;
+  process.env.MONGODB_URI = process.env.TEST_DB;
 }
 
 if (['test', 'production'].indexOf(process.env.NODE_ENV) === -1) {
@@ -28,7 +28,7 @@ var middleware = require('./routes/middleware');
 app.use(methodOverride('_method'));
 
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
