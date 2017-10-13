@@ -395,52 +395,10 @@ module.exports = React.createBackboneClass({
                       </a>
                     </p>
                     <p>
-                      <FontAwesome name="globe" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'Website'} href={this.getModel().get('website')} target="_blank">
-                        {this.getModel().get('website')}
-                      </a>
-                    </p>
-                    <p>
                       <FontAwesome name="mobile" fixedWidth={true} />
                       &nbsp;
                       <a href={'tel:'+ this.getModel().get('phone')}>
                         {this.getModel().get('phone')}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="github" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'GitHub Account'} href={'https://github.com/' + this.getModel().get('github')} target="_blank">
-                        {this.getModel().get('github')}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="linkedin-square" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'LinkedIn Profile'} href={'https://linkedin.com/in/' + this.getModel().get('linkedIn')} target="_blank">
-                        {this.getModel().get('linkedIn')}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="rocket" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'Rocket Chat'} href={`${process.env.ROCKETCHAT_URL}/direct/` + this.getModel().get('rocketchat')} target="_blank">
-                        {this.getModel().get('rocketchat') ? `@${this.getModel().get('rocketchat')}` : ''}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="users" fixedWidth={true} />
-                      &nbsp;
-                      <a title={'Discourse'} href={`${process.env.DISCOURSE_URL}/u/` + this.getModel().get('discourse')} target="_blank">
-                        {this.getModel().get('discourse') ? `@${this.getModel().get('discourse')}` : ''}
-                      </a>
-                    </p>
-                    <p>
-                      <FontAwesome name="map-marker" fixedWidth={true} />
-                      &nbsp;
-                      <a href={'https://maps.google.com/?q=' + this.getModel().get('zipcode')} target="_blank">
-                        {this.getModel().get('zipcode')}
                       </a>
                     </p>
                   </Col>

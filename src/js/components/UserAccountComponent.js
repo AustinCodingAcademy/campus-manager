@@ -82,42 +82,37 @@ module.exports = React.createBackboneClass({
     } else {
       this.props.terms.each(term => {
         term.get('courses').each(course => {
-          if (
-            course.get('location').get('city') === this.getModel().get('campus') &&
-            course.get('seats') > 0
-          ) {
-            courses.add(course);
-          }
+          if (course.get('seats') > 0) courses.add(course);
         });
       });
     }
 
-    const locationFilter = [];
-    const dayTimeFilter = [];
-    const courseFilter = [];
+    // const locationFilter = [];
+    // const dayTimeFilter = [];
+    // const courseFilter = [];
 
-    const filters = {
-      'Courses': [],
-      'Locations': [],
-      'Days/Times': []
-    };
+    // const filters = {
+    //   'Courses': [],
+    //   'Locations': [],
+    //   'Days/Times': []
+    // };
 
-    courses.each(course => {
-      filters['Courses'].push(course.get('name'))
-      filters['Locations'].push(`${course.get('location').get('name')}, ${course.get('location').get('address')}`)
-      filters['Days/Times'].push(`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`);
-    });
+    // courses.each(course => {
+    //   filters['Courses'].push(course.get('name'))
+    //   filters['Locations'].push(`${course.get('location').get('name')}, ${course.get('location').get('address')}`)
+    //   filters['Days/Times'].push(`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`);
+    // });
 
-    Object.keys(filters).forEach(filter => {
-      filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
-      filters[filter] = filters[filter].map(option => {
-        return (
-          <Radio name={filter} inline>
-            {option}
-          </Radio>
-        )
-      })
-    });
+    // Object.keys(filters).forEach(filter => {
+    //   filters[filter] = filters[filter].filter((elem, pos, arr) => arr.indexOf(elem) == pos);
+    //   filters[filter] = filters[filter].map(option => {
+    //     return (
+    //       <Radio name={filter} inline>
+    //         {option}
+    //       </Radio>
+    //     )
+    //   })
+    // });
 
     const options = [];
 
@@ -215,7 +210,7 @@ module.exports = React.createBackboneClass({
                   <ControlLabel>
                     1. {this.getModel().get('courses').length ? 'What are you paying for?' : 'What course would you like to take?'}
                   </ControlLabel>
-                  <Well>
+                  {/* <Well>
                     {filters['Courses']}
                   </Well>
                   <Well>
@@ -223,7 +218,7 @@ module.exports = React.createBackboneClass({
                   </Well>
                   <Well>
                     {filters['Days/Times']}
-                  </Well>
+                  </Well> */}
                   <Select
                     name="courses"
                     options={options}
