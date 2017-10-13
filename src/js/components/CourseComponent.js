@@ -421,7 +421,7 @@ module.exports = React.createBackboneClass({
           </Col>
         </Row>
         <Row>
-          <Col xs={12} md={7}>
+          {/* <Col xs={12} md={7}>
             <Panel
               header={<h3>Screencasts</h3>}
               footer={
@@ -478,7 +478,7 @@ module.exports = React.createBackboneClass({
                 </Table>
               </form>
             </Panel>
-          </Col>
+          </Col> */}
           <Col xs={12} md={5}>
             <Panel header={<h3>Class Dates</h3>}>
               <Row>

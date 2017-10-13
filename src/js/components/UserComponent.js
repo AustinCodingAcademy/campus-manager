@@ -156,9 +156,9 @@ module.exports = React.createBackboneClass({
           <tr key={`${i}-${j}`}>
             <td>{date.format("ddd, MMM D")}</td>
             <td>{attended} {checkin}</td>
-            <td>
+            {/* <td>
               {videos}
-            </td>
+            </td> */}
           </tr>
         );
       });
@@ -312,7 +312,7 @@ module.exports = React.createBackboneClass({
                   <tr>
                     <th>Date</th>
                     <th>Attended</th>
-                    <th>Screencast</th>
+                    {/* <th>Screencast</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -433,18 +433,6 @@ module.exports = React.createBackboneClass({
                   <a href="#" className={this.state.keyOpacity ? 'hidden' : ''} onClick={this.showKey}>show</a>
                   <a href="#" className={this.state.keyOpacity ? '' : 'hidden'} onClick={this.generateApiKey}>regenerate</a>
                 </small>
-              </Panel>
-            </Col>
-            :
-            ''
-            }
-            {this.getModel().get('is_instructor') ?
-            <Col xs={12} md={6}>
-              <Panel header={<h3>Instructor Checklist</h3>}>
-                <h4>1. Today's Attendance Code is <strong>{utils.attendanceCode()}</strong></h4>
-                <h4>2. Start Screen Recording and Verify Audio Recording</h4>
-                <h4>3. Optionally start a Jitsi session</h4>
-                <h4>4. Upload Screencast to YouTube</h4>
               </Panel>
             </Col>
             :
