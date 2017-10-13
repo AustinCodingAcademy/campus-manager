@@ -104,12 +104,7 @@ module.exports = Backbone.Model.extend({
       'first_name',
       'last_name',
       'username',
-      'phone',
-      'github',
-      'rocketchat',
-      'website',
-      'zipcode',
-      'linkedIn'
+      'phone'
     ]
     return Math.round(_.filter(attrs, attr => {
       return this.get(attr);
