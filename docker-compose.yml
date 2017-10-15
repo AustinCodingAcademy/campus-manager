@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  manager:
+    image: austincoding/campusmanager:1.0.0
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
