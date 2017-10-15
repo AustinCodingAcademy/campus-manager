@@ -109,17 +109,11 @@ module.exports = {
       'credits',
       'email',
       'first_name',
-      'github',
       'is_admin',
       'is_instructor',
       'is_student',
       'last_name',
-      'linkedIn',
-      'phone',
-      'rocketchat',
-      'website',
-      'zipcode',
-      'discourse'
+      'phone'
     ];
 
     _.each(attributes, function(attr) {
@@ -137,8 +131,9 @@ module.exports = {
             error: err
           });
         }
+        res.json(user);
         transport.sendMail({
-          from: `info@campusmanager.io`,
+          from: process.env.SMTP_USERNAME,
           to: user.username,
           subject: 'Welcome to Campus Manager!',
           html: `Welcome to Campus Manager! Please visit ${process.env.DOMAIN}/reset to set your password.`
