@@ -92,7 +92,7 @@ module.exports = {
       course.save(function(err, course) {
         if(err) {
           return res.json(500, {
-            message: 'Error saving course',
+            message: `Error saving ${Object.keys(err.errors).join(', ')}`,
             error: err
           });
         }
@@ -114,7 +114,7 @@ module.exports = {
     }, function(err, course){
       if(err) {
         return res.json(500, {
-          message: 'Error saving course',
+          message: `Error saving ${Object.keys(err.errors).join(', ')}`,
           error: err
         });
       }
