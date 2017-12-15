@@ -209,10 +209,10 @@ module.exports = React.createBackboneClass({
       const withdrawal = course.get('withdrawals').find(wd => {
         return wd.userId === this.getModel().id;
       });
-      let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(2, 'week').format('ddd, MMM D')}</span>;
+      let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(1, 'month').format('ddd, MMM D')}</span>;
       if (withdrawal) {
         textbook = <span>Withdrawn</span>;
-      } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(2, 'week')) || course.get('name').toLowerCase().includes('intro')) {
+      } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(1, 'month')) || course.get('name').toLowerCase().includes('intro')) {
         textbook = (
           <a href={course.get('textbook').get('student_url')} target="_blank">
             <FontAwesome name="book" fixedWidth={true} />
