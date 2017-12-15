@@ -28,6 +28,13 @@ You first need to setup your environment.
     1. Start MongoDB `mongod.exe`
       * Leave this running or just close the terminal window while running
       * You'll have to do this step every time you restart your computer
+  * Linux
+    1. Install MongoDB `sudo apt install mongodb`
+    1. Create MongoDB data directory `sudo mkdir -p /data/db`
+    1. Correct permissions `sudo chmod -R 0755 /data/db && sudo chown $USER /data/db`
+    1. Start MongoDB `mongod`
+      * Leave this running or just close the terminal window while running
+      * You'll have to do this step every time you restart your computer
 
 ### App Dependencies
 After forking, cloning, and navigating into repository:
@@ -43,4 +50,5 @@ After forking, cloning, and navigating into repository:
 1. Install Java JDK
   * Mac OSX `brew cask install java`
   * Windows `choco install jdk7`
+  * Linux `sudo apt install openjdk-8-jdk-headless`
 1. Run `npm test`
