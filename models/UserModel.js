@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 const version = require('mongoose-version');
+const validators = require('mongoose-validators')
 
 const userSchema = new Schema({
   username: {
@@ -9,7 +10,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     index: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+    validate: validators.isEmail()
   },
   password: String,
   is_client: {
