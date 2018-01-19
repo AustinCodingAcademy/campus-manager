@@ -275,7 +275,6 @@ module.exports = {
         'phone',
         'reviews',
         'rocketchat',
-        'username',
         'website',
         'zipcode',
         'discourse'
@@ -311,6 +310,7 @@ module.exports = {
         _.each(attributes, function(attr) {
           user[attr] = req.body.hasOwnProperty(attr) ? req.body[attr] : user[attr];
         });
+        user.username = req.body.hasOwnProperty('username') ? req.body.username.toLowerCase() : user.username;
       }
 
       user.save(function(err, user){
