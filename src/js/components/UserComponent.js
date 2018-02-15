@@ -217,15 +217,6 @@ module.exports = React.createBackboneClass({
               </small>
             </h3>
           }
-          footer={this.state.activeKey === course.id ?
-            <small>
-              D: Daily Grades are weighted 30% and are checked for completion;
-              CP: Checkpoints are weighted 70% and are checked for a deeper
-              understanding of the content
-            </small>
-            :
-            ''
-          }
           eventKey={course.id}
         >
           <Row>
