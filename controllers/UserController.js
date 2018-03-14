@@ -132,18 +132,18 @@ module.exports = {
           });
         }
         res.json(user);
-        transport.sendMail({
-          from: process.env.SMTP_USERNAME,
-          to: user.username,
-          subject: 'Welcome to Campus Manager!',
-          html: `Welcome to Campus Manager! Please visit ${process.env.DOMAIN}/reset to set your password.`
-        }, function (err, info) {
-          if (err) {
-            return res.json(500, {
-              message: 'Error sending confirmation email. Please contact support for additional assistance.'
-            })
-          }
-        });
+//         transport.sendMail({
+//           from: process.env.SMTP_USERNAME,
+//           to: user.username,
+//           subject: 'Welcome to Campus Manager!',
+//           html: `Welcome to Campus Manager! Please visit ${process.env.DOMAIN}/reset to set your password.`
+//         }, function (err, info) {
+//           if (err) {
+//             return res.json(500, {
+//               message: 'Error sending confirmation email. Please contact support for additional assistance.'
+//             })
+//           }
+//         });
       });
     });
   },
