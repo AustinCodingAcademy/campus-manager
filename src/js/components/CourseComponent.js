@@ -374,10 +374,7 @@ module.exports = React.createBackboneClass({
               header={<h3>Grades</h3>}
               footer={
                 <small>
-                  CP: Signifies the grade is a checkpoint. Checkpoints are
-                  weighted more and are used as markers in the student&#39;s
-                  understanding of the content. WD: Signifies student has
-                  withdrawn from the course and the date of withdrawal.
+                  Number Grades Translate to Catalog Letter Grades as such:  Number Grade of 100 = Letter Grade of P or C; 50 = F; Zero = I; WD Signifies student has withdrawn from the course and the date of withdrawal.
                 </small>
               }
             >
