@@ -4,7 +4,7 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const Select = require('react-select');
+import Select from 'react-select';
 import ReactPhoneInput from 'react-phone-input';
 const UserModel = require('../models/UserModel');
 const LocationsCollection = require('../collections/LocationsCollection');
@@ -217,6 +217,16 @@ module.exports = React.createBackboneClass({
 DC 10% Scholarship 6/15/17: 249.00`}
                 onChange={this.changeCreditsValue}
                 defaultValue={credits}
+                rows={4}
+              />
+            </FormGroup>
+            <FormGroup controlId="note" className={`${hidden}`}>
+              <ControlLabel>Note</ControlLabel>
+              <FormControl
+                componentClass="textarea"
+                placeholder="Add a note..."
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.note}
                 rows={4}
               />
             </FormGroup>

@@ -71,6 +71,7 @@ const userSchema = new Schema({
   discourse: String,
   stripe_secret_key: String,
   stripe_publishable_key: String,
+  note: String
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

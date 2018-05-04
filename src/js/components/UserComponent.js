@@ -337,14 +337,6 @@ module.exports = React.createBackboneClass({
 
     let reviewCount = false;
 
-    if (this.getModel().get('campus') && reviews[this.getModel().get('campus')]) {
-      reviewCount = Object.keys(reviews[this.getModel().get('campus')]).filter(review => {
-        return reviews[this.getModel().get('campus')][review].href;
-      }).length + Object.keys(socials[this.getModel().get('campus')]).filter(social => {
-        return socials[this.getModel().get('campus')][social].href;
-      }).length;
-    }
-
     return (
       <div>
         <Row>

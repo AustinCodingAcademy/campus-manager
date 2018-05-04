@@ -10,7 +10,7 @@
     "test": "gulp build && gulp test"
   },
   "engines": {
-    "node": "7.2.1"
+    "node": "8.9.4"
   },
   "dependencies": {
     "atob": "^2.0.3",
@@ -112,6 +112,7 @@
     "uglifyify": "^3.0.4",
     "underscore": "1.8.3",
     "utils-merge": "^1.0.0",
+    "uuid": "^3.2.1",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
     "watchify": "^3.7.0",

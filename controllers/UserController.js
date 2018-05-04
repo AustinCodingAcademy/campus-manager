@@ -87,10 +87,12 @@ module.exports = {
               if (charges) {
                 user.charges = charges.data;
               }
+              if (!req.user.is_admin) delete user.note;
               return res.json(user);
             }
           );
         } else {
+          if (!req.user.is_admin) delete user.note;
           return res.json(user);
         }
       });
@@ -113,7 +115,8 @@ module.exports = {
       'is_instructor',
       'is_student',
       'last_name',
-      'phone'
+      'phone',
+      'note'
     ];
 
     _.each(attributes, function(attr) {
@@ -192,7 +195,8 @@ module.exports = {
         'is_student',
         'price',
         'stripe_secret_key',
-        'stripe_publishable_key'
+        'stripe_publishable_key',
+        'note'
       ];
 
       if (req.user.is_admin) {
@@ -241,6 +245,7 @@ module.exports = {
           }
           user.courses = courses;
           user.charges = req.body.charges;
+          if (!req.user.is_admin) delete user.note;
           return res.json(user);
         });
       });
