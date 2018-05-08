@@ -3,7 +3,7 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const Select = require('react-select');
+import Select from 'react-select';
 const TermOptionComponent = require('./TermOptionComponent');
 const TermValueComponent = require('./TermValueComponent');
 const LocationOptionComponent = require('./LocationOptionComponent');

@@ -6,7 +6,7 @@ import {
   Row, Col, Panel, Table, FormGroup, InputGroup, FormControl, ControlLabel,
   Tabs, Tab, Radio, Well
 } from 'react-bootstrap';
-const Select = require('react-select');
+import Select from 'react-select';
 const CourseOptionComponent = require('./CourseOptionComponent');
 const CourseValueComponent = require('./CourseValueComponent');
 const CourseModel = require('../models/CourseModel');
