@@ -218,119 +218,13 @@ router.post('/register/:id', function(req, res, next) {
         });
 
         newUser.save(function (err, user) {
-
           if (err) {
             req.flash('error', err.message);
             return res.redirect('/register/' + req.params.id);
           }
-          console.log('authenticating with rocketchat');
-          fetch(`${process.env.ROCKETCHAT_URL}/api/v1/login`, {
-            method: 'POST',
-            body: JSON.stringify({
-              username: process.env.ROCKETCHAT_BOT_USERNAME,
-              password: process.env.ROCKETCHAT_BOT_PASSWORD
-            })
-          })
-          .then(response => {
-            console.log('authenticating with rocketchat successful');
-            response.json().then(login => {
-              const password = hashids.encode(Date.now()) + hashids.encode(Date.now());
-              const username = `${user.first_name.toLowerCase()}${user.last_name.toLowerCase()}-${user.idn}`.split(' ').join('');
-              const name = `${user.first_name} ${user.last_name}`;
-              console.log('creating user on rocketchat');
-              fetch(`${process.env.ROCKETCHAT_URL}/api/v1/users.create`, {
-                method: 'POST',
-                headers: {
-                  "X-Auth-Token": login.data.authToken,
-                  "X-User-Id": login.data.userId,
-                  "Content-type": "application/json"
-                },
-                body: JSON.stringify({
-                  email: user.username,
-                  name,
-                  password,
-                  username,
-                  requirePasswordChange: true,
-                  sendWelcomeEmail: true
-                })
-              })
-              .then(() => {
-                console.log('successfully created user on rocketchat');
-                user.rocketchat = username;
-                user.save()
-                .then(user => {
-                  const discourseData = {
-                    api_key: process.env.DISCOURSE_API_KEY,
-                    api_username: process.env.DISCOURSE_API_USERNAME,
-                    name,
-                    email: user.username,
-                    password,
-                    username
-                  };
-                  const formData = new FormData();
-                  for (let datum in discourseData) {
-                    formData.append(datum, discourseData[datum]);
-                  }
-                  console.log('creating user on discourse');
-                  fetch(`${process.env.DISCOURSE_URL}/users.json`, {
-                    method: 'POST',
-                    body: formData
-                  })
-                  .then(() => {
-                    console.log('successfully created user on discourse');
-                    user.discourse = username;
-                    user.save()
-                    .then(user => {
-                      // If the user has been created successfully, log them in with
-                      // passport to start their session and redirect to the home route
-                      req.login(user, function(err) {
-                        if (err) { return res.redirect('/register/' + req.params.id); }
-                        return res.redirect('/');
-                      });
-                    })
-                    .catch(err => {
-                      return res.json(500, {
-                        message: 'Error saving user',
-                        error: err
-                      });
-                    });
-                  })
-                  .catch(err => {
-                    console.log(err);
-                    // If the user has been created successfully, log them in with
-                    // passport to start their session and redirect to the home route
-                    req.login(user, function(err) {
-                      if (err) { return res.redirect('/register/' + req.params.id); }
-                      return res.redirect('/');
-                    });
-                  })
-                })
-                .catch(err => {
-                  return res.json(500, {
-                    message: 'Error saving user',
-                    error: err
-                  });
-                });
-              })
-              .catch(err => {
-                console.log(err);
-                // If the user has been created successfully, log them in with
-                // passport to start their session and redirect to the home route
-                req.login(user, function(err) {
-                  if (err) { return res.redirect('/register/' + req.params.id); }
-                  return res.redirect('/');
-                });
-              });
-            });
-          })
-          .catch(err => {
-            console.log(err);
-            // If the user has been created successfully, log them in with
-            // passport to start their session and redirect to the home route
-            req.login(user, function(err) {
-              if (err) { return res.redirect('/register/' + req.params.id); }
-              return res.redirect('/');
-            });
+          req.login(user, function(err) {
+            if (err) { return res.redirect('/register/' + req.params.id); }
+            return res.redirect('/');
           });
         });
       });
