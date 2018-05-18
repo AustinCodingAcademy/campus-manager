@@ -47,6 +47,12 @@ module.exports = React.createBackboneClass({
     const hidden = this.props.currentUser.roles().includes('admin') ? '' : 'hidden';
 
     const courseRows = this.getCollection().map(course => {
+
+      const instructorNames = course.get("instructors").map(inst => {
+        return `${inst.first_name} ${inst.last_name}`
+      })
+        .join(", ");
+
       return (
         <Tr key={course.id}>
           <Td column="Name" value={course.get('name')}>
@@ -54,13 +60,14 @@ module.exports = React.createBackboneClass({
               <a href="#" onClick={this.show} data-id={course.id}>{course.get('name')}</a>
             </div>
           </Td>
-          <Td column="Section">{course.get('section')}</Td>
+          <Td column="Section">{course.get('section' )}</Td>
           <Td column="Textbook">{course.get('textbook').get('name')}</Td>
           <Td column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
           <Td column="Term">{course.get('term').get('name')}</Td>
           <Td column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>
           <Td column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
           <Td column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
+          <Td column="Instructors">{instructorNames}</Td>
           <Td column="edit" className={hidden}>
             <a href="#" onClick={this.open} data-id={course.id}>
               <FontAwesome name='pencil' />
@@ -69,6 +76,8 @@ module.exports = React.createBackboneClass({
         </Tr>
       );
     });
+
+    console.log(courseRows);
 
     return (
       <Row>
@@ -93,8 +102,8 @@ module.exports = React.createBackboneClass({
             <Table
               className="table table-condensed table-striped"
               itemsPerPage={20}
-              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook']}
-              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook']}
+              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'instructors']}
+              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'instructors']}
               filterBy={this.state.filterBy}
             >
               <Thead>
@@ -106,6 +115,7 @@ module.exports = React.createBackboneClass({
                 <Th>Days</Th>
                 <Th>Seats</Th>
                 <Th>Cost</Th>
+                <Th>Instructors</Th>
                 <Th className={hidden}>edit</Th>
               </Thead>
               {courseRows}
