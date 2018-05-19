@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const TermModalComponent = require('./TermModalComponent.js');
-const TermModel = require('../models/TermModel');
-const moment = require('moment');
+import FontAwesome from 'react-fontawesome';
+import TermModalComponent from './TermModalComponent.js';
+import TermModel from '../models/TermModel';
+import moment from 'moment';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

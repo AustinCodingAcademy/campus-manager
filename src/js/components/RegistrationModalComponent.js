@@ -4,13 +4,13 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const Select = require('react-select');
-const UserOptionComponent = require('./UserOptionComponent');
-const UserValueComponent = require('./UserValueComponent');
-const CourseOptionComponent = require('./CourseOptionComponent');
-const CourseValueComponent = require('./CourseValueComponent');
-const UserModel = require('../models/UserModel');
-const CourseModel = require('../models/CourseModel');
+import Select from 'react-select';
+import UserOptionComponent from './UserOptionComponent';
+import UserValueComponent from './UserValueComponent';
+import CourseOptionComponent from './CourseOptionComponent';
+import CourseValueComponent from './CourseValueComponent';
+import UserModel from '../models/UserModel';
+import CourseModel from '../models/CourseModel';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

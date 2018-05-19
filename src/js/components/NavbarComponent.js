@@ -3,9 +3,9 @@ import * as _ from 'underscore';
 import {
   Navbar, Nav, NavItem, NavDropdown, MenuItem, Button, Label
 } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const AppsModalComponent = require('./AppsModalComponent');
-const FeedbackModalComponent = require('./FeedbackModalComponent');
+import FontAwesome from 'react-fontawesome';
+import AppsModalComponent from './AppsModalComponent';
+import FeedbackModalComponent from './FeedbackModalComponent';
 
 module.exports = React.createBackboneClass({
   links: {

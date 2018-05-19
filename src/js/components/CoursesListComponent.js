@@ -2,11 +2,11 @@ import * as React from 'react';
 import * as Backbone from 'backbone';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const CourseModalComponent = require('./CourseModalComponent.js');
-const CourseModel = require('../models/CourseModel');
-const TermsCollection = require('../collections/TermsCollection');
-const moment = require('moment');
+import FontAwesome from 'react-fontawesome';
+import CourseModalComponent from './CourseModalComponent.js';
+import CourseModel from '../models/CourseModel';
+import TermsCollection from '../collections/TermsCollection';
+import moment from 'moment';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

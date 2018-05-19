@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Row, Col, Panel, ListGroup, ListGroupItem, ProgressBar } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const reviews = require('../data/reviews');
-const socials = require('../data/social');
-const utils = require('../utils');
+import FontAwesome from 'react-fontawesome';
+import reviews from '../data/reviews';
+import socials from '../data/social';
+import utils from '../utils';
 
 module.exports = React.createBackboneClass({
   handleReviewClick(e) {

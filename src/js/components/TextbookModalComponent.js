@@ -3,7 +3,7 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const TextbookModel = require('../models/TextbookModel');
+import TextbookModel from '../models/TextbookModel';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

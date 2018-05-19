@@ -1,6 +1,6 @@
-var React = require('react');
-var Modal = require('react-modal');
-var _ = require('underscore');
+import React from 'react';
+import Modal from 'react-modal';
+import _ from 'underscore';
 
 module.exports = React.createBackboneClass({
   render: function() {

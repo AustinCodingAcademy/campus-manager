@@ -3,7 +3,7 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
 module.exports = React.createBackboneClass({
   render() {
