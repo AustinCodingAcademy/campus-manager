@@ -225,6 +225,8 @@ module.exports = React.createBackboneClass({
           key={course.id}
           header={
             <h3>
+              {course.get('section')}
+              &nbsp;
               {course.get('name')} {withdrawal ? ` (Withdrawn ${moment(withdrawal.timestamp).format('MMM D, YYYY')})` : ''}
               <small className="pull-right">
                 {course.get('term').get('name')}
