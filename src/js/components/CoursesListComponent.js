@@ -100,8 +100,8 @@ module.exports = React.createBackboneClass({
             <Table
               className="table table-condensed table-striped"
               itemsPerPage={20}
-              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'instructors']}
-              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'instructors']}
+              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'Instructors']}
+              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'Instructors']}
               filterBy={this.state.filterBy}
             >
               <Thead>
