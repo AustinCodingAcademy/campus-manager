@@ -3,8 +3,8 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const YoutubeAccountSelect = require('./YoutubeAccountSelect');
-const YoutubeUploader = require('./YoutubeUploader');
+import YoutubeAccountSelect from './YoutubeAccountSelect';
+import YoutubeUploader from './YoutubeUploader';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

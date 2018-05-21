@@ -1,18 +1,18 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-const moment = require('moment');
-var BaseModal = require('./BaseModal');
-var CourseVideoUpload = require('./CourseVideoUpload');
-const CourseAttendanceComponent = require('./CourseAttendanceComponent');
-const utils = require('../utils');
+import moment from 'moment';
+import BaseModal from './BaseModal';
+import CourseVideoUpload from './CourseVideoUpload';
+import CourseAttendanceComponent from './CourseAttendanceComponent';
+import utils from '../utils';
 import {
   Col, Row, Button, ButtonGroup, Table, FormControl, FormGroup,
   ControlLabel, Panel, Checkbox, ListGroup, ListGroupItem, InputGroup
 } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const DatePicker = require('react-datepicker');
-const GradeModel = require('../models/GradeModel');
-const CourseUserComponent = require('./CourseUserComponent');
+import FontAwesome from 'react-fontawesome';
+import DatePicker from 'react-datepicker';
+import GradeModel from '../models/GradeModel';
+import CourseUserComponent from './CourseUserComponent';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

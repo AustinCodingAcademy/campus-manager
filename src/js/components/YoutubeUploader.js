@@ -1,10 +1,10 @@
 import * as React from 'react';
-const Dropzone = require('react-dropzone');
-const moment = require('moment');
-const MediaUploader = require('../modules/MediaUploader');
-const DatePicker = require('react-datepicker');
+import Dropzone from 'react-dropzone';
+import moment from 'moment';
+import MediaUploader from '../modules/MediaUploader';
+import DatePicker from 'react-datepicker';
 import { Row, Col, FormGroup, ControlLabel } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
 module.exports = React.createBackboneClass({
   getInitialState: function() {

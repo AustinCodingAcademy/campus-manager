@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Backbone from 'backbone';
 import StripeCheckout from 'react-stripe-checkout';
 import { Button } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

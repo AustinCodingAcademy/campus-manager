@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Label } from 'react-bootstrap';
-const moment = require('moment');
+import moment from 'moment';
 
 module.exports = React.createClass({
 	handleMouseDown (event) {

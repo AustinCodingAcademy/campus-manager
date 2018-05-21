@@ -1,17 +1,18 @@
 import * as React from 'react';
 import {
-  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
-  InputGroup, Alert
-} from 'react-bootstrap';
+  Modal, Button, Row,
+  Col, FormGroup, ControlLabel,
+  FormControl, Checkbox, InputGroup,
+  Alert } from 'react-bootstrap';
 import Select from 'react-select';
-const TermOptionComponent = require('./TermOptionComponent');
-const TermValueComponent = require('./TermValueComponent');
-const LocationOptionComponent = require('./LocationOptionComponent');
-const LocationValueComponent = require('./LocationValueComponent');
-const LocationModel = require('../models/LocationModel');
-const TermModel = require('../models/TermModel');
-const TextbookModel = require('../models/TextbookModel');
-const CourseModel = require('../models/CourseModel');
+import TermOptionComponent from './TermOptionComponent';
+import TermValueComponent from './TermValueComponent';
+import LocationOptionComponent from './LocationOptionComponent';
+import LocationValueComponent from './LocationValueComponent';
+import LocationModel from '../models/LocationModel';
+import TermModel from '../models/TermModel';
+import TextbookModel from '../models/TextbookModel';
+import CourseModel from '../models/CourseModel';
 
 module.exports = React.createBackboneClass({
   mixins: [

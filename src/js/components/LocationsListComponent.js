@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const LocationModalComponent = require('./LocationModalComponent');
-const LocationModel = require('../models/LocationModel');
+import FontAwesome from 'react-fontawesome';
+import LocationModalComponent from './LocationModalComponent';
+import LocationModel from '../models/LocationModel';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as Backbone from 'backbone';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const RegistrationModalComponent = require('./RegistrationModalComponent');
+import FontAwesome from 'react-fontawesome';
+import RegistrationModalComponent from './RegistrationModalComponent';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

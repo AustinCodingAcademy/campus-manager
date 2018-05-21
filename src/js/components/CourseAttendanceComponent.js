@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Line} from 'react-chartjs';
-const Chart = require('chart.heatmap.js');
+import Chart from 'chart.heatmap.js';
 import { Row, Col, Panel } from 'react-bootstrap';
 
 module.exports = React.createBackboneClass({

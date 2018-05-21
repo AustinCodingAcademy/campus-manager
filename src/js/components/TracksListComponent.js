@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const TrackModalComponent = require('./TrackModalComponent');
-const TrackModel = require('../models/TrackModel');
+import FontAwesome from 'react-fontawesome';
+import TrackModalComponent from './TrackModalComponent';
+import TrackModel from '../models/TrackModel';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 
 module.exports = React.createBackboneClass({

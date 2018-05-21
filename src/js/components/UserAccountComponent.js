@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as _ from 'underscore';
-const moment = require('moment');
-const StripeCheckoutComponent = require('./StripeCheckoutComponent');
+import moment from 'moment';
+import StripeCheckoutComponent from './StripeCheckoutComponent';
 import {
   Row, Col, Panel, Table, FormGroup, InputGroup, FormControl, ControlLabel,
   Tabs, Tab
 } from 'react-bootstrap';
 import Select from 'react-select';
-const CourseOptionComponent = require('./CourseOptionComponent');
-const CourseValueComponent = require('./CourseValueComponent');
-const CourseModel = require('../models/CourseModel');
-const CoursesCollection = require('../collections/CoursesCollection');
-const utils = require('../utils');
+import CourseOptionComponent from './CourseOptionComponent';
+import CourseValueComponent from './CourseValueComponent';
+import CourseModel from '../models/CourseModel';
+import CoursesCollection from '../collections/CoursesCollection';
+import utils from '../utils';
 
 module.exports = React.createBackboneClass({
   mixins: [

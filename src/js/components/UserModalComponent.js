@@ -6,8 +6,8 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import ReactPhoneInput from 'react-phone-input';
-const UserModel = require('../models/UserModel');
-const LocationsCollection = require('../collections/LocationsCollection');
+import UserModel from '../models/UserModel';
+import LocationsCollection from '../collections/LocationsCollection';
 
 module.exports = React.createBackboneClass({
   roleOptions: [
