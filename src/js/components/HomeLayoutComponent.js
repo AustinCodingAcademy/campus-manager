@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 var TermCardComponent = React.createFactory(require('./TermCardComponent'));
 
 module.exports = React.createBackboneClass({

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as _ from 'underscore';
-const utils = require('../utils');
+import utils from '../utils';
 import { Checkbox } from 'react-bootstrap';
-const moment = require('moment');
-const DatePicker = require('react-datepicker');
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
 
 module.exports = React.createBackboneClass({
   mixins: [

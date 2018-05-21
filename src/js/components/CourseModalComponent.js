@@ -1,17 +1,18 @@
 import * as React from 'react';
 import {
-  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
-  InputGroup, Alert
-} from 'react-bootstrap';
-const Select = require('react-select');
-const TermOptionComponent = require('./TermOptionComponent');
-const TermValueComponent = require('./TermValueComponent');
-const LocationOptionComponent = require('./LocationOptionComponent');
-const LocationValueComponent = require('./LocationValueComponent');
-const LocationModel = require('../models/LocationModel');
-const TermModel = require('../models/TermModel');
-const TextbookModel = require('../models/TextbookModel');
-const CourseModel = require('../models/CourseModel');
+  Modal, Button, Row,
+  Col, FormGroup, ControlLabel,
+  FormControl, Checkbox, InputGroup,
+  Alert } from 'react-bootstrap';
+import Select from 'react-select';
+import TermOptionComponent from './TermOptionComponent';
+import TermValueComponent from './TermValueComponent';
+import LocationOptionComponent from './LocationOptionComponent';
+import LocationValueComponent from './LocationValueComponent';
+import LocationModel from '../models/LocationModel';
+import TermModel from '../models/TermModel';
+import TextbookModel from '../models/TextbookModel';
+import CourseModel from '../models/CourseModel';
 
 module.exports = React.createBackboneClass({
   mixins: [
@@ -39,7 +40,9 @@ module.exports = React.createBackboneClass({
       days: [],
       alertVisible: 'hidden',
       error: '',
-      title: this.props.title
+      title: this.props.title,
+      instructors: [],
+      userOptions: []
     }
   },
 
@@ -74,6 +77,13 @@ module.exports = React.createBackboneClass({
 
   changeTextbookValue(e) {
     this.state.course.textbook = this.props.textbooks.get(e.currentTarget.value);
+  },
+
+  selectInstructors(options) {
+    this.setState({ instructors: options });
+    const idArr = options.map(option => option.value);
+    const newCourseValue = Object.assign({}, this.state.course, { instructors: idArr });
+    this.setState({ course: newCourseValue });
   },
 
   save(e) {
@@ -119,6 +129,16 @@ module.exports = React.createBackboneClass({
   },
 
   componentWillReceiveProps(nextProps) {
+    const userOptions = this.props.users.models.map(user => {
+      return {
+        value: user.id,
+        label: `${user.fullName()} ${user.get("username")} ${user.get(
+          "phone"
+        )}`,
+        user: user
+      };
+    })
+      .filter(e => e.user.attributes.is_instructor === true);
     this.setState({
       title: nextProps.title,
       course: this.getModel().attributes,
@@ -127,7 +147,14 @@ module.exports = React.createBackboneClass({
       textbook: this.getModel().get('textbook'),
       days: this.dayOptions.filter(day => {
         return this.getModel().get('days').includes(day.value);
-      })
+      }),
+      instructors: userOptions.filter(user => {
+        return this.getModel()
+          .get("instructors")
+          .map(e => e._id)
+          .includes(user.value);
+      }),
+      userOptions
     });
   },
 
@@ -269,6 +296,16 @@ module.exports = React.createBackboneClass({
                 placeholder="Note..."
                 onChange={this.changeTextValue}
                 defaultValue={this.getModel().get('note')}
+              />
+            </FormGroup>
+            <FormGroup controlId="instructors">
+              <ControlLabel>Instructors</ControlLabel>
+              <Select
+                name="instructors"
+                value={this.state.instructors}
+                options={this.state.userOptions}
+                onChange={this.selectInstructors}
+                multi={true}
               />
             </FormGroup>
             <a href="#" className="link-danger" onClick={this.delete}>Delete Course</a>

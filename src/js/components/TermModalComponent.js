@@ -3,9 +3,9 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const DatePicker = require('react-datepicker');
-const TermModel = require('../models/TermModel');
-const moment = require('moment');
+import DatePicker from 'react-datepicker';
+import TermModel from '../models/TermModel';
+import moment from 'moment';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

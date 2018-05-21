@@ -1,15 +1,15 @@
 import * as Backbone from 'backbone';
 import * as React from 'react';
-const CodeMirror = require('react-codemirror');
+import CodeMirror from 'react-codemirror';
 import 'cm-sql';
-const Clipboard = require('clipboard');
-const utils = require('../utils');
+import Clipboard from 'clipboard';
+import utils from '../utils';
 import { Table } from 'reactable';
 import {
   Col, Row, Button, FormControl, ButtonGroup, OverlayTrigger, Tooltip, Tabs,
   Tab, DropdownButton, MenuItem
 } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
 module.exports = React.createBackboneClass({
   mixins: [

@@ -3,11 +3,11 @@ import {
   Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
   InputGroup, Alert
 } from 'react-bootstrap';
-const Select = require('react-select');
+import Select from 'react-select';
 import ReactPhoneInput from 'react-phone-input';
-const TrackModel = require('../models/TrackModel');
-const CourseOptionComponent = require('./CourseOptionComponent');
-const CourseValueComponent = require('./CourseValueComponent');
+import TrackModel from '../models/TrackModel';
+import CourseOptionComponent from './CourseOptionComponent';
+import CourseValueComponent from './CourseValueComponent';
 
 module.exports = React.createBackboneClass({
   mixins: [

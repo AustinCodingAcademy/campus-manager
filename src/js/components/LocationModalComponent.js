@@ -4,7 +4,7 @@ import {
   InputGroup, Alert
 } from 'react-bootstrap';
 import ReactPhoneInput from 'react-phone-input';
-const LocationModel = require('../models/LocationModel');
+import LocationModel from '../models/LocationModel';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

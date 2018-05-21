@@ -1,23 +1,23 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as Backbone from 'backbone';
-const moment = require('moment');
+import moment from 'moment';
 import { Doughnut } from 'react-chartjs';
 import {
   Col, Row, Panel, PanelGroup, Table, Well, ControlLabel, FormControl,
   InputGroup, Button
 } from 'react-bootstrap';
-const Gravatar = require('react-gravatar');
+import Gravatar from 'react-gravatar';
 import Equalizer from 'react-equalizer';
-const FontAwesome = require('react-fontawesome');
-const TermsCollection = require('../collections/TermsCollection');
-const UserAccountComponent = require('./UserAccountComponent');
-const UserModalComponent = require('./UserModalComponent');
-const UserReviewComponent = require('./UserReviewComponent');
-const GradeModel = require('../models/GradeModel');
-const reviews = require('../data/reviews');
-const socials = require('../data/social');
-const utils = require('../utils');
+import FontAwesome from 'react-fontawesome';
+import TermsCollection from '../collections/TermsCollection';
+import UserAccountComponent from './UserAccountComponent';
+import UserModalComponent from './UserModalComponent';
+import UserReviewComponent from './UserReviewComponent';
+import GradeModel from '../models/GradeModel';
+import reviews from '../data/reviews';
+import socials from '../data/social';
+import utils from '../utils';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -225,7 +225,7 @@ module.exports = React.createBackboneClass({
           key={course.id}
           header={
             <h3>
-              {course.get('name')} {withdrawal ? ` (Withdrawn ${moment(withdrawal.timestamp).format('MMM D, YYYY')})` : ''}
+              {`${course.get('name').split(' ')[0]}.${course.get('section')} ${course.get('name').split(' ').slice(1).join(' ')}`} {withdrawal ? ` (Withdrawn ${moment(withdrawal.timestamp).format('MMM D, YYYY')})` : ''}
               <small className="pull-right">
                 {course.get('term').get('name')}
               </small>

@@ -1,18 +1,18 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-const moment = require('moment');
-var BaseModal = require('./BaseModal');
-var CourseVideoUpload = require('./CourseVideoUpload');
-const CourseAttendanceComponent = require('./CourseAttendanceComponent');
-const utils = require('../utils');
+import moment from 'moment';
+import BaseModal from './BaseModal';
+import CourseVideoUpload from './CourseVideoUpload';
+import CourseAttendanceComponent from './CourseAttendanceComponent';
+import utils from '../utils';
 import {
   Col, Row, Button, ButtonGroup, Table, FormControl, FormGroup,
   ControlLabel, Panel, Checkbox, ListGroup, ListGroupItem, InputGroup
 } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const DatePicker = require('react-datepicker');
-const GradeModel = require('../models/GradeModel');
-const CourseUserComponent = require('./CourseUserComponent');
+import FontAwesome from 'react-fontawesome';
+import DatePicker from 'react-datepicker';
+import GradeModel from '../models/GradeModel';
+import CourseUserComponent from './CourseUserComponent';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -339,7 +339,9 @@ module.exports = React.createBackboneClass({
         <Row>
           <Col xs={12} md={4}>
             <h4>{this.getModel().get('term').get('name')}</h4>
-            <h2 style={{marginTop: '10px'}}>{this.getModel().get('name')}</h2>
+            <h2 style={{marginTop: '10px'}}>
+              {`${this.getModel().get('name').split(' ')[0]}.${this.getModel().get('section')} ${this.getModel().get('name').split(' ').slice(1).join(' ')}`}
+            </h2>
           </Col>
           <Col xs={12} md={8} className="text-right">
             <h5>Daily Attendance Code: <strong>{utils.attendanceCode()}</strong></h5>
@@ -374,10 +376,7 @@ module.exports = React.createBackboneClass({
               header={<h3>Grades</h3>}
               footer={
                 <small>
-                  CP: Signifies the grade is a checkpoint. Checkpoints are
-                  weighted more and are used as markers in the student&#39;s
-                  understanding of the content. WD: Signifies student has
-                  withdrawn from the course and the date of withdrawal.
+                  Number Grades Translate to Catalog Letter Grades as such:  Number Grade of 100 = Letter Grade of P or C; 50 = F; Zero = I; WD Signifies student has withdrawn from the course and the date of withdrawal.
                 </small>
               }
             >

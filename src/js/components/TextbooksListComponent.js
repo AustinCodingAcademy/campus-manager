@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const TextbookModalComponent = require('./TextbookModalComponent');
-const TextbookModel = require('../models/TextbookModel');
+import FontAwesome from 'react-fontawesome';
+import TextbookModalComponent from './TextbookModalComponent';
+import TextbookModel from '../models/TextbookModel';
 
 module.exports = React.createBackboneClass({
   getInitialState() {

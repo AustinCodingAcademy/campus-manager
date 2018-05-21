@@ -2,9 +2,9 @@ import * as Backbone from 'backbone';
 import * as React from 'react';
 import { Table, Tr, Td, Th, Thead } from 'reactable';
 import { Col, Row, Button, FormControl } from 'react-bootstrap';
-const FontAwesome = require('react-fontawesome');
-const UserModalComponent = require('./UserModalComponent');
-const UserModel = require('../models/UserModel');
+import FontAwesome from 'react-fontawesome';
+import UserModalComponent from './UserModalComponent';
+import UserModel from '../models/UserModel';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
