@@ -47,6 +47,12 @@ module.exports = React.createBackboneClass({
     const hidden = this.props.currentUser.roles().includes('admin') ? '' : 'hidden';
 
     const courseRows = this.getCollection().map(course => {
+
+      const instructorNames = course.get("instructors").map(inst => {
+        return `${inst.first_name} ${inst.last_name}`
+      })
+        .join(", ");
+
       return (
         <Tr key={course.id}>
           <Td column="Name" value={course.get('name')}>
@@ -61,6 +67,7 @@ module.exports = React.createBackboneClass({
           <Td column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>
           <Td column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
           <Td column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
+          <Td column="Instructors">{instructorNames}</Td>
           <Td column="edit" className={hidden}>
             <a href="#" onClick={this.open} data-id={course.id}>
               <FontAwesome name='pencil' />
@@ -93,8 +100,8 @@ module.exports = React.createBackboneClass({
             <Table
               className="table table-condensed table-striped"
               itemsPerPage={20}
-              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook']}
-              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook']}
+              filterable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'Instructors']}
+              sortable={['Name', 'Location', 'Term', 'Days', 'Seats', 'Cost', 'Textbook', 'Instructors']}
               filterBy={this.state.filterBy}
             >
               <Thead>
@@ -106,6 +113,7 @@ module.exports = React.createBackboneClass({
                 <Th>Days</Th>
                 <Th>Seats</Th>
                 <Th>Cost</Th>
+                <Th>Instructors</Th>
                 <Th className={hidden}>edit</Th>
               </Thead>
               {courseRows}
@@ -121,6 +129,7 @@ module.exports = React.createBackboneClass({
             locations={this.props.locations}
             title={this.state.modalTitle}
             listComponent={this}
+            users={this.props.users}
           />
         </Col>
       </Row>

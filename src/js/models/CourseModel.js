@@ -23,7 +23,8 @@ module.exports = Model.extend({
     textbook: new TextbookModel(),
     videos: [],
     withdrawals: [],
-    section: ''
+    section: '',
+    instructors: []
   },
 
   initialize: function() {
