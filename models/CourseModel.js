@@ -45,7 +45,13 @@ const courseSchema = new Schema({
   },
   withdrawals: [],
   note: String,
-  section: Number
+  section: Number,
+  instructors: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user'
+    }
+  ]
 }, { timestamps: true });
 
 courseSchema.plugin(version, { collection: 'courses__versions' });

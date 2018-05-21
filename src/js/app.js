@@ -154,12 +154,15 @@ document.addEventListener('DOMContentLoaded', () => {
       locations.fetch();
       const textbooks = new TextbooksCollection();
       textbooks.fetch();
+      const users = new UsersCollection();
+      users.fetch();
       ReactDOM.render(CoursesListComponent({
         collection: courses,
         currentUser: this.currentUser,
         terms,
         locations,
-        textbooks
+        textbooks,
+        users
       }), document.getElementById('container'));
     },
 
