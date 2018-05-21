@@ -340,9 +340,7 @@ module.exports = React.createBackboneClass({
           <Col xs={12} md={4}>
             <h4>{this.getModel().get('term').get('name')}</h4>
             <h2 style={{marginTop: '10px'}}>
-              {this.getModel().get('name')}
-              &nbsp;
-              <span>{this.getModel().get('section')}</span>
+              {`${this.getModel().get('name').split(' ')[0]}.${this.getModel().get('section')} ${this.getModel().get('name').split(' ').slice(1).join(' ')}`}
             </h2>
           </Col>
           <Col xs={12} md={8} className="text-right">
