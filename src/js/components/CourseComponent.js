@@ -258,6 +258,7 @@ module.exports = React.createBackboneClass({
                 onBlur={this.blurGrade}
                 data-student-id={student.id}
                 data-grade-name={grade.name}
+                value={grade.url}
                 disabled={this.getModel().get('withdrawals').find(wd => {return wd.userId === student.id})}
               />
               <InputGroup.Button>
