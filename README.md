@@ -10,7 +10,7 @@
 You first need to setup your environment.
 
 ### Machine Dependencies
-1. Download and install [Node.js](https://nodejs.org/en/) (at least version 7.2.1)
+1. Download and install [Node.js](https://nodejs.org/en/) (at least version 8.9.4)
 
 2.
   * Mac OSX
