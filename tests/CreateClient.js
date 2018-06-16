@@ -1,7 +1,6 @@
 module.exports = {
   'Create Client': browser => {
     browser
-    .click('#campus-select option[value="Austin"]')
     .setValue('input[name="first_name"]', 'Test')
     .setValue('input[name="last_name"]', 'Client')
     .setValue('input[name="username"]', 'test@client.com')
