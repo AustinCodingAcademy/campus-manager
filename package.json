@@ -127,7 +127,7 @@
     "vinyl-source-stream": "1.1.0",
     "watchify": "^3.7.0",
     "whatwg-fetch": "^2.0.1",
-    "yosql": "github:kevincolten/yosql#a710a4f56a6cc5dbb938aabd35ad9245fa55125c"
+    "yosql": "kevincolten/yosql#cf1e0e41"
   },
   "browser": {
     "jquery": "jquery",
