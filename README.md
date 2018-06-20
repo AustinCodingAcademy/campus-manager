@@ -4,8 +4,6 @@
 
 [![CircleCI](https://circleci.com/gh/AustinCodingAcademy/campus-manager/tree/master.svg?style=svg)](https://circleci.com/gh/AustinCodingAcademy/campus-manager/tree/master)
 
-[![Heroku](https://heroku-badge.herokuapp.com/?app=aca-campus)](http://aca-campus.herokuapp.com)
-
 ## Development
 You first need to setup your environment.
 
