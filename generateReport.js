@@ -14,7 +14,7 @@ let headers = {
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 
 const fileName = 'report.sqlite3';
 if (fs.existsSync(fileName)) {
