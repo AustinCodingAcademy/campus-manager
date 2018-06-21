@@ -6,15 +6,15 @@ html(lang='us-en')
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='mobile-web-app-capable' content='yes')
     meta(name='csrf-token', content=csrfToken)
-    if campusKey == 'sanantonio'
-      include favicon-sanantonio
-    else if campusKey == 'dallas'
-      include favicon-dallas
-    else if campusKey == 'houstontx'
-      include favicon-houston
-    else
-      include favicon-austin
     if env == 'production'
+      if campusKey == 'sanantonio'
+        include favicon-sanantonio
+      else if campusKey == 'dallas'
+        include favicon-dallas
+      else if campusKey == 'houstontx'
+        include favicon-houston
+      else
+        include favicon-austin
       link(rel='stylesheet', href='{{cache-break:css/app.css}}')
     else
       link(rel='stylesheet', href='css/app.css')
