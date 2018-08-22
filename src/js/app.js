@@ -1,5 +1,5 @@
 'use strict';
-
+import "babel-polyfill";
 import 'es6-shim';
 import 'whatwg-fetch';
 const Backbone = require('backbone');
@@ -35,6 +35,15 @@ const RegistrationsListComponent = React.createFactory(require('./components/Reg
 const UserComponent = React.createFactory(require('./components/UserComponent'));
 const ReportComponent = React.createFactory(require('./components/ReportComponent'));
 
+// Create Element.remove() function if not exist
+if (!('remove' in Element.prototype)) {
+  Element.prototype.remove = function() {
+      if (this.parentNode) {
+          this.parentNode.removeChild(this);
+      }
+  };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('error', function (e) {
     console.log(e.error);
@@ -67,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'report/:query': 'report'
     },
 
-    currentUser: new UserModel(JSON.parse(document.querySelector('[data-bootstrap]').getAttribute('data-bootstrap'))),
+    currentUser: new UserModel(JSON.parse(document.getElementById('dataBootstrap').getAttribute('data-bootstrap'))),
 
     initialize: function() {
-      document.querySelector('[data-bootstrap]').remove();
+      document.getElementById('dataBootstrap').remove();
       $('<div id="nav-container"></div>').insertBefore('#container');
       ReactDOM.render(NavbarComponent({ model: this.currentUser }), document.getElementById('nav-container'));
     },

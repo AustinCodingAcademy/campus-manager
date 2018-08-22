@@ -20,7 +20,31 @@ gulp.task('bundle', function () {
       [
         babelify,
         {
-          presets: ['es2015', 'react']
+          presets: [
+            [
+              "@babel/preset-env",
+              {
+                targets: {
+                  browsers: [
+                    "Chrome >= 59",
+                    "FireFox >= 44",
+                    "Safari >= 7",
+                    "ie 11",
+                    "last 4 Edge versions"
+                  ]
+                },
+              }
+            ],
+            "@babel/preset-react",
+          ],
+          plugins: [
+            "@babel/plugin-proposal-export-default-from",
+            "@babel/plugin-proposal-logical-assignment-operators",
+            ["@babel/plugin-proposal-optional-chaining", { "loose": false }],
+            ["@babel/plugin-proposal-pipeline-operator", { "proposal": "minimal" }],
+            ["@babel/plugin-proposal-nullish-coalescing-operator", { "loose": false }],
+            "@babel/plugin-proposal-do-expressions",
+          ]
         }
       ],
       envify

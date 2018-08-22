@@ -48,14 +48,13 @@ html(lang='us-en')
           if (response.status === 401) {
             window.location.replace('/login');
           } else {
-            $('.alerts').append(`
-              <div class="alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                ${JSON.parse(response.responseText).message}
-              </div>
-            `);
+            $('.alerts').append(
+              '<div class="alert alert-success" role="alert">' + 
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span>' +
+              '</button>' + JSON.parse(response.responseText).message +
+            '</div>'
+            );
             $('.alert').alert();
           }
         });    
