@@ -25,14 +25,13 @@ block bottom_scripts
           _csrf: $('[name="_csrf"]').val()
         },
         success: function(response) {
-          $('.alerts').append(`
-            <div class="alert alert-success" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              ${response.message}
-            </div>
-          `);
+          $('.alerts').append(
+            '<div class="alert alert-success" role="alert">' + 
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span>' +
+              '</button>' + response.message +
+            '</div>'
+          );
           $('.alert').alert();
         }
       });

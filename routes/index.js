@@ -204,7 +204,7 @@ router.post('/register/:id', function(req, res, next) {
           return res.redirect('/register/' + req.params.id);
         }
 
-        console.log(req.body);
+        console.log(Object.assign({}, req.body, { password: 'hidden' }));
 
         var newUser = new UserModel({
           first_name: req.body.first_name,

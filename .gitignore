@@ -13,3 +13,6 @@ faviconData.json
 views/favicon-*
 *.sqlite3
 leadNotes.json
+.DS_Store
+tmp
+*.orig

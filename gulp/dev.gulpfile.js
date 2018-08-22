@@ -8,10 +8,8 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
-var cssnano = require('gulp-cssnano');
 var pixrem  = require('pixrem');
 var postcss = require('gulp-postcss');
-var uglifyify = require('uglifyify');
 var envify = require('envify');
 var source = require('vinyl-source-stream');
 var babelify = require('babelify');
@@ -21,15 +19,7 @@ gulp.task('bundle-dev', function() {
   var args = merge(watchify.args, {
     entries: ['src/js/app.js'],
     debug: true,
-    transform: [
-      [
-        babelify,
-        {
-          presets: ['es2015', 'react']
-        }
-      ],
-      envify
-    ],
+    transform: [ envify ],
     plugin: [
       [
         watchify,
