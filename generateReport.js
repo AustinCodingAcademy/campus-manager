@@ -98,157 +98,157 @@ function fetchAllStripeCharges(startingAfter) {
       console.log('generating stripe_payments table');
       yosql.createTable(db, 'stripe_payments', stripePayments, {}, () => {
         console.log('fetching insightly lead statuses');
-        fetchInsightlyLeadStatuses();
+        uploadDatabase();
       });
     }
   });
 }
 
-function fetchInsightlyLeadStatuses() {
-  fetch('https://api.insight.ly/v2.2/LeadStatuses?converted=true', {
-    method: 'GET',
-    headers
-  })
-  .then(res => {
-    return res.json();
-  })
-  .then(leadStatuses => {
-    if (typeof leadStatuses === 'string') {
-      console.log(leadStatuses);
-      if (leadStatuses.contains('Second')) {
-        headers = {
-          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-          'Accept-Encoding': 'gzip'
-        };
-        return fetchInsightlyLeadStatuses();
-      } else {
-        db.close();
-        return uploadDatabase();
-      }
-    }
-    console.log('generating insightly_lead_statuses table');
-    yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
-      console.log('fetching insightly custom fields');
-      fetchInsightlyCustomFields();
-    });
-  })
-  .catch(error => {
-    console.log(error);
-  });
-}
+// function fetchInsightlyLeadStatuses() {
+//   fetch('https://api.insight.ly/v2.2/LeadStatuses?converted=true', {
+//     method: 'GET',
+//     headers
+//   })
+//   .then(res => {
+//     return res.json();
+//   })
+//   .then(leadStatuses => {
+//     if (typeof leadStatuses === 'string') {
+//       console.log(leadStatuses);
+//       if (leadStatuses.contains('Second')) {
+//         headers = {
+//           'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+//           'Accept-Encoding': 'gzip'
+//         };
+//         return fetchInsightlyLeadStatuses();
+//       } else {
+//         db.close();
+//         return uploadDatabase();
+//       }
+//     }
+//     console.log('generating insightly_lead_statuses table');
+//     yosql.createTable(db, 'insightly_lead_statuses', leadStatuses, {}, () => {
+//       console.log('fetching insightly custom fields');
+//       fetchInsightlyCustomFields();
+//     });
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
+// }
 
-function fetchInsightlyCustomFields() {
-  fetch('https://api.insight.ly/v2.2/CustomFields', {
-    method: 'GET',
-    headers
-  })
-  .then(res => {
-    return res.json();
-  })
-  .then(customFields => {
-    if (typeof customFields === 'string') {
-      console.log(customFields);
-      if (customFields.contains('Second')) {
-        headers = {
-          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-          'Accept-Encoding': 'gzip'
-        };
-        return fetchInsightlyCustomFields();
-      } else {
-        db.close();
-        return uploadDatabase();
-      }
-    }
-    console.log('generating insightly_custom_fields table');
-    yosql.createTable(db, 'insightly_custom_fields', customFields, {}, () => {
-      console.log('fetching insightly leads');
-      fetchInsightlyLeads(0);
-    });
-  })
-  .catch(error => {
-    console.log(error);
-  });
-}
+// function fetchInsightlyCustomFields() {
+//   fetch('https://api.insight.ly/v2.2/CustomFields', {
+//     method: 'GET',
+//     headers
+//   })
+//   .then(res => {
+//     return res.json();
+//   })
+//   .then(customFields => {
+//     if (typeof customFields === 'string') {
+//       console.log(customFields);
+//       if (customFields.contains('Second')) {
+//         headers = {
+//           'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+//           'Accept-Encoding': 'gzip'
+//         };
+//         return fetchInsightlyCustomFields();
+//       } else {
+//         db.close();
+//         return uploadDatabase();
+//       }
+//     }
+//     console.log('generating insightly_custom_fields table');
+//     yosql.createTable(db, 'insightly_custom_fields', customFields, {}, () => {
+//       console.log('fetching insightly leads');
+//       fetchInsightlyLeads(0);
+//     });
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
+// }
 
-function fetchInsightlyLeads(skip) {
-  fetch(`https://api.insight.ly/v2.2/Leads/?converted=true&top=500&skip=${skip}`, {
-    method: 'GET',
-    headers
-  })
-  .then(res => {
-    return res.json();
-  })
-  .then(leads => {
-    if (typeof leads === 'string') {
-      console.log(leads);
-      if (leads.contains('Second')) {
-        headers = {
-          'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
-          'Accept-Encoding': 'gzip'
-        };
-        return fetchInsightlyLeads(skip);
-      } else {
-        db.close();
-        return uploadDatabase();
-      }
-    }
-    Array.prototype.push.apply(insightlyLeads, leads);
-    console.log(`fetched ${leads.length} leads`);
-    if (leads.length === 500) {
-      setTimeout(() => {
-        fetchInsightlyLeads(skip + 500);
-      }, 200);
-    } else {
-      console.log('fetching insightly lead notes');
-      fetchInsightlyLeadNotes();
-    }
-  }).catch(error => {
-    console.log(error);
-  });
-}
+// function fetchInsightlyLeads(skip) {
+//   fetch(`https://api.insight.ly/v2.2/Leads/?converted=true&top=500&skip=${skip}`, {
+//     method: 'GET',
+//     headers
+//   })
+//   .then(res => {
+//     return res.json();
+//   })
+//   .then(leads => {
+//     if (typeof leads === 'string') {
+//       console.log(leads);
+//       if (leads.contains('Second')) {
+//         headers = {
+//           'Authorization': 'Basic ' + btoa(process.env.INSIGHTLY_API_KEY_2),
+//           'Accept-Encoding': 'gzip'
+//         };
+//         return fetchInsightlyLeads(skip);
+//       } else {
+//         db.close();
+//         return uploadDatabase();
+//       }
+//     }
+//     Array.prototype.push.apply(insightlyLeads, leads);
+//     console.log(`fetched ${leads.length} leads`);
+//     if (leads.length === 500) {
+//       setTimeout(() => {
+//         fetchInsightlyLeads(skip + 500);
+//       }, 200);
+//     } else {
+//       console.log('fetching insightly lead notes');
+//       fetchInsightlyLeadNotes();
+//     }
+//   }).catch(error => {
+//     console.log(error);
+//   });
+// }
 
-function fetchInsightlyLeadNotes() {
-  s3.getObject({
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: `leadNotes.json`
-  }, function(err, data) {
-    if (err) {
-      console.log(err, err.stack); // an error occurred
-      return fetchInsightlyLeadAttachments();
-    } else {
-      const leadNotes = JSON.parse(data.Body.toString());
-      insightlyLeads.forEach(lead => {
-        lead.NOTES = leadNotes[lead.LEAD_ID];
-      });
-    }
-    fetchInsightlyLeadAttachments();
-  });
-}
+// function fetchInsightlyLeadNotes() {
+//   s3.getObject({
+//     Bucket: process.env.S3_BUCKET_NAME,
+//     Key: `leadNotes.json`
+//   }, function(err, data) {
+//     if (err) {
+//       console.log(err, err.stack); // an error occurred
+//       return fetchInsightlyLeadAttachments();
+//     } else {
+//       const leadNotes = JSON.parse(data.Body.toString());
+//       insightlyLeads.forEach(lead => {
+//         lead.NOTES = leadNotes[lead.LEAD_ID];
+//       });
+//     }
+//     fetchInsightlyLeadAttachments();
+//   });
+// }
 
-function fetchInsightlyLeadAttachments() {
-  s3.getObject({
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: `leadAttachments.json`
-  }, function(err, data) {
-    if (err) {
-      console.log(err, err.stack); // an error occurred
-      return createLeadsTable();
-    } else {
-      const leadAttachments = JSON.parse(data.Body.toString());
-      insightlyLeads.forEach(lead => {
-        lead.FILE_ATTACHMENTS = leadAttachments[lead.LEAD_ID];
-      });
-    }
-    createLeadsTable();
-  });
-}
+// function fetchInsightlyLeadAttachments() {
+//   s3.getObject({
+//     Bucket: process.env.S3_BUCKET_NAME,
+//     Key: `leadAttachments.json`
+//   }, function(err, data) {
+//     if (err) {
+//       console.log(err, err.stack); // an error occurred
+//       return createLeadsTable();
+//     } else {
+//       const leadAttachments = JSON.parse(data.Body.toString());
+//       insightlyLeads.forEach(lead => {
+//         lead.FILE_ATTACHMENTS = leadAttachments[lead.LEAD_ID];
+//       });
+//     }
+//     createLeadsTable();
+//   });
+// }
 
-function createLeadsTable() {
-  yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
-    db.close();
-    uploadDatabase();
-  });
-}
+// function createLeadsTable() {
+//   yosql.createTable(db, 'insightly_leads', insightlyLeads, {}, () => {
+//     db.close();
+//     uploadDatabase();
+//   });
+// }
 
 function uploadDatabase() {
   s3.putObject({
