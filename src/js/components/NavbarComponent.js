@@ -77,6 +77,12 @@ module.exports = React.createBackboneClass({
               <li role="presentation">
                 <a href='#' onClick={this.openAppsModal}>
                   <FontAwesome name="th" />
+                  <div style={{
+                    position: 'absolute',
+                    top: '7px',
+                    fontSize: '10px',
+                    right: '9px'
+                  }}>🔥</div>
                 </a>
               </li>
               <li role="presentation"><a href='#'>Dashboard</a></li>

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
-  Modal, Button, Row, Col, FormGroup, ControlLabel, FormControl, Checkbox,
-  InputGroup, Alert
+  Modal, Row, Col, Label
 } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 
@@ -26,6 +25,15 @@ module.exports = React.createBackboneClass({
                 <FontAwesome name="calendar" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Calendar
+              </a>
+            </Col>
+            <Col xs={4} className="text-center">
+              <a className="btn btn-white" href="https://austincodingacademy.com/tutors" target="blank">
+                <FontAwesome name="graduation-cap" fixedWidth={true} size="3x" />
+                <br />
+                &nbsp;Tutoring
+                <br/>
+                <Label bsStyle="warning">New!</Label>
               </a>
             </Col>
           </Row>
