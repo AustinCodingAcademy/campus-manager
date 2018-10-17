@@ -45,7 +45,11 @@ module.exports = {
   * TextbookController.create()
   */
   create: (req, res) => {
-    const textbook = new TextbookModel({			name : req.body.name,      instructor_url: req.body.instructor_url,      student_url: req.body.student_url,      client: req.user.client,
+    const textbook = new TextbookModel({
+			name : req.body.name,
+      instructor_url: req.body.instructor_url,
+      student_url: req.body.student_url,
+      client: req.user.client,
     });
 
     textbook.save((err, textbook) => {
@@ -80,7 +84,7 @@ module.exports = {
       const attrs = [
         'name',
         'instructor_url',
-        'admin_url'
+        'student_url'
       ];
 
       attrs.forEach(attr => {
