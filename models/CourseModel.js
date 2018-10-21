@@ -51,7 +51,8 @@ const courseSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'user'
     }
-  ]
+  ],
+  virtual: String
 }, { timestamps: true });
 
 courseSchema.plugin(version, { collection: 'courses__versions' });

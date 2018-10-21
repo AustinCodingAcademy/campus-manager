@@ -253,14 +253,13 @@ module.exports = React.createBackboneClass({
                       <br />
                       {textbook}
                     </p>
-                    <p>
-                      <ControlLabel>Virtual Classroom</ControlLabel>
-                      <br />
-                      <a href={utils.jitsiUrl(course)} target="_blank">
-                        <FontAwesome name="video-camera" fixedWidth={true} />
-                        &nbsp; Enter Room
-                      </a>
-                    </p>
+                    {course.get('virtual') &&
+                      <p>
+                        <ControlLabel>Virtual Classroom</ControlLabel>
+                        <br />
+                        {course.get('virtual')}
+                      </p>
+                    }
                     <p>
                       <ControlLabel>Class Times</ControlLabel>
                       <br />

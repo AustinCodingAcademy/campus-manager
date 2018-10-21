@@ -362,10 +362,12 @@ module.exports = React.createBackboneClass({
                 <FontAwesome name="book" />
                 &nbsp; View Textbook
               </a>
-              <a href={utils.jitsiUrl(this.getModel())} target="_blank" className="btn btn-default">
+              {this.getModel().get('virtual') &&
+              <a href={this.getModel().get('virtual')} target="_blank" className="btn btn-default">
                 <FontAwesome name="video-camera" />
                 &nbsp; Virtual Classroom
               </a>
+              }
             </ButtonGroup>
           </Col>
         </Row>

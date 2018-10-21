@@ -220,6 +220,14 @@ module.exports = React.createBackboneClass({
                 placeholder="Type to search..."
               />
            </FormGroup>
+           <FormGroup controlId="virtual">
+              <ControlLabel>Virtual Classroom</ControlLabel>
+              <FormControl
+                type="text"
+                onChange={this.changeTextValue}
+                defaultValue={this.getModel().get('virtual')}
+              />
+            </FormGroup>
             <FormGroup controlId="cost">
               <ControlLabel>Cost</ControlLabel>
               <InputGroup>

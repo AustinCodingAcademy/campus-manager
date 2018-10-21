@@ -87,7 +87,8 @@ module.exports = {
         timeEnd: req.body.timeEnd,
         client: currentUser.client,
         note: req.body.note,
-        instructors: req.body.instructors
+        instructors: req.body.instructors,
+        virtual: req.body.virtual
       });
 
       course.save(function(err, course) {
@@ -142,7 +143,8 @@ module.exports = {
         'timeEnd',
         'note',
         'section',
-        'instructors'
+        'instructors',
+        'virtual'
       ];
 
       var instructorAttributes = [
