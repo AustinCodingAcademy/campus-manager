@@ -87,10 +87,12 @@ module.exports = {
               if (charges) {
                 user.charges = charges.data;
               }
+              if (!req.user.is_admin) delete user.note;
               return res.json(user);
             }
           );
         } else {
+          if (!req.user.is_admin) delete user.note;
           return res.json(user);
         }
       });
@@ -120,7 +122,8 @@ module.exports = {
       'rocketchat',
       'website',
       'zipcode',
-      'discourse'
+      'discourse',
+      'note'
     ];
 
     _.each(attributes, function(attr) {
@@ -287,6 +290,7 @@ module.exports = {
         'is_instructor',
         'is_student',
         'price',
+        'note'
       ];
 
       if (req.user.is_admin) {
@@ -336,6 +340,7 @@ module.exports = {
           }
           user.courses = courses;
           user.charges = req.body.charges;
+          if (!req.user.is_admin) delete user.note;
           return res.json(user);
         });
       });

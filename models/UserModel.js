@@ -82,6 +82,7 @@ const userSchema = new Schema({
   rocketchat: String,
   zipcode: String,
   discourse: String,
+  note: String
 }, { timestamps: true });
 
 userSchema.set('toJSON', {

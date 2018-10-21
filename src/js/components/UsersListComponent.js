@@ -57,6 +57,7 @@ module.exports = React.createBackboneClass({
           <Td column="Phone">{user.get('phone')}</Td>
           <Td column="Campus">{user.get('campus')}</Td>
           <Td column="Roles">{user.roles().join(', ')}</Td>
+          <Td column="Note">{user.get('note')}</Td>
           <Td column="edit">
             <a href="#" onClick={this.open} data-id={user.id}>
               <FontAwesome name='pencil' />
@@ -89,7 +90,7 @@ module.exports = React.createBackboneClass({
             <Table
               className="table table-condensed table-striped"
               itemsPerPage={20}
-              filterable={['IDN', 'Name', 'Email', 'Phone', 'Roles', 'Campus']}
+              filterable={['IDN', 'Name', 'Email', 'Phone', 'Roles', 'Campus', 'Note']}
               sortable={['IDN', 'Name', 'Email', 'Campus']}
               filterBy={this.state.filterBy}
             >
@@ -100,6 +101,7 @@ module.exports = React.createBackboneClass({
                 <Th>Phone</Th>
                 <Th>Campus</Th>
                 <Th>Roles</Th>
+                <Th>Note</Th>
                 <Th>edit</Th>
               </Thead>
               {userRows}

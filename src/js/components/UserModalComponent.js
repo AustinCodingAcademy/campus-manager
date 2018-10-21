@@ -121,7 +121,8 @@ module.exports = React.createBackboneClass({
       user: this.getModel().attributes,
       roles: this.roleOptions.filter(role => {
         return this.getModel().roles().includes(role.value);
-      })
+      }),
+      credits: this.getModel().get('credits')
     });
   },
 
@@ -294,6 +295,16 @@ module.exports = React.createBackboneClass({
 DC 10% Scholarship 6/15/17: 249.00`}
                 onChange={this.changeCreditsValue}
                 defaultValue={credits}
+                rows={4}
+              />
+            </FormGroup>
+            <FormGroup controlId="note" className={`${hidden}`}>
+              <ControlLabel>Note</ControlLabel>
+              <FormControl
+                componentClass="textarea"
+                placeholder="Add a note..."
+                onChange={this.changeTextValue}
+                defaultValue={this.state.user.note}
                 rows={4}
               />
             </FormGroup>
