@@ -107,6 +107,7 @@
     "react-bootstrap": "^0.30.7",
     "react-chartjs": "jhudson8/react-chartjs#da9f718c19b8b3904fd9c46c151ae48b401b7a97",
     "react-codemirror": "^0.2.6",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-datepicker": "^0.39.0",
     "react-dom": "15.3.2",
     "react-dropzone": "3.7.2",

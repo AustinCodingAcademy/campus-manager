@@ -13,6 +13,7 @@ import FontAwesome from 'react-fontawesome';
 import DatePicker from 'react-datepicker';
 import GradeModel from '../models/GradeModel';
 import CourseUserComponent from './CourseUserComponent';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -345,6 +346,19 @@ module.exports = React.createBackboneClass({
           </Col>
           <Col xs={12} md={8} className="text-right">
             <h5>Daily Attendance Code: <strong>{utils.attendanceCode()}</strong></h5>
+            <h5>
+              Virtual Classroom: &nbsp;
+              {this.getModel().get('virtual') &&
+              <CopyToClipboard text={this.getModel().get('virtual')}
+                onCopy={() => this.setState({copied: true})}>
+                <span>
+                  {this.getModel().get('virtual')}
+                  &nbsp;&nbsp;
+                  <a href="#" onClick={e => e.preventDefault()}>copy</a>
+                </span>
+              </CopyToClipboard>
+              }
+            </h5>
             <ButtonGroup>
               <a
                 className="btn btn-default"
@@ -362,12 +376,6 @@ module.exports = React.createBackboneClass({
                 <FontAwesome name="book" />
                 &nbsp; View Textbook
               </a>
-              {this.getModel().get('virtual') &&
-              <a href={this.getModel().get('virtual')} target="_blank" className="btn btn-default">
-                <FontAwesome name="video-camera" />
-                &nbsp; Virtual Classroom
-              </a>
-              }
             </ButtonGroup>
           </Col>
         </Row>
@@ -445,7 +453,7 @@ module.exports = React.createBackboneClass({
                     <tr>
                       <th>Date</th>
                       <th>Part</th>
-                      <th>YouTube Link</th>
+                      <th>Video Link</th>
                       <th style={{minWidth: '140px'}}></th>
                     </tr>
                   </thead>
@@ -464,7 +472,7 @@ module.exports = React.createBackboneClass({
                       <td>
                         <FormControl
                           type="text"
-                          placeholder="YouTube Link"
+                          placeholder="Video Link"
                           id="video-link"
                         />
                       </td>

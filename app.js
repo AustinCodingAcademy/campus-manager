@@ -71,6 +71,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
 app.use('/api/queries', require('./routes/queries'));
+app.use('/api/videos', require('./routes/videos'));
 app.use(csrf({cookie: true}));
 // compress all responses
 app.use(compression({ threshold: 0 }))

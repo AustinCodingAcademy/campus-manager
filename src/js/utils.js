@@ -79,9 +79,5 @@ module.exports = {
 
   attendanceCode() {
     return hashids.encode(Number(moment().format('YYYY-MM-DD').split('-').join(''))).slice(0, 4).toUpperCase();
-  },
-
-  jitsiUrl(course) {
-    return 'https://meet.jit.si/' + hashids.encode([moment.utc(course.get('createdAt')).unix(), moment().format('MMDDYYYY')]);
   }
 }

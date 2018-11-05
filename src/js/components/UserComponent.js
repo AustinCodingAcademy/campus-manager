@@ -18,6 +18,7 @@ import GradeModel from '../models/GradeModel';
 import reviews from '../data/reviews';
 import socials from '../data/social';
 import utils from '../utils';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -257,7 +258,14 @@ module.exports = React.createBackboneClass({
                       <p>
                         <ControlLabel>Virtual Classroom</ControlLabel>
                         <br />
-                        {course.get('virtual')}
+                        <CopyToClipboard text={course.get('virtual')}
+                          onCopy={() => this.setState({copied: true})}>
+                          <small>
+                            {course.get('virtual')}
+                            <br/>
+                            <a href="#" onClick={e => e.preventDefault()}>copy</a>
+                          </small>
+                        </CopyToClipboard>
                       </p>
                     }
                     <p>
@@ -495,8 +503,6 @@ module.exports = React.createBackboneClass({
               <Panel header={<h3>Instructor Checklist</h3>}>
                 <h4>1. Today's Attendance Code is <strong>{utils.attendanceCode()}</strong></h4>
                 <h4>2. Start Screen Recording and Verify Audio Recording</h4>
-                <h4>3. Optionally start a Jitsi session</h4>
-                <h4>4. Upload Screencast to YouTube</h4>
               </Panel>
             </Col>
             :
