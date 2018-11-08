@@ -1,5 +1,5 @@
 var CourseModel = require('../models/CourseModel.js');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 /**
 * CourseController.js
@@ -25,7 +25,7 @@ module.exports = {
       }
       course.videos.set(course.videos.length, {
         link: link,
-        timestamp: moment().format('YYYY-MM-DD')
+        timestamp: moment().tz('America/Chicago').format('YYYY-MM-DD')
       });
       course.save(err => {
         if (err) {
