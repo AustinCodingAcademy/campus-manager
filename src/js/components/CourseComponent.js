@@ -348,16 +348,19 @@ module.exports = React.createBackboneClass({
             <h5>Daily Attendance Code: <strong>{utils.attendanceCode()}</strong></h5>
             <h5>
               Virtual Classroom: &nbsp;
-              {this.getModel().get('virtual') &&
-              <CopyToClipboard text={this.getModel().get('virtual')}
-                onCopy={() => this.setState({copied: true})}>
-                <span>
-                  {this.getModel().get('virtual')}
-                  &nbsp;&nbsp;
-                  <a href="#" onClick={e => e.preventDefault()}>copy</a>
+              {this.getModel().get('virtual') && this.getModel().get('virtual').split(' ').filter(virtual => virtual).map(virtual =>
+                <span key={virtual}>
+                  <CopyToClipboard text={virtual}
+                    onCopy={() => this.setState({copied: true})}>
+                    <span>
+                      {virtual}
+                      &nbsp;&nbsp;
+                      <a href="#" onClick={e => e.preventDefault()}>copy</a>
+                    </span>
+                  </CopyToClipboard>
+                  <br />
                 </span>
-              </CopyToClipboard>
-              }
+              )}
             </h5>
             <ButtonGroup>
               <a

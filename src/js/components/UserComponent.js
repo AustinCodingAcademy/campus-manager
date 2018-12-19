@@ -255,19 +255,25 @@ module.exports = React.createBackboneClass({
                       {textbook}
                     </p>
                     {course.get('virtual') &&
-                      <p>
+                      <div>
                         <ControlLabel>Virtual Classroom</ControlLabel>
                         <br />
-                        <CopyToClipboard text={course.get('virtual')}
-                          onCopy={() => this.setState({copied: true})}>
-                          <small>
-                            {course.get('virtual')}
-                            <br/>
-                            <a href="#" onClick={e => e.preventDefault()}>copy</a>
-                          </small>
-                        </CopyToClipboard>
-                      </p>
+                        {course.get('virtual') && course.get('virtual').split(' ').filter(virtual => virtual).map(virtual =>
+                          <span key={virtual}>
+                            <CopyToClipboard text={virtual}
+                              onCopy={() => this.setState({copied: true})}>
+                              <span>
+                                {virtual}
+                                &nbsp;&nbsp;
+                                <a href="#" onClick={e => e.preventDefault()}>copy</a>
+                              </span>
+                            </CopyToClipboard>
+                            <br />
+                          </span>
+                        )}
+                      </div>
                     }
+                    <br />
                     <p>
                       <ControlLabel>Class Times</ControlLabel>
                       <br />
