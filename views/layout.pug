@@ -38,7 +38,6 @@ html(lang='us-en')
       block content
       br
       br
-    include feedback
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js')
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js')
     script(type='text/javascript').
@@ -48,7 +47,7 @@ html(lang='us-en')
             window.location.replace('/login');
           } else {
             $('.alerts').append(
-              '<div class="alert alert-success" role="alert">' + 
+              '<div class="alert alert-success" role="alert">' +
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
                 '<span aria-hidden="true">&times;</span>' +
               '</button>' + JSON.parse(response.responseText).message +
@@ -56,6 +55,6 @@ html(lang='us-en')
             );
             $('.alert').alert();
           }
-        });    
+        });
       });
     block bottom_scripts
