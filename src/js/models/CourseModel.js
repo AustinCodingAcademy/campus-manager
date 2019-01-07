@@ -125,7 +125,7 @@ module.exports = Model.extend({
         label: student.fullName(),
         data: _.map(this.pastDates(), function(date) {
           return _.find(student.get('attendance'), function(checkIn) {
-            return checkIn.slice(0, 10) === date.format('YYYY-MM-DD');
+            return (checkIn.date || checkIn).slice(0, 10) === date.format('YYYY-MM-DD');
           }) ? 100 : 0;
         })
       });
@@ -149,7 +149,7 @@ module.exports = Model.extend({
       var checkIns = 0;
       this.get('registrations').each(function(student) {
         var match = _.find(student.get('attendance'), function(checkIn) {
-          if (moment(checkIn, 'YYYY-MM-DD HH:ss').isSame(date, 'day')) {
+          if (moment((checkIn.date || checkIn), 'YYYY-MM-DD HH:ss').isSame(date, 'day')) {
             checkIns++;
           }
         });

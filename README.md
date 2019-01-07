@@ -37,7 +37,15 @@ You first need to setup your environment.
 ### App Dependencies
 After forking, cloning, and navigating into repository:
 
-1. Install dependencies `npm install`
+1. Install dependencies `yarn`
+  * You'll need to have python 2.7 to run `yarn` the first time or to rebuild
+    * Mac OSX
+      1. `brew cask install miniconda`
+      1. `echo 'export PATH=/usr/local/miniconda3/bin:"$PATH"' >> ~/.bash_profile`
+      1. restart terminal
+      1. `conda create -n py27 python=2.7`
+      1. `source activate py27`
+      1. `yarn` or `yarn rebuild`
 1. Duplicate `.env.example` and name it `.env`
 1. Leave `npx gulp` running in one terminal session
 1. Navigate to `http://localhost:3000/register` to create a user
@@ -49,4 +57,4 @@ After forking, cloning, and navigating into repository:
   * Mac OSX `brew cask install java`
   * Windows `choco install jdk7`
   * Linux `sudo apt install openjdk-8-jdk-headless`
-1. Run `npm test`
+1. Run `yarn test`

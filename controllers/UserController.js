@@ -437,10 +437,11 @@ module.exports = {
         user.attendance = [];
       }
       var matched = _.find(user.attendance, function(date) { return moment(date, 'YYYY-MM-DD HH:ss').isSame(req.body.date, 'day')});
+      console.log(matched)
       if (matched) {
         user.attendance.splice(user.attendance.indexOf(matched), 1);
       } else {
-        user.attendance.push(req.body.date);
+        user.attendance = [...user.attendance, req.body];
       }
 
       user.save(() => {
