@@ -72,7 +72,7 @@ module.exports = Backbone.Model.extend({
   attendanceAverage(attendedDates) {
     attendedDates = _.uniq(attendedDates);
     const attendance = _.uniq(_.map(this.get('attendance'), date => {
-      return moment(date, 'YYYY-MM-DD HH:ss').format('YYYY-MM-DD');
+      return moment((date.date || date), 'YYYY-MM-DD HH:ss').format('YYYY-MM-DD');
     }));
     return Math.round(_.intersection(attendedDates, attendance).length / attendedDates.length * 100) || 0;
   },

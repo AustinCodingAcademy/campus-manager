@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Doughnut } from 'react-chartjs';
 import {
   Col, Row, Panel, PanelGroup, Table, Well, ControlLabel, FormControl,
-  InputGroup, Button
+  InputGroup, Button, Modal, FormGroup
 } from 'react-bootstrap';
 import Gravatar from 'react-gravatar';
 import Equalizer from 'react-equalizer';
@@ -19,6 +19,7 @@ import reviews from '../data/reviews';
 import socials from '../data/social';
 import utils from '../utils';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import Rating from 'react-rating';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -26,12 +27,27 @@ module.exports = React.createBackboneClass({
       showModal: false,
       user: this.getModel(),
       activeKey: this.getModel().currentCourse().id,
-      keyOpacity: 0
+      keyOpacity: 0,
+      showAttendanceModal: false,
+      inClassInstructionRating: 0,
+      preWorkRating: 0,
+      attendanceCode: '',
+      feedback: ''
     }
   },
 
   close() {
     this.setState({ showModal: false });
+  },
+
+  handleCloseAttendanceModal() {
+    this.setState({ showAttendanceModal: false });
+  },
+
+  setCheckInValue(attr, value) {
+    this.setState({
+      [attr]: value
+    });
   },
 
   open(e) {
@@ -41,29 +57,38 @@ module.exports = React.createBackboneClass({
     });
   },
 
-  checkIn(date) {
-    $.ajax('/api/users/attendance', {
-      method: 'post',
-      data: {
-        idn: this.getModel().get('idn'),
-        date: date
-      },
-      success: () => {
-        this.getModel().fetch();
-      }
-    });
+  checkIn(date, admin) {
+    if (admin || (this.state.attendanceCode && this.state.attendanceCode.toUpperCase() === utils.attendanceCode())) {
+      $.ajax('/api/users/attendance', {
+        method: 'post',
+        data: {
+          idn: this.getModel().get('idn'),
+          date: date,
+          inClassInstructionRating: this.state.inClassInstructionRating,
+          preWorkRating: this.state.preWorkRating,
+          attendanceCode: this.state.attendanceCode,
+          feedback: this.state.feedback
+        },
+        success: () => {
+          this.setState({
+            showAttendanceModal: false,
+            inClassInstructionRating: 0,
+            preWorkRating: 0,
+            attendanceCode: '',
+            feedback: ''
+          })
+          this.getModel().fetch();
+        }
+      });
+    }
   },
 
-  changeAttendance(e) {
-    e.preventDefault();
-    const date = e.currentTarget.getAttribute('data-date');
+  changeAttendance(date, e) {
+    e.preventDefault()
     if (this.props.currentUser.get('is_admin') || this.props.currentUser.get('is_instructor')) {
-      this.checkIn(date);
+      this.checkIn(date, this.props.currentUser.get('is_admin'));
     } else if (moment(date, 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
-      const code = prompt('Enter Daily Attendance Code');
-      if (code && code.toUpperCase() === utils.attendanceCode()) {
-        this.checkIn(date);
-      }
+      this.setState({ showAttendanceModal: true });
     }
   },
 
@@ -139,10 +164,10 @@ module.exports = React.createBackboneClass({
         if (date.isSameOrBefore(moment(), 'day')) {
           attended = <FontAwesome name="calendar-times-o" className="text-danger" />
           matched = _.find(this.getModel().get('attendance'), (attendedDate) => {
-            return moment(attendedDate, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
+            return moment((attendedDate.date || attendedDate), 'YYYY-MM-DD HH:mm').isSame(date, 'day');
           });
           if (matched) {
-            attended = <FontAwesome name="calendar-check-o" className="text-success" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')} />;
+            attended = <FontAwesome name="calendar-check-o" className="text-success" onClick={(e) => this.changeAttendance(date.format('YYYY-MM-DD HH:ss'), e)} />;
             checkin = <span>Present</span>;
           }  else {
             checkin = <span>Absent</span>;
@@ -154,7 +179,7 @@ module.exports = React.createBackboneClass({
             (this.props.currentUser.roles().some(role => ['instructor', 'admin'].includes(role)) && date.isSameOrBefore(moment(), 'day'))
           )
         ) {
-          checkin = <a href="#" onClick={this.changeAttendance} data-date={date.format('YYYY-MM-DD HH:ss')}>Check In</a>;
+          checkin = <a href="#" onClick={(e) => this.changeAttendance(date.format('YYYY-MM-DD HH:ss'), e)}>Check In</a>;
         }
         return (
           <tr key={`${i}-${j}`}>
@@ -576,6 +601,43 @@ module.exports = React.createBackboneClass({
           title='Edit Profile'
           currentUser={this.props.currentUser}
         />
+        <form>
+          <Modal show={this.state.showAttendanceModal} onHide={this.handleCloseAttendanceModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>How would you rate your understanding of the most recent content?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Row className="text-center">
+                <Col xs={6} >
+                  <FormGroup controlId="preWorkRating">
+                    <ControlLabel>Pre-Homework*</ControlLabel>
+                    <br />
+                    <Rating onChange={value => this.setCheckInValue('preWorkRating', value)} initialRating={this.state.preWorkRating}/>
+                  </FormGroup>
+                </Col>
+                <Col xs={6}>
+                  <FormGroup controlId="inClassInstructionRating">
+                    <ControlLabel>In-Class Instruction*</ControlLabel>
+                    <br />
+                    <Rating onChange={value => this.setCheckInValue('inClassInstructionRating', value)} initialRating={this.state.inClassInstructionRating}/>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <FormGroup controlId="formControlsTextarea">
+                <ControlLabel>Any Feedback?</ControlLabel>
+                <FormControl componentClass="textarea" placeholder="Help us grow!" onChange={e => this.setCheckInValue('feedback', e.target.value)}/>
+              </FormGroup>
+              <FormGroup controlId="attendanceCode">
+                <ControlLabel>Attendance Code</ControlLabel>
+                <FormControl type="text" value={this.state.attendanceCode}  onChange={(e) => this.setCheckInValue('attendanceCode', e.target.value)}/>
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.handleCloseAttendanceModal}>Close</Button>
+              <Button disabled={this.state.attendanceCode.toUpperCase() !== utils.attendanceCode()} bsStyle='primary' type="submit" onClick={() => this.checkIn(moment().format('YYYY-MM-DD HH:ss')) }>Submit</Button>
+            </Modal.Footer>
+          </Modal>
+        </form>
       </div>
     );
   }
