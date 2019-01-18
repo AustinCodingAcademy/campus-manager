@@ -86,7 +86,7 @@ module.exports = React.createBackboneClass({
   changeAttendance(date, e) {
     e.preventDefault()
     if (this.props.currentUser.get('is_admin') || this.props.currentUser.get('is_instructor')) {
-      this.checkIn(date, this.props.currentUser.get('is_admin'));
+      this.checkIn(date, true);
     } else if (moment(date, 'YYYY-MM-DD HH:mm').isSame(moment(), 'day')) {
       this.setState({ showAttendanceModal: true });
     }
