@@ -164,7 +164,7 @@ module.exports = React.createBackboneClass({
         if (date.isSameOrBefore(moment(), 'day')) {
           attended = <FontAwesome name="calendar-times-o" className="text-danger" />
           matched = _.find(this.getModel().get('attendance'), (attendedDate) => {
-            return moment((attendedDate.date || attendedDate), 'YYYY-MM-DD HH:mm').isSame(date, 'day');
+            return moment(attendedDate.date, 'YYYY-MM-DD HH:mm').isSame(date, 'day');
           });
           if (matched) {
             attended = <FontAwesome name="calendar-check-o" className="text-success" onClick={(e) => this.changeAttendance(date.format('YYYY-MM-DD HH:ss'), e)} />;
@@ -634,7 +634,7 @@ module.exports = React.createBackboneClass({
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={this.handleCloseAttendanceModal}>Close</Button>
-              <Button disabled={this.state.attendanceCode.toUpperCase() !== utils.attendanceCode()} bsStyle='primary' type="submit" onClick={() => this.checkIn(moment().format('YYYY-MM-DD HH:ss')) }>Submit</Button>
+              <Button disabled={this.state.attendanceCode.toUpperCase() !== utils.attendanceCode() || !Number(this.state.preWorkRating) || !Number(this.state.inClassInstructionRating)} bsStyle='primary' type="submit" onClick={() => this.checkIn(moment().format('YYYY-MM-DD HH:ss')) }>Submit</Button>
             </Modal.Footer>
           </Modal>
         </form>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Modal, Row, Col, Label
+  Modal, Row, Col, Label, Image
 } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 
@@ -42,9 +42,8 @@ module.exports = React.createBackboneClass({
           <Row>
             <Col xs={4} className="text-center">
               <a className="btn btn-white" href={process.env.DISCOURSE_URL} target="blank">
-                <FontAwesome name="group" fixedWidth={true} size="3x" />
-                <br />
-                &nbsp;Discourse
+                <Image src="/img/Hack_Overflow_Icon.png" responsive style={{width: '4.2rem', margin: 'auto'}} />
+                &nbsp;Hack Overflow
               </a>
             </Col>
             <Col xs={4} className="text-center">
