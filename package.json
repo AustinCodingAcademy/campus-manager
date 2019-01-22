@@ -127,7 +127,7 @@
     "require-dir": "^0.3.1",
     "run-sequence": "1.2.2",
     "serve-favicon": "2.3.0",
-    "sqlite3": "^3.1.8",
+    "sqlite3": "^4.0.6",
     "stripe": "4.12.0",
     "tableify": "^1.0.0",
     "uglifyify": "^3.0.4",
@@ -137,7 +137,7 @@
     "vinyl-source-stream": "1.1.0",
     "watchify": "^3.7.0",
     "whatwg-fetch": "^2.0.1",
-    "yosql": "kevincolten/yosql#cf1e0e41"
+    "yosql": "^1.1.4"
   },
   "browser": {
     "jquery": "jquery",
