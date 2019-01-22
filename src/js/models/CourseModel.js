@@ -124,9 +124,11 @@ module.exports = Model.extend({
       datasets.push({
         label: student.fullName(),
         data: _.map(this.pastDates(), function(date) {
-          return _.find(student.get('attendance'), function(checkIn) {
+           const checkedIn = _.find(student.get('attendance'), function(checkIn) {
             return (checkIn.date || checkIn).slice(0, 10) === date.format('YYYY-MM-DD');
-          }) ? 100 : 0;
+          })
+          if (checkedIn) console.log(checkedIn)
+          return checkedIn ? (typeof checkedIn == 'object' ? (Number(checkedIn.preWorkRating) + Number(checkedIn.inClassInstructionRating)) / 2 / 5 * 100 : 100) : 0;
         })
       });
     }, this);
@@ -139,6 +141,7 @@ module.exports = Model.extend({
         options: this.get('attendance').get('student').options
       }
     }, { silent: true });
+    console.log(datasets)
   },
 
   attendanceOverTime: function() {
