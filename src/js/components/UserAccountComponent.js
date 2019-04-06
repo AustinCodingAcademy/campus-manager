@@ -116,7 +116,7 @@ module.exports = React.createBackboneClass({
       totalPaid += ((charge.amount - charge.amount_refunded) / 100);
       return(
         <tr key={charge.created}>
-          <td>{('$' + ((charge.amount - charge.amount_refunded) / 100).toFixed(2))}</td>
+          <td>{('$' + ((charge.amount - charge.amount_refunded) / 100).toFixed(2))}{Number(charge.metadata.fee) ? ` + $${Number(charge.metadata.fee / 100).toFixed(2)} fee` : ''}</td>
           <td>*{charge.source.last4}</td>
           <td>{moment.unix(charge.created).format('MM/DD/YY')}</td>
           <td>{charge.metadata && charge.metadata.course_name ? `${charge.metadata.course_name} (${charge.metadata.term_name})` : ''}</td>
@@ -258,7 +258,7 @@ module.exports = React.createBackboneClass({
                   <thead>
                     <tr>
                       <th>Paid</th>
-                      <th>Card</th>
+                      <th>Acct</th>
                       <th>Date</th>
                       <th>Course</th>
                       <th>ID</th>
