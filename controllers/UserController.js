@@ -85,7 +85,10 @@ module.exports = {
             function(err, charges) {
               if (err) console.log(err);
               if (charges) {
-                user.charges = charges.data;
+                user.charges = charges.data.map(charge => ({
+                  ...charge,
+                  amount: charge.amount - (charge.metadata.fee || 0)
+                }));
               }
               if (!req.user.is_admin) delete user.note;
               return res.json(user);
