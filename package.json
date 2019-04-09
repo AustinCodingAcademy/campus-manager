@@ -17,7 +17,7 @@
     "favicon": "yarn favicon-austin && yarn favicon-sanantonio && yarn favicon-dallas && yarn favicon-houston"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=8 <11"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-rc.2",
