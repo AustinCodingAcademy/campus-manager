@@ -9,6 +9,25 @@ var transport = nodemailer.createTransport(mandrillTransport({
     apiKey: process.env.MANDRILL_API_KEY
   }
 }));
+var passport = require('passport');
+
+router.get('/current', (req, res, next) => {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    if (err) {
+      console.log(err);
+    }
+    if (info != undefined) {
+      console.log(info.message);
+      res.send(info.message);
+    } else {
+      res.status(200).send({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        username: user.username
+      });
+    }
+  })(req, res, next);
+});
 
 /*
 * GET
