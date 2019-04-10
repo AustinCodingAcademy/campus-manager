@@ -17,7 +17,7 @@
     "favicon": "yarn favicon-austin && yarn favicon-sanantonio && yarn favicon-dallas && yarn favicon-houston"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": "8.9.4"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-rc.2",
@@ -90,7 +90,7 @@
     "mongoose-unique-validator": "1.0.2",
     "mongoose-validators": "^0.1.0",
     "mongoose-version": "^1.0.0",
-    "morgan": "1.7.0",
+    "morgan": "1.9.1",
     "nightwatch": "^0.9.8",
     "node-fetch": "^1.6.3",
     "node-sass": "3.11.1",
