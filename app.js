@@ -1,6 +1,7 @@
 var express = require('express');
+var httpsRedirect = require('express-https-redirect');
 var app = express();
-
+app.use('/', httpsRedirect());
 if (process.env.NODE_ENV === 'test') {
   process.env.MONGODB_URI = process.env.TEST_DB;
 }
