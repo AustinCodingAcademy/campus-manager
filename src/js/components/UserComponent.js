@@ -511,9 +511,9 @@ module.exports = React.createBackboneClass({
             <Col xs={12} md={6}>
               <Panel header={<h3>Admin Tips</h3>}>
                 <p>New User Registration can be found at</p>
-                <small><pre>{`https://campus.${key}codingacademy.com/register/${this.getModel().get('client')}`}</pre></small>
+                <small><pre>{`${window.location.origin}/register/${this.getModel().get('client')}`}</pre></small>
                 <p>Users can reset their password at</p>
-                <small><pre>{`https://campus.${key}codingacademy.com/reset`}</pre></small>
+                <small><pre>{`${window.location.origin}/reset`}</pre></small>
                 <p>Your API Key is</p>
                 <small>
                   <pre>
