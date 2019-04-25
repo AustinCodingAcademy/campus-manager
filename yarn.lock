@@ -3018,6 +3018,11 @@ express-flash@0.0.2:
   dependencies:
     connect-flash "0.1.x"
 
+express-https-redirect@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/express-https-redirect/-/express-https-redirect-1.0.0.tgz#d97bbb382cb428dcd8125710dcfc563a645c48e0"
+  integrity sha1-2Xu7OCy0KNzYElcQ3PxWOmRcSOA=
+
 express-session@1.14.2:
   version "1.14.2"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.14.2.tgz#6bcf586ed6d1dc37b02570087756c9de7b80b275"
