@@ -59,15 +59,18 @@ module.exports = React.createBackboneClass({
       case 'houstontxcodingacademy':
         key = 'houstontx';
         break;
+      case 'lubbockcodingacademy':
+        key = 'lubbock';
+        break
     }
     return(
       <div>
         <Navbar collapseOnSelect fluid>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#">
+              <a href="#" style={{display: 'flex', minWidth: '220px', alignItems: 'center'}}>
                 <img src={`/img/${key}-logo.svg`} />
-                Campus Manager
+                <span>Campus Manager</span>
               </a>
             </Navbar.Brand>
             <Navbar.Toggle />
