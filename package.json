@@ -14,7 +14,7 @@
     "favicon-austin": "real-favicon generate _favicon_austin.json faviconData.json public/favicons/austin && yarn favicon-inject-austin",
     "favicon-sanantonio": "real-favicon generate _favicon_sanantonio.json faviconData.json public/favicons/sanantonio && yarn favicon-inject-sanantonio",
     "favicon-dallas": "real-favicon generate _favicon_dallas.json faviconData.json public/favicons/dallas && yarn favicon-inject-dallas",
-    "favicon-lubbock": "real-favicon generate _favicon_lubbock.json faviconData.json public/favicons/dallas && yarn favicon-inject-lubbock",
+    "favicon-lubbock": "real-favicon generate _favicon_lubbock.json faviconData.json public/favicons/lubbock && yarn favicon-inject-lubbock",
     "favicon-houston": "real-favicon generate _favicon_houston.json faviconData.json public/favicons/houston && yarn favicon-inject-houston",
     "favicon": "yarn favicon-austin && yarn favicon-sanantonio && yarn favicon-dallas && yarn favicon-houston && yarn favicon-lubbock"
   },
