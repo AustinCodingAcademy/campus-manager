@@ -52,9 +52,12 @@ app.use(function (req, res, next) {
     case 'houstontxcodingacademy':
       key = 'houstontx';
       break;
+    case 'lubbockcodingacademy':
+      key = 'lubbock';
+      break;
   }
   res.locals = {
-    campusKey: key
+    campusKey: 'lubbock'
   };
   next();
 });

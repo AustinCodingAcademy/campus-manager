@@ -40,3 +40,7 @@ block bottom_scripts
         $that.intlTelInput('setNumber', $that.val());
       });
     });
+
+    if (window.location.href.includes('lubbock')) {
+      $('[name="campus"]').val('Lubbock')
+    }
