@@ -58,7 +58,7 @@ app.use(function (req, res, next) {
       break;
   }
   res.locals = {
-    campusKey: 'lubbock'
+    campusKey: key
   };
   next();
 });
