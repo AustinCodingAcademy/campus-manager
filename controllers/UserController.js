@@ -87,7 +87,7 @@ module.exports = {
               if (charges) {
                 user.charges = charges.data.map(charge => ({
                   ...charge,
-                  amount: charge.amount - (charge.metadata.fee || 0)
+                  amount: charge.amount - ((charge.metadata && charge.metadata.fee) ? charge.metadata.fee : 0)
                 }));
               }
               if (!req.user.is_admin) delete user.note;
