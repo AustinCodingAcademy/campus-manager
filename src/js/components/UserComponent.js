@@ -67,7 +67,8 @@ module.exports = React.createBackboneClass({
           inClassInstructionRating: this.state.inClassInstructionRating,
           preWorkRating: this.state.preWorkRating,
           attendanceCode: this.state.attendanceCode,
-          feedback: this.state.feedback
+          feedback: this.state.feedback,
+          courseId: this.getModel().currentCourse().id
         },
         success: () => {
           this.setState({
