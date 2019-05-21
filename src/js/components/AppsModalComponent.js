@@ -28,7 +28,7 @@ module.exports = React.createBackboneClass({
               </a>
             </Col>
             <Col xs={4} className="text-center">
-              <a className="btn btn-white" href="https://austincodingacademy.com/tutors/" target="blank">
+              <a className="btn btn-white" href={`${window.location.origin.split('campus.').join('')}/tutors/`} target="blank">
                 <FontAwesome name="graduation-cap" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Tutoring
