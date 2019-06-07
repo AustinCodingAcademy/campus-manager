@@ -613,14 +613,26 @@ module.exports = React.createBackboneClass({
                   <FormGroup controlId="preWorkRating">
                     <ControlLabel>Pre-Homework*</ControlLabel>
                     <br />
-                    <Rating onChange={value => this.setCheckInValue('preWorkRating', value)} initialRating={this.state.preWorkRating}/>
+                    <Rating
+                      style={{ fontSize: '22px', color: '#F8B231' }}
+                      emptySymbol="fa fa-star-o"
+                      fullSymbol="fa fa-star"
+                      onChange={value => this.setCheckInValue('preWorkRating', value)}
+                      initialRating={this.state.preWorkRating}
+                    />
                   </FormGroup>
                 </Col>
                 <Col xs={6}>
                   <FormGroup controlId="inClassInstructionRating">
                     <ControlLabel>In-Class Instruction*</ControlLabel>
                     <br />
-                    <Rating onChange={value => this.setCheckInValue('inClassInstructionRating', value)} initialRating={this.state.inClassInstructionRating}/>
+                    <Rating
+                      style={{ fontSize: '22px', color: '#F8B231' }}
+                      emptySymbol="fa fa-star-o"
+                      fullSymbol="fa fa-star"
+                      onChange={value => this.setCheckInValue('inClassInstructionRating', value)}
+                      initialRating={this.state.inClassInstructionRating}
+                    />
                   </FormGroup>
                 </Col>
               </Row>
