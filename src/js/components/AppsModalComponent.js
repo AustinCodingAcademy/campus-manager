@@ -47,11 +47,11 @@ module.exports = React.createBackboneClass({
               </a>
             </Col>
             <Col xs={4} className="text-center">
-              <a className="btn btn-white" href="https://student.austincodingacademy.com" target="blank">
+              {/* <a className="btn btn-white" href="https://student.austincodingacademy.com" target="blank">
                 <FontAwesome name="book" fixedWidth={true} size="3x" />
                 <br />
                 &nbsp;Handbook
-              </a>
+              </a> */}
             </Col>
           </Row>
         </Modal.Body>
