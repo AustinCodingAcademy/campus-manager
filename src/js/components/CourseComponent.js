@@ -344,24 +344,20 @@ module.exports = React.createBackboneClass({
               {`${this.getModel().get('name').split(' ')[0]}.${this.getModel().get('section')} ${this.getModel().get('name').split(' ').slice(1).join(' ')}`}
             </h2>
           </Col>
-          <Col xs={12} md={8} className="text-right">
+          <Col xs={12} md={8} className="text-right" style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}}>
             <h5>Daily Attendance Code: <strong>{utils.attendanceCode()}</strong></h5>
-            <h5>
-              Virtual Classroom: &nbsp;
-              {this.getModel().get('virtual') && this.getModel().get('virtual').split(' ').filter(virtual => virtual).map(virtual =>
-                <span key={virtual}>
-                  <CopyToClipboard text={virtual}
-                    onCopy={() => this.setState({copied: true})}>
-                    <span>
-                      {virtual}
-                      &nbsp;&nbsp;
-                      <a href="#" onClick={e => e.preventDefault()}>copy</a>
-                    </span>
-                  </CopyToClipboard>
-                  <br />
-                </span>
+            <ButtonGroup style={{marginBottom: '5px'}}>
+              {this.getModel().get('virtual') && this.getModel().get('virtual').split(' ').filter(virtual => virtual).map((virtual, idx) =>
+                <a
+                  className="btn btn-default"
+                  href={virtual}
+                  target="_blank"
+                >
+                  <FontAwesome name="desktop" />
+                  &nbsp; Virtual Classroom {idx + 1}
+                </a>
               )}
-            </h5>
+            </ButtonGroup>
             <ButtonGroup>
               <a
                 className="btn btn-default"
