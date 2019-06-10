@@ -389,7 +389,7 @@ module.exports = React.createBackboneClass({
                 </small>
               }
             >
-              <Row>
+              <Row style={{display: 'flex', alignItems: 'space-between'}}>
                 <Col xs={3} style={{ overflowX: 'scroll' }}>
                   <Table striped>
                     <thead>
