@@ -349,6 +349,7 @@ module.exports = React.createBackboneClass({
             <ButtonGroup style={{marginBottom: '5px'}}>
               {this.getModel().get('virtual') && this.getModel().get('virtual').split(' ').filter(virtual => virtual).map((virtual, idx) =>
                 <a
+                  key={virtual}
                   className="btn btn-default"
                   href={virtual}
                   target="_blank"
