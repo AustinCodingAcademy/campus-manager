@@ -10,7 +10,6 @@ import {
 import Gravatar from 'react-gravatar';
 import Equalizer from 'react-equalizer';
 import FontAwesome from 'react-fontawesome';
-import TermsCollection from '../collections/TermsCollection';
 import UserAccountComponent from './UserAccountComponent';
 import UserModalComponent from './UserModalComponent';
 import UserReviewComponent from './UserReviewComponent';
@@ -18,7 +17,6 @@ import GradeModel from '../models/GradeModel';
 import reviews from '../data/reviews';
 import socials from '../data/social';
 import utils from '../utils';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Rating from 'react-rating';
 
 module.exports = React.createBackboneClass({
@@ -137,8 +135,7 @@ module.exports = React.createBackboneClass({
 
   render() {
     const key = utils.campusKey(this.getModel());
-    this.getModel().get('courses').comparator = this.getModel().get('courses').reverse;
-    this.getModel().get('courses').sort();
+    this.getModel().get('courses').models.sort((a, b) => a.startDate < b.startDate ? -1 : 1)
     const courses = this.getModel().get('courses').map((course, i) => {
       const dates = course.classDates().map((date, j) => {
         let attended = <FontAwesome name="calendar-o" />;

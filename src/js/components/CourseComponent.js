@@ -13,7 +13,6 @@ import FontAwesome from 'react-fontawesome';
 import DatePicker from 'react-datepicker';
 import GradeModel from '../models/GradeModel';
 import CourseUserComponent from './CourseUserComponent';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
