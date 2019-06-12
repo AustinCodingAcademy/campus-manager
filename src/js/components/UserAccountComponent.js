@@ -40,14 +40,15 @@ module.exports = React.createBackboneClass({
 
   render() {
     const courses = new CoursesCollection();
-    courses.comparator = courses.reverse;
     const currentCourse = this.getModel().currentCourse();
     const futureCourse = this.getModel().futureCourse();
     let totalCourseCost = 0;
     const courseCharges = [];
     let totalPaid = 0;
 
-    this.getModel().get('courses').each(course => {
+    this.getModel().get('courses').models
+    .sort((a, b) => a.get('term').get('start_date') < b.get('term').get('start_date') ? -1 : 1)
+    .map(course => {
       if (course.get('cost') && course.get('cost') > 0) {
         totalCourseCost += this.getModel().get('price') || course.get('cost');
         courseCharges.push(
