@@ -18,7 +18,6 @@ import GradeModel from '../models/GradeModel';
 import reviews from '../data/reviews';
 import socials from '../data/social';
 import utils from '../utils';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Rating from 'react-rating';
 
 module.exports = React.createBackboneClass({
@@ -137,31 +136,31 @@ module.exports = React.createBackboneClass({
 
   render() {
     const key = utils.campusKey(this.getModel());
-    this.getModel().get('courses').comparator = this.getModel().get('courses').reverse;
-    this.getModel().get('courses').sort();
-    const courses = this.getModel().get('courses').map((course, i) => {
-      const dates = course.classDates().map((date, j) => {
-        let attended = <FontAwesome name="calendar-o" />;
-        let matched;
-        let checkin;
-        let videos = course.get('videos').filter(video => {
-          return video.timestamp === date.format('YYYY-MM-DD');
-        });
-        videos = videos.map((video, idx) => {
-          return (
-            <span key={`${video.link}-{idx}`}>
-              <a href={video.link} target="_blank">
-                <FontAwesome name="youtube-play" />
-                &nbsp; Pt. {idx + 1}
-              </a>
-              {idx < videos.length - 1 ?
-              <span>&nbsp;|&nbsp;</span>
-              :
-              ''
-              }
-            </span>
-          );
-        });
+    const courses = this.getModel().get('courses').models
+      .sort((a, b) => a.get('term').get('start_date') > b.get('term').get('start_date') ? -1 : 1)
+      .map((course, i) => {
+        const dates = course.classDates().map((date, j) => {
+          let attended = <FontAwesome name="calendar-o" />;
+          let matched;
+          let checkin;
+          let videos = course.get('videos').filter(video => {
+            return video.timestamp === date.format('YYYY-MM-DD');
+          });
+          videos = videos.map((video, idx) => {
+            return (
+              <span key={`${video.link}-{idx}`}>
+                <a href={video.link} target="_blank">
+                  <FontAwesome name="youtube-play" />
+                  &nbsp; Pt. {idx + 1}
+                </a>
+                {idx < videos.length - 1 ?
+                <span>&nbsp;|&nbsp;</span>
+                :
+                ''
+                }
+              </span>
+            );
+          });
         if (date.isSameOrBefore(moment(), 'day')) {
           attended = <FontAwesome name="calendar-times-o" className="text-danger" />
           matched = _.find(this.getModel().get('attendance'), (attendedDate) => {
@@ -182,6 +181,7 @@ module.exports = React.createBackboneClass({
         ) {
           checkin = <a href="#" onClick={(e) => this.changeAttendance(date.format('YYYY-MM-DD HH:ss'), e)}>Check In</a>;
         }
+
         return (
           <tr key={`${i}-${j}`}>
             <td>{date.format("ddd, MMM D")}</td>
@@ -233,9 +233,11 @@ module.exports = React.createBackboneClass({
           </tr>
         );
       });
+
       const withdrawal = course.get('withdrawals').find(wd => {
         return wd.userId === this.getModel().id;
       });
+
       let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(1, 'month').format('ddd, MMM D')}</span>;
       if (withdrawal) {
         textbook = <span>Withdrawn</span>;
@@ -247,7 +249,9 @@ module.exports = React.createBackboneClass({
           </a>
         );
       }
+
       return (
+        // Beginning of Course Panel
         <Panel
           key={course.id}
           header={

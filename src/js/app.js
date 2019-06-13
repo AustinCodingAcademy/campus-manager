@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ReactDOM.render(UsersListComponent({
         collection: users,
         currentUser: this.currentUser
-       }), document.getElementById('container'));
+      }), document.getElementById('container'));
     },
 
     locations: function() {
