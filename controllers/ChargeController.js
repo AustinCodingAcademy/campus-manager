@@ -46,56 +46,36 @@ module.exports = {
   },
 
   plaid: async (req, res) => {
-    // Change sandbox to development to test with live users and change
-    // to production when you're ready to go live!
+    try {
+      var plaidClient = new plaid.Client(
+        process.env.PLAID_CLIENT_ID,
+        process.env.PLAID_SECRET,
+        process.env.PLAID_PUBLIC_KEY,
+        plaid.environments[process.env.PLAID_ENV]
+      );
 
-    var plaidClient = new plaid.Client(
-      process.env.PLAID_CLIENT_ID,
-      process.env.PLAID_SECRET,
-      process.env.PLAID_PUBLIC_KEY,
-      plaid.environments[process.env.PLAID_ENV]
-    );
-
-    plaidClient.exchangePublicToken(req.body.metadata.public_token,
-    async function(err, plaidRes1) {
-
-      // Generate a bank account token
-      plaidClient.createStripeToken(plaidRes1.access_token, req.body.metadata.account_id,
-      async function (err, plaidRes2) {
-        UserModel.findOne({
-          _id: req.body.user_id,
-          client: req.user.client
-        }, async function(err, user) {
-          if(err) {
-            return res.json(500, {
-              message: 'Error getting user.',
-              error: err
-            });
-          }
-          if(!user) {
-            return res.json(404, {
-              message: 'No such user'
-            });
-          }
-          if (!user.customer_id) {
-            stripe.customers.create({
-              email: user.username
-            }, async function(err, customer) {
-              if (err) { return res.json(500, { message: 'Error creating new customer.', error: err }); }
-              user.customer_id = customer.id;
-              user.save(async function(err, user) {
-                if (err) { return res.json(500, { message: 'Error saving customer id.', error: err }); }
-                const charge = await createCharge(req, res, user, plaidRes2.stripe_bank_account_token);
-                return res.json(charge);
-              });
-            });
-          } else {
-            const charge = await createCharge(req, res, user, plaidRes2.stripe_bank_account_token);
-            return res.json(charge);
-          }
+      const plaidRes1 = await plaidClient.exchangePublicToken(req.body.metadata.public_token);
+      const plaidRes2 = await plaidClient.createStripeToken(plaidRes1.access_token, req.body.metadata.account_id)
+      const user = await UserModel.findOne({ _id: req.body.user_id, client: req.user.client }).exec();
+      if(!user) {
+        console.error('No such user');
+        return res.json(404, {
+          message: 'No such user'
         });
+      }
+      if (!user.customer_id) {
+        const customer = stripe.customers.create({ email: user.username })
+        user.customer_id = customer.id;
+        await user.save();
+      }
+      const charge = await createCharge(req, res, user, plaidRes2.stripe_bank_account_token);
+      return res.json(charge);
+    } catch (error) {
+      console.error(error);
+      return res.json(500, {
+        message: 'Error creating charge'
       });
-    });
+    }
   }
 };
 
