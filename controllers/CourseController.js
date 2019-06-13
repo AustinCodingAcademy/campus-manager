@@ -16,7 +16,7 @@ module.exports = {
   list: function(req, res) {
     CourseModel.find({
       client: req.user.client
-    }).populate('term registrations location textbook instructors').exec(function(err, courses){
+    }).populate('term registrations location textbooks instructors').exec(function(err, courses){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
@@ -50,7 +50,7 @@ module.exports = {
     CourseModel.findOne({
       _id: id,
       client: req.user.client
-    }).populate('term registrations location textbook instructors').exec(function(err, course){
+    }).populate('term registrations location textbooks instructors').exec(function(err, course){
       if(err) {
         return res.json(500, {
           message: 'Error getting course.',
@@ -79,7 +79,7 @@ module.exports = {
         term : req.body.term,
         days : req.body.days,
         seats : req.body.seats,
-        textbook: req.body.textbook,
+        textbooks: req.body.textbooks,
         videos: req.body.videos,
         cost: req.body.cost,
         location : req.body.location,
@@ -134,7 +134,7 @@ module.exports = {
         'seats',
         'holidays',
         'grades',
-        'textbook',
+        'textbooks',
         'videos',
         'cost',
         'term',
@@ -175,7 +175,7 @@ module.exports = {
             message: 'No such course'
           });
         }
-        course.populate('registrations location term textbook instructors').populate(function(err, course) {
+        course.populate('registrations location term textbooks instructors').populate(function(err, course) {
           return res.json(course);
         });
       });

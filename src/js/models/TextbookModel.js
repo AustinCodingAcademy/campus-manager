@@ -1,6 +1,6 @@
-import { Model } from 'backbone';
+import * as Backbone from 'backbone';
 
-module.exports = Model.extend({
+module.exports = Backbone.Model.extend({
   urlRoot: 'api/textbooks',
   idAttribute: '_id',
 
@@ -10,3 +10,6 @@ module.exports = Model.extend({
     student_url: ''
   }
 });
+
+
+

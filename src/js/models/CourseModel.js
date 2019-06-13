@@ -5,7 +5,7 @@ import 'moment-range';
 const TermModel = require('./TermModel');
 const UsersCollection = require('../collections/UsersCollection');
 const LocationModel = require('../models/LocationModel');
-const TextbookModel = require('../models/TextbookModel');
+const TextbooksCollection = require('../collections/TextbooksCollection');
 
 module.exports = Model.extend({
   urlRoot: 'api/courses',
@@ -20,7 +20,7 @@ module.exports = Model.extend({
     holidays: [],
     cost: '',
     location: new LocationModel(),
-    textbook: new TextbookModel(),
+    textbooks: new TextbooksCollection(),
     videos: [],
     withdrawals: [],
     section: '',
@@ -183,8 +183,8 @@ module.exports = Model.extend({
       obj.location = new LocationModel(obj.location, { parse: true });
     }
 
-    if (obj.textbook) {
-      obj.textbook = new TextbookModel(obj.textbook, { parse: true });
+    if (obj.textbooks) {
+      obj.textbooks = new TextbooksCollection(obj.textbooks, { parse: true });
     }
 
     return obj;
