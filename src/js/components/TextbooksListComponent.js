@@ -11,7 +11,8 @@ module.exports = React.createBackboneClass({
       showModal: false,
       textbook: new TextbookModel(),
       modalTitle: 'New Textbook',
-      filterBy: ''
+      filterBy: '',
+      deleteBtn: true
     }
   },
 
@@ -25,7 +26,8 @@ module.exports = React.createBackboneClass({
     this.state.textbook.clear().set(textbook.attributes);
     this.setState({
       showModal: true,
-      modalTitle: textbook.id ? 'Edit Textbook' : 'New Textbook'
+      modalTitle: textbook.id ? 'Edit Textbook' : 'New Textbook',
+      deleteBtn: textbook.id ? true : false
     });
   },
 
@@ -107,6 +109,7 @@ module.exports = React.createBackboneClass({
             model={this.state.textbook}
             title={this.state.modalTitle}
             listComponent={this}
+            deleteBtn={this.state.deleteBtn}
           />
         </Col>
       </Row>

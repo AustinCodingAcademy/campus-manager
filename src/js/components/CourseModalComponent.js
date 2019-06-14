@@ -35,7 +35,6 @@ module.exports = React.createBackboneClass({
     return {
       location: new LocationModel(),
       term: new TermModel(),
-      // textbooks: new TextbookModel(),
       textbooks: [],
       course: this.getModel().attributes,
       days: [],
@@ -72,9 +71,9 @@ module.exports = React.createBackboneClass({
 
   selectTextbooks(options) {
     this.setState({ textbooks: options });
-    const idArr = options.map(option => option.value);
-    const newCourseValue = Object.assign({}, this.state.course, { textbooks: idArr });
-    this.setState({ course: newCourseValue });
+    this.state.course.textbooks = options.map(textbook => {
+      return textbook.value
+    })
   },
 
   selectInstructors(options) {
@@ -145,13 +144,16 @@ module.exports = React.createBackboneClass({
         textbook: textbook
       };
     })
+
     this.setState({
       title: nextProps.title,
       course: this.getModel().attributes,
       term: this.getModel().get('term'),
       location: this.getModel().get('location'),
-      // textbook: this.getModel().get('textbook'),
-      textbooks: this.getModel().get('textbooks'),
+      textbooks: textbookOptions.filter(textbook => {
+        console.log(this.getModel().get('textbooks').map(e => e.id))
+        return this.getModel().get('textbooks').map(e => e.id).includes(textbook.value);
+      }),
       days: this.dayOptions.filter(day => {
         return this.getModel().get('days').includes(day.value);
       }),
@@ -166,8 +168,6 @@ module.exports = React.createBackboneClass({
   },
 
   render() {
-    console.log('textbooks', this.getModel().get('textbooks'));
-    console.log('getModel', this.getModel());
     const termOptions = this.props.terms.map(term => {
       return {
         value: term.id,
@@ -219,19 +219,7 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.getModel().get('section')}
               />
             </FormGroup>
-            {/* <FormGroup controlId="textbook">
-              <ControlLabel>Textbook</ControlLabel>
-              <Select
-                name="textbooks"
-                // value={this.state.textbook.id}
-                value={this.props.textbooks}
-                // options={this.props.textbooks.map(textbook => { return { value: textbook.id, label: textbook.get('name')}; })}
-                onChange={this.setTextbookValue}
-                placeholder="Type to search..."
-                multi={true}
-              />
-           </FormGroup> */}
-           <FormGroup controlId="textbooks">
+            <FormGroup controlId="textbooks">
               <ControlLabel>Textbooks</ControlLabel>
               <Select
                 name="textbooks"
@@ -241,7 +229,7 @@ module.exports = React.createBackboneClass({
                 multi={true}
               />
             </FormGroup>
-           <FormGroup controlId="virtual">
+            <FormGroup controlId="virtual">
               <ControlLabel>Virtual Classroom</ControlLabel>
               <FormControl
                 type="text"

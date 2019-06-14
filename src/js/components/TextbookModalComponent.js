@@ -4,6 +4,7 @@ import {
   InputGroup, Alert
 } from 'react-bootstrap';
 import TextbookModel from '../models/TextbookModel';
+import TextbooksCollection from '../collections/TextbooksCollection';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
@@ -11,7 +12,8 @@ module.exports = React.createBackboneClass({
       textbook: this.getModel().attributes,
       alertVisible: 'hidden',
       error: '',
-      title: this.props.title
+      title: this.props.title,
+      deleteBtn: this.props.deleteBtn
     }
   },
 
@@ -65,7 +67,8 @@ module.exports = React.createBackboneClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       title: nextProps.title,
-      textbook: this.getModel().attributes
+      textbook: this.getModel().attributes,
+      deleteBtn: nextProps.deleteBtn
     });
   },
 
@@ -111,7 +114,7 @@ module.exports = React.createBackboneClass({
                 defaultValue={this.state.textbook.student_url}
               />
             </FormGroup>
-            <a href="#" className="link-danger" onClick={this.delete}>Delete Textbook</a>
+            {this.state.deleteBtn && <a href="#" className="link-danger" onClick={this.delete}>Delete Textbook</a>}
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="primary" type="submit" block onClick={this.save}>Save</Button>
