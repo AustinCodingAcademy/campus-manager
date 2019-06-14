@@ -62,8 +62,10 @@ module.exports = {
 
   campusKey: function(user) {
     const campus = user.campus ? user.campus : user.get('campus');
-    let key = 'austin'
+    let key = 'austin';
     switch (campus) {
+      case 'Lubbock':
+        key = 'lubbock';
       case 'San Antonio':
         key = 'sanantonio';
         break;
