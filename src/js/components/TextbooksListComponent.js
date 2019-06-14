@@ -27,7 +27,7 @@ module.exports = React.createBackboneClass({
     this.setState({
       showModal: true,
       modalTitle: textbook.id ? 'Edit Textbook' : 'New Textbook',
-      deleteBtn: textbook.id ? true : false
+      deleteBtn: !!textbook.id
     });
   },
 

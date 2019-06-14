@@ -1,6 +1,6 @@
-import * as Backbone from 'backbone';
+import { Model } from 'backbone';
 
-module.exports = Backbone.Model.extend({
+module.exports = Model.extend({
   urlRoot: 'api/textbooks',
   idAttribute: '_id',
 
