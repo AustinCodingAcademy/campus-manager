@@ -31,10 +31,12 @@ const courseSchema = new Schema({
 	 	ref: 'location',
     required: true
 	},
-  textbook: {
-	 	type: Schema.Types.ObjectId,
-	 	ref: 'textbook'
-	},
+  textbooks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'textbook'
+    }
+  ],
   timeStart: {
     type: String,
     required: true

@@ -367,14 +367,19 @@ module.exports = React.createBackboneClass({
                 <FontAwesome name="envelope" />
                 &nbsp; Email Class
               </a>
-              <a
-                className="btn btn-default"
-                href={this.getModel().get('textbook').get('instructor_url')}
-                target="_blank"
-              >
-                <FontAwesome name="book" />
-                &nbsp; View Textbook
-              </a>
+              {/* mapping for possible multiple textbooks */}
+              {
+                this.getModel().get('textbooks').map(textbook =>
+                  <a
+                    className="btn btn-default"
+                    href={textbook.get('instructor_url')}
+                    target="_blank"
+                  >
+                    <FontAwesome name="book" />
+                    &nbsp; View {textbook.get('name')} Textbook
+                  </a>
+                )
+              }
             </ButtonGroup>
           </Col>
         </Row>
