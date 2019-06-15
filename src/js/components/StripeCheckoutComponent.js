@@ -3,14 +3,28 @@ import * as Backbone from 'backbone';
 import StripeCheckout from 'react-stripe-checkout';
 import { Button } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
-import PlaidLink from 'react-plaid-link'
+import PlaidLink from 'react-plaid-link';
+import PayConfirmationModalComponent from './PayConfirmationModalComponent';
 
 module.exports = React.createBackboneClass({
   getInitialState() {
     return {
       paymentAmount: this.props.paymentAmount,
-      course: this.props.course
+      course: this.props.course,
+      showModal: false
     };
+  },
+
+  open() {
+    this.setState({
+      showModal: true
+    });
+  },
+
+  close() {
+    this.setState({
+      showModal: false
+    });
   },
 
   register() {
@@ -27,6 +41,7 @@ module.exports = React.createBackboneClass({
       success: () => {
         this.state.course.get('registrations').add(this.getModel());
         this.getModel().fetch();
+        this.open();
       },
       error: (model, res) => {
         this.setState({
@@ -107,6 +122,10 @@ module.exports = React.createBackboneClass({
             <FontAwesome name="credit-card" /> 3. Pay With Card (+ 3% fee)
           </Button>
         </StripeCheckout>
+        <PayConfirmationModalComponent
+          show={this.state.showModal}
+          onHide={this.close}
+        />
       </div>
     );
   }
