@@ -3,14 +3,10 @@ import { Modal } from 'react-bootstrap';
 
 module.exports = React.createBackboneClass({
 
-  componentDidMount() {
-
-  },
-
   style: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   render() {
