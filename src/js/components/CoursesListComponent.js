@@ -61,7 +61,7 @@ module.exports = React.createBackboneClass({
             </div>
           </Td>
           <Td column="Section">{course.get('section')}</Td>
-          <Td column="Textbook">{course.get('textbook').get('name')}</Td>
+          <Td column="Textbook">{course.get('textbooks').get('name')}</Td>
           <Td column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
           <Td column="Term">{course.get('term').get('name')}</Td>
           <Td column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>

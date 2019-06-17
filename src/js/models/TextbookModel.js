@@ -10,3 +10,6 @@ module.exports = Model.extend({
     student_url: ''
   }
 });
+
+
+
