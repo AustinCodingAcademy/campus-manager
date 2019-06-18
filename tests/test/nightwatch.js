@@ -10,7 +10,7 @@ function extend(target) {
 };
 
 [
-  '../CreateSession',
+  '../CreateSession',  // don't worry about this
   '../CreateClient',
   '../CreateTerm',
   '../CreateLocation',

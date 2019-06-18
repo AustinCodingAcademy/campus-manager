@@ -2,9 +2,11 @@ module.exports = {
   'Create Term': browser => {
     browser
     .click('#admin-dropdown')
-    .click('[href="#terms"]')
+    .click('a[href="#terms"]')
     .click('a[data-test="new-term"]')
-    .setValue('#name', 'Test Term')
-    .click('button[type="submit"]');
+    .setValue('input#name', 'Test Term')
+    .setValue('input#start-date', 'Test start')
+    .setValue('input#end-date', 'Test end')
+    .click('button[type="submit"]')
   }
 }

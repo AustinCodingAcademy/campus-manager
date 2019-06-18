@@ -424,7 +424,7 @@ module.exports = React.createBackboneClass({
               >
                 <Row>
                   <Col xs={12}>
-                    <h4>
+                    <h4 data-test="name">
                       <a
                         href="http://en.gravatar.com/"
                         target="_blank"
@@ -443,7 +443,7 @@ module.exports = React.createBackboneClass({
                     <p>
                       <FontAwesome name="envelope" fixedWidth={true} />
                       &nbsp;
-                      <a href={'mailto:' + this.getModel().get('username')} target="_blank">
+                      <a data-test="email" href={'mailto:' + this.getModel().get('username')} target="_blank">
                         {this.getModel().get('username')}
                       </a>
                     </p>
@@ -457,7 +457,7 @@ module.exports = React.createBackboneClass({
                     <p>
                       <FontAwesome name="mobile" fixedWidth={true} />
                       &nbsp;
-                      <a href={'tel:'+ this.getModel().get('phone')}>
+                      <a data-test="phone" href={'tel:'+ this.getModel().get('phone')}>
                         {this.getModel().get('phone')}
                       </a>
                     </p>
