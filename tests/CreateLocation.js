@@ -10,9 +10,16 @@ module.exports = {
     .setValue('input#city', 'Austin')
     .setValue('input#state', 'TX')
     .setValue('input#zipcode', '78701')
-    .setValue('input[type="tel"]', '+1 (555)555-5555')
+    .clearValue('input[type="tel"]')
+    .setValue('input[type="tel"]', '+1 (555) 555-5555')
     .setValue('input#contact', 'John Smith 555-555-5555')
     .setValue('input#note', 'On the 5th Floor')
-    .click('button[type="submit"]');
+    .click('button[type="submit"]')
+    .pause(1000)
+    .verify.containsText('[label="Name"]', 'Test Location')
+    .verify.containsText('[label="Address"]', '555 Travis Lane, Austin, TX 78701')
+    .verify.containsText('[label="Phone"]', '+1 (555) 555-5555')
+    .verify.containsText('[label="Contact"]', 'John Smith 555-555-5555')
+    .verify.containsText('[label="Note"]', 'On the 5th Floor')
   }
 }
