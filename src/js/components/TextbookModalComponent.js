@@ -35,7 +35,6 @@ module.exports = React.createBackboneClass({
         this.props.onHide();
       },
       error: (model, res) => {
-        console.log('res textbookmodalcomp', res)
         this.setState({
           error: res.responseJSON.message,
           alertVisible: ''

@@ -55,18 +55,18 @@ module.exports = React.createBackboneClass({
 
       return (
         <Tr key={course.id}>
-          <Td column="Name" value={course.get('name')}>
+          <Td data-test="name" column="Name" value={course.get('name')}>
             <div>
               <a href="#" onClick={this.show} data-id={course.id}>{course.get('name')}</a>
             </div>
           </Td>
-          <Td column="Section">{course.get('section')}</Td>
-          <Td column="Textbook">{course.get('textbooks').get('name')}</Td>
-          <Td column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
-          <Td column="Term">{course.get('term').get('name')}</Td>
-          <Td column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>
-          <Td column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
-          <Td column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
+          <Td data-test="section" column="Section">{course.get('section')}</Td>
+          <Td data-test="textbook" column="Textbook">{course.get('textbooks').get('name')}</Td>
+          <Td data-test="location" column="Location">{course.get('location') ? course.get('location').get('name') : ''}</Td>
+          <Td data-test="term" column="Term">{course.get('term').get('name')}</Td>
+          <Td data-test="days" column="Days">{`${course.shortDays()} ${moment(course.get('timeStart'), 'HH:mm').format('h:mm a')} - ${moment(course.get('timeEnd'), 'HH:mm').format('h:mm a')}`}</Td>
+          <Td data-test="seats" column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
+          <Td data-test="cost" column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
           <Td column="Instructors">{instructorNames}</Td>
           <Td column="edit" className={hidden}>
             <a href="#" onClick={this.open} data-id={course.id}>

@@ -240,6 +240,7 @@ module.exports = React.createBackboneClass({
               <ControlLabel>Textbooks</ControlLabel>
               <Select
                 name="textbooks"
+                data-test="textbooks"
                 value={textbooks}
                 options={textbookOptions}
                 onChange={this.selectTextbooks}
