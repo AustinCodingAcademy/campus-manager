@@ -46,18 +46,18 @@ module.exports = React.createBackboneClass({
       return (
         <Tr key={user.id}>
           <Td column="IDN">{user.get('idn')}</Td>
-          <Td column="Name" value={user.fullName()}>
+          <Td data-test="name" column="Name" value={user.fullName()}>
             <a href="#" onClick={this.show} data-id={user.id}>{user.fullName()}</a>
           </Td>
-          <Td column="Email" value={user.get('username')}>
+          <Td data-test="email" column="Email" value={user.get('username')}>
             <div>
-              <a href={`mailto:${user.get('username')}`} target="_blank">{user.get('username')}</a>
+              <a href={`mailto:${user.get('username')}` } target="_blank">{user.get('username')}</a>
             </div>
           </Td>
-          <Td column="Phone">{user.get('phone')}</Td>
-          <Td column="Campus">{user.get('campus')}</Td>
-          <Td column="Roles">{user.roles().join(', ')}</Td>
-          <Td column="Note">{user.get('note')}</Td>
+          <Td data-test="phone" column="Phone">{user.get('phone')}</Td>
+          <Td data-test="location" column="Campus">{user.get('campus')}</Td>
+          <Td data-test="roles" column="Roles">{user.roles().join(', ')}</Td>
+          <Td data-test="notes" column="Note">{user.get('note')}</Td>
           <Td column="edit">
             <a href="#" onClick={this.open} data-id={user.id}>
               <FontAwesome name='pencil' />
@@ -73,7 +73,7 @@ module.exports = React.createBackboneClass({
           <h3>
             Users
             <small>
-              <a href="#" className="pull-right" onClick={this.open}>
+              <a href="#" data-test="add-user" className="pull-right" onClick={this.open}>
                 <FontAwesome name='plus' />
                 &nbsp;User
               </a>

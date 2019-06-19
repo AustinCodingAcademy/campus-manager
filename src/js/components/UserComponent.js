@@ -10,7 +10,6 @@ import {
 import Gravatar from 'react-gravatar';
 import Equalizer from 'react-equalizer';
 import FontAwesome from 'react-fontawesome';
-import TermsCollection from '../collections/TermsCollection';
 import UserAccountComponent from './UserAccountComponent';
 import UserModalComponent from './UserModalComponent';
 import UserReviewComponent from './UserReviewComponent';

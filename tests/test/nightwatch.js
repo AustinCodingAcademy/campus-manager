@@ -16,7 +16,7 @@ function extend(target) {
   '../CreateLocation',
   '../CreateTextbook',
   '../CreateCourse',
-  // '../MakeStudent',
+  '../MakeStudent',
   // '../RegisterCourse'
 ].forEach(test => {
   module.exports = extend(module.exports, require(test));
