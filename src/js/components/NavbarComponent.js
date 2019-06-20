@@ -88,7 +88,7 @@ module.exports = React.createBackboneClass({
                   }}>🔥</div>
                 </a>
               </li>
-              <li role="presentation"><a href='#'>Dashboard</a></li>
+              <li role="presentation"><a data-test="dashboard" href='#'>Dashboard</a></li>
               <li role="presentation" style={{ display: this.display('courses') }}><a href='#courses'>Courses</a></li>
               <NavDropdown eventKey={3} title="Admin" id="admin-dropdown" style={{ display: this.display('admin') }}>
                 <MenuItem eventKey={3.1} href="#users">Users</MenuItem>

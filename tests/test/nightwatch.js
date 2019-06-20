@@ -10,14 +10,14 @@ function extend(target) {
 };
 
 [
-  '../CreateSession',  // don't worry about this
+  '../CreateSession',
   '../CreateClient',
   '../CreateTerm',
   '../CreateLocation',
   '../CreateTextbook',
   '../CreateCourse',
   '../MakeStudent',
-  // '../RegisterCourse'
+  '../RegisterCourse'
 ].forEach(test => {
   module.exports = extend(module.exports, require(test));
 });
