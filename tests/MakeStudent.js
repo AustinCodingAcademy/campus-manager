@@ -32,7 +32,7 @@ module.exports = {
     .setValue('#credits', 'KC Materials Fee 5/15/17: -100.00')
     .setValue('#note', 'test')
     .click('button[type="submit"]')
-    .pause(1000) // * keep this, seems necessary to pass
+    .pause(2000) // * keep this, seems necessary to pass
     // UsersListComponent
     .verify.containsText('tbody > tr:nth-child(2) > [data-test="name"]', 'Client, Test')
     .verify.containsText('tbody > tr:nth-child(2) > [data-test="email"]', 'test@gmail.com')

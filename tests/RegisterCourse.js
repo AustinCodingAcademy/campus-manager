@@ -45,10 +45,14 @@ module.exports = {
     // .pause(1000)
     .setValue('#first-name', 'Test')
     .setValue('#last-name', 'Student')
-    .setValue('#email', 'test@gmail.com')
+    .setValue('#email', 'test2@gmail.com')
     .setValue('#phone', '(555) 555-5555')
     .setValue('#password', 'password123')
-    .pause(11000)
+    .click('button[type="submit"]')
+    .pause(212122500)
+    // student logged in, registers for course
+    // ! no course to register for, does the created course not persist in test mode?
+
   }
 }
 
