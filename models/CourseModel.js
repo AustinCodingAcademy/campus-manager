@@ -4,7 +4,7 @@ const version = require('mongoose-version');
 const isAbsoluteUrl = require('is-absolute-url');
 
 const fixUrl = (url) => {
-  const split = url.split(' ').forEach((url) => isAbsoluteUrl(url) ? url : `https://${url}`);
+  const split = url.split(' ').map((url) => isAbsoluteUrl(url) ? url : `https://${url}`);
     return split.join(' ');
 }
 
@@ -62,8 +62,7 @@ const courseSchema = new Schema({
   ],
   virtual: {
     type: String,
-    set: fixUrl,
-    lowercase: true
+    set: fixUrl
   }
 }, { timestamps: true });
 

@@ -5,8 +5,6 @@ const version = require('mongoose-version');
 const validators = require('mongoose-validators');
 const isAbsoluteUrl = require('is-absolute-url');
 
-const fixUrl = url => isAbsoluteUrl(url) ? url : `https://${url}`;
-
 const userSchema = new Schema({
   username: {
     type: String,
@@ -46,20 +44,17 @@ const userSchema = new Schema({
   },
   github: {
     type: String,
-    set: fixUrl,
-    lowercase: true,
+    // set: username => {`https://github.com/${username}`},
     default: ""
   },
   linkedIn: {
     type: String,
-    set: fixUrl,
-    lowercase: true,
+    set: url => isAbsoluteUrl(url) ? url : `https://${url}`,
     default: ""
   },
   website: {
     type: String,
-    set: fixUrl,
-    lowercase: true,
+    set: url => isAbsoluteUrl(url) ? url : `https://${url}`,
     default: ""
   },
   idn: {
@@ -91,9 +86,15 @@ const userSchema = new Schema({
   },
   reset_password: String,
   reviews: Array,
-  rocketchat: String,
+  rocketchat: {
+    type: String,
+    // set: username => `https://chat.austincodingacademy.com/direct/${username}`
+  },
   zipcode: String,
-  discourse: String,
+  discourse: {
+    type: String,
+    // set: username => `https://austincodingacademy.com/forum/u/${username}`
+  },
   note: String
 }, { timestamps: true });
 
