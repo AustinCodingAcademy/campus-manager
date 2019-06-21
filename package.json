@@ -79,6 +79,7 @@
     "gulp-sourcemaps": "2.2.0",
     "hashids": "^1.1.1",
     "intl-tel-input": "^10.0.2",
+    "is-absolute-url": "^3.0.0",
     "jquery": "3.1.1",
     "json2csv": "^3.7.1",
     "lodash": "^4.17.4",

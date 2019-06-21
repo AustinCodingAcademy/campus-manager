@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 const version = require('mongoose-version');
-const validators = require('mongoose-validators')
+const validators = require('mongoose-validators');
+const isAbsoluteUrl = require('is-absolute-url');
+
+const fixUrl = url => isAbsoluteUrl(url) ? url : `https://${url}`;
 
 const userSchema = new Schema({
   username: {
@@ -43,14 +46,20 @@ const userSchema = new Schema({
   },
   github: {
     type: String,
+    set: fixUrl,
+    lowercase: true,
     default: ""
   },
   linkedIn: {
     type: String,
+    set: fixUrl,
+    lowercase: true,
     default: ""
   },
   website: {
     type: String,
+    set: fixUrl,
+    lowercase: true,
     default: ""
   },
   idn: {
@@ -72,7 +81,10 @@ const userSchema = new Schema({
   customer_id: String,
   grades: Array,
   insightly: String,
-  linkedIn: String,
+  linkedIn: {
+    type: String,
+    set: fixUrl
+  },
   price: {
     type: Number,
     default: 0
