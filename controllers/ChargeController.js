@@ -46,6 +46,7 @@ module.exports = {
   },
 
   plaid: async (req, res) => {
+    let user;
     try {
       var plaidClient = new plaid.Client(
         process.env.PLAID_CLIENT_ID,
@@ -56,7 +57,7 @@ module.exports = {
 
       const plaidRes1 = await plaidClient.exchangePublicToken(req.body.metadata.public_token);
       const plaidRes2 = await plaidClient.createStripeToken(plaidRes1.access_token, req.body.metadata.account_id)
-      const user = await UserModel.findOne({ _id: req.body.user_id, client: req.user.client }).exec();
+      user = await UserModel.findOne({ _id: req.body.user_id, client: req.user.client }).exec();
       if(!user) {
         console.error('No such user');
         return res.json(404, {
@@ -71,6 +72,12 @@ module.exports = {
       const charge = await createCharge(req, res, user, plaidRes2.stripe_bank_account_token);
       return res.json(charge);
     } catch (error) {
+      console.error(JSON.stringify({
+        name: `${user.first_name} ${user.last_name}`,
+        id: user._id,
+        idn: user.idn,
+        amount: req.body.amount
+      }, null, 2));
       console.error(error);
       return res.json(500, {
         message: 'Error creating charge'
