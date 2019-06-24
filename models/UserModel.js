@@ -5,6 +5,11 @@ const version = require('mongoose-version');
 const validators = require('mongoose-validators');
 const isAbsoluteUrl = require('is-absolute-url');
 
+function fixUrl(url) {
+  if (!url) return url;
+  return isAbsoluteUrl(url) ? url : `https://${url}`
+};
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -44,17 +49,18 @@ const userSchema = new Schema({
   },
   github: {
     type: String,
-    // set: username => {`https://github.com/${username}`},
     default: ""
   },
   linkedIn: {
     type: String,
-    set: url => isAbsoluteUrl(url) ? url : `https://${url}`,
+    set: fixUrl,
+    get: fixUrl,
     default: ""
   },
   website: {
     type: String,
-    set: url => isAbsoluteUrl(url) ? url : `https://${url}`,
+    set: fixUrl,
+    get: fixUrl,
     default: ""
   },
   idn: {
@@ -76,10 +82,6 @@ const userSchema = new Schema({
   customer_id: String,
   grades: Array,
   insightly: String,
-  linkedIn: {
-    type: String,
-    set: fixUrl
-  },
   price: {
     type: Number,
     default: 0
@@ -88,17 +90,21 @@ const userSchema = new Schema({
   reviews: Array,
   rocketchat: {
     type: String,
-    // set: username => `https://chat.austincodingacademy.com/direct/${username}`
   },
   zipcode: String,
   discourse: {
     type: String,
-    // set: username => `https://austincodingacademy.com/forum/u/${username}`
   },
   note: String
-}, { timestamps: true });
+}, {
+  timestamps: true,
+  toObject: { getters: true, setters: true },
+  runSettersOnQuery: true
+})
 
 userSchema.set('toJSON', {
+  getters: true,
+  setters: true,
   transform: function(doc, ret, options) {
     delete ret.password;
     delete ret.__v;

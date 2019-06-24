@@ -218,7 +218,7 @@ module.exports = React.createBackboneClass({
             </FormGroup>
             <FormGroup controlId="discourse">
               <ControlLabel>
-                Hack Overflow Username <small>(https://austincodingacademy.com/forum/u/<em>yourusername</em>)</small>
+                Hack Overflow Username <small>(austincodingacademy.com/forum/u/<em>yourusername</em>)</small>
               </ControlLabel>
               <FormControl
                 type="text"
@@ -229,7 +229,7 @@ module.exports = React.createBackboneClass({
             </FormGroup>
             <FormGroup controlId="linkedIn">
               <ControlLabel>
-                LinkedIn link <small>(ex. https://www.linkedin.com/in/username)</small>
+                LinkedIn link
               </ControlLabel>
               <FormControl
                 type="text"
@@ -240,7 +240,7 @@ module.exports = React.createBackboneClass({
             </FormGroup>
             <FormGroup controlId="website">
               <ControlLabel>
-                Website link <small>(ex. https://example.com)</small>
+                Website link
               </ControlLabel>
               <FormControl
                 type="text"
