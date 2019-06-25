@@ -43,6 +43,7 @@ module.exports = {
     .keys(browser.Keys.DOWN_ARROW)
     .keys(browser.Keys.TAB)
     .keys(browser.Keys.DOWN_ARROW)
+    // .pause(10000)
     .click('button[type="submit"]')
     .pause(300)
     .verify.containsText('[data-test="name"]', 'Test Course')

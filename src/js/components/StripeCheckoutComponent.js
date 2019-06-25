@@ -103,7 +103,7 @@ module.exports = React.createBackboneClass({
           onExit={this.handleOnExit}
           onSuccess={this.handleOnSuccess}
           style={{width: '100%', padding: 0, borderWidth: 0}}>
-          <Button block bsStyle="primary" disabled={!(this.state.course.id && Number(this.state.paymentAmount) > 0 && (Number(this.state.paymentAmount) / 100 >= 490 || this.props.currentUser.get('is_admin') || this.state.balance < 0))} data-test="make-payment">
+          <Button block bsStyle="primary" disabled={!(this.state.course.id && Number(this.state.paymentAmount) > 0 && (Number(this.state.paymentAmount) / 100 >= 490 || this.props.currentUser.get('is_admin') || this.state.balance < 0))} id="make-payment-echeck">
             <FontAwesome name="bank" /> 3. Pay by eCheck (No Fee)
           </Button>
         </PlaidLink>
@@ -118,7 +118,7 @@ module.exports = React.createBackboneClass({
           amount={Number(this.state.paymentAmount) * 1.03}
           email={this.getModel().get('username')}
         >
-          <Button block bsStyle="primary" disabled={!(this.state.course.id && Number(this.state.paymentAmount) > 0 && (Number(this.state.paymentAmount) / 100 >= 490 || this.props.currentUser.get('is_admin') || this.state.balance < 0))} data-test="make-payment">
+          <Button block bsStyle="primary" disabled={!(this.state.course.id && Number(this.state.paymentAmount) > 0 && (Number(this.state.paymentAmount) / 100 >= 490 || this.props.currentUser.get('is_admin') || this.state.balance < 0))} id="make-payment-stripe">
             <FontAwesome name="credit-card" /> 3. Pay With Card (+ 3% fee)
           </Button>
         </StripeCheckout>

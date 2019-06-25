@@ -214,6 +214,7 @@ module.exports = React.createBackboneClass({
                   <InputGroup>
                     <InputGroup.Addon>$</InputGroup.Addon>
                     <FormControl
+                      id="payment-amount"
                       type="text"
                       placeholder="0.00"
                       onChange={this.changeAmount}

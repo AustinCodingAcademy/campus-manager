@@ -5,20 +5,13 @@ module.exports = {
     .click('a[href="#terms"]')
     .click('a[data-test="new-term"]')
     .setValue('input#name', 'Test Term')
-    // .pause(500)
-    // .clearValue('input#start-date')
-    // .pause(500)
-    // .setValue('input#start-date', 'Wed, Jan 3, 2018')
-    // .pause(500)
-    // .click('.modal-title')
-    // .pause(500)
-    // .clearValue('input#end-date')
-    // .pause(500)
-    // .setValue('input#end-date', 'Fri, Jun 1, 2018')
-    // .pause(500)
-    // .click('.modal-title')
-    // .pause(500)
-    // .click('input#end-date');
+    .clearValue('input#start-date')
+    .setValue('input#start-date', 'Thu, Jun 25, 2020')
+    .click('.modal-title')
+    .clearValue('input#end-date')
+    .setValue('input#end-date', 'Thu, Oct 22, 2020')
+    .click('.modal-title')
+    .click('input#end-date');
     // function to continue doing browers.click() and verify.containsText('.react-datepicker__current-month', 'June 2019')
 
     // browser.execute(function() {
@@ -37,8 +30,8 @@ module.exports = {
 
 
     browser.click('button[type="submit"]')
-    .pause(1210)
-    // .verify.containsText('[label="Name"]', 'Test Term')
-    // .verify.containsText('[label="Dates"]', 'Wed, Jan 3, 2018 - Fri, Jun 1, 2018')
+    .pause(300)
+    .verify.containsText('[label="Name"]', 'Test Term')
+    .verify.containsText('[label="Dates"]', 'Thu, Jun 25, 2020 - Thu, Oct 22, 2020')
   }
 }
