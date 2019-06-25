@@ -83,7 +83,11 @@ module.exports = React.createBackboneClass({
           <h3>
             Courses
             <small>
-              <a href="#" className={`${hidden} pull-right`} onClick={this.open} data-test="new-course">
+              <a href="#"
+                className={`${hidden} pull-right`}
+                onClick={this.open}
+                id="new-course"
+              >
                 <FontAwesome name='plus' />
                 &nbsp;Course
               </a>
