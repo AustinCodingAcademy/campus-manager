@@ -3,7 +3,7 @@ module.exports = {
     browser
     .pause(500)
     .click('a[href="#courses"]')
-    .click('a[data-test="new-course"]')
+    .click('a#new-course')
     .setValue('#name', 'Test Course')
     .setValue('#section', 1)
     .keys(browser.Keys.TAB)
