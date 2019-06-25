@@ -5,7 +5,7 @@ const version = require('mongoose-version');
 const validators = require('mongoose-validators');
 const isAbsoluteUrl = require('is-absolute-url');
 
-function fixUrl(url) {
+function formatToAbsoluteUrl(url) {
   if (!url) return url;
   return isAbsoluteUrl(url) ? url : `https://${url}`
 };
@@ -53,14 +53,14 @@ const userSchema = new Schema({
   },
   linkedIn: {
     type: String,
-    set: fixUrl,
-    get: fixUrl,
+    set: formatToAbsoluteUrl,
+    get: formatToAbsoluteUrl,
     default: ""
   },
   website: {
     type: String,
-    set: fixUrl,
-    get: fixUrl,
+    set: formatToAbsoluteUrl,
+    get: formatToAbsoluteUrl,
     default: ""
   },
   idn: {

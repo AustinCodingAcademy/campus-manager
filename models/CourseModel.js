@@ -6,7 +6,7 @@ const isAbsoluteUrl = require('is-absolute-url');
 const fixUrl = (url) => {
   if (!url) return url;
   const splitUrl = url.split(' ').map(url => isAbsoluteUrl(url) ? url : `https://${url}`);
-    return splitUrl.join(' ');
+  return splitUrl.join(' ');
 }
 
 const courseSchema = new Schema({
