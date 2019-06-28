@@ -1,6 +1,8 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var OAuth2Strategy = require('passport-google-oauth').OAuth2Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 var bcrypt = require('bcrypt');
 var User = require('../models/UserModel');
 
@@ -35,6 +37,24 @@ passport.use(new OAuth2Strategy(
     });
   })
 );
+
+passport.use('jwt', new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: 'hello'
+}, function(payload, done) {
+  console.log(ExtractJwt.fromAuthHeaderAsBearerToken())
+  User.findOne({id: payload.username}, function(err, user) {
+    if (err) {
+      return done(err, false);
+    }
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+      // or you could create a new account
+    }
+  });
+}));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
