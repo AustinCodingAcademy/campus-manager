@@ -161,7 +161,7 @@
   "devDependencies": {
     "chromedriver": "^2.38.3",
     "dotenv": "^2.0.0",
-    "open": "0.0.5",
+    "open": "6.0.0",
     "pa11y": "^5.0.4",
     "pa11y-reporter-html": "^1.0.0",
     "selenium-server-standalone-jar": "3.0.1"
