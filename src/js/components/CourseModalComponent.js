@@ -247,7 +247,7 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="virtual">
-              <ControlLabel>Virtual Classroom</ControlLabel>
+              <ControlLabel>Virtual Classroom <small>(separate multiple links with a single space)</small></ControlLabel>
               <FormControl
                 type="text"
                 onChange={this.changeTextValue}

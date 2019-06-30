@@ -199,7 +199,7 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="github">
-              <ControlLabel>Github Username <small>(github.com/<em>username</em>)</small></ControlLabel>
+              <ControlLabel>Github Username <small>(github.com/<em>yourusername</em>)</small></ControlLabel>
               <FormControl
                 type="text"
                 placeholder="username"
@@ -217,30 +217,34 @@ module.exports = React.createBackboneClass({
               />
             </FormGroup>
             <FormGroup controlId="discourse">
-              <ControlLabel>Discourse Username</ControlLabel>
+              <ControlLabel>
+                Hack Overflow Username <small>(austincodingacademy.com/forum/u/<em>yourusername</em>)</small>
+              </ControlLabel>
               <FormControl
                 type="text"
-                placeholder="Discourse Username"
+                placeholder="Hack OverFlow Username"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.discourse}
               />
             </FormGroup>
             <FormGroup controlId="linkedIn">
               <ControlLabel>
-                LinkedIn <small>(linkedin.com/in/<em>username</em>)</small>
+                LinkedIn link
               </ControlLabel>
               <FormControl
                 type="text"
-                placeholder="username"
+                placeholder="https://www.linkedin.com/in/yourusername"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.linkedIn}
               />
             </FormGroup>
             <FormGroup controlId="website">
-              <ControlLabel>Website</ControlLabel>
+              <ControlLabel>
+                Website link
+              </ControlLabel>
               <FormControl
                 type="text"
-                placeholder="http://example.com"
+                placeholder="https://example.com"
                 onChange={this.changeTextValue}
                 defaultValue={this.state.user.website}
               />

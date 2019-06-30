@@ -2,7 +2,13 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 const version = require('mongoose-version');
-const validators = require('mongoose-validators')
+const validators = require('mongoose-validators');
+const isAbsoluteUrl = require('is-absolute-url');
+
+function formatToAbsoluteUrl(url) {
+  if (!url) return url;
+  return isAbsoluteUrl(url) ? url : `https://${url}`
+};
 
 const userSchema = new Schema({
   username: {
@@ -47,10 +53,14 @@ const userSchema = new Schema({
   },
   linkedIn: {
     type: String,
+    set: formatToAbsoluteUrl,
+    get: formatToAbsoluteUrl,
     default: ""
   },
   website: {
     type: String,
+    set: formatToAbsoluteUrl,
+    get: formatToAbsoluteUrl,
     default: ""
   },
   idn: {
@@ -72,20 +82,29 @@ const userSchema = new Schema({
   customer_id: String,
   grades: Array,
   insightly: String,
-  linkedIn: String,
   price: {
     type: Number,
     default: 0
   },
   reset_password: String,
   reviews: Array,
-  rocketchat: String,
+  rocketchat: {
+    type: String,
+  },
   zipcode: String,
-  discourse: String,
+  discourse: {
+    type: String,
+  },
   note: String
-}, { timestamps: true });
+}, {
+  timestamps: true,
+  toObject: { getters: true, setters: true },
+  runSettersOnQuery: true
+})
 
 userSchema.set('toJSON', {
+  getters: true,
+  setters: true,
   transform: function(doc, ret, options) {
     delete ret.password;
     delete ret.__v;
