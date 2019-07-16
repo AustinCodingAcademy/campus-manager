@@ -41,17 +41,17 @@ module.exports = {
           return registerUser(courses, ++idx)
         } else {
           let key = utils.campusKey(user);
-          try {
-            await transport.sendMail({
-              from: `info@${key}codingacademy.com`,
-              to: user.username,
-              subject: `${key.charAt(0).toUpperCase() + key.slice(1)} Coding Academy course payment successful!`,
-              html: `Your payment has been processed!
-              Visit https://campus.${key}codingacademy.com/, scroll down, and click on your class to view your course materials.`
-            })
-          } catch (error) {
-            console.error(error)
-          }
+//           try {
+//             await transport.sendMail({
+//               from: `info@${key}codingacademy.com`,
+//               to: user.username,
+//               subject: `${key.charAt(0).toUpperCase() + key.slice(1)} Coding Academy course payment successful!`,
+//               html: `Your payment has been processed!
+//               Visit https://campus.${key}codingacademy.com/, scroll down, and click on your class to view your course materials.`
+//             })
+//           } catch (error) {
+//             console.error(error)
+//           }
           return res.json(req.body.userId);
         }
       }
