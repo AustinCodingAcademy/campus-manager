@@ -65,7 +65,7 @@ module.exports = {
         });
       }
       if (!user.customer_id) {
-        const customer = stripe.customers.create({ email: user.username })
+        const customer = await stripe.customers.create({ email: user.username })
         user.customer_id = customer.id;
         await user.save();
       }
