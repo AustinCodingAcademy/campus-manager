@@ -45,8 +45,6 @@ module.exports = React.createClass({
         <br />
         {`$${this.props.option.user && this.props.option.user.get('price') ? Number(this.props.option.user.get('price')).toFixed(2) : Number(this.props.option.course.get('cost')).toFixed(2)}`}
 				<br />
-				{this.props.option.course.get('seats') - this.props.option.course.get('registrations').length} seats left
-        <br />
 				{this.props.option.course.get('term').get('name')}
 			</div>
 		);
