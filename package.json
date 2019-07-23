@@ -79,6 +79,7 @@
     "gulp-sourcemaps": "2.2.0",
     "hashids": "^1.1.1",
     "intl-tel-input": "^10.0.2",
+    "is-absolute-url": "^3.0.0",
     "jquery": "3.1.1",
     "json2csv": "^3.7.1",
     "lodash": "^4.17.4",
@@ -160,7 +161,7 @@
   "devDependencies": {
     "chromedriver": "^2.38.3",
     "dotenv": "^2.0.0",
-    "open": "0.0.5",
+    "open": "6.0.0",
     "pa11y": "^5.0.4",
     "pa11y-reporter-html": "^1.0.0",
     "selenium-server-standalone-jar": "3.0.1"

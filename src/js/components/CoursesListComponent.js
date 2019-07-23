@@ -5,7 +5,6 @@ import { Col, Row, Button, FormControl } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import CourseModalComponent from './CourseModalComponent.js';
 import CourseModel from '../models/CourseModel';
-import TermsCollection from '../collections/TermsCollection';
 import moment from 'moment';
 
 module.exports = React.createBackboneClass({
@@ -46,12 +45,14 @@ module.exports = React.createBackboneClass({
   render() {
     const hidden = this.props.currentUser.roles().includes('admin') ? '' : 'hidden';
 
-    const courseRows = this.getCollection().map(course => {
-
+    const courseRows = this.getCollection().map((course, i) => {
       const instructorNames = course.get("instructors").map(inst => {
         return `${inst.first_name} ${inst.last_name}`
       })
         .join(", ");
+
+      const classEmails = course.get('registrations').map(student => student.get('username'))
+        .concat(course.get('instructors').map(inst => inst.username))
 
       return (
         <Tr key={course.id}>
@@ -68,6 +69,16 @@ module.exports = React.createBackboneClass({
           <Td column="Seats">{course.get('registrations').length + ' / ' + course.get('seats')}</Td>
           <Td column="Cost">{'$' + Number(course.get('cost')).toFixed(2)}</Td>
           <Td column="Instructors">{instructorNames}</Td>
+          <Td column="Email Class">
+            <a
+              className="btn"
+              href={ 'mailto:' + this.props.currentUser.get('username') + '?bcc=' + classEmails }
+              target="_blank"
+              key={i}
+            >
+              <FontAwesome name="envelope" />
+            </a>
+          </Td>
           <Td column="edit" className={hidden}>
             <a href="#" onClick={this.open} data-id={course.id}>
               <FontAwesome name='pencil' />
@@ -83,7 +94,11 @@ module.exports = React.createBackboneClass({
           <h3>
             Courses
             <small>
-              <a href="#" className={`${hidden} pull-right`} onClick={this.open} data-test="new-course">
+              <a href="#"
+                className={`${hidden} pull-right`}
+                onClick={this.open}
+                id="new-course"
+              >
                 <FontAwesome name='plus' />
                 &nbsp;Course
               </a>
@@ -114,6 +129,7 @@ module.exports = React.createBackboneClass({
                 <Th>Seats</Th>
                 <Th>Cost</Th>
                 <Th>Instructors</Th>
+                <Th>Email Class</Th>
                 <Th className={hidden}>edit</Th>
               </Thead>
               {courseRows}
