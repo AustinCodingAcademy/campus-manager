@@ -238,15 +238,17 @@ module.exports = React.createBackboneClass({
         return wd.userId === this.getModel().id;
       });
 
-      let textbook = <span>Available {moment(course.get('term').get('start_date')).subtract(1, 'month').format('ddd, MMM D')}</span>;
+      let textbooks = <span>Available {moment(course.get('term').get('start_date')).subtract(1, 'month').format('ddd, MMM D')}</span>;
       if (withdrawal) {
-        textbook = <span>Withdrawn</span>;
+        textbooks = <span>Withdrawn</span>;
       } else if (moment().isSameOrAfter(moment(course.get('term').get('start_date')).subtract(1, 'month')) || course.get('name').toLowerCase().includes('intro')) {
-        textbook = (
-          <a href={course.get('textbook').get('student_url')} target="_blank">
-            <FontAwesome name="book" fixedWidth={true} />
-            &nbsp; {course.get('textbook').get('name')}
-          </a>
+        textbooks = course.get('textbooks').map(textbook =>
+          <div>
+            <a href={textbook.get('student_url')} target="_blank">
+              <FontAwesome name="book" fixedWidth={true} />
+              &nbsp; {textbook.get('name')}
+            </a>
+          </div>
         );
       }
 
@@ -282,7 +284,7 @@ module.exports = React.createBackboneClass({
                     <p>
                       <ControlLabel>Textbook</ControlLabel>
                       <br />
-                      {textbook}
+                      {textbooks}
                     </p>
                     {course.get('virtual') &&
                       <div>

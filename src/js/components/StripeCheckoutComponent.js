@@ -98,7 +98,7 @@ module.exports = React.createBackboneClass({
         <PlaidLink
           clientName="Austin Coding Academy"
           env={process.env.PLAID_ENV}
-          product={process.env.PLAID_PRODUCTS}
+          product={['auth', 'transactions']}
           publicKey={process.env.PLAID_PUBLIC_KEY}
           onExit={this.handleOnExit}
           onSuccess={this.handleOnSuccess}

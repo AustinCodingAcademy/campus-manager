@@ -66,6 +66,7 @@ module.exports = {
     switch (campus) {
       case 'Lubbock':
         key = 'lubbock';
+        break;
       case 'San Antonio':
         key = 'sanantonio';
         break;
