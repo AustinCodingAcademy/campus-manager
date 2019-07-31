@@ -111,7 +111,7 @@ const createCharge = async (req, res, user, token) => {
       source: source.id,
       customer: user.customer_id,
       currency: 'usd',
-      amount: req.body.amount,
+      amount: Math.round(req.body.amount),
       metadata: {
         course_id: course._id.toString(),
         course_name: course.name,
