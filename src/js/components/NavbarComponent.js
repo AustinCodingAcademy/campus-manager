@@ -6,6 +6,7 @@ import {
 import FontAwesome from 'react-fontawesome';
 import AppsModalComponent from './AppsModalComponent';
 import FeedbackModalComponent from './FeedbackModalComponent';
+import CurriculumFeedbackComponent from './CurriculumFeedbackComponent';
 
 module.exports = React.createBackboneClass({
   links: {
@@ -36,6 +37,15 @@ module.exports = React.createBackboneClass({
   openFeedbackModal(e) {
     e.preventDefault();
     this.setState({ showFeedbackModal: true });
+  },
+
+  closeCurriculumFeedbackModal() {
+    this.setState({ showCurriculumFeedbackModal: false });
+  },
+
+  openCurriculumFeedbackModal(e) {
+    e.preventDefault();
+    this.setState({ showCurriculumFeedbackModal: true });
   },
 
   display(link) {
@@ -114,6 +124,9 @@ module.exports = React.createBackboneClass({
         <Button className="btn-feedback" bsStyle="warning" onClick={this.openFeedbackModal}>
           <FontAwesome name="comments-o" />
         </Button>
+        <Button className="btn-feedback" bsStyle="warning" onClick={this.openCurriculumFeedbackModal}>
+          <FontAwesome name="book" />
+        </Button>
         <AppsModalComponent
           show={this.state.showAppsModal}
           onHide={this.closeAppsModal}
@@ -121,6 +134,10 @@ module.exports = React.createBackboneClass({
         <FeedbackModalComponent
           show={this.state.showFeedbackModal}
           onHide={this.closeFeedbackModal}
+        />
+        <CurriculumFeedbackComponent
+          show={this.state.showCurriculumFeedbackModal}
+          onHide={this.closeCurriculumFeedbackModal}
         />
       </div>
     )
