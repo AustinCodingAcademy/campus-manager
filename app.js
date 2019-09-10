@@ -56,6 +56,9 @@ app.use(function (req, res, next) {
     case 'lubbockcodingacademy':
       key = 'lubbock';
       break;
+    case 'texastechuniversitycodingacademy':
+      key = 'texastechuniversity';
+      break;
   }
   res.locals = {
     campusKey: key
