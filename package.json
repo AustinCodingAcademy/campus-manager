@@ -10,11 +10,13 @@
     "favicon-inject-sanantonio": "echo '' > views/favicon-sanantonio.pug && real-favicon inject faviconData.json public/favicons/sanantonio views/favicon-sanantonio.pug && mv public/favicons/sanantonio/favicon-sanantonio.pug views/favicon-sanantonio.pug",
     "favicon-inject-dallas": "echo '' > views/favicon-dallas.pug && real-favicon inject faviconData.json public/favicons/dallas views/favicon-dallas.pug && mv public/favicons/dallas/favicon-dallas.pug views/favicon-dallas.pug",
     "favicon-inject-lubbock": "echo '' > views/favicon-lubbock.pug && real-favicon inject faviconData.json public/favicons/lubbock views/favicon-lubbock.pug && mv public/favicons/lubbock/favicon-lubbock.pug views/favicon-lubbock.pug",
+    "favicon-inject-texastechuniversity": "echo '' > views/favicon-texastechuniversity.pug && real-favicon inject faviconData.json public/favicons/texastechuniversity views/favicon-texastechuniversity.pug && mv public/favicons/texastechuniversity/favicon-texastechuniversity.pug views/favicon-texastechuniversity.pug",
     "favicon-inject-houston": "echo '' > views/favicon-houston.pug && real-favicon inject faviconData.json public/favicons/houston views/favicon-houston.pug && mv public/favicons/houston/favicon-houston.pug views/favicon-houston.pug",
     "favicon-austin": "real-favicon generate _favicon_austin.json faviconData.json public/favicons/austin && yarn favicon-inject-austin",
     "favicon-sanantonio": "real-favicon generate _favicon_sanantonio.json faviconData.json public/favicons/sanantonio && yarn favicon-inject-sanantonio",
     "favicon-dallas": "real-favicon generate _favicon_dallas.json faviconData.json public/favicons/dallas && yarn favicon-inject-dallas",
     "favicon-lubbock": "real-favicon generate _favicon_lubbock.json faviconData.json public/favicons/lubbock && yarn favicon-inject-lubbock",
+    "favicon-texastechuniversity": "real-favicon generate _favicon_texastechuniversity.json faviconData.json public/favicons/texastechuniversity && yarn favicon-inject-texastechuniversity",
     "favicon-houston": "real-favicon generate _favicon_houston.json faviconData.json public/favicons/houston && yarn favicon-inject-houston",
     "favicon": "yarn favicon-austin && yarn favicon-sanantonio && yarn favicon-dallas && yarn favicon-houston && yarn favicon-lubbock"
   },
