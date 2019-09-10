@@ -576,7 +576,7 @@ module.exports = React.createBackboneClass({
             </Col>
             : ''}
           </Equalizer>
-          {this.getModel().get('is_student') && this.getModel().get('campus') !== 'Lubbock' ?
+          {this.getModel().get('is_student') && this.getModel().get('campus') === 'Austin' ?
           <Col xs={12} md={6}>
             <UserAccountComponent
               model={this.getModel()}
