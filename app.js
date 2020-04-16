@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(bodyParser.json({ limit: '400kb' }));
+app.use(bodyParser.json({ limit: '800kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
