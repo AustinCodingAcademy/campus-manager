@@ -5598,9 +5598,10 @@ mongoose-to-csv@^0.1.0:
   dependencies:
     csv-builder "0.0.4"
 
-mongoose-unique-validator@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/mongoose-unique-validator/-/mongoose-unique-validator-1.0.2.tgz#f12bb892918bd95e19cb62beb3c00b044ab25ea0"
+mongoose-unique-validator@^1.0.2:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/mongoose-unique-validator/-/mongoose-unique-validator-1.0.6.tgz#fab31e68c1a5ba6f5b05da8e93842db55eb0a3b1"
+  integrity sha512-hJf1eiWPw9O5ed7HUtFHtHhqnWDpm42Q5iC3xs6p99kr1qrVMq8WR2x+yobx6rY5F26Ki2NqGvJTe8v/Fax0kw==
   dependencies:
     lodash.foreach "^4.1.0"
     lodash.get "^4.0.2"
@@ -5611,9 +5612,10 @@ mongoose-validators@^0.1.0:
   dependencies:
     validator "3.16.0"
 
-mongoose-version@^1.0.0:
+mongoose-version@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/mongoose-version/-/mongoose-version-1.1.0.tgz#1da8633fcd36eefec32310114d890fa4eb3125cb"
+  integrity sha1-HahjP8027v7DIxARTYkPpOsxJcs=
   dependencies:
     debug "~2.6.0"
 
