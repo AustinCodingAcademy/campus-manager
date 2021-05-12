@@ -98,7 +98,7 @@
     "nightwatch": "^0.9.8",
     "node-fetch": "^1.6.3",
     "node-sass": "3.11.1",
-    "nodemailer": "2.6.4",
+    "nodemailer": "6.4.16",
     "nodemailer-mandrill-transport": "kevincolten/nodemailer-mandrill-transport",
     "nodemon": "^1.11.0",
     "passport": "0.3.2",
